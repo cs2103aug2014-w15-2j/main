@@ -7,8 +7,6 @@ Supervisor: 	Christopher Chak Hanrui
 Extra Feature: 	Power Cooperative Tasks
 
 
-----------
-
 
 User Guide
 -------------
@@ -16,10 +14,10 @@ User Guide
 ####1. Login in / Create An Account
 
 When you first run the app, you will be required to log in with your account if you did not log out last time.<br />
-(1.1) 	If you do not have one, you can create one with the command:
-```create account```
-(1.2) 	If you have already had one, you can log into your account with command :
-```log in to @<username> @<password>```
+(1.1) 	If you do not have one, you can create one with the command:<br />
+```create account```<br />
+(1.2) 	If you have already had one, you can log into your account with command :<br />
+```log in to @<username> @<password>```<br />
 
 
 ####2. Create A Task
