@@ -22,17 +22,15 @@ When you first run the app, you will be required to log in with your account if 
 #### 2. Create A Task  
 The general command format to create a task is  
 ```[<adding command>] <task description> [@<time>][@<members>][@<list name>]```  
-(2.1) 	```<adding command>``` includes: **add**, **insert**, and **create**.  
-(2.2) 	```<adding command>``` can be omitted, thus the following two commands are equivalent:  
-```add project meeting```  
-and  
-```project meeting```  
-(2.3) 	```@<member>``` represents the username of the member, a request will be sent to him or her. After confirmation, the same task will be added to his or her list.  
-(2.4) 	the format of ```@<time>``` is  
-	```<period>```	: period including daily, weekly, monthly  
-	```findSlot```	: find the most appropriate empty slot for this task  
-	```before <hhmm><ddmmyyyy>```  
-	```from <hhmm><ddmmyyyy> to <hhmm><ddmmyyyy>```  
-(2.5) 	To create a sublist, use the following command  
-	```addList @<list name>```  
+2.1 ```<adding command>``` includes: **add**, **insert**, and **create**.  
+2.2 ```<adding command>``` can be omitted, thus the following two commands are equivalent:  
+```add project meeting``` and ```project meeting```  
+2.3 ```@<member>``` represents the username of the member, a request will be sent to him or her. After confirmation, the same task will be added to his or her list.  
+2.4 the format of ```@<time>``` is  
+```<period>```	: period including daily, weekly, monthly  
+```findSlot```	: find the most appropriate empty slot for this task  
+```before <hhmm><ddmmyyyy>```  
+```from <hhmm><ddmmyyyy> to <hhmm><ddmmyyyy>```  
+2.5 To create a sublist, use the following command  
+```addList @<list name>```  
 
