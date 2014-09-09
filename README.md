@@ -17,9 +17,9 @@ User Guide
 
 When you first run the app, you will be required to log in with your account if you did not log out last time.<br />
 (1.1) 	If you do not have one, you can create one with the command:
-<div style="text-align:center">```create account```</div>
+```create account```
 (1.2) 	If you have already had one, you can log into your account with command :
-<div style="text-align:center">```log in to @<username> @<password>```</div>
+```log in to @<username> @<password>```
 
 
 ####2. Create A Task
