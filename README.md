@@ -12,11 +12,11 @@ User Guide
 -------------
 
 #### 1. Login in / Create An Account
-When you first run the app, you will be required to log in with your account if you did not log out last time.  
-1.1 If you do not have one, you can create one with the command:  
-```create account```  
-1.2 If you have already had one, you can log into your account with command :  
-```log in to @<username> @<password>```  
+&nbsp;&nbsp;&nbsp;&nbsp;When you first run the app, you will be required to log in with your account if you did not log out last time.  
+&nbsp;&nbsp;&nbsp;&nbsp;1.1 If you do not have one, you can create one with the command:  
+&nbsp;&nbsp;&nbsp;&nbsp;```create account```  
+&nbsp;&nbsp;&nbsp;&nbsp;1.2 If you have already had one, you can log into your account with command :  
+&nbsp;&nbsp;&nbsp;&nbsp;```log in to @<username> @<password>```  
 
 
 #### 2. Create A Task  
