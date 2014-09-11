@@ -39,7 +39,7 @@ User Guide
 &nbsp;&nbsp;&nbsp;&nbsp;The general command format to display tasks is  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```<displaying command> [@<type>][@<component>][@<list name>]```  
 &nbsp;&nbsp;&nbsp;&nbsp;3.1 The tasks will be shown with an index, which you will use to do further operations on the specific task.  
-&nbsp;&nbsp;&nbsp;&nbsp;3.2 ```<displaying command>``` includes: ```read```, ```display```, ```search```, and ```find```. 
+&nbsp;&nbsp;&nbsp;&nbsp;3.2 ```<displaying command>``` includes: ```read```, ```display```, ```search```, and ```find```.  
 &nbsp;&nbsp;&nbsp;&nbsp;3.3 ```@<type>``` specify the type of view, including  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```list```: tasks are displayed in an ordered list (default)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```schedule```: tasks are displayed in a calendar view  
