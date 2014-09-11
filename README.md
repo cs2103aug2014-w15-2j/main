@@ -15,7 +15,6 @@ User Guide
 &nbsp;&nbsp;&nbsp;&nbsp;When you first run the app, you will be required to log in with your account if you did not log out last time.
   
 &nbsp;&nbsp;&nbsp;&nbsp;1.1 If you do not have one, you can create one with the command:  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ```
 create account
 ```  
