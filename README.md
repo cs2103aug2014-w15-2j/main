@@ -79,14 +79,22 @@ addList @<list name>
   
 &nbsp;&nbsp;&nbsp;&nbsp;4.1 ```<task index>``` can be retrieved from [Part 3. Displaying Tasks](#3-display-tasks)  
   
-&nbsp;&nbsp;&nbsp;&nbsp;3.2 ```<displaying command>``` includes: ```read```, ```display```, ```search```, and ```find```.  
+&nbsp;&nbsp;&nbsp;&nbsp;4.2 User can batch update more than one tasks, the indices are separated by comma (,)  
   
-&nbsp;&nbsp;&nbsp;&nbsp;3.3 ```@<type>``` specify the type of view, including  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```list```: tasks are displayed in an ordered list (default)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```schedule```: tasks are displayed in a calendar view  
+&nbsp;&nbsp;&nbsp;&nbsp;4.3 ```<updating command>``` includes: ```update```, ```change```, ```edit```, and ```modify```  
+
+
+#### 5. Delete Tasks  
+&nbsp;&nbsp;&nbsp;&nbsp;The general command format to delete tasks is  
+```
+<deleting command><component>
+```  
   
-&nbsp;&nbsp;&nbsp;&nbsp;3.4 ```@<component>``` specify the searching requirements, including  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```<search keywords>``` : show the tasks that contain the provided keyword in a list view  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```<time>``` : show the tasks that need to be done before a specific time  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```<member>``` : show the tasks that need to be done with a specific person  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```ALL``` : show all the records (default)  
+&nbsp;&nbsp;&nbsp;&nbsp;5.1 ```@<component>``` includes  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```<task index> [, <task index2>, …]``` : indices can retrieve from [Part 3. Displaying Tasks](#3-display-tasks); The task with the indices in current list will be trashed.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```<list name>``` : the list with provided name will be trashed  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```ALL``` : all records will be trashed  
+  
+&nbsp;&nbsp;&nbsp;&nbsp;5.2 Deleted tasks will be placed in trash bin temporarily  
+  
+&nbsp;&nbsp;&nbsp;&nbsp;4.3 ```<updating command>``` includes: ```update```, ```change```, ```edit```, and ```modify```  
