@@ -11,7 +11,7 @@ Extra Feature: 	Power Cooperative Tasks
 User Guide
 -------------
 
-#### 1. Login in / Create An Account
+#### 1. Log in / Create An Account
 &nbsp;&nbsp;&nbsp;&nbsp;When you first run the app, you will be required to log in with your account if you did not log out last time.
   
 &nbsp;&nbsp;&nbsp;&nbsp;1.1 If you do not have one, you can create one with the command:  
