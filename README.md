@@ -20,12 +20,16 @@ create account
 ```  
   
 &nbsp;&nbsp;&nbsp;&nbsp;1.2 If you have already had one, you can log into your account with command :  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```log in to @<username> @<password>```  
+```
+log in to @<username> @<password>
+```  
 
 
 #### 2. Create A Task  
 &nbsp;&nbsp;&nbsp;&nbsp;The general command format to create a task is  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```[<adding command>] <task description> [@<time>][@<members>][@<list name>]```  
+```
+[<adding command>] <task description> [@<time>][@<members>][@<list name>]
+```  
   
 &nbsp;&nbsp;&nbsp;&nbsp;2.1 ```<adding command>``` includes: ```add```, ```insert```, and ```create```.  
   
