@@ -22,7 +22,7 @@ User Guide
 #### 2. Create A Task  
 &nbsp;&nbsp;&nbsp;&nbsp;The general command format to create a task is  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```[<adding command>] <task description> [@<time>][@<members>][@<list name>]```  
-&nbsp;&nbsp;&nbsp;&nbsp;2.1 ```<adding command>``` includes: ```add```, ``insert```, and ```create```.  
+&nbsp;&nbsp;&nbsp;&nbsp;2.1 ```<adding command>``` includes: ```add```, ```insert```, and ```create```.  
 &nbsp;&nbsp;&nbsp;&nbsp;2.2 ```<adding command>``` can be omitted, thus the following two commands are equivalent:  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```add project meeting``` and ```project meeting```  
 &nbsp;&nbsp;&nbsp;&nbsp;2.3 ```@<member>``` represents the username of the member, a request will be sent to him or her. After confirmation, the same task will be added to his or her list.  
