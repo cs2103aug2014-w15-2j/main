@@ -45,12 +45,16 @@ log in to @<username> @<password>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```from <hhmm><ddmmyyyy> to <hhmm><ddmmyyyy>```  
   
 &nbsp;&nbsp;&nbsp;&nbsp;2.5 To create a sublist, use the following command  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```addList @<list name>```  
+```
+addList @<list name>
+```  
 
 
 #### 3. Display Tasks  
 &nbsp;&nbsp;&nbsp;&nbsp;The general command format to display tasks is  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```<displaying command> [@<type>][@<component>][@<list name>]```  
+```
+<displaying command> [@<type>][@<component>][@<list name>]
+```  
   
 &nbsp;&nbsp;&nbsp;&nbsp;3.1 The tasks will be shown with an index, which you will use to do further operations on the specific task.  
   
