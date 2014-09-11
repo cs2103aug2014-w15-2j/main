@@ -96,5 +96,37 @@ addList @<list name>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```ALL``` : all records will be trashed  
   
 &nbsp;&nbsp;&nbsp;&nbsp;5.2 Deleted tasks will be placed in trash bin temporarily  
+
+
+#### 6. Recovering from recent actions  
+&nbsp;&nbsp;&nbsp;&nbsp;The general command format to recover is  
+```
+undo [<number of steps>]
+```  
+
+
+#### 7. Trash Bin Actions  
   
-&nbsp;&nbsp;&nbsp;&nbsp;4.3 ```<updating command>``` includes: ```update```, ```change```, ```edit```, and ```modify```  
+&nbsp;&nbsp;&nbsp;&nbsp;7.1 To display the trash bin, use the command  
+```
+viewTrash
+```  
+
+&nbsp;&nbsp;&nbsp;&nbsp;7.2 To display the trash bin, use the command  
+```
+emptyTrash
+```  
+&nbsp;&nbsp;&nbsp;&nbsp;(Note: this action is unable to be undone.)  
+
+&nbsp;&nbsp;&nbsp;&nbsp;7.3 To recover a task, use the command  
+```
+recover <component>
+```
+
+
+#### 8. Help  
+&nbsp;&nbsp;&nbsp;&nbsp;If you need help anywhere anytime, just type in the command  
+```
+help [<command>]
+```  
+  
