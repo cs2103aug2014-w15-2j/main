@@ -34,3 +34,19 @@ User Guide
 &nbsp;&nbsp;&nbsp;&nbsp;2.5 To create a sublist, use the following command  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```addList @<list name>```  
 
+
+#### 3. Display Tasks  
+&nbsp;&nbsp;&nbsp;&nbsp;The general command format to display tasks is  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```<displaying command> [@<type>][@<component>][@<list name>]```  
+&nbsp;&nbsp;&nbsp;&nbsp;3.1 The tasks will be shown with an index, which you will use to do further operations on the specific task.  
+&nbsp;&nbsp;&nbsp;&nbsp;3.2 ```<displaying command>``` includes: **read**, **display**, **search**, and **find**. 
+&nbsp;&nbsp;&nbsp;&nbsp;3.3 ```@<type>``` specify the type of view, including  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**list**: tasks are displayed in an ordered list (default)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**schedule**: tasks are displayed in a calendar view  
+&nbsp;&nbsp;&nbsp;&nbsp;3.4 ```@<component>``` specify the searching requirements, including  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**<search keywords>** : show the tasks that contain the provided keyword in a list view  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**<time>** : show the tasks that need to be done before a specific time  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**<member>** : show the tasks that need to be done with a specific person  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**ALL** : show all the records (default)  
+
+
