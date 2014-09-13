@@ -14,6 +14,12 @@ public class Task {
 	
 	/**
 	 * constructor
+	 * @param description
+	 * @param category
+	 * @param priority
+	 * @param task_id
+	 * @param repeated_period
+	 * @param tag
 	 */
 	public Task(String description, String category, int priority, String task_id, int repeated_period, ArrayList<String> tag) {
 		this.description = description;
