@@ -1,5 +1,5 @@
 package include;
 
-public class FloatingTask {
+public class FloatingTask extends Task{
 
 }
