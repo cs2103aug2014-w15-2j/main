@@ -32,4 +32,40 @@ public class Task {
 		this.repeated_period = repeated_period;
 		this.tag = tag;
 	}
+	
+	/**
+	 * isFloatingTask
+	 * @return
+	 */
+	public boolean isFloatingTask() {
+		if (this.type.equals(TaskType.FLOATING)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * isTimedTask
+	 * @return
+	 */
+	public boolean isTimedTask() {
+		if (this.type.equals(TaskType.TIMED)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * isDeadlineTask
+	 * @return
+	 */
+	public boolean isDeadlineTask() {
+		if (this.type.equals(TaskType.DEADLINE)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
