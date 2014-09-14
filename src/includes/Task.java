@@ -1,6 +1,7 @@
 package includes;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 
@@ -67,5 +68,17 @@ public class Task {
 		} else {
 			return false;
 		}
+	}
+	
+	public TimeInterval getInterval() {
+		TimeInterval interval = null;
+		try {
+			interval = new TimeInterval(new Date(Long.MIN_VALUE), new Date(Long.MIN_VALUE));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return interval;
 	}
 }

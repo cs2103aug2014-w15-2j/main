@@ -1,11 +1,10 @@
 package includes;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 public class TimeInterval {
-	private Timestamp startDate;
-	private Timestamp endDate;
+	private Date startDate;
+	private Date endDate;
 	
 	/**
 	 * constructor
@@ -13,7 +12,7 @@ public class TimeInterval {
 	 * @param endDate
 	 * @throws Exception
 	 */
-	public TimeInterval(Timestamp startDate, Timestamp endDate) throws Exception {
+	public TimeInterval(Date startDate, Date endDate) throws Exception {
 		if (startDate.after(endDate)) {
 			throw new Exception("invalid time interval");
 		} else {
@@ -27,7 +26,7 @@ public class TimeInterval {
 	 * @return start date
 	 */
 	public Date getStartDate() {
-		return (Date) this.startDate;
+		return this.startDate;
 	}
 	
 	/**
@@ -35,6 +34,22 @@ public class TimeInterval {
 	 * @return end date
 	 */
 	public Date getEndDate() {
-		return (Date) this.endDate;
+		return this.endDate;
+	}
+	
+	/**
+	 * isOverlapped
+	 * @param firstInterval
+	 * @param secondInterval
+	 * @return
+	 */
+	public static boolean isOverlapped(TimeInterval firstInterval, TimeInterval secondInterval) {
+		
+		if ((firstInterval.getStartDate().after(secondInterval.getEndDate())) || 
+		   (firstInterval.getEndDate().before(secondInterval.getStartDate()))) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

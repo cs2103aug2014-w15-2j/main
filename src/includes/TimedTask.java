@@ -1,6 +1,7 @@
 package includes;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class TimedTask extends Task {
 	TimeInterval interval;
@@ -21,10 +22,25 @@ public class TimedTask extends Task {
 					 String task_id, 
 					 int repeated_period, 
 					 ArrayList<String> tag,
-					 TimeInterval interval) {
+					 Date startDate,
+					 Date endDate) {
 		super(description, category, priority, task_id, repeated_period, tag);
-		this.interval = interval;
+		try {
+			this.interval = new TimeInterval(startDate, endDate);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.type = TaskType.TIMED;
+	}
+	
+	
+	/**
+	 * @override getInterval
+	 * @return interval
+	 */
+	public TimeInterval getInterval() {
+		return this.interval;
 	}
 
 }

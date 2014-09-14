@@ -1,6 +1,5 @@
 package includes;
 
-import includes.Task.TaskType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,4 +29,18 @@ public class DeadlineTask extends Task {
 		this.type = TaskType.DEADLINE;
 	}
 
+	/**
+	 * @override getInterval
+	 * @return interval
+	 */
+	public TimeInterval getInterval() {
+		TimeInterval interval = null;
+		try {
+			interval = new TimeInterval(new Date(Long.MIN_VALUE), this.deadline);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return interval;
+	}
 }
