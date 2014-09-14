@@ -1,5 +1,7 @@
 package includes;
 
+import includes.Task.TaskType;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -25,6 +27,7 @@ public class DeadlineTask extends Task {
 						Date deadline) {
 		super(description, category, priority, task_id, repeated_period, tag);
 		this.deadline = deadline;
+		this.type = TaskType.DEADLINE;
 	}
 
 }

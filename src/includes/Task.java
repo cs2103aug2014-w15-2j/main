@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 
 public class Task {
+	public enum TaskType {FLOATING, TIMED, DEADLINE};
+	
+	public TaskType type;
 	public String description;
 	public String category;
 	public int priority;

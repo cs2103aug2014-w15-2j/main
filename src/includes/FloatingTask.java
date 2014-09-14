@@ -20,6 +20,7 @@ public class FloatingTask extends Task {
 						int repeated_period, 
 						ArrayList<String> tag) {
 		super(description, category, priority, task_id, repeated_period, tag);
+		this.type = TaskType.FLOATING;
 	}
 
 }

@@ -24,6 +24,7 @@ public class TimedTask extends Task {
 					 TimeInterval interval) {
 		super(description, category, priority, task_id, repeated_period, tag);
 		this.interval = interval;
+		this.type = TaskType.TIMED;
 	}
 
 }
