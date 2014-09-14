@@ -111,4 +111,21 @@ public class User {
 		
 		return null;
 	}
+	
+	/**
+	 * find
+	 * @param constraint
+	 * @return
+	 */
+	public ArrayList<Task> find(Constraint constraint) {
+		Iterator<Task> taskIterator = this.currentTasks.iterator();
+		ArrayList<Task> matchedTasks = new ArrayList<Task>();
+		while (taskIterator.hasNext()) {
+			Task task = taskIterator.next();
+			if (constraint.isMeeted(task)) {
+				matchedTasks.add(task);
+			}
+		}
+		return matchedTasks;
+	}
 }
