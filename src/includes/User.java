@@ -1,6 +1,7 @@
 package includes;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Stack;
 
 public class User {
@@ -80,5 +81,34 @@ public class User {
 		// TODO: update the tag by appending 'trashed' tag
 	}
 	
+	/**
+	 * getTaskIdByIndex
+	 * @param task_id
+	 * @return
+	 */
+	public String getTaskIdByIndex(int task_id) {
+		if (task_id >= this.currentTasks.size()) {
+			// Error message/ how?
+			return null;
+		} else {
+			return this.currentTasks.get(task_id).task_id;
+		}
+	}
 	
+	/**
+	 * retrieve
+	 * @param task_id
+	 * @return the Task, null if there is an error
+	 */
+	public Task retrieve(int task_id) {
+		Iterator<Task> taskIterator = this.currentTasks.iterator();
+		while (taskIterator.hasNext()) {
+			Task task = taskIterator.next();
+			if (task.task_id.equals(this.getTaskIdByIndex(task_id))) {
+				return task;
+			}
+		}
+		
+		return null;
+	}
 }
