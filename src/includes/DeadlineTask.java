@@ -32,15 +32,11 @@ public class DeadlineTask extends Task {
 	/**
 	 * @override getInterval
 	 * @return interval
+	 * @throws Exception 
 	 */
-	public TimeInterval getInterval() {
+	public TimeInterval getInterval() throws Exception {
 		TimeInterval interval = null;
-		try {
-			interval = new TimeInterval(new Date(Long.MIN_VALUE), this.deadline);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		interval = new TimeInterval(new Date(Long.MIN_VALUE), this.deadline);
 		return interval;
 	}
 }

@@ -12,23 +12,20 @@ public class Constraint {
 	 * @param keyword
 	 * @param startDate
 	 * @param endDate
+	 * @throws Exception 
 	 */
-	public Constraint(String keyword, Date startDate, Date endDate) {
+	public Constraint(String keyword, Date startDate, Date endDate) throws Exception {
 		this.keyword = keyword.toLowerCase();
-		try {
-			this.interval = new TimeInterval(startDate, endDate);
-		} catch (Exception e) {
-			// e.printStackTrace();
-			// TODO: error message
-		}
+		this.interval = new TimeInterval(startDate, endDate);
 	}
 	
 	/**
 	 * isMeeted
 	 * @param task
 	 * @return boolean
+	 * @throws Exception 
 	 */
-	public boolean isMeeted(Task task) {
+	public boolean isMeeted(Task task) throws Exception {
 		// test description
 		if (task.description.toLowerCase().contains(this.keyword)) {
 			return true;

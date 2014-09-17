@@ -15,6 +15,7 @@ public class TimedTask extends Task {
 	 * @param repeated_period
 	 * @param tag
 	 * @param interval
+	 * @throws Exception 
 	 */
 	public TimedTask(String description, 
 					 String category, 
@@ -23,14 +24,9 @@ public class TimedTask extends Task {
 					 int repeated_period, 
 					 ArrayList<String> tag,
 					 Date startDate,
-					 Date endDate) {
+					 Date endDate) throws Exception {
 		super(description, category, priority, task_id, repeated_period, tag);
-		try {
-			this.interval = new TimeInterval(startDate, endDate);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.interval = new TimeInterval(startDate, endDate);
 		this.type = TaskType.TIMED;
 	}
 	

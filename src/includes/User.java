@@ -116,8 +116,9 @@ public class User {
 	 * find
 	 * @param constraint
 	 * @return
+	 * @throws Exception 
 	 */
-	public ArrayList<Task> find(Constraint constraint) {
+	public ArrayList<Task> find(Constraint constraint) throws Exception {
 		Iterator<Task> taskIterator = this.currentTasks.iterator();
 		ArrayList<Task> matchedTasks = new ArrayList<Task>();
 		while (taskIterator.hasNext()) {
