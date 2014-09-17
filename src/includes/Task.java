@@ -70,9 +70,43 @@ public class Task {
 		}
 	}
 	
+	/**
+	 * getInterval
+	 * @return
+	 * @throws Exception
+	 */
 	public TimeInterval getInterval() throws Exception {
 		TimeInterval interval = null;
 		interval = new TimeInterval(new Date(Long.MIN_VALUE), new Date(Long.MIN_VALUE));
 		return interval;
 	}
+	
+	/**
+	 * addTag
+	 * @param tag
+	 * @return true for success, false for failure
+	 */
+	public boolean addTag(String tag) {
+		try {
+			this.tag.add(tag);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	/**
+	 * removeTag
+	 * @param tag
+	 * @return true for success, false for failure
+	 */
+	public boolean removeTag(String tag) {
+		try {
+			this.tag.remove(tag);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
 }

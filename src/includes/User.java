@@ -17,7 +17,6 @@ public class User {
 	 */
 	public boolean undo() {
 		if (this.undoable.empty()) {
-			// cannot undo
 			return false;
 		} else {
 			this.redoable.push(this.currentTasks);
@@ -55,7 +54,7 @@ public class User {
 	 * updateUndoable
 	 * this method should be called BEFORE every operation involving task list
 	 */
-	public void updateUndoable() {
+	private void updateUndoable() {
 		this.redoable.clear();
 		this.undoable.push(this.currentTasks);
 		if (this.undoable.size() > MAXIMUM_UNDO_TIMES) {
@@ -66,16 +65,23 @@ public class User {
 	/**
 	 * add
 	 * @param task
+	 * @return true for success, false for failure
 	 */
-	public void add(Task task) {
-		this.updateUndoable();
-		this.currentTasks.add(task);
-		// TODO: display message
+	public boolean add(Task task) {
+		try {
+			this.updateUndoable();
+			this.currentTasks.add(task);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+		
 	}
 	
 	/**
 	 * delete
 	 * @param task_id
+	 * @return true for success, false for failure
 	 */
 	public void delete(int task_id) {
 		// TODO: update the tag by appending 'trashed' tag
