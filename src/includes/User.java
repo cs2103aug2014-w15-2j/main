@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Stack;
 
 public class User {
+	private static final String TRASHED_TAG = "trashed";
 	ArrayList<Task> currentTasks;
 	Stack<ArrayList<Task>> undoable;
 	Stack<ArrayList<Task>> redoable;
@@ -80,24 +81,24 @@ public class User {
 	
 	/**
 	 * delete
-	 * @param task_id
-	 * @return true for success, false for failure
+	 * @param index
+	 * @throws CommandFailedException 
 	 */
-	public void delete(int task_id) {
-		// TODO: update the tag by appending 'trashed' tag
+	public void delete(int index) throws CommandFailedException {
+		this.currentTasks.get(index).addTag(TRASHED_TAG);
 	}
 	
 	/**
 	 * getTaskIdByIndex
-	 * @param task_id
+	 * @param index
 	 * @return
 	 */
-	public String getTaskIdByIndex(int task_id) {
-		if (task_id >= this.currentTasks.size()) {
+	public String getTaskIdByIndex(int index) {
+		if (index >= this.currentTasks.size()) {
 			// Error message/ how?
 			return null;
 		} else {
-			return this.currentTasks.get(task_id).task_id;
+			return this.currentTasks.get(index).task_id;
 		}
 	}
 	

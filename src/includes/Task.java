@@ -6,7 +6,8 @@ import java.util.Date;
 
 
 public class Task {
-	public enum TaskType {FLOATING, TIMED, DEADLINE};
+	public enum TaskType {FLOATING, TIMED, DEADLINE}
+	private static final String DUPLICATED_TAG_ERROR_MESSAGE = "tag %1$s already exists.";
 	
 	public TaskType type;
 	public String description;
@@ -83,30 +84,24 @@ public class Task {
 	
 	/**
 	 * addTag
+	 * user cannot add duplicated tag for a task
 	 * @param tag
-	 * @return true for success, false for failure
+	 * @throws CommandFailedException 
 	 */
-	public boolean addTag(String tag) {
-		try {
+	public void addTag(String tag) throws CommandFailedException {
+		if (this.tag.contains(tag)) {
+			throw new CommandFailedException(String.format(DUPLICATED_TAG_ERROR_MESSAGE, tag));
+		} else {
 			this.tag.add(tag);
-			return true;
-		} catch (Exception e) {
-			return false;
 		}
 	}
 	
 	/**
 	 * removeTag
 	 * @param tag
-	 * @return true for success, false for failure
 	 */
-	public boolean removeTag(String tag) {
-		try {
-			this.tag.remove(tag);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
+	public void removeTag(String tag) {
+		this.tag.remove(tag);
 	}
 	
 }
