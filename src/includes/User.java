@@ -6,6 +6,9 @@ import java.util.Stack;
 
 public class User {
 	private static final String TRASHED_TAG = "trashed";
+	private static final String NO_REDOABLE_ERROR_MESSAGE = "nothing available for redoing";
+	private static final String NO_UNDOABLE_ERROR_MESSAGE = "nothing available for undoing";
+	private static final String INVALID_INDEX_ERROR_MESSAGE = "invalid task index %1$d";
 	ArrayList<Task> currentTasks;
 	Stack<ArrayList<Task>> undoable;
 	Stack<ArrayList<Task>> redoable;
@@ -14,11 +17,11 @@ public class User {
 	
 	/**
 	 * undo
-	 * @return boolean
+	 * @throws CommandFailedException 
 	 */
-	public boolean undo() {
+	public void undo() throws CommandFailedException {
 		if (this.undoable.empty()) {
-			return false;
+			throw new CommandFailedException(NO_UNDOABLE_ERROR_MESSAGE);
 		} else {
 			this.redoable.push(this.currentTasks);
 			
@@ -27,18 +30,16 @@ public class User {
 			}
 			
 			this.currentTasks = this.undoable.pop();
-			return true;
 		}
 	}
 	
 	/**
 	 * redo
-	 * @return boolean
+	 * @throws CommandFailedException 
 	 */
-	public boolean redo() {
+	public void redo() throws CommandFailedException {
 		if (this.redoable.empty()) {
-			// cannot redo
-			return false;
+			throw new CommandFailedException(NO_REDOABLE_ERROR_MESSAGE);
 		} else {
 			this.undoable.push(this.currentTasks);
 			
@@ -47,7 +48,6 @@ public class User {
 			}
 			
 			this.currentTasks = this.redoable.pop();
-			return true;
 		}
 	}
 	
@@ -66,17 +66,10 @@ public class User {
 	/**
 	 * add
 	 * @param task
-	 * @return true for success, false for failure
 	 */
-	public boolean add(Task task) {
-		try {
-			this.updateUndoable();
-			this.currentTasks.add(task);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-		
+	public void add(Task task) {
+		this.updateUndoable();
+		this.currentTasks.add(task);
 	}
 	
 	/**
@@ -85,18 +78,22 @@ public class User {
 	 * @throws CommandFailedException 
 	 */
 	public void delete(int index) throws CommandFailedException {
-		this.currentTasks.get(index).addTag(TRASHED_TAG);
+		if (!this.isValidIndex(index)) {
+			throw new CommandFailedException(String.format(INVALID_INDEX_ERROR_MESSAGE, index));
+		} else {
+			this.currentTasks.get(index).addTag(TRASHED_TAG);
+		}
 	}
 	
 	/**
 	 * getTaskIdByIndex
 	 * @param index
 	 * @return
+	 * @throws CommandFailedException 
 	 */
-	public String getTaskIdByIndex(int index) {
-		if (index >= this.currentTasks.size()) {
-			// Error message/ how?
-			return null;
+	public String getTaskIdByIndex(int index) throws CommandFailedException {
+		if (!this.isValidIndex(index)) {
+			throw new CommandFailedException(String.format(INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			return this.currentTasks.get(index).task_id;
 		}
@@ -104,19 +101,23 @@ public class User {
 	
 	/**
 	 * retrieve
-	 * @param task_id
+	 * @param index
 	 * @return the Task, null if there is an error
+	 * @throws CommandFailedException 
 	 */
-	public Task retrieve(int task_id) {
-		Iterator<Task> taskIterator = this.currentTasks.iterator();
-		while (taskIterator.hasNext()) {
-			Task task = taskIterator.next();
-			if (task.task_id.equals(this.getTaskIdByIndex(task_id))) {
-				return task;
+	public Task retrieve(int index) throws CommandFailedException {
+		if (!this.isValidIndex(index)) {
+			throw new CommandFailedException(String.format(INVALID_INDEX_ERROR_MESSAGE, index));
+		} else {
+			Iterator<Task> taskIterator = this.currentTasks.iterator();
+			while (taskIterator.hasNext()) {
+				Task task = taskIterator.next();
+				if (task.task_id.equals(this.getTaskIdByIndex(index))) {
+					return task;
+				}
 			}
+			return null;
 		}
-		
-		return null;
 	}
 	
 	/**
@@ -135,5 +136,18 @@ public class User {
 			}
 		}
 		return matchedTasks;
+	}
+	
+	/**
+	 * isValidIndex
+	 * @param index
+	 * @return
+	 */
+	private boolean isValidIndex(int index) {
+		if ((index < 0) || (index > this.currentTasks.size())) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }
