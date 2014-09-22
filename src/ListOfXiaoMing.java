@@ -1,5 +1,10 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
 
 import includes.*;
@@ -7,7 +12,7 @@ import data.*;
 
 
 enum COMMAND_TYPE {
-	LOG_IN, LOG_OUT, CREATE_ACCOUNT, HELP, ADD, UPDATE, DELETE, SEARCH
+	LOG_IN, LOG_OUT, CREATE_ACCOUNT, HELP, ADD, UPDATE, DELETE, SEARCH, REDO, UNDO
 }
 
 class Pair {
@@ -24,7 +29,7 @@ public class ListOfXiaoMing {
 	private static Scanner scanner_ = new Scanner(System.in);
 	
 	//a property to store the current user
-	private User thisUser;
+	private User user;
 	
 	
 	
@@ -32,7 +37,7 @@ public class ListOfXiaoMing {
 	 * Constructor
 	 */
 	public ListOfXiaoMing(String recordFilePath) {
-		thisUser = new User(recordFilePath);
+		user = new User(recordFilePath);
 	}
 	
 	
@@ -241,38 +246,177 @@ public class ListOfXiaoMing {
 	 * @param command
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private String execute (String userInput) {
 		Pair commandPair = ListOfXiaoMing.parse(userInput);
 		COMMAND_TYPE thisCommand = (COMMAND_TYPE) commandPair.head;
-		Object parameter = commandPair.tail;
+		ArrayList<String> parameterList = (ArrayList<String>) commandPair.tail;
 		
 		switch(thisCommand) {
 			case ADD:
-				return this.add(parameter);
+				return this.add(parameterList);
 			
 			case DELETE:
-				break;
+				return this.delete(parameterList);
 				
 			case UPDATE:
-				break;
+				return "";
 			
 			case SEARCH:
-				break;
+				return this.search(parameterList);
 			
 			case LOG_OUT:
-				break;
+				return this.logOut();
+				
+			case UNDO:
+				return this.undo();
+				
+			case REDO:
+				return this.redo();
 			
 			default:
-				break;
+				return "";
 		}
-		
+	}
+	
+	private String add(ArrayList<String> taskParameters) {
+		Task taskToAdd = getTaskFromParameterList(taskParameters);
+		this.user.add(taskToAdd);
 		return "";
 	}
 	
-	@SuppressWarnings("unchecked")
-	private String add(Object parameters) {
-		Task taskToAdd = getTaskFromParameterList((ArrayList<String>) parameters);
-		this.thisUser.add(taskToAdd);
+	private String delete(ArrayList<String> taskParameters) {
+		int index = Integer.parseInt(taskParameters.get(0));
+		try {
+			this.user.delete(index);
+		} catch (CommandFailedException e) {
+			showToUser(e.toString());
+		}
 		return "";
 	}
+	
+
+	private String logOut() {
+		return "log out";
+	}
+	
+	
+	private String undo() {
+		try {
+			this.user.undo();
+		} catch (CommandFailedException e) {
+			showToUser(e.toString());
+		}
+		return "";
+	}
+	
+	private String redo() {
+		try {
+			this.user.redo();
+		} catch (CommandFailedException e) {
+			showToUser(e.toString());
+		}
+		return "";
+	}
+	
+	private String search(ArrayList<String> taskParameters) {
+		
+		try {
+			TimeInterval timeInterval = null;
+			for (String parameter : taskParameters) {
+				if (TimeInterval.isTimeInterval(parameter)) {
+					timeInterval = new TimeInterval(parameter);
+					taskParameters.remove(parameter);
+				}
+			}
+		
+			String keyword = taskParameters.get(0);
+			Constraint thisConstraint = new Constraint(keyword, timeInterval);
+			ArrayList<Task> queryResult = this.user.find(thisConstraint);
+			return taskListToString(queryResult);
+		} catch (Exception e) {
+			return e.toString();
+		}
+	}
+	
+	
+	private static String taskListToString(ArrayList<Task> list) {
+		String returnValue = "";
+		for (int i = 0; i < list.size(); i++) {
+			if (i == 0) {
+				returnValue = i+ ". " + list.get(i).toString();
+			} else {
+				returnValue = returnValue + "\n" + i + ". " + list.get(i).toString();
+			}
+		}
+		
+		return returnValue;
+	}
+	
+	
+	public static Date parseDateString (String dateString) {
+		try {
+			//e.g. "20:00 04 Jan 2014"
+			Date date = new SimpleDateFormat("hh:mm dd MMMM yyyy", Locale.ENGLISH).parse(dateString);
+			return date;
+		} catch (ParseException e) {
+			return null;
+		}
+	}
+	
+	public static TimeInterval parseTimeInterval(String parameter) throws Exception {
+		String[] wordList = parameter.trim().split(" ");
+		if (wordList.length == 1) {
+			if (parameter.equalsIgnoreCase("today")) {
+				Calendar startCalendar = Calendar.getInstance();
+				startCalendar.setTime(new Date());
+				
+				Calendar endCalendar = Calendar.getInstance();
+				endCalendar.setTime(new Date());
+				endCalendar.set(Calendar.HOUR, 23);
+				endCalendar.set(Calendar.MINUTE, 59);
+				
+				return new TimeInterval(startCalendar.getTime(), endCalendar.getTime());
+			} else if (parameter.equalsIgnoreCase("tommorrow")) {
+				Calendar startCalendar = Calendar.getInstance();
+				startCalendar.setTime(new Date());
+				startCalendar.add(Calendar.DATE, 1);
+				startCalendar.set(Calendar.HOUR, 0);
+				startCalendar.set(Calendar.MINUTE, 0);
+				
+				Calendar endCalendar = Calendar.getInstance();
+				endCalendar.setTime(new Date());
+				endCalendar.add(Calendar.DATE, 1);
+				endCalendar.set(Calendar.HOUR, 23);
+				endCalendar.set(Calendar.MINUTE, 59);
+				
+				return new TimeInterval(startCalendar.getTime(), endCalendar.getTime());
+			} else {
+				return null;
+			}
+		} else if (wordList.length == 5) {
+			if (wordList[0].equalsIgnoreCase("before")) {
+				parameter.replaceFirst("before ", "");
+				Date startDate = new Date();
+				Date endDate = parseDateString(parameter);
+				return new TimeInterval(startDate, endDate);
+			} else {
+				return null;
+			}
+		} else if (wordList.length == 10) {
+			if (wordList[0].equalsIgnoreCase("from") && wordList[5].equalsIgnoreCase("to")) {
+				String startDateString = wordList[1] + " " + wordList[2] + " " + wordList[3] + " " + wordList[4];
+				String endDateString = wordList[6] + " " + wordList[7] + " " + wordList[8] + " " + wordList[9];
+				Date startDate = parseDateString(startDateString);
+				Date endDate = parseDateString(endDateString);
+				return new TimeInterval(startDate, endDate);
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+	
+	
 }

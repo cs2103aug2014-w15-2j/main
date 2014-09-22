@@ -20,7 +20,7 @@ public class TimeInterval {
 			this.endDate = endDate;
 		}
 	}
-	
+
 	/**
 	 * getStartDate
 	 * @return start date

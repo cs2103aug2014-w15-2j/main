@@ -19,6 +19,11 @@ public class Constraint {
 		this.interval = new TimeInterval(startDate, endDate);
 	}
 	
+	public Constraint(String keyword, TimeInterval timeInterval) {
+		this.keyword = keyword.toLowerCase();
+		this.interval = timeInterval;
+	}
+
 	/**
 	 * isMeeted
 	 * @param task
