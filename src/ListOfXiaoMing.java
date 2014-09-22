@@ -1,5 +1,10 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
 
 import includes.*;
@@ -347,4 +352,71 @@ public class ListOfXiaoMing {
 		
 		return returnValue;
 	}
+	
+	
+	public static Date parseDateString (String dateString) {
+		try {
+			//e.g. "20:00 04 Jan 2014"
+			Date date = new SimpleDateFormat("hh:mm dd MMMM yyyy", Locale.ENGLISH).parse(dateString);
+			return date;
+		} catch (ParseException e) {
+			return null;
+		}
+	}
+	
+	public static TimeInterval parseTimeInterval(String parameter) throws Exception {
+		String[] wordList = parameter.trim().split(" ");
+		if (wordList.length == 1) {
+			if (parameter.equalsIgnoreCase("today")) {
+				Calendar startCalendar = Calendar.getInstance();
+				startCalendar.setTime(new Date());
+				
+				Calendar endCalendar = Calendar.getInstance();
+				endCalendar.setTime(new Date());
+				endCalendar.set(Calendar.HOUR, 23);
+				endCalendar.set(Calendar.MINUTE, 59);
+				
+				return new TimeInterval(startCalendar.getTime(), endCalendar.getTime());
+			} else if (parameter.equalsIgnoreCase("tommorrow")) {
+				Calendar startCalendar = Calendar.getInstance();
+				startCalendar.setTime(new Date());
+				startCalendar.add(Calendar.DATE, 1);
+				startCalendar.set(Calendar.HOUR, 0);
+				startCalendar.set(Calendar.MINUTE, 0);
+				
+				Calendar endCalendar = Calendar.getInstance();
+				endCalendar.setTime(new Date());
+				endCalendar.add(Calendar.DATE, 1);
+				endCalendar.set(Calendar.HOUR, 23);
+				endCalendar.set(Calendar.MINUTE, 59);
+				
+				return new TimeInterval(startCalendar.getTime(), endCalendar.getTime());
+			} else {
+				return null;
+			}
+		} else if (wordList.length == 5) {
+			if (wordList[0].equalsIgnoreCase("before")) {
+				parameter.replaceFirst("before ", "");
+				Date startDate = new Date();
+				Date endDate = parseDateString(parameter);
+				return new TimeInterval(startDate, endDate);
+			} else {
+				return null;
+			}
+		} else if (wordList.length == 10) {
+			if (wordList[0].equalsIgnoreCase("from") && wordList[5].equalsIgnoreCase("to")) {
+				String startDateString = wordList[1] + " " + wordList[2] + " " + wordList[3] + " " + wordList[4];
+				String endDateString = wordList[6] + " " + wordList[7] + " " + wordList[8] + " " + wordList[9];
+				Date startDate = parseDateString(startDateString);
+				Date endDate = parseDateString(endDateString);
+				return new TimeInterval(startDate, endDate);
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+	
+	
 }
