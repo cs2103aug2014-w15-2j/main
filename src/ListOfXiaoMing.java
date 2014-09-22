@@ -324,8 +324,8 @@ public class ListOfXiaoMing {
 		try {
 			TimeInterval timeInterval = null;
 			for (String parameter : taskParameters) {
-				if (TimeInterval.isTimeInterval(parameter)) {
-					timeInterval = new TimeInterval(parameter);
+				timeInterval = parseTimeInterval(parameter);
+				if (timeInterval != null) {
 					taskParameters.remove(parameter);
 				}
 			}
@@ -354,7 +354,7 @@ public class ListOfXiaoMing {
 	}
 	
 	
-	public static Date parseDateString (String dateString) {
+	private static Date parseDateString (String dateString) {
 		try {
 			//e.g. "20:00 04 Jan 2014"
 			Date date = new SimpleDateFormat("hh:mm dd MMMM yyyy", Locale.ENGLISH).parse(dateString);
@@ -364,58 +364,55 @@ public class ListOfXiaoMing {
 		}
 	}
 	
-	public static TimeInterval parseTimeInterval(String parameter) throws Exception {
+	private static TimeInterval parseTimeInterval(String parameter) throws Exception {
 		String[] wordList = parameter.trim().split(" ");
+		Date startDate = null;
+		Date endDate = null;
 		if (wordList.length == 1) {
 			if (parameter.equalsIgnoreCase("today")) {
-				Calendar startCalendar = Calendar.getInstance();
-				startCalendar.setTime(new Date());
+				startDate = new Date();
 				
 				Calendar endCalendar = Calendar.getInstance();
 				endCalendar.setTime(new Date());
 				endCalendar.set(Calendar.HOUR, 23);
 				endCalendar.set(Calendar.MINUTE, 59);
-				
-				return new TimeInterval(startCalendar.getTime(), endCalendar.getTime());
+				startDate = endCalendar.getTime();
 			} else if (parameter.equalsIgnoreCase("tommorrow")) {
 				Calendar startCalendar = Calendar.getInstance();
 				startCalendar.setTime(new Date());
 				startCalendar.add(Calendar.DATE, 1);
 				startCalendar.set(Calendar.HOUR, 0);
 				startCalendar.set(Calendar.MINUTE, 0);
+				startDate = startCalendar.getTime();
 				
 				Calendar endCalendar = Calendar.getInstance();
 				endCalendar.setTime(new Date());
 				endCalendar.add(Calendar.DATE, 1);
 				endCalendar.set(Calendar.HOUR, 23);
 				endCalendar.set(Calendar.MINUTE, 59);
-				
-				return new TimeInterval(startCalendar.getTime(), endCalendar.getTime());
-			} else {
-				return null;
+				endDate = endCalendar.getTime();
 			}
 		} else if (wordList.length == 5) {
 			if (wordList[0].equalsIgnoreCase("before")) {
 				parameter.replaceFirst("before ", "");
-				Date startDate = new Date();
-				Date endDate = parseDateString(parameter);
-				return new TimeInterval(startDate, endDate);
-			} else {
-				return null;
+				startDate = new Date();
+				endDate = parseDateString(parameter);
 			}
 		} else if (wordList.length == 10) {
 			if (wordList[0].equalsIgnoreCase("from") && wordList[5].equalsIgnoreCase("to")) {
 				String startDateString = wordList[1] + " " + wordList[2] + " " + wordList[3] + " " + wordList[4];
 				String endDateString = wordList[6] + " " + wordList[7] + " " + wordList[8] + " " + wordList[9];
-				Date startDate = parseDateString(startDateString);
-				Date endDate = parseDateString(endDateString);
-				return new TimeInterval(startDate, endDate);
-			} else {
-				return null;
+				startDate = parseDateString(startDateString);
+				endDate = parseDateString(endDateString);
 			}
-		} else {
-			return null;
 		}
+		
+		if (startDate == null || endDate == null) {
+			return null;
+		} else {
+			return new TimeInterval(startDate, endDate);
+		}
+
 	}
 	
 	
