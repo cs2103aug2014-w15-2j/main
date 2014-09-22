@@ -1,6 +1,21 @@
 package data;
 
+import includes.DeadlineTask;
+import includes.FloatingTask;
+import includes.Task;
+import includes.TimedTask;
+import includes.Task.TaskType;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+
 public class DataStore {
+	
+	protected final int ATTRIBUTE_END_POSITION = 1;
 
 	public static boolean isAccountExisting(String username) {
 		// TODO Auto-generated method stub
@@ -17,7 +32,89 @@ public class DataStore {
 		
 	}
 
-	
+	/**
+	 * read file and get user current tasks
+	 * 
+	 * @param file
+	 * @throws IOException
+	 * @return user current tasks
+	 */
+	public static ArrayList<Task> getCurrentTasks(File file) throws IOException {
+		ArrayList<Task> currentTasks = new ArrayList<Task>();
+		Task task;
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		reader.readLine();
+		reader.readLine();
+		reader.readLine();
+		String nextTask = reader.readLine();
+		while (nextTask != null) {
+			task = parseTask(nextTask);
+			currentTasks.add(task);
+			nextTask = reader.readLine();
+		}
+		reader.close();
+		return currentTasks;
+	}
+
+	private Task parseTask(String taskDescription) {
+		Task task;
+		String type;
+		int typeEndIndex;
+
+		typeEndIndex = taskDescription.indexOf("`");
+		type = taskDescription.substring(0, typeEndIndex
+				- ATTRIBUTE_END_POSITION);
+		taskDescription = taskDescription.substring(typeEndIndex
+				+ ATTRIBUTE_END_POSITION);
+
+		if (type.equals(TaskType.FLOATING)) {
+			task = parseFloatingTask(taskDescription);
+		} else if (type.equals(TaskType.TIMED)) {
+			task = parseTimedTask(taskDescription);
+		} else {
+			task = parseDeadlineTask(taskDescription);
+		}
+		return task;
+	}
+
+	private FloatingTask parseFloatingTask(String taskDescription) {
+		FloatingTask task;
+		String description; 
+		String category;
+		int priority;
+		String task_id; 
+		int repeated_period; 
+		ArrayList<String> tag;
+		
+		return task;
+	}
+
+	private TimedTask parseTimedTask(String taskDescription) {
+		TimedTask task;
+		String description;
+		String category;
+		int priority;
+		String task_id;
+		int repeated_period;
+		ArrayList<String> tag;
+		Date startDate;
+		Date endDate;
+		
+		return task;
+	}
+
+	private DeadlineTask parseDeadlineTask(String taskDescription) {
+		DeadlineTask task;
+		String description; 
+		String category;
+		int priority;
+		String task_id; 
+		int repeated_period; 
+		ArrayList<String> tag;
+		Date deadline;
+		
+		return task;
+	}
 	
 	
 	

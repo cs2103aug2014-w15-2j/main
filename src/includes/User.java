@@ -1,13 +1,18 @@
 package includes;
 
+import includes.Task.TaskType;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Stack;
+
+import data.DataStore;
 
 public class User {
 	private static final String TRASHED_TAG = "trashed";
@@ -17,89 +22,67 @@ public class User {
 	ArrayList<Task> currentTasks;
 	Stack<ArrayList<Task>> undoable;
 	Stack<ArrayList<Task>> redoable;
-	
+
 	protected final int MAXIMUM_UNDO_TIMES = 10;
 	protected final int MAXIMUM_REDO_TIMES = 10;
-	
-	/**
-	 * constructor
-	 * @param recordFilePath
-	 * @throws IOException 
-	 */
-	public User(String recordFilePath) throws IOException{
-		String userFilePath = recordFilePath;
-		File userFile = new File(userFilePath);
-		currentTasks = getCurrentTasks(userFile);
-	}
 
 	/**
-	 * read file and get user current tasks
-	 * @param file
+	 * constructor
+	 * 
+	 * @param recordFilePath
 	 * @throws IOException
-	 * @return user current tasks
 	 */
-	private ArrayList<Task> getCurrentTasks(File file) throws IOException{
-		ArrayList<Task> currentTasks = new ArrayList<Task>();
-		Task task;
-		BufferedReader reader = new BufferedReader(new FileReader(file));
-		reader.readLine();
-		reader.readLine();
-		reader.readLine();
-		String nextTask = reader.readLine();
-		while (nextTask != null) {
-			task = parseTask(nextTask);
-			currentTasks.add(task);
-			nextTask = reader.readLine();
-		}
-		reader.close();
-		return currentTasks;
+	public User(String recordFilePath) throws IOException {
+		String userFilePath = recordFilePath;
+		File userFile = new File(userFilePath);
+		undoable = new Stack<ArrayList<Task>>();
+		redoable = new Stack<ArrayList<Task>>();
+		currentTasks = DataStore.getCurrentTasks(userFile);
 	}
+
 	
-	private Task parseTask (String taskDescription){
-		Task task;
-		
-		return task;
-	}
-	
+
 	/**
 	 * undo
-	 * @throws CommandFailedException 
+	 * 
+	 * @throws CommandFailedException
 	 */
 	public void undo() throws CommandFailedException {
 		if (this.undoable.empty()) {
 			throw new CommandFailedException(NO_UNDOABLE_ERROR_MESSAGE);
-		} else {		
+		} else {
 			this.redoable.push(this.currentTasks);
-			
+
 			if (this.redoable.size() > MAXIMUM_REDO_TIMES) {
 				this.redoable.remove(0);
 			}
-			
+
 			this.currentTasks = this.undoable.pop();
 		}
 	}
-	
+
 	/**
 	 * redo
-	 * @throws CommandFailedException 
+	 * 
+	 * @throws CommandFailedException
 	 */
 	public void redo() throws CommandFailedException {
 		if (this.redoable.empty()) {
 			throw new CommandFailedException(NO_REDOABLE_ERROR_MESSAGE);
 		} else {
 			this.undoable.push(this.currentTasks);
-			
+
 			if (this.undoable.size() > MAXIMUM_UNDO_TIMES) {
 				this.undoable.remove(0);
 			}
-			
+
 			this.currentTasks = this.redoable.pop();
 		}
 	}
-	
+
 	/**
-	 * updateUndoable
-	 * this method should be called BEFORE every operation involving task list
+	 * updateUndoable this method should be called BEFORE every operation
+	 * involving task list
 	 */
 	private void updateUndoable() {
 		this.redoable.clear();
@@ -108,52 +91,59 @@ public class User {
 			this.undoable.remove(0);
 		}
 	}
-	
+
 	/**
 	 * add
+	 * 
 	 * @param task
 	 */
 	public void add(Task task) {
 		this.updateUndoable();
 		this.currentTasks.add(task);
 	}
-	
+
 	/**
 	 * delete
+	 * 
 	 * @param index
-	 * @throws CommandFailedException 
+	 * @throws CommandFailedException
 	 */
 	public void delete(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
-			throw new CommandFailedException(String.format(INVALID_INDEX_ERROR_MESSAGE, index));
+			throw new CommandFailedException(String.format(
+					INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			this.currentTasks.get(index).addTag(TRASHED_TAG);
 		}
 	}
-	
+
 	/**
 	 * getTaskIdByIndex
+	 * 
 	 * @param index
 	 * @return
-	 * @throws CommandFailedException 
+	 * @throws CommandFailedException
 	 */
 	public String getTaskIdByIndex(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
-			throw new CommandFailedException(String.format(INVALID_INDEX_ERROR_MESSAGE, index));
+			throw new CommandFailedException(String.format(
+					INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			return this.currentTasks.get(index).task_id;
 		}
 	}
-	
+
 	/**
 	 * retrieve
+	 * 
 	 * @param index
 	 * @return the Task, null if there is an error
-	 * @throws CommandFailedException 
+	 * @throws CommandFailedException
 	 */
 	public Task retrieve(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
-			throw new CommandFailedException(String.format(INVALID_INDEX_ERROR_MESSAGE, index));
+			throw new CommandFailedException(String.format(
+					INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			Iterator<Task> taskIterator = this.currentTasks.iterator();
 			while (taskIterator.hasNext()) {
@@ -165,12 +155,13 @@ public class User {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * find
+	 * 
 	 * @param constraint
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public ArrayList<Task> find(Constraint constraint) throws Exception {
 		Iterator<Task> taskIterator = this.currentTasks.iterator();
@@ -183,9 +174,10 @@ public class User {
 		}
 		return matchedTasks;
 	}
-	
+
 	/**
 	 * isValidIndex
+	 * 
 	 * @param index
 	 * @return
 	 */
