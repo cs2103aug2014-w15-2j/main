@@ -15,6 +15,10 @@ public class User {
 	
 	protected final int MAXIMUM_UNDO_TIMES = 10;
 	
+	public User(String recordFilePath) {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * undo
 	 * @throws CommandFailedException 
