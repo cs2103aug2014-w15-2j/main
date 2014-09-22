@@ -248,7 +248,7 @@ public class ListOfXiaoMing {
 		
 		switch(thisCommand) {
 			case ADD:
-				break;
+				return this.add(parameter);
 			
 			case DELETE:
 				break;
@@ -266,6 +266,13 @@ public class ListOfXiaoMing {
 				break;
 		}
 		
+		return "";
+	}
+	
+	@SuppressWarnings("unchecked")
+	private String add(Object parameters) {
+		Task taskToAdd = getTaskFromParameterList((ArrayList<String>) parameters);
+		this.thisUser.add(taskToAdd);
 		return "";
 	}
 }
