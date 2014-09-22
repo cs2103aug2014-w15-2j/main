@@ -1,7 +1,10 @@
 package includes;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
@@ -18,18 +21,46 @@ public class User {
 	protected final int MAXIMUM_UNDO_TIMES = 10;
 	protected final int MAXIMUM_REDO_TIMES = 10;
 	
-	public User(String recordFilePath) throws FileNotFoundException{
+	/**
+	 * constructor
+	 * @param recordFilePath
+	 * @throws IOException 
+	 */
+	public User(String recordFilePath) throws IOException{
 		String userFilePath = recordFilePath;
 		File userFile = new File(userFilePath);
 		currentTasks = getCurrentTasks(userFile);
 	}
 
-	private ArrayList<Task> getCurrentTasks(File file){
-		ArrayList<Task> currentTasks;
-		
-		
+	/**
+	 * read file and get user current tasks
+	 * @param file
+	 * @throws IOException
+	 * @return user current tasks
+	 */
+	private ArrayList<Task> getCurrentTasks(File file) throws IOException{
+		ArrayList<Task> currentTasks = new ArrayList<Task>();
+		Task task;
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		reader.readLine();
+		reader.readLine();
+		reader.readLine();
+		String nextTask = reader.readLine();
+		while (nextTask != null) {
+			task = parseTask(nextTask);
+			currentTasks.add(task);
+			nextTask = reader.readLine();
+		}
+		reader.close();
 		return currentTasks;
 	}
+	
+	private Task parseTask (String taskDescription){
+		Task task;
+		
+		return task;
+	}
+	
 	/**
 	 * undo
 	 * @throws CommandFailedException 
