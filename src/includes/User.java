@@ -1,27 +1,12 @@
 package includes;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-<<<<<<< HEAD
-import java.util.Dictionary;
-=======
 import java.util.Iterator;
->>>>>>> branch 'master' of https://fanshicomic@github.com/cs2103aug2014-w15-2j/main.git
 import java.util.Stack;
 
 public class User {
-<<<<<<< HEAD
-	ArrayList<Task> CurrentTasks;
-	Stack<ArrayList<Task>> Undoable;
-	Stack<ArrayList<Task>> Redoable;
-	void add(Task task){
-		
-	}
-	void delete(String task_id){
-		
-	}
-	void update(String task_id, Dictionary<String, Object> updateCommand){
-		
-=======
 	private static final String TRASHED_TAG = "trashed";
 	private static final String NO_REDOABLE_ERROR_MESSAGE = "nothing available for redoing";
 	private static final String NO_UNDOABLE_ERROR_MESSAGE = "nothing available for undoing";
@@ -31,11 +16,20 @@ public class User {
 	Stack<ArrayList<Task>> redoable;
 	
 	protected final int MAXIMUM_UNDO_TIMES = 10;
+	protected final int MAXIMUM_REDO_TIMES = 10;
 	
-	public User(String recordFilePath) {
-		// TODO Auto-generated constructor stub
+	public User(String recordFilePath) throws FileNotFoundException{
+		String userFilePath = recordFilePath;
+		File userFile = new File(userFilePath);
+		currentTasks = getCurrentTasks(userFile);
 	}
 
+	private ArrayList<Task> getCurrentTasks(File file){
+		ArrayList<Task> currentTasks;
+		
+		
+		return currentTasks;
+	}
 	/**
 	 * undo
 	 * @throws CommandFailedException 
@@ -43,10 +37,10 @@ public class User {
 	public void undo() throws CommandFailedException {
 		if (this.undoable.empty()) {
 			throw new CommandFailedException(NO_UNDOABLE_ERROR_MESSAGE);
-		} else {
+		} else {		
 			this.redoable.push(this.currentTasks);
 			
-			if (this.redoable.size() > MAXIMUM_UNDO_TIMES) {
+			if (this.redoable.size() > MAXIMUM_REDO_TIMES) {
 				this.redoable.remove(0);
 			}
 			
@@ -170,6 +164,5 @@ public class User {
 		} else {
 			return true;
 		}
->>>>>>> branch 'master' of https://fanshicomic@github.com/cs2103aug2014-w15-2j/main.git
 	}
 }
