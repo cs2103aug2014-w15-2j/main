@@ -86,6 +86,26 @@ public class DataStore {
 		int repeated_period; 
 		ArrayList<String> tag;
 		
+		int endIndex;
+		
+		endIndex = taskDescription.indexOf("`");
+		task_id = taskDescription.substring(0, endIndex
+				- ATTRIBUTE_END_POSITION);
+		taskDescription = taskDescription.substring(endIndex
+				+ ATTRIBUTE_END_POSITION);
+		
+		endIndex = taskDescription.indexOf("`");
+		description = taskDescription.substring(0, endIndex
+				- ATTRIBUTE_END_POSITION);
+		taskDescription = taskDescription.substring(endIndex
+				+ ATTRIBUTE_END_POSITION);
+		
+		endIndex = taskDescription.indexOf("`");
+		category = taskDescription.substring(0, endIndex
+				- ATTRIBUTE_END_POSITION);
+		taskDescription = taskDescription.substring(endIndex
+				+ ATTRIBUTE_END_POSITION);
+		
 		return task;
 	}
 
