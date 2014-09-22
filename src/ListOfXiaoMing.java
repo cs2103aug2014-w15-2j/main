@@ -7,7 +7,7 @@ import data.*;
 
 
 enum COMMAND_TYPE {
-	LOG_IN, LOG_OUT, CREATE_ACCOUNT, HELP, ADD, UPDATE, DELETE, SEARCH
+	LOG_IN, LOG_OUT, CREATE_ACCOUNT, HELP, ADD, UPDATE, DELETE, SEARCH, REDO, UNDO
 }
 
 class Pair {
@@ -24,7 +24,7 @@ public class ListOfXiaoMing {
 	private static Scanner scanner_ = new Scanner(System.in);
 	
 	//a property to store the current user
-	private User thisUser;
+	private User user;
 	
 	
 	
@@ -32,7 +32,7 @@ public class ListOfXiaoMing {
 	 * Constructor
 	 */
 	public ListOfXiaoMing(String recordFilePath) {
-		thisUser = new User(recordFilePath);
+		user = new User(recordFilePath);
 	}
 	
 	
@@ -241,38 +241,110 @@ public class ListOfXiaoMing {
 	 * @param command
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private String execute (String userInput) {
 		Pair commandPair = ListOfXiaoMing.parse(userInput);
 		COMMAND_TYPE thisCommand = (COMMAND_TYPE) commandPair.head;
-		Object parameter = commandPair.tail;
+		ArrayList<String> parameterList = (ArrayList<String>) commandPair.tail;
 		
 		switch(thisCommand) {
 			case ADD:
-				return this.add(parameter);
+				return this.add(parameterList);
 			
 			case DELETE:
-				break;
+				return this.delete(parameterList);
 				
 			case UPDATE:
-				break;
+				return "";
 			
 			case SEARCH:
-				break;
+				return this.search(parameterList);
 			
 			case LOG_OUT:
-				break;
+				return this.logOut();
+				
+			case UNDO:
+				return this.undo();
+				
+			case REDO:
+				return this.redo();
 			
 			default:
-				break;
+				return "";
 		}
-		
+	}
+	
+	private String add(ArrayList<String> taskParameters) {
+		Task taskToAdd = getTaskFromParameterList(taskParameters);
+		this.user.add(taskToAdd);
 		return "";
 	}
 	
-	@SuppressWarnings("unchecked")
-	private String add(Object parameters) {
-		Task taskToAdd = getTaskFromParameterList((ArrayList<String>) parameters);
-		this.thisUser.add(taskToAdd);
+	private String delete(ArrayList<String> taskParameters) {
+		int index = Integer.parseInt(taskParameters.get(0));
+		try {
+			this.user.delete(index);
+		} catch (CommandFailedException e) {
+			showToUser(e.toString());
+		}
 		return "";
+	}
+	
+
+	private String logOut() {
+		return "log out";
+	}
+	
+	
+	private String undo() {
+		try {
+			this.user.undo();
+		} catch (CommandFailedException e) {
+			showToUser(e.toString());
+		}
+		return "";
+	}
+	
+	private String redo() {
+		try {
+			this.user.redo();
+		} catch (CommandFailedException e) {
+			showToUser(e.toString());
+		}
+		return "";
+	}
+	
+	private String search(ArrayList<String> taskParameters) {
+		
+		try {
+			TimeInterval timeInterval = null;
+			for (String parameter : taskParameters) {
+				if (TimeInterval.isTimeInterval(parameter)) {
+					timeInterval = new TimeInterval(parameter);
+					taskParameters.remove(parameter);
+				}
+			}
+		
+			String keyword = taskParameters.get(0);
+			Constraint thisConstraint = new Constraint(keyword, timeInterval);
+			ArrayList<Task> queryResult = this.user.find(thisConstraint);
+			return taskListToString(queryResult);
+		} catch (Exception e) {
+			return e.toString();
+		}
+	}
+	
+	
+	private static String taskListToString(ArrayList<Task> list) {
+		String returnValue = "";
+		for (int i = 0; i < list.size(); i++) {
+			if (i == 0) {
+				returnValue = i+ ". " + list.get(i).toString();
+			} else {
+				returnValue = returnValue + "\n" + i + ". " + list.get(i).toString();
+			}
+		}
+		
+		return returnValue;
 	}
 }

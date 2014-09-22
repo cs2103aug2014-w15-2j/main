@@ -21,6 +21,10 @@ public class TimeInterval {
 		}
 	}
 	
+	public TimeInterval(String parameter) {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * getStartDate
 	 * @return start date
@@ -51,5 +55,10 @@ public class TimeInterval {
 		} else {
 			return true;
 		}
+	}
+
+	public static boolean isTimeInterval(String parameter) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
