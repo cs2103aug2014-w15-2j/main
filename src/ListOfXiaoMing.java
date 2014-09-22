@@ -5,14 +5,22 @@ import data.*;
 
 public class ListOfXiaoMing {
 
-	//a property to store current user
+	//user commands set
+	public static enum USER_COMMAND {
+		
+	}
+	//a property to store the current user
 	private User thisUser;
 	
 	
-	//user commands set
-	private enum USER_COMMAND {
+	
+	/**
+	 * Constructor
+	 */
+	public ListOfXiaoMing(String recordFilePath) {
 		
 	}
+	
 	
 	public static void main(String[] args) {
 		
@@ -23,7 +31,7 @@ public class ListOfXiaoMing {
 	 * method to read in an user command and response correspondingly
 	 * @return
 	 */
-	public String readCommand() {
+	public static String readCommand() {
 		
 		return "";
 	}
@@ -33,7 +41,7 @@ public class ListOfXiaoMing {
 	 * method for users to log in
 	 * @return
 	 */
-	private String userLogIn() {
+	public static String userLogIn() {
 		
 		return "";
 	}
@@ -43,7 +51,7 @@ public class ListOfXiaoMing {
 	 * method for users to log out
 	 * @return
 	 */
-	private String userLogOut() {
+	public static String userLogOut() {
 		
 		return "";
 	}
@@ -53,10 +61,23 @@ public class ListOfXiaoMing {
 	 * method for users to create an account
 	 * @return
 	 */
-	private String createAccount() {
+	public static String createAccount() {
 		
 		return "";
 	}
+	
+	
+	/**
+	 * method to print contents on users' screen
+	 * @param contentsToBeShown
+	 */
+	public static void showToUser(String contentsToBeShown) {
+		System.out.println(contentsToBeShown);
+	}
+	
+	
+	
+	
 	
 	
 	/**
