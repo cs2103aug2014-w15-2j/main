@@ -1,7 +1,6 @@
 package includes;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Task {
 	private static final String DUPLICATED_TAG_ERROR_MESSAGE = "tag %1$s already exists.";
@@ -28,15 +27,14 @@ public class Task {
 	 * @throws Exception
 	 */
 	public Task(String description, String category, int priority,
-			int repeated_period, ArrayList<String> tag, Date startDate,
-			Date endDate) throws Exception {
+			int repeated_period, ArrayList<String> tag, TimeInterval interval) throws Exception {
 		this.description = description;
 		this.category = category;
 		this.priority = priority;
 		// this.task_id = ;
 		this.repeated_period = repeated_period;
 		this.tag = tag;
-		this.interval = new TimeInterval(startDate, endDate);
+		this.interval = interval;
 	}
 	
 	/**
@@ -54,15 +52,14 @@ public class Task {
 	 * @throws Exception
 	 */
 	public Task(String task_id, String description, String category, int priority,
-			int repeated_period, ArrayList<String> tag, Date startDate,
-			Date endDate) throws Exception {
+			int repeated_period, ArrayList<String> tag, TimeInterval interval) throws Exception {
 		this.description = description;
 		this.category = category;
 		this.priority = priority;
 		this.task_id = task_id;
 		this.repeated_period = repeated_period;
 		this.tag = tag;
-		this.interval = new TimeInterval(startDate, endDate);
+		this.interval = interval;
 	}
     
 	/**

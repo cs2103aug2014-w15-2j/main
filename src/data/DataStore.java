@@ -1,6 +1,7 @@
 package data;
 
 import includes.Task;
+import includes.TimeInterval;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -68,6 +69,7 @@ public class DataStore {
 		ArrayList<String> tag;
 		Date startDate;
 		Date endDate;
+		TimeInterval interval;
 		
 		int endIndex;
 
@@ -114,8 +116,10 @@ public class DataStore {
 		
 		endDate = new Date(Long.parseLong(taskDescription));
 
+		interval = new TimeInterval(startDate, endDate);
+
 		task = new Task(task_id, description, category, priority,
-				repeated_period, tag, startDate, endDate);
+				repeated_period, tag, interval);
 
 		return task;
 	}
