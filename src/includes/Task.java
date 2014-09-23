@@ -96,6 +96,11 @@ public class Task {
 		this.tag.remove(tag);
 	}
 	
+	/**
+	 * parse task to string
+	 * 
+	 * @return a task string
+	 */
 	public String toString(){
 		String task = new String();
 		
@@ -110,6 +115,11 @@ public class Task {
 		return task;
 	}
 	
+	/**
+	 * add tags for task string
+	 * 
+	 * @return tags string
+	 */
 	private String toStringAddTags(){
 		String tags = new String();
 		for(String aTag : tag){
