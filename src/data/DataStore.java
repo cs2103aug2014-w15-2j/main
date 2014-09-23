@@ -106,6 +106,24 @@ public class DataStore {
 		taskDescription = taskDescription.substring(endIndex
 				+ ATTRIBUTE_END_POSITION);
 		
+		tag = getTaskTags(taskDescription);
+		endIndex = taskDescription.indexOf("`");
+		taskDescription = taskDescription.substring(endIndex
+				+ ATTRIBUTE_END_POSITION);
+		
+		endIndex = taskDescription.indexOf("`");
+		repeated_period = Integer.parseInt(taskDescription.substring(0, endIndex
+				- ATTRIBUTE_END_POSITION));
+		taskDescription = taskDescription.substring(endIndex
+				+ ATTRIBUTE_END_POSITION);
+		
+		endIndex = taskDescription.indexOf("`");
+		priority = Integer.parseInt(taskDescription.substring(0, endIndex
+				- ATTRIBUTE_END_POSITION));
+		taskDescription = taskDescription.substring(endIndex
+				+ ATTRIBUTE_END_POSITION);
+		
+		task = new FloatingTask(description, category, priority, task_id, repeated_period, tag);
 		return task;
 	}
 
@@ -136,6 +154,22 @@ public class DataStore {
 		return task;
 	}
 	
+	private ArrayList<String> getTaskTags(String taskDescription){
+		ArrayList<String> tag = new ArrayList<String>();
+		int endIndex;
+		int commaIndex;
+		endIndex = taskDescription.indexOf("`");
+		commaIndex = taskDescription.indexOf(",");
+		while(commaIndex != -1){
+			tag.add(taskDescription.substring(0, commaIndex
+				- ATTRIBUTE_END_POSITION));
+			taskDescription = taskDescription.substring(commaIndex
+					+ ATTRIBUTE_END_POSITION);
+		}	
+		tag.add(taskDescription.substring(0, endIndex
+				- ATTRIBUTE_END_POSITION));
+		return tag;
+	}
 	
 	
 	
