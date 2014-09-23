@@ -5,7 +5,6 @@ import includes.Task;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -52,6 +51,13 @@ public class DataStore {
 		return currentTasks;
 	}
 
+	/**
+	 * parse String to task
+	 * 
+	 * @param taskDescription
+	 * @return task
+	 * @throws Exception
+	 */
 	private static Task parseTask(String taskDescription) throws Exception {
 		Task task;
 		String description;
@@ -114,6 +120,11 @@ public class DataStore {
 		return task;
 	}
 
+	/**
+	 * get the tags of a task
+	 * @param taskDescription
+	 * @return list of tags
+	 */
 	private static ArrayList<String> getTaskTags(String taskDescription) {
 		ArrayList<String> tag = new ArrayList<String>();
 		int endIndex;

@@ -37,6 +37,20 @@ public class Task {
 		this.interval = new TimeInterval(startDate, endDate);
 	}
 	
+	/**
+	 * 
+	 * constructor
+	 * 
+	 * @param task_id
+	 * @param description
+	 * @param category
+	 * @param priority
+	 * @param repeated_period
+	 * @param tag
+	 * @param startDate
+	 * @param endDate
+	 * @throws Exception
+	 */
 	public Task(String task_id, String description, String category, int priority,
 			int repeated_period, ArrayList<String> tag, Date startDate,
 			Date endDate) throws Exception {
