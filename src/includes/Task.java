@@ -35,7 +35,18 @@ public class Task {
 		this.repeated_period = repeated_period;
 		this.tag = tag;
 		this.interval = new TimeInterval(startDate, endDate);
-
+	}
+	
+	public Task(String task_id, String description, String category, int priority,
+			int repeated_period, ArrayList<String> tag, Date startDate,
+			Date endDate) throws Exception {
+		this.description = description;
+		this.category = category;
+		this.priority = priority;
+		this.task_id = task_id;
+		this.repeated_period = repeated_period;
+		this.tag = tag;
+		this.interval = new TimeInterval(startDate, endDate);
 	}
     
 	/**

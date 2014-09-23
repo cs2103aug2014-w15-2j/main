@@ -32,10 +32,10 @@ public class DataStore {
 	 * read file and get user current tasks
 	 * 
 	 * @param file
-	 * @throws IOException
 	 * @return user current tasks
+	 * @throws Exception 
 	 */
-	public static ArrayList<Task> getCurrentTasks(File file) throws IOException {
+	public static ArrayList<Task> getCurrentTasks(File file) throws Exception {
 		ArrayList<Task> currentTasks = new ArrayList<Task>();
 		Task task;
 		BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -52,7 +52,7 @@ public class DataStore {
 		return currentTasks;
 	}
 
-	private static Task parseTask(String taskDescription) {
+	private static Task parseTask(String taskDescription) throws Exception {
 		Task task;
 		String description;
 		String category;
@@ -108,7 +108,7 @@ public class DataStore {
 		
 		endDate = new Date(Long.parseLong(taskDescription));
 
-		task = new Task(description, category, priority,
+		task = new Task(task_id, description, category, priority,
 				repeated_period, tag, startDate, endDate);
 
 		return task;
