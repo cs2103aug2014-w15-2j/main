@@ -106,7 +106,7 @@ public class DataStore {
 		taskDescription = taskDescription.substring(endIndex
 				+ ATTRIBUTE_END_POSITION);
 		
-		endIndex = taskDescription.indexOf("`");
+		endIndex = taskDescription.indexOf("`");		
 		startDate = new Date(Long.parseLong(taskDescription.substring(0, endIndex
 				- ATTRIBUTE_END_POSITION)));
 		taskDescription = taskDescription.substring(endIndex

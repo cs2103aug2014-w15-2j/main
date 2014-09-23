@@ -1,7 +1,6 @@
 package includes;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
@@ -24,9 +23,9 @@ public class User {
 	 * constructor
 	 * 
 	 * @param recordFilePath
-	 * @throws IOException
+	 * @throws Exception 
 	 */
-	public User(String recordFilePath) throws IOException {
+	public User(String recordFilePath) throws Exception {
 		String userFilePath = recordFilePath;
 		File userFile = new File(userFilePath);
 		undoable = new Stack<ArrayList<Task>>();

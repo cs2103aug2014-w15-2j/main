@@ -13,6 +13,8 @@ public class Task {
 	public int repeated_period;
 	public ArrayList<String> tag;
 	public TimeInterval interval;
+	
+	private final int REDUCE_CHAR = 1;
 
 	/**
 	 * constructor
@@ -93,5 +95,27 @@ public class Task {
 	public void removeTag(String tag) {
 		this.tag.remove(tag);
 	}
-
+	
+	public String toString(){
+		String task = new String();
+		
+		task.concat(task_id).concat("`");
+		task.concat(description).concat("`");
+		task.concat(category).concat("`");
+		task.concat(toStringAddTags()).concat("`");
+		task.concat(Integer.toString(repeated_period)).concat("`");
+		task.concat(Integer.toString(priority)).concat("`");
+		task.concat(interval.getStartDate().toString()).concat("`");
+		task.concat(interval.getEndDate().toString());
+		return task;
+	}
+	
+	private String toStringAddTags(){
+		String tags = new String();
+		for(String aTag : tag){
+			tags.concat(aTag).concat(",");
+		}
+		tags.substring(0, tags.length() - REDUCE_CHAR);
+		return tags;
+	}
 }
