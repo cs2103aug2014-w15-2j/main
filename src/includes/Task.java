@@ -24,10 +24,9 @@ public class Task {
 	 * @param task_id
 	 * @param repeated_period
 	 * @param tag
-	 * @throws Exception
 	 */
 	public Task(String description, String category, int priority,
-			int repeated_period, ArrayList<String> tag, TimeInterval interval) throws Exception {
+			int repeated_period, ArrayList<String> tag, TimeInterval interval){
 		this.description = description;
 		this.category = category;
 		this.priority = priority;
@@ -49,10 +48,9 @@ public class Task {
 	 * @param tag
 	 * @param startDate
 	 * @param endDate
-	 * @throws Exception
 	 */
 	public Task(String task_id, String description, String category, int priority,
-			int repeated_period, ArrayList<String> tag, TimeInterval interval) throws Exception {
+			int repeated_period, ArrayList<String> tag, TimeInterval interval){
 		this.description = description;
 		this.category = category;
 		this.priority = priority;
