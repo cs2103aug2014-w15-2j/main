@@ -1,10 +1,6 @@
 package data;
 
-import includes.DeadlineTask;
-import includes.FloatingTask;
 import includes.Task;
-import includes.TimedTask;
-import includes.Task.TaskType;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class DataStore {
-	
+
 	protected final static int ATTRIBUTE_END_POSITION = 1;
 
 	public static boolean isAccountExisting(String username) {
@@ -29,7 +25,7 @@ public class DataStore {
 
 	public static void createAccount(String username, String passwordInput1) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -58,77 +54,6 @@ public class DataStore {
 
 	private static Task parseTask(String taskDescription) {
 		Task task;
-		String type;
-		int typeEndIndex;
-
-		typeEndIndex = taskDescription.indexOf("`");
-		type = taskDescription.substring(0, typeEndIndex
-				- ATTRIBUTE_END_POSITION);
-		taskDescription = taskDescription.substring(typeEndIndex
-				+ ATTRIBUTE_END_POSITION);
-
-		if (type.equals(TaskType.FLOATING)) {
-			task = parseFloatingTask(taskDescription);
-		} else if (type.equals(TaskType.TIMED)) {
-			task = parseTimedTask(taskDescription);
-		} else {
-			task = parseDeadlineTask(taskDescription);
-		}
-		return task;
-	}
-
-	private static FloatingTask parseFloatingTask(String taskDescription) {
-		FloatingTask task;
-		String description; 
-		String category;
-		int priority;
-		String task_id; 
-		int repeated_period; 
-		ArrayList<String> tag;
-		
-		int endIndex;
-		
-		endIndex = taskDescription.indexOf("`");
-		task_id = taskDescription.substring(0, endIndex
-				- ATTRIBUTE_END_POSITION);
-		taskDescription = taskDescription.substring(endIndex
-				+ ATTRIBUTE_END_POSITION);
-		
-		endIndex = taskDescription.indexOf("`");
-		description = taskDescription.substring(0, endIndex
-				- ATTRIBUTE_END_POSITION);
-		taskDescription = taskDescription.substring(endIndex
-				+ ATTRIBUTE_END_POSITION);
-		
-		endIndex = taskDescription.indexOf("`");
-		category = taskDescription.substring(0, endIndex
-				- ATTRIBUTE_END_POSITION);
-		taskDescription = taskDescription.substring(endIndex
-				+ ATTRIBUTE_END_POSITION);
-		
-		tag = getTaskTags(taskDescription);
-		endIndex = taskDescription.indexOf("`");
-		taskDescription = taskDescription.substring(endIndex
-				+ ATTRIBUTE_END_POSITION);
-		
-		endIndex = taskDescription.indexOf("`");
-		repeated_period = Integer.parseInt(taskDescription.substring(0, endIndex
-				- ATTRIBUTE_END_POSITION));
-		taskDescription = taskDescription.substring(endIndex
-				+ ATTRIBUTE_END_POSITION);
-		
-		endIndex = taskDescription.indexOf("`");
-		priority = Integer.parseInt(taskDescription.substring(0, endIndex
-				- ATTRIBUTE_END_POSITION));
-		taskDescription = taskDescription.substring(endIndex
-				+ ATTRIBUTE_END_POSITION);
-		
-		task = new FloatingTask(description, category, priority, task_id, repeated_period, tag);
-		return task;
-	}
-
-	private static TimedTask parseTimedTask(String taskDescription) {
-		TimedTask task;
 		String description;
 		String category;
 		int priority;
@@ -138,39 +63,71 @@ public class DataStore {
 		Date startDate;
 		Date endDate;
 		
+		int endIndex;
+
+		endIndex = taskDescription.indexOf("`");
+		task_id = taskDescription.substring(0, endIndex
+				- ATTRIBUTE_END_POSITION);
+		taskDescription = taskDescription.substring(endIndex
+				+ ATTRIBUTE_END_POSITION);
+
+		endIndex = taskDescription.indexOf("`");
+		description = taskDescription.substring(0, endIndex
+				- ATTRIBUTE_END_POSITION);
+		taskDescription = taskDescription.substring(endIndex
+				+ ATTRIBUTE_END_POSITION);
+
+		endIndex = taskDescription.indexOf("`");
+		category = taskDescription.substring(0, endIndex
+				- ATTRIBUTE_END_POSITION);
+		taskDescription = taskDescription.substring(endIndex
+				+ ATTRIBUTE_END_POSITION);
+
+		tag = getTaskTags(taskDescription);
+		endIndex = taskDescription.indexOf("`");
+		taskDescription = taskDescription.substring(endIndex
+				+ ATTRIBUTE_END_POSITION);
+
+		endIndex = taskDescription.indexOf("`");
+		repeated_period = Integer.parseInt(taskDescription.substring(0,
+				endIndex - ATTRIBUTE_END_POSITION));
+		taskDescription = taskDescription.substring(endIndex
+				+ ATTRIBUTE_END_POSITION);
+
+		endIndex = taskDescription.indexOf("`");
+		priority = Integer.parseInt(taskDescription.substring(0, endIndex
+				- ATTRIBUTE_END_POSITION));
+		taskDescription = taskDescription.substring(endIndex
+				+ ATTRIBUTE_END_POSITION);
+		
+		endIndex = taskDescription.indexOf("`");
+		startDate = new Date(Long.parseLong(taskDescription.substring(0, endIndex
+				- ATTRIBUTE_END_POSITION)));
+		taskDescription = taskDescription.substring(endIndex
+				+ ATTRIBUTE_END_POSITION);
+		
+		endDate = new Date(Long.parseLong(taskDescription));
+
+		task = new Task(description, category, priority,
+				repeated_period, tag, startDate, endDate);
+
 		return task;
 	}
 
-	private static DeadlineTask parseDeadlineTask(String taskDescription) {
-		DeadlineTask task;
-		String description; 
-		String category;
-		int priority;
-		String task_id; 
-		int repeated_period; 
-		ArrayList<String> tag;
-		Date deadline;
-		
-		return task;
-	}
-	
-	private static ArrayList<String> getTaskTags(String taskDescription){
+	private static ArrayList<String> getTaskTags(String taskDescription) {
 		ArrayList<String> tag = new ArrayList<String>();
 		int endIndex;
 		int commaIndex;
 		endIndex = taskDescription.indexOf("`");
 		commaIndex = taskDescription.indexOf(",");
-		while(commaIndex != -1){
+		while (commaIndex != -1) {
 			tag.add(taskDescription.substring(0, commaIndex
-				- ATTRIBUTE_END_POSITION));
+					- ATTRIBUTE_END_POSITION));
 			taskDescription = taskDescription.substring(commaIndex
 					+ ATTRIBUTE_END_POSITION);
-		}	
-		tag.add(taskDescription.substring(0, endIndex
-				- ATTRIBUTE_END_POSITION));
+		}
+		tag.add(taskDescription.substring(0, endIndex - ATTRIBUTE_END_POSITION));
 		return tag;
 	}
-	
-	
-	
+
 }
