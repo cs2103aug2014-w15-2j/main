@@ -68,7 +68,12 @@ public class ListOfXiaoMing {
 	 * Constructor
 	 */
 	public ListOfXiaoMing(String recordFilePath) {
-		user = new User(recordFilePath);
+		try {
+			user = new User(recordFilePath);
+		} catch (Exception e) {
+			// impossible errors
+			e.printStackTrace();
+		}
 	}
 	
 //main
@@ -427,7 +432,7 @@ public class ListOfXiaoMing {
 			}
 		}
 		
-		return new Task(description, category, priority, "", repeatedPeriod, tag);
+		return new Task(description, category, priority, repeatedPeriod, tag);
 	}
 
 	private static Pair parse(String userInput) {
