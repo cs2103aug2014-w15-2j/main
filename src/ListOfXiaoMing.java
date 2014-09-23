@@ -10,11 +10,6 @@ import java.util.Scanner;
 import includes.*;
 import data.*;
 
-
-enum COMMAND_TYPE {
-	LOG_IN, LOG_OUT, CREATE_ACCOUNT, HELP, ADD, UPDATE, DELETE, SEARCH, REDO, UNDO
-}
-
 class Pair {
 	public Object head;
 	public Object tail;
@@ -28,10 +23,46 @@ public class ListOfXiaoMing {
 	
 	private static Scanner scanner_ = new Scanner(System.in);
 	
+	private static final String KEY_TIME = "time";
+	private static final String KEY_CATEGORY = "categroy";
+	private static final String KEY_PRIORITY = "priority";
+	private static final String KEY_REPEATED_PERIOD = "repeat";
+	private static final String KEY_TAG = "tag";
+	
+	private static final String COMMAND_STRING_LOG_IN = "log in";
+	private static final String COMMAND_STRING_LOG_OUT = "log out";
+	private static final String COMMAND_STRING_CREATE_ACCOUNT = "create account";
+	private static final String COMMAND_STRING_HELP = "help";
+	private static final String COMMAND_STRING_ADD = "add";
+	private static final String COMMAND_STRING_UPDATE = "update";
+	private static final String COMMAND_STRING_DELETE = "delete";
+	private static final String COMMAND_STRING_SEARCH = "search";
+	private static final String COMMAND_STRING_REDO = "redo";
+	private static final String COMMAND_STRING_UNDO = "undo";
+	private static final String COMMAND_STRING_CLEAR = "clear";
+	
+	
+	public static final int PRIORITY_DEFAULT = 1;
+	public static final int PRIORITY_INVALID = 0;
+	public static final int PRIORITY_HIGH = 1;
+	public static final int PRIORITY_MEDIUM = 2;
+	public static final int PRIORITY_LOW = 3;
+	
+	public static final int REPEATED_PERIOD_DEFAULT = 1;
+	public static final int REPEATED_PERIOD_INVALID = 0;
+	public static final int REPEATED_PERIOD_NONE = 1;
+	public static final int REPEATED_PERIOD_DAILY = 2;
+	public static final int REPEATED_PERIOD_WEEKLY = 3;
+	public static final int REPEATED_PERIOD_MONTHLY = 4;
+	
+	
+	private static enum COMMAND_TYPE {
+		LOG_IN, LOG_OUT, CREATE_ACCOUNT, HELP, ADD, UPDATE, DELETE, SEARCH, REDO, UNDO, CLEAR
+	}
+	
+	
 	//a property to store the current user
 	private User user;
-	
-	
 	
 	/**
 	 * Constructor
@@ -40,7 +71,7 @@ public class ListOfXiaoMing {
 		user = new User(recordFilePath);
 	}
 	
-	
+//main
 	public static void main(String[] args) {
 		ListOfXiaoMing list = null;
 		showToUser("Welcome to 小鸣的清单(List of Xiao Ming), you can log in or create a new accout.");
@@ -63,16 +94,12 @@ public class ListOfXiaoMing {
 			}
 		}
     }
-	
-	
-	/**
-	 * method to read in an user command
-	 * @return
-	 */
 	public static String readCommand() {
 		return scanner_.nextLine();
 	}
 	
+	
+//system level commands
 	/**
 	 * method to execute the system-level command like log in or log out
 	 * @return
@@ -101,12 +128,6 @@ public class ListOfXiaoMing {
 				return null;
 		}
 	}
-	
-	
-	/**
-	 * method for users to log in
-	 * @return
-	 */
 	public static String userLogIn(ArrayList<String> parameters) {
 		String username = null;
 		String password = null;
@@ -148,21 +169,6 @@ public class ListOfXiaoMing {
 		
 		return username;
 	}
-	
-	
-	/**
-	 * method for users to log out
-	 * @return
-	 */
-	public static String userLogOut() {
-		return "";
-	}
-	
-	
-	/**
-	 * method for users to create an account
-	 * @return
-	 */
 	public static String createAccount(ArrayList<String> parameters) {
 		String username = null;
 		String passwordInput1 = null;
@@ -197,55 +203,57 @@ public class ListOfXiaoMing {
 		DataStore.createAccount(username, passwordInput1);
 		return "Account Created";
 	}
-	
-	
 	public static String showHelp(){
 		
 		return"";
 	}
 	
-	
-	/**
-	 * method to print contents on users' screen
-	 * @param contentsToBeShown
-	 */
-	public static void showToUser(String contentsToBeShown) {
-		System.out.println(contentsToBeShown);
-	}
-	
-	
-	
-	
+
 	private static COMMAND_TYPE determineCommandType(String commandTypeString) {
+		switch (commandTypeString) {
+			case COMMAND_STRING_LOG_IN:
+				return COMMAND_TYPE.LOG_IN;
+			
+			case COMMAND_STRING_LOG_OUT:
+				return COMMAND_TYPE.LOG_OUT;
+				
+			case COMMAND_STRING_CREATE_ACCOUNT:
+				return COMMAND_TYPE.CREATE_ACCOUNT;
+
+			case COMMAND_STRING_HELP:
+				return COMMAND_TYPE.HELP;
+				
+			case COMMAND_STRING_ADD:
+				return COMMAND_TYPE.ADD;
+				
+			case COMMAND_STRING_UPDATE:
+				return COMMAND_TYPE.UPDATE;
+				
+			case COMMAND_STRING_DELETE:
+				return COMMAND_TYPE.DELETE;
+
+			case COMMAND_STRING_SEARCH:
+				return COMMAND_TYPE.SEARCH;
+				
+			case COMMAND_STRING_UNDO:
+				return COMMAND_TYPE.UNDO;
+				
+			case COMMAND_STRING_REDO:
+				return COMMAND_TYPE.REDO;
+	
+			case COMMAND_STRING_CLEAR:
+				return COMMAND_TYPE.CLEAR;	
 		
-		return COMMAND_TYPE.HELP;
+			default:
+				return COMMAND_TYPE.HELP;
+		}
 	}
 	
 	
-	/**
-	 * method to interpret users' input string
-	 * @param userInput
-	 * @return
-	 */
-	private static Pair parse(String userInput) {
-		ArrayList<String> parameterList = new ArrayList<String>(Arrays.asList(userInput.trim().split("@")));
-		COMMAND_TYPE thisCommand = ListOfXiaoMing.determineCommandType(parameterList.get(0));
-		parameterList.remove(0);
-		return new Pair(thisCommand, parameterList);
-	}
-	
-	private static Task getTaskFromParameterList(ArrayList<String> parameterList) {
 		
-		
-		return null;
-	}
 	
+//User level commands
 	
-	/**
-	 * method to execute a command
-	 * @param command
-	 * @return
-	 */
 	@SuppressWarnings("unchecked")
 	private String execute (String userInput) {
 		Pair commandPair = ListOfXiaoMing.parse(userInput);
@@ -284,7 +292,6 @@ public class ListOfXiaoMing {
 		this.user.add(taskToAdd);
 		return "";
 	}
-	
 	private String delete(ArrayList<String> taskParameters) {
 		int index = Integer.parseInt(taskParameters.get(0));
 		try {
@@ -293,14 +300,10 @@ public class ListOfXiaoMing {
 			showToUser(e.toString());
 		}
 		return "";
-	}
-	
-
+	}	
 	private String logOut() {
 		return "log out";
 	}
-	
-	
 	private String undo() {
 		try {
 			this.user.undo();
@@ -309,7 +312,6 @@ public class ListOfXiaoMing {
 		}
 		return "";
 	}
-	
 	private String redo() {
 		try {
 			this.user.redo();
@@ -318,7 +320,6 @@ public class ListOfXiaoMing {
 		}
 		return "";
 	}
-	
 	private String search(ArrayList<String> taskParameters) {
 		
 		try {
@@ -327,43 +328,114 @@ public class ListOfXiaoMing {
 				timeInterval = parseTimeInterval(parameter);
 				if (timeInterval != null) {
 					taskParameters.remove(parameter);
+					break;
 				}
 			}
 		
-			String keyword = taskParameters.get(0);
+			String keyword = taskParameters.get(0);	
 			Constraint thisConstraint = new Constraint(keyword, timeInterval);
 			ArrayList<Task> queryResult = this.user.find(thisConstraint);
+			
 			return taskListToString(queryResult);
-		} catch (Exception e) {
-			return e.toString();
+		} catch(Exception e) {
+			showToUser("start time should before end time");
+			return null;
 		}
+		
 	}
 	
 	
-	private static String taskListToString(ArrayList<Task> list) {
-		String returnValue = "";
-		for (int i = 0; i < list.size(); i++) {
-			if (i == 0) {
-				returnValue = i+ ". " + list.get(i).toString();
-			} else {
-				returnValue = returnValue + "\n" + i + ". " + list.get(i).toString();
+//parse methods
+	
+	private static Task getTaskFromParameterList(ArrayList<String> parameterList) {
+		TimeInterval timeInterval = null;
+		String category = null; 
+		int priority = PRIORITY_DEFAULT;
+		int repeatedPeriod = REPEATED_PERIOD_DEFAULT; 
+		ArrayList<String> tag = new ArrayList<String>();
+		
+		String description = parameterList.get(0);
+		parameterList.remove(0);
+		
+		boolean hasTime = false;
+		boolean hasCategory = false;
+		boolean hasPriority = false;
+		boolean hasRepeatedPeriod = false;
+		
+		for (String parameter: parameterList) {
+			String key = getFirstWord(parameter);
+			String value = removeFirstWord(parameter);
+			switch(key) {
+				case KEY_TIME:
+					try {
+						if (hasTime) {
+							showToUser("You can only assign one time for a task");
+						} else {
+							timeInterval = parseTimeInterval(value);
+							if (timeInterval == null) {
+								showToUser("invalid time format: the correct format should be...");
+							} else {
+								hasTime = true;
+							}
+						}
+					} catch (Exception e) {
+						showToUser("start time should be earlier than end time");
+					}
+					break;
+				
+				case KEY_CATEGORY:
+					break;
+				
+				case KEY_PRIORITY:
+					if (hasPriority) {
+						showToUser("You can only assign one priority to a task");
+					} else {
+						int tempPriority = parsePriority(value);
+						if (tempPriority == PRIORITY_INVALID) {
+							showToUser("invalid priority format: it should be 'priority none/high/medium/low'");
+						} else {
+							priority = tempPriority;
+							hasPriority = true;
+						}
+
+					}
+					break;
+				
+				case KEY_REPEATED_PERIOD:
+					if (hasRepeatedPeriod) {
+						showToUser("You can only assign one repeated period to a task");
+					} else {
+						int tempRepeatedPeriod = parseRepeatedPeriod(value);
+						if (tempRepeatedPeriod == REPEATED_PERIOD_INVALID) {
+							showToUser("invalid repeat format: it should be 'repeat daily/weekly/monthly'");
+						} else {
+							repeatedPeriod = tempRepeatedPeriod;
+							hasRepeatedPeriod = true;
+						}
+					}
+					break;
+					
+				case KEY_TAG:
+					if (!tag.contains(value)) {
+						tag.add(value);
+					}
+					break;
+					
+				default:
+					showToUser("Unrecognized parameter!");
+					break;
 			}
 		}
 		
-		return returnValue;
+		return new Task(description, category, priority, "", repeatedPeriod, tag);
 	}
-	
-	
-	private static Date parseDateString (String dateString) {
-		try {
-			//e.g. "20:00 04 Jan 2014"
-			Date date = new SimpleDateFormat("hh:mm dd MMMM yyyy", Locale.ENGLISH).parse(dateString);
-			return date;
-		} catch (ParseException e) {
-			return null;
-		}
+
+	private static Pair parse(String userInput) {
+		ArrayList<String> parameterList = new ArrayList<String>(Arrays.asList(userInput.trim().split("@")));
+		COMMAND_TYPE thisCommand = ListOfXiaoMing.determineCommandType(parameterList.get(0));
+		parameterList.remove(0);
+		return new Pair(thisCommand, parameterList);
 	}
-	
 	private static TimeInterval parseTimeInterval(String parameter) throws Exception {
 		String[] wordList = parameter.trim().split(" ");
 		Date startDate = null;
@@ -415,5 +487,68 @@ public class ListOfXiaoMing {
 
 	}
 	
+
+	private static Date parseDateString (String dateString) {
+		try {
+			//e.g. "20:00 04 Jan 2014"
+			Date date = new SimpleDateFormat("hh:mm dd MMMM yyyy", Locale.ENGLISH).parse(dateString);
+			return date;
+		} catch (ParseException e) {
+			return null;
+		}
+	}
 	
+	private static int parsePriority(String parameter) {
+		if (parameter.equalsIgnoreCase("high")) {
+			return PRIORITY_HIGH;
+		} else if (parameter.equalsIgnoreCase("medium")) {
+			return PRIORITY_MEDIUM;
+		} else if (parameter.equalsIgnoreCase("low")) {
+			return PRIORITY_LOW;
+		} else {
+			return PRIORITY_INVALID;
+		}
+	}
+
+	private static int parseRepeatedPeriod(String parameter) {
+		if (parameter.equalsIgnoreCase("none")) {
+			return REPEATED_PERIOD_NONE;
+		} else if (parameter.equalsIgnoreCase("daily")) {
+			return REPEATED_PERIOD_DAILY;
+		} else if (parameter.equalsIgnoreCase("weekly")) {
+			return REPEATED_PERIOD_WEEKLY;
+		} else if (parameter.equalsIgnoreCase("monthly")) {
+			return REPEATED_PERIOD_MONTHLY;
+		} else {
+			return REPEATED_PERIOD_INVALID;
+		}
+	}
+	
+	
+	
+	
+//basic tools methods
+
+	private static String taskListToString(ArrayList<Task> list) {
+		String returnValue = "";
+		for (int i = 0; i < list.size(); i++) {
+			if (i == 0) {
+				returnValue = i+ ". " + list.get(i).toString();
+			} else {
+				returnValue = returnValue + "\n" + i + ". " + list.get(i).toString();
+			}
+		}
+		
+		return returnValue;
+	}
+	private static String getFirstWord(String userCommand) {
+		String commandTypeString = userCommand.trim().split("\\s+")[0];
+		return commandTypeString;
+	}
+	private static String removeFirstWord(String userCommand) {
+		return userCommand.replace(getFirstWord(userCommand), "").trim();
+	}
+	public static void showToUser(String contentsToBeShown) {
+		System.out.println(contentsToBeShown);
+	}
 }
