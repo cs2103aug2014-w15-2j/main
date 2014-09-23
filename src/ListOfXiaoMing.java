@@ -432,7 +432,8 @@ public class ListOfXiaoMing {
 			}
 		}
 		
-		return new Task(description, category, priority, repeatedPeriod, tag);
+		
+		return new Task(description, category, priority, repeatedPeriod, tag, timeInterval);
 	}
 
 	private static Pair parse(String userInput) {
