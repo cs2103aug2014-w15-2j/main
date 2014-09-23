@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class DataStore {
 	
-	protected final int ATTRIBUTE_END_POSITION = 1;
+	protected final static int ATTRIBUTE_END_POSITION = 1;
 
 	public static boolean isAccountExisting(String username) {
 		// TODO Auto-generated method stub
@@ -56,7 +56,7 @@ public class DataStore {
 		return currentTasks;
 	}
 
-	private Task parseTask(String taskDescription) {
+	private static Task parseTask(String taskDescription) {
 		Task task;
 		String type;
 		int typeEndIndex;
@@ -77,7 +77,7 @@ public class DataStore {
 		return task;
 	}
 
-	private FloatingTask parseFloatingTask(String taskDescription) {
+	private static FloatingTask parseFloatingTask(String taskDescription) {
 		FloatingTask task;
 		String description; 
 		String category;
@@ -127,7 +127,7 @@ public class DataStore {
 		return task;
 	}
 
-	private TimedTask parseTimedTask(String taskDescription) {
+	private static TimedTask parseTimedTask(String taskDescription) {
 		TimedTask task;
 		String description;
 		String category;
@@ -141,7 +141,7 @@ public class DataStore {
 		return task;
 	}
 
-	private DeadlineTask parseDeadlineTask(String taskDescription) {
+	private static DeadlineTask parseDeadlineTask(String taskDescription) {
 		DeadlineTask task;
 		String description; 
 		String category;
@@ -154,7 +154,7 @@ public class DataStore {
 		return task;
 	}
 	
-	private ArrayList<String> getTaskTags(String taskDescription){
+	private static ArrayList<String> getTaskTags(String taskDescription){
 		ArrayList<String> tag = new ArrayList<String>();
 		int endIndex;
 		int commaIndex;
