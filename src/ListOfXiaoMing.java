@@ -59,6 +59,7 @@ public class ListOfXiaoMing {
 	public static final String PROMPT_MESSAGE_WELCOME = "Welcome to 小鸣的清单(List of Xiao Ming), you can log in or create a new accout.";
 	public static final String PROMPT_MESSAGE_INSTRUCTION = "You can type in 'log in', 'create account', 'help' or 'exit'.";
 	public static final String PROMPT_MESSAGE_LOG_IN_CANCELLED = "user cancelled logging in";
+	public static final String PROMPT_MESSAGE_NOT_LOG_IN = "you have not logged in yet";
 	
 	
 	private static enum COMMAND_TYPE {
@@ -138,7 +139,7 @@ public class ListOfXiaoMing {
 				ListOfXiaoMing.exit();
 				
 			default:
-				showToUser("you have not logged in yet");
+				showToUser(PROMPT_MESSAGE_NOT_LOG_IN);
 				return null;
 		}
 	}
