@@ -4,28 +4,99 @@ import includes.Task;
 import includes.TimeInterval;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Date;
 
 public class DataStore {
 
 	protected final static int ATTRIBUTE_END_POSITION = 1;
+	private final static String SPLIT_SECTION = "**********";
 
 	public static boolean isAccountExisting(String username) {
-		// TODO Auto-generated method stub
+		File account = new File(username + ".txt");
+		if(account.exists()){
+			return true;
+		}
 		return false;
 	}
 
 	public static boolean authenticate(String username, String password) {
-		// TODO Auto-generated method stub
-		return false;
+		if(!isAccountExisting(username)){
+			return false;
+		}
+		
+		try {
+			String realPassword = getPassword(username);
+			return password.equals(realPassword);
+		} catch (FileNotFoundException e) {
+			return false;
+		} catch (IOException e){
+			return false;
+		}
 	}
 
-	public static void createAccount(String username, String passwordInput1) {
-		// TODO Auto-generated method stub
-
+	public static boolean createAccount(String username, String passwordInput1) {
+		if(isAccountExisting(username)){
+			return false;
+		}
+		
+		try {
+			File account = new File(username + ".txt");
+			account.createNewFile();
+			
+			BufferedWriter bw = new BufferedWriter(new FileWriter(username + ".txt"));
+			bw.write(passwordInput1);
+			bw.newLine();
+			bw.write(SPLIT_SECTION);
+			bw.newLine();
+			bw.close();
+			
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
+	}
+	
+	public static boolean destroy(String username, String password) {
+		//check whether it is a valid account
+		if(!authenticate(username, password)){
+			return false;
+		}
+		File account = new File(username + ".txt");
+		return account.delete();
+	}
+	
+	public static boolean save(String username, ArrayList<Task> tasks) {
+		if(!isAccountExisting(username)){
+			return false;
+		}
+		
+		try {
+			String password = getPassword(username);
+			BufferedWriter bw = new BufferedWriter(new FileWriter(username + ".txt"));
+			
+			bw.write(password);
+			bw.newLine();
+			bw.write(SPLIT_SECTION);
+			bw.newLine();
+			
+			for(int i=0; i<tasks.size(); i++){
+				bw.write(tasks.get(i).toString());
+				bw.newLine();
+			}
+			
+			bw.close();
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
 	}
 
 	/**
@@ -143,6 +214,13 @@ public class DataStore {
 		}
 		tag.add(taskDescription.substring(0, endIndex - ATTRIBUTE_END_POSITION));
 		return tag;
+	}
+	
+	private static String getPassword(String username) throws IOException{
+		BufferedReader br = new BufferedReader(new FileReader(username + ".txt"));
+		String password = br.readLine();
+		br.close();
+		return password;
 	}
 
 }
