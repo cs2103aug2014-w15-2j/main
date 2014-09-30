@@ -33,6 +33,7 @@ public class ListOfXiaoMing {
 	private static final String COMMAND_STRING_LOG_OUT = "log out";
 	private static final String COMMAND_STRING_CREATE_ACCOUNT = "create account";
 	private static final String COMMAND_STRING_HELP = "help";
+	private static final String COMMAND_STRING_EXIT = "exit";
 	private static final String COMMAND_STRING_ADD = "add";
 	private static final String COMMAND_STRING_UPDATE = "update";
 	private static final String COMMAND_STRING_DELETE = "delete";
@@ -55,9 +56,13 @@ public class ListOfXiaoMing {
 	public static final int REPEATED_PERIOD_WEEKLY = 3;
 	public static final int REPEATED_PERIOD_MONTHLY = 4;
 	
+	public static final String PROMPT_MESSAGE_WELCOME = "Welcome to 小鸣的清单(List of Xiao Ming), you can log in or create a new accout.";
+	public static final String PROMPT_MESSAGE_INSTRUCTION = "You can type in 'log in', 'create account', 'help' or 'exit'.";
+	public static final String PROMPT_MESSAGE_LOG_IN_CANCELLED = "user cancelled logging in";
+	
 	
 	private static enum COMMAND_TYPE {
-		LOG_IN, LOG_OUT, CREATE_ACCOUNT, HELP, ADD, UPDATE, DELETE, SEARCH, REDO, UNDO, CLEAR
+		LOG_IN, LOG_OUT, CREATE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, SEARCH, REDO, UNDO, CLEAR
 	}
 	
 	
@@ -79,13 +84,14 @@ public class ListOfXiaoMing {
 //main
 	public static void main(String[] args) {
 		ListOfXiaoMing list = null;
-		showToUser("Welcome to 小鸣的清单(List of Xiao Ming), you can log in or create a new accout.");
+		showToUser(PROMPT_MESSAGE_WELCOME);
 		while (list == null) {
-			showToUser("You can type in 'log in', 'create account' or 'help'.");
+			showToUser(PROMPT_MESSAGE_INSTRUCTION);
 			String userInput = ListOfXiaoMing.readCommand();
 			String recordFilePath = ListOfXiaoMing.exectueUpperLevelCommand(userInput);
-			if (recordFilePath != null) {
+			if (recordFilePath != null  && !recordFilePath.equalsIgnoreCase(PROMPT_MESSAGE_LOG_IN_CANCELLED)) {
 				//already find the record
+				System.out.println(recordFilePath);
 				list = new ListOfXiaoMing(recordFilePath);
 			}
 		}
@@ -128,6 +134,9 @@ public class ListOfXiaoMing {
 				showToUser(ListOfXiaoMing.showHelp());
 				return null;
 			
+			case EXIT:
+				ListOfXiaoMing.exit();
+				
 			default:
 				showToUser("you have not logged in yet");
 				return null;
@@ -189,7 +198,7 @@ public class ListOfXiaoMing {
 			if (DataStore.isAccountExisting(username)) {
 				showToUser("The account has exsited already. Do you want to change a name? (Y/N)");
 				 if (readCommand().equalsIgnoreCase("N")) {
-					return "user cancelled creating an account";
+					return PROMPT_MESSAGE_LOG_IN_CANCELLED;
 				 }
 			} else {
 				username = inputUsername;
@@ -205,15 +214,18 @@ public class ListOfXiaoMing {
 			passwordInput2 = readCommand();
 		}
 		
-		DataStore.createAccount(username, passwordInput1);
-		return "Account Created";
+		boolean successCreated = DataStore.createAccount(username, passwordInput1);
+		return successCreated ? "Account Created" : "Fail to create account: Please check again";
 	}
 	public static String showHelp(){
 		
-		return"";
+		return "'Help' has not been implemented yet";
 	}
 	
-
+	public static void exit() {
+		showToUser("Session end");
+		System.exit(0);
+	}
 	private static COMMAND_TYPE determineCommandType(String commandTypeString) {
 		switch (commandTypeString) {
 			case COMMAND_STRING_LOG_IN:
@@ -224,9 +236,12 @@ public class ListOfXiaoMing {
 				
 			case COMMAND_STRING_CREATE_ACCOUNT:
 				return COMMAND_TYPE.CREATE_ACCOUNT;
-
+				
 			case COMMAND_STRING_HELP:
 				return COMMAND_TYPE.HELP;
+				
+			case COMMAND_STRING_EXIT:
+				return COMMAND_TYPE.EXIT;
 				
 			case COMMAND_STRING_ADD:
 				return COMMAND_TYPE.ADD;
