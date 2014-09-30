@@ -210,7 +210,7 @@ public class ListOfXiaoMing {
 	}
 	public static String showHelp(){
 		
-		return"";
+		return "'Help' has not been implemented yet";
 	}
 	
 
