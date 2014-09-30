@@ -84,25 +84,28 @@ public class ListOfXiaoMing {
 	
 //main
 	public static void main(String[] args) {
-		ListOfXiaoMing list = null;
-		showToUser(PROMPT_MESSAGE_WELCOME);
-		while (list == null) {
-			showToUser(PROMPT_MESSAGE_INSTRUCTION);
-			String userInput = ListOfXiaoMing.readCommand();
-			String recordFilePath = ListOfXiaoMing.exectueUpperLevelCommand(userInput);
-			if (recordFilePath != null  && !recordFilePath.equalsIgnoreCase(PROMPT_MESSAGE_LOG_IN_CANCELLED)) {
-				//already find the record
-				System.out.println(recordFilePath);
-				list = new ListOfXiaoMing(recordFilePath);
+		while (true) {
+			ListOfXiaoMing list = null;
+			showToUser(PROMPT_MESSAGE_WELCOME);
+			while (list == null) {
+				showToUser(PROMPT_MESSAGE_INSTRUCTION);
+				String userInput = ListOfXiaoMing.readCommand();
+				String recordFilePath = ListOfXiaoMing.exectueUpperLevelCommand(userInput);
+				if (recordFilePath != null  && !recordFilePath.equalsIgnoreCase(PROMPT_MESSAGE_LOG_IN_CANCELLED)) {
+					//already find the record
+					System.out.println(recordFilePath);
+					list = new ListOfXiaoMing(recordFilePath);
+				}
 			}
-		}
-		
-		boolean willContinue = true;
-		while (willContinue) {
-			String userInput = ListOfXiaoMing.readCommand();
-			String result = list.execute(userInput);
-			if (result.equals("log out")) {
-				willContinue = false;
+			
+			boolean willContinue = true;
+			while (willContinue) {
+				String userInput = ListOfXiaoMing.readCommand();
+				String result = list.execute(userInput);
+				if (result.equals("log out")) {
+					willContinue = false;
+					showToUser("Successfully logged out\n\n\n");
+				}
 			}
 		}
     }
@@ -157,7 +160,7 @@ public class ListOfXiaoMing {
 		while (username == null) {
 			showToUser("Please enter your user name");
 			String inputUsername = readCommand();
-			if (!DataStore.isAccountExisting(username)) {
+			if (!DataStore.isAccountExisting(inputUsername)) {
 				showToUser("The account doesn't exist! Do you want to enter the name again? (Y/N)");
 				 if (readCommand().equalsIgnoreCase("N")) {
 					return "user cancelled logging in";
@@ -196,7 +199,7 @@ public class ListOfXiaoMing {
 		while (username == null) {
 			showToUser("Please enter your user name");
 			String inputUsername = readCommand();
-			if (DataStore.isAccountExisting(username)) {
+			if (DataStore.isAccountExisting(inputUsername)) {
 				showToUser("The account has exsited already. Do you want to change a name? (Y/N)");
 				 if (readCommand().equalsIgnoreCase("N")) {
 					return PROMPT_MESSAGE_LOG_IN_CANCELLED;
