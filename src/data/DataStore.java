@@ -23,9 +23,9 @@ public class DataStore {
 		return false;
 	}
 
-	public static void createAccount(String username, String passwordInput1) {
+	public static boolean createAccount(String username, String passwordInput1) {
 		// TODO Auto-generated method stub
-
+		return false;
 	}
 
 	/**

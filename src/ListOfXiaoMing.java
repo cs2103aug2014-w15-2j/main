@@ -205,8 +205,8 @@ public class ListOfXiaoMing {
 			passwordInput2 = readCommand();
 		}
 		
-		DataStore.createAccount(username, passwordInput1);
-		return "Account Created";
+		boolean successCreated = DataStore.createAccount(username, passwordInput1);
+		return successCreated ? "Account Created" : "Fail to create account: Please check again";
 	}
 	public static String showHelp(){
 		
