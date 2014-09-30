@@ -20,7 +20,7 @@ public class DataStore {
 	private final static String SPLIT_SECTION = "**********";
 
 	public static boolean isAccountExisting(String username) {
-		File account = new File(username + ".txt");
+		File account = new File(username);
 		if(account.exists()){
 			return true;
 		}
@@ -48,10 +48,10 @@ public class DataStore {
 		}
 		
 		try {
-			File account = new File(username + ".txt");
+			File account = new File(username);
 			account.createNewFile();
 			
-			BufferedWriter bw = new BufferedWriter(new FileWriter(username + ".txt"));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(username));
 			bw.write(passwordInput1);
 			bw.newLine();
 			bw.write(SPLIT_SECTION);
@@ -69,7 +69,7 @@ public class DataStore {
 		if(!authenticate(username, password)){
 			return false;
 		}
-		File account = new File(username + ".txt");
+		File account = new File(username);
 		return account.delete();
 	}
 	
@@ -80,7 +80,7 @@ public class DataStore {
 		
 		try {
 			String password = getPassword(username);
-			BufferedWriter bw = new BufferedWriter(new FileWriter(username + ".txt"));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(username));
 			
 			bw.write(password);
 			bw.newLine();
@@ -217,7 +217,7 @@ public class DataStore {
 	}
 	
 	private static String getPassword(String username) throws IOException{
-		BufferedReader br = new BufferedReader(new FileReader(username + ".txt"));
+		BufferedReader br = new BufferedReader(new FileReader(username));
 		String password = br.readLine();
 		br.close();
 		return password;
