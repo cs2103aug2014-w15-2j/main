@@ -2,6 +2,8 @@ package includes;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Stack;
 
@@ -12,6 +14,7 @@ public class User {
 	private static final String NO_REDOABLE_ERROR_MESSAGE = "nothing available for redoing";
 	private static final String NO_UNDOABLE_ERROR_MESSAGE = "nothing available for undoing";
 	private static final String INVALID_INDEX_ERROR_MESSAGE = "invalid task index %1$d";
+	private static final String INVALID_UPDATE_MESSAGE = "invalid task attributes";
 	ArrayList<Task> currentTasks;
 	Stack<ArrayList<Task>> undoable;
 	Stack<ArrayList<Task>> redoable;
@@ -102,11 +105,34 @@ public class User {
 	 * @throws CommandFailedException
 	 */
 	public void delete(int index) throws CommandFailedException {
-		if (!this.isValidIndex(index)) {
+		if(!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
 					INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			this.currentTasks.get(index).addTag(TRASHED_TAG);
+		}
+	}
+	
+	public void update(Task task, Dictionary<String, Object> toBeUpdated){
+		Enumeration<String> attributes = toBeUpdated.keys();
+		if(attributes.hasMoreElements()) {
+			String currentAttribute = attributes.nextElement();
+			Object currentObject = toBeUpdated.get(currentAttribute);
+			if(currentAttribute == "description") {
+				task.setDescription((String) currentObject);
+			} else if(currentAttribute == "category") {
+				task.setCategory((String) currentObject);
+			} else if(currentAttribute == "priority") {
+				task.setPriority((int) currentObject);
+			} else if(currentAttribute == "repeated_period") {
+				task.setRepeatedPeriod((int) currentObject);
+			} else if(currentAttribute == "tag") {
+				task.setTag((ArrayList<String>) currentObject);
+			} else if (currentAttribute == "time_interval") {
+				task.setTimeInterval((TimeInterval) currentObject);
+			} else {
+				throw new CommandFailedException(INVALID_UPDATE_MESSAGE);
+			}
 		}
 	}
 
