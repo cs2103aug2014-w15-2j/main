@@ -3,6 +3,7 @@ package includes;
 import java.util.ArrayList;
 
 public class Toolbox {
+	
 	/**
 	 * methods to convert a task list to a string
 	 * @param list
@@ -32,6 +33,7 @@ public class Toolbox {
 		return commandTypeString;
 	}
 	
+	
 	/**
 	 * to remove the first word of a string
 	 * @param userCommand
@@ -40,6 +42,7 @@ public class Toolbox {
 	public static String removeFirstWord(String userCommand) {
 		return userCommand.replace(getFirstWord(userCommand), "").trim();
 	}
+	
 	
 	/**
 	 * print the string
