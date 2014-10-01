@@ -457,7 +457,7 @@ public class ListOfXiaoMing {
 
 	private static Pair parse(String userInput) {
 		ArrayList<String> parameterList = new ArrayList<String>(Arrays.asList(userInput.trim().split("@")));
-		COMMAND_TYPE thisCommand = ListOfXiaoMing.determineCommandType(parameterList.get(0));
+		COMMAND_TYPE thisCommand = ListOfXiaoMing.determineCommandType(parameterList.get(0).trim());
 		parameterList.remove(0);
 		return new Pair(thisCommand, parameterList);
 	}
