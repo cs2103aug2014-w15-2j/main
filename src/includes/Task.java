@@ -101,14 +101,24 @@ public class Task {
 	public String toString(){
 		String task = new String();
 		
-		task.concat(task_id).concat("`");
-		task.concat(description).concat("`");
-		task.concat(category).concat("`");
-		task.concat(toStringAddTags()).concat("`");
-		task.concat(Integer.toString(repeated_period)).concat("`");
-		task.concat(Integer.toString(priority)).concat("`");
-		task.concat(interval.getStartDate().toString()).concat("`");
-		task.concat(interval.getEndDate().toString());
+//		task.concat(task_id).concat("`");
+//		task.concat(description).concat("`");
+//		task.concat(category).concat("`");
+//		task.concat(toStringAddTags()).concat("`");
+//		task.concat(Integer.toString(repeated_period)).concat("`");
+//		task.concat(Integer.toString(priority)).concat("`");
+//		task.concat(interval.getStartDate().toString()).concat("`");
+//		task.concat(interval.getEndDate().toString());
+		
+		task = task + task_id + '`';
+		task = task + description + '`';
+		task = task + category + '`';
+		task = task + toStringAddTags() + '`';
+		task = task + Integer.toString(repeated_period) + '`';
+		task = task + Integer.toString(priority) + '`';
+		task = task + interval.getStartDate().toString() + '`';
+		task = task + interval.getEndDate().toString();
+		
 		return task;
 	}
 	
