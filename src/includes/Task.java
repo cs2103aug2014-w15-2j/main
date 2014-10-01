@@ -1,17 +1,18 @@
 package includes;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Task {
 	private static final String DUPLICATED_TAG_ERROR_MESSAGE = "tag %1$s already exists.";
 
-	public String description;
-	public String category;
-	public int priority;
-	public String task_id;
-	public int repeated_period;
-	public ArrayList<String> tag;
-	public TimeInterval interval;
+	private String description;
+	private String category;
+	private int priority;
+	private String task_id;
+	private int repeated_period;
+	private ArrayList<String> tag;
+	private TimeInterval interval;
 	
 	private final int REDUCE_CHAR = 1;
 
@@ -109,6 +110,142 @@ public class Task {
 		task.concat(interval.getEndDate().toString());
 		return task;
 	}
+	
+	// setter and getter
+	
+	/**
+	 * getPriority getter of the priority attribute
+	 * 
+	 * @return
+	 */
+	public String getDescription() {
+		return this.description;
+	}
+	
+	/**
+	 * setDescription setter of the description attribute
+	 * 
+	 * @param newDescription
+	 */
+	public void setDescription(String newDescription) {
+		try {
+			this.description = newDescription;
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	/**
+	 * getDescription getter of the category attribute
+	 * 
+	 * @return
+	 */
+	public String getCategory() {
+		return this.category;
+	}
+	
+	/**
+	 * setDescription setter of the category attribute
+	 * 
+	 * @param newCategory
+	 */
+	public void setCategory(String newCategory) {
+		try {
+			this.category = newCategory;
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	/**
+	 * getPriority getter of the priority attribute
+	 * 
+	 * @return
+	 */
+	public int getPriority() {
+		return this.priority;
+	}
+	
+	/**
+	 * setPriority setter of the priority attribute
+	 * 
+	 * @param newPriority
+	 */
+	public void setPriority(int newPriority) {
+		try {
+			this.priority = newPriority;
+		} catch (Exception e) {
+			
+		}
+	}	
+	
+	/**
+	 * getTaskId getter of the task_id attribute
+	 * 
+	 * @return
+	 */
+	public String getTaskId() {
+		return this.task_id;
+	}
+	
+	/**
+	 * getRepeatedPeriod getter of the repeated_period attribute
+	 * 
+	 * @return
+	 */
+	public int getRepeatedPeriod() {
+		return this.repeated_period;
+	}
+	
+	/**
+	 * setRepeatedPeriod setter of the repeated_period attribute
+	 * 
+	 * @param newRepeatedPeriod
+	 */
+	public void setRepeatedPeriod(int newRepeatedPeriod) {
+		try {
+			this.repeated_period = newRepeatedPeriod;
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	/**
+	 * getTag getter of the tag attribute
+	 * 
+	 * @return
+	 */
+	public ArrayList<String> getTag() {
+		return this.tag;
+	}
+	
+	/**
+	 * setTag setter of the tag attribute
+	 * 
+	 * @param newTag
+	 */
+	public void setTag(ArrayList<String> newTag) {
+		try {
+			this.tag = newTag;
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	
+	/**
+	 * setInterval setter of the interval attribute
+	 * 
+	 * @param interval
+	 */
+	public void setInterval(TimeInterval inteval) {
+		try {
+			this.interval = inteval;
+		} catch (Exception e) {
+			
+		}
+	}
+	
 	
 	/**
 	 * add tags for task string

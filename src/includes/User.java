@@ -122,8 +122,9 @@ public class User {
 	 * 
 	 * @param task, attributes to be updated
 	 * @param toBeUpdated
+	 * @throws CommandFailedException 
 	 */
-	public void update(Task task, Dictionary<String, Object> toBeUpdated){
+	public void update(Task task, Dictionary<String, Object> toBeUpdated) throws CommandFailedException{
 		Enumeration<String> attributes = toBeUpdated.keys();
 		if(attributes.hasMoreElements()) {
 			String currentAttribute = attributes.nextElement();
@@ -139,7 +140,7 @@ public class User {
 			} else if(currentAttribute == "tag") {
 				task.setTag((ArrayList<String>) currentObject);
 			} else if (currentAttribute == "time_interval") {
-				task.setTimeInterval((TimeInterval) currentObject);
+				task.setInterval((TimeInterval) currentObject);
 			} else {
 				throw new CommandFailedException(INVALID_UPDATE_MESSAGE);
 			}
