@@ -5,9 +5,22 @@ public class Constant {
 	//prompt messages that will be printed for users
 	public static final String PROMPT_MESSAGE_WELCOME = "Welcome to 小鸣的清单(List of Xiao Ming), you can log in or create a new accout.";
 	public static final String PROMPT_MESSAGE_INSTRUCTION = "You can type in 'log in', 'create account', 'help' or 'exit'.";
-	public static final String PROMPT_MESSAGE_LOG_IN_CANCELLED = "user cancelled logging in";
 	public static final String PROMPT_MESSAGE_NOT_LOG_IN = "you have not logged in yet";
+	public static final String PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY = "Successfully logged out\n\n\n";
+	public static final String PROMPT_MESSAGE_NEED_USERNAME = "Please enter your username: ";
+	public static final String PROMPT_MESSAGE_NEED_PASSWORD = "Please enter your password: ";
+	public static final String PROMPT_MESSAGE_NEED_ENTER_AGAIN = "Please re-enter your password: ";
+	public static final String PROMPT_MESSAGE_PASSWORD_INCORRECT = "Incorrect password! Please try again.";
+	public static final String PROMPT_MESSAGE_ACCOUNT_NOT_EXSIT = "The account doesn't exist! Do you want to enter the name again? (Y/N)";
+	public static final String PROMPT_MESSAGE_ACCOUNT_EXSIT = "The account has exsited already. Do you want to change a name? (Y/N)";
+	public static final String PROMPT_MESSAGE_ACCOUNT_CREATED =  "Account Created";
+	public static final String PROMPT_MESSAGE_ACCOUNT_NOT_CREATED =  "Fail to create account: Please check again";
+	public static final String PROMPT_MESSAGE_SESSION_END =  "Session end!";
 	
+	public static final String RETURN_VALUE_LOG_IN_CANCELLED =  "user cancelled logging in";
+	public static final String RETURN_VALUE_AUTHENTICATION_FAILED =  "authentication failed.";
+	public static final String RETURN_VALUE_LOGGED_OUT =  "log out";
+
 	
 	//parser
 	public static final String KEY_TIME = "time";
@@ -45,7 +58,7 @@ public class Constant {
 	
 	//command type
 	public static enum COMMAND_TYPE {
-		LOG_IN, LOG_OUT, CREATE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, SEARCH, REDO, UNDO, CLEAR
+		LOG_IN, LOG_OUT, CREATE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR
 	}
 	
 }

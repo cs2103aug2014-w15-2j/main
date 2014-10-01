@@ -35,7 +35,7 @@ public class ListOfXiaoMing {
 				Toolbox.showToUser(Constant.PROMPT_MESSAGE_INSTRUCTION);
 				String userInput = ListOfXiaoMing.readCommand();
 				String recordFilePath = ListOfXiaoMing.exectueUpperLevelCommand(userInput);
-				if (recordFilePath != null  && !recordFilePath.equalsIgnoreCase(Constant.PROMPT_MESSAGE_LOG_IN_CANCELLED)) {
+				if (recordFilePath != null  && !recordFilePath.equalsIgnoreCase(Constant.RETURN_VALUE_LOG_IN_CANCELLED)) {
 					//already find the record
 					System.out.println(recordFilePath);
 					list = new ListOfXiaoMing(recordFilePath);
@@ -46,9 +46,9 @@ public class ListOfXiaoMing {
 			while (willContinue) {
 				String userInput = ListOfXiaoMing.readCommand();
 				String result = list.execute(userInput);
-				if (result.equals("log out")) {
+				if (result.equals(Constant.RETURN_VALUE_LOGGED_OUT)) {
 					willContinue = false;
-					Toolbox.showToUser("Successfully logged out\n\n\n");
+					Toolbox.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY);
 				}
 			}
 		}
@@ -90,6 +90,7 @@ public class ListOfXiaoMing {
 				return null;
 		}
 	}
+	
 	public static String userLogIn(ArrayList<String> parameters) {
 		String username = null;
 		String password = null;
@@ -102,12 +103,12 @@ public class ListOfXiaoMing {
 		}
 		
 		while (username == null) {
-			Toolbox.showToUser("Please enter your user name");
+			Toolbox.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME);
 			String inputUsername = readCommand();
 			if (!DataStore.isAccountExisting(inputUsername)) {
-				Toolbox.showToUser("The account doesn't exist! Do you want to enter the name again? (Y/N)");
-				 if (readCommand().equalsIgnoreCase("N")) {
-					return "user cancelled logging in";
+				Toolbox.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_NOT_EXSIT);
+				 if (!readCommand().equalsIgnoreCase("Y")) {
+					return Constant.RETURN_VALUE_LOG_IN_CANCELLED;
 				 }
 			} else {
 				username = inputUsername;
@@ -115,7 +116,7 @@ public class ListOfXiaoMing {
 		}
 			
 		while (password == null) {
-			Toolbox.showToUser("Please enter your password");
+			Toolbox.showToUser(Constant.PROMPT_MESSAGE_NEED_PASSWORD);
 			password = readCommand();
 		}
 		
@@ -123,14 +124,15 @@ public class ListOfXiaoMing {
 		while (!DataStore.authenticate(username, password)) {
 			incorrectPasswordCount++;
 			if (incorrectPasswordCount >= 3) {
-				return "Authentication failed.";
+				return Constant.RETURN_VALUE_AUTHENTICATION_FAILED;
 			}
-			Toolbox.showToUser("Incorrect password! Please enter again");
+			Toolbox.showToUser(Constant.PROMPT_MESSAGE_PASSWORD_INCORRECT);
 			password = readCommand();
 		}
 		
 		return username;
 	}
+	
 	public static String createAccount(ArrayList<String> parameters) {
 		String username = null;
 		String passwordInput1 = null;
@@ -141,12 +143,12 @@ public class ListOfXiaoMing {
 		}
 		
 		while (username == null) {
-			Toolbox.showToUser("Please enter your user name");
+			Toolbox.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME);
 			String inputUsername = readCommand();
 			if (DataStore.isAccountExisting(inputUsername)) {
-				Toolbox.showToUser("The account has exsited already. Do you want to change a name? (Y/N)");
-				 if (readCommand().equalsIgnoreCase("N")) {
-					return Constant.PROMPT_MESSAGE_LOG_IN_CANCELLED;
+				Toolbox.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_EXSIT);
+				 if (!readCommand().equalsIgnoreCase("Y")) {
+					return Constant.RETURN_VALUE_LOG_IN_CANCELLED;
 				 }
 			} else {
 				username = inputUsername;
@@ -156,22 +158,24 @@ public class ListOfXiaoMing {
 		while(!(passwordInput1 != null && passwordInput2 != null && passwordInput1.equals(passwordInput2))) {
 			passwordInput1 = null;
 			passwordInput2 = null;
-			Toolbox.showToUser("Please enter your password:");
+			Toolbox.showToUser(Constant.PROMPT_MESSAGE_NEED_PASSWORD);
 			passwordInput1 = readCommand();
-			Toolbox.showToUser("Please enter again");
+			Toolbox.showToUser(Constant.PROMPT_MESSAGE_NEED_ENTER_AGAIN);
 			passwordInput2 = readCommand();
 		}
 		
 		boolean successCreated = DataStore.createAccount(username, passwordInput1);
-		return successCreated ? "Account Created" : "Fail to create account: Please check again";
+		return successCreated ?  Constant.PROMPT_MESSAGE_ACCOUNT_CREATED: Constant.PROMPT_MESSAGE_ACCOUNT_NOT_CREATED;
 	}
+	
+	
 	public static String showHelp(){
 		
 		return "'Help' has not been implemented yet";
 	}
 	
 	public static void exit() {
-		Toolbox.showToUser("Session end");
+		Toolbox.showToUser(Constant.PROMPT_MESSAGE_SESSION_END);
 		System.exit(0);
 	}
 	
@@ -237,7 +241,7 @@ public class ListOfXiaoMing {
 	
 	
 	private String logOut() {
-		return "log out";
+		return Constant.RETURN_VALUE_LOGGED_OUT;
 	}
 	
 	
@@ -282,7 +286,7 @@ public class ListOfXiaoMing {
 			
 			return Toolbox.taskListToString(queryResult);
 		} catch(Exception e) {
-			Toolbox.showToUser("start time should before end time");
+			Toolbox.showToUser(e.toString());
 			return null;
 		}
 		
