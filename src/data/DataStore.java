@@ -113,6 +113,7 @@ public class DataStore {
 			bw.newLine();
 			bw.write(SPLIT_SECTION);
 			bw.newLine();
+			bw.flush();
 			for(int i = 0; i < tasks.size(); i++) {
 				bw.write(tasks.get(i).toString());
 				bw.newLine();
