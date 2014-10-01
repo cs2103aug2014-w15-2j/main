@@ -18,6 +18,7 @@ public class User {
 	ArrayList<Task> currentTasks;
 	Stack<ArrayList<Task>> undoable;
 	Stack<ArrayList<Task>> redoable;
+	String username;
 
 	protected final int MAXIMUM_UNDO_TIMES = 10;
 	protected final int MAXIMUM_REDO_TIMES = 10;
@@ -34,6 +35,7 @@ public class User {
 		undoable = new Stack<ArrayList<Task>>();
 		redoable = new Stack<ArrayList<Task>>();
 		currentTasks = DataStore.getCurrentTasks(userFile);
+		username = recordFilePath;
 	}
 
 	
@@ -96,6 +98,7 @@ public class User {
 	public void add(Task task) {
 		this.updateUndoable();
 		this.currentTasks.add(task);
+		DataStore.save(this.username, this.currentTasks);
 	}
 
 	/**
@@ -110,6 +113,7 @@ public class User {
 					INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			this.currentTasks.get(index).addTag(TRASHED_TAG);
+			DataStore.save(this.username, this.currentTasks);
 		}
 	}
 	
