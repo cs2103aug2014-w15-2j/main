@@ -2,6 +2,7 @@ package includes;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 public class Task {
 	private static final String DUPLICATED_TAG_ERROR_MESSAGE = "tag %1$s already exists.";
@@ -31,7 +32,7 @@ public class Task {
 		this.description = description;
 		this.category = category;
 		this.priority = priority;
-		// this.task_id = ;
+		this.task_id = UUID.randomUUID().toString();
 		this.repeated_period = repeated_period;
 		this.tag = tag;
 		this.interval = interval;
