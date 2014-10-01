@@ -4,17 +4,12 @@ import java.util.Scanner;
 import includes.*;
 import data.*;
 
-import includes.Parser.COMMAND_TYPE;
+import includes.Constant.COMMAND_TYPE;
 
 
 public class ListOfXiaoMing {
 	
 	private static Scanner scanner_ = new Scanner(System.in);
-	
-	public static final String PROMPT_MESSAGE_WELCOME = "Welcome to 小鸣的清单(List of Xiao Ming), you can log in or create a new accout.";
-	public static final String PROMPT_MESSAGE_INSTRUCTION = "You can type in 'log in', 'create account', 'help' or 'exit'.";
-	public static final String PROMPT_MESSAGE_LOG_IN_CANCELLED = "user cancelled logging in";
-	public static final String PROMPT_MESSAGE_NOT_LOG_IN = "you have not logged in yet";
 
 	//a property to store the current user
 	private User user;
@@ -35,12 +30,12 @@ public class ListOfXiaoMing {
 	public static void main(String[] args) {
 		while (true) {
 			ListOfXiaoMing list = null;
-			Toolbox.showToUser(PROMPT_MESSAGE_WELCOME);
+			Toolbox.showToUser(Constant.PROMPT_MESSAGE_WELCOME);
 			while (list == null) {
-				Toolbox.showToUser(PROMPT_MESSAGE_INSTRUCTION);
+				Toolbox.showToUser(Constant.PROMPT_MESSAGE_INSTRUCTION);
 				String userInput = ListOfXiaoMing.readCommand();
 				String recordFilePath = ListOfXiaoMing.exectueUpperLevelCommand(userInput);
-				if (recordFilePath != null  && !recordFilePath.equalsIgnoreCase(PROMPT_MESSAGE_LOG_IN_CANCELLED)) {
+				if (recordFilePath != null  && !recordFilePath.equalsIgnoreCase(Constant.PROMPT_MESSAGE_LOG_IN_CANCELLED)) {
 					//already find the record
 					System.out.println(recordFilePath);
 					list = new ListOfXiaoMing(recordFilePath);
@@ -91,7 +86,7 @@ public class ListOfXiaoMing {
 				ListOfXiaoMing.exit();
 				
 			default:
-				Toolbox.showToUser(PROMPT_MESSAGE_NOT_LOG_IN);
+				Toolbox.showToUser(Constant.PROMPT_MESSAGE_NOT_LOG_IN);
 				return null;
 		}
 	}
@@ -151,7 +146,7 @@ public class ListOfXiaoMing {
 			if (DataStore.isAccountExisting(inputUsername)) {
 				Toolbox.showToUser("The account has exsited already. Do you want to change a name? (Y/N)");
 				 if (readCommand().equalsIgnoreCase("N")) {
-					return PROMPT_MESSAGE_LOG_IN_CANCELLED;
+					return Constant.PROMPT_MESSAGE_LOG_IN_CANCELLED;
 				 }
 			} else {
 				username = inputUsername;
@@ -219,11 +214,16 @@ public class ListOfXiaoMing {
 		}
 	}
 	
+	
+	
 	private String add(ArrayList<String> taskParameters) {
 		Task taskToAdd = Parser.getTaskFromParameterList(taskParameters);
 		this.user.add(taskToAdd);
 		return "";
 	}
+	
+	
+	
 	private String delete(ArrayList<String> taskParameters) {
 		int index = Integer.parseInt(taskParameters.get(0));
 		try {
@@ -233,9 +233,15 @@ public class ListOfXiaoMing {
 		}
 		return "";
 	}	
+	
+	
+	
 	private String logOut() {
 		return "log out";
 	}
+	
+	
+	
 	private String undo() {
 		try {
 			this.user.undo();
@@ -244,6 +250,9 @@ public class ListOfXiaoMing {
 		}
 		return "";
 	}
+	
+	
+	
 	private String redo() {
 		try {
 			this.user.redo();
@@ -252,6 +261,9 @@ public class ListOfXiaoMing {
 		}
 		return "";
 	}
+	
+	
+	
 	private String search(ArrayList<String> taskParameters) {
 		
 		try {

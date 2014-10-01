@@ -1,5 +1,7 @@
 package includes;
 
+import includes.Constant.COMMAND_TYPE;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,80 +10,46 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+
+
 public class Parser {
-	
-	public static final String KEY_TIME = "time";
-	public static final String KEY_CATEGORY = "categroy";
-	public static final String KEY_PRIORITY = "priority";
-	public static final String KEY_REPEATED_PERIOD = "repeat";
-	public static final String KEY_TAG = "tag";
-	
-	public static final String COMMAND_STRING_LOG_IN = "log in";
-	public static final String COMMAND_STRING_LOG_OUT = "log out";
-	public static final String COMMAND_STRING_CREATE_ACCOUNT = "create account";
-	public static final String COMMAND_STRING_HELP = "help";
-	public static final String COMMAND_STRING_EXIT = "exit";
-	public static final String COMMAND_STRING_ADD = "add";
-	public static final String COMMAND_STRING_UPDATE = "update";
-	public static final String COMMAND_STRING_DELETE = "delete";
-	public static final String COMMAND_STRING_SEARCH = "search";
-	public static final String COMMAND_STRING_REDO = "redo";
-	public static final String COMMAND_STRING_UNDO = "undo";
-	public static final String COMMAND_STRING_CLEAR = "clear";
-	
-	public static final int PRIORITY_DEFAULT = 1;
-	public static final int PRIORITY_INVALID = 0;
-	public static final int PRIORITY_HIGH = 1;
-	public static final int PRIORITY_MEDIUM = 2;
-	public static final int PRIORITY_LOW = 3;
-	
-	public static final int REPEATED_PERIOD_DEFAULT = 1;
-	public static final int REPEATED_PERIOD_INVALID = 0;
-	public static final int REPEATED_PERIOD_NONE = 1;
-	public static final int REPEATED_PERIOD_DAILY = 2;
-	public static final int REPEATED_PERIOD_WEEKLY = 3;
-	public static final int REPEATED_PERIOD_MONTHLY = 4;
-	
-	public static enum COMMAND_TYPE {
-		LOG_IN, LOG_OUT, CREATE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, SEARCH, REDO, UNDO, CLEAR
-	}
 	
 	public static COMMAND_TYPE determineCommandType(String commandTypeString) {
 		switch (commandTypeString) {
-			case COMMAND_STRING_LOG_IN:
+			case Constant.COMMAND_STRING_LOG_IN:
 				return COMMAND_TYPE.LOG_IN;
 			
-			case COMMAND_STRING_LOG_OUT:
+			case Constant.COMMAND_STRING_LOG_OUT:
 				return COMMAND_TYPE.LOG_OUT;
 				
-			case COMMAND_STRING_CREATE_ACCOUNT:
+			case Constant.COMMAND_STRING_CREATE_ACCOUNT:
 				return COMMAND_TYPE.CREATE_ACCOUNT;
 				
-			case COMMAND_STRING_HELP:
+			case Constant.COMMAND_STRING_HELP:
 				return COMMAND_TYPE.HELP;
 				
-			case COMMAND_STRING_EXIT:
+			case Constant.COMMAND_STRING_EXIT:
 				return COMMAND_TYPE.EXIT;
 				
-			case COMMAND_STRING_ADD:
+			case Constant.COMMAND_STRING_ADD:
 				return COMMAND_TYPE.ADD;
 				
-			case COMMAND_STRING_UPDATE:
+			case Constant.COMMAND_STRING_UPDATE:
 				return COMMAND_TYPE.UPDATE;
 				
-			case COMMAND_STRING_DELETE:
+			case Constant.COMMAND_STRING_DELETE:
 				return COMMAND_TYPE.DELETE;
 
-			case COMMAND_STRING_SEARCH:
+			case Constant.COMMAND_STRING_SEARCH:
 				return COMMAND_TYPE.SEARCH;
 				
-			case COMMAND_STRING_UNDO:
+			case Constant.COMMAND_STRING_UNDO:
 				return COMMAND_TYPE.UNDO;
 				
-			case COMMAND_STRING_REDO:
+			case Constant.COMMAND_STRING_REDO:
 				return COMMAND_TYPE.REDO;
 	
-			case COMMAND_STRING_CLEAR:
+			case Constant.COMMAND_STRING_CLEAR:
 				return COMMAND_TYPE.CLEAR;	
 		
 			default:
@@ -92,8 +60,8 @@ public class Parser {
 	public static Task getTaskFromParameterList(ArrayList<String> parameterList) {
 		TimeInterval timeInterval = null;
 		String category = null; 
-		int priority = PRIORITY_DEFAULT;
-		int repeatedPeriod = REPEATED_PERIOD_DEFAULT; 
+		int priority = Constant.PRIORITY_DEFAULT;
+		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT; 
 		ArrayList<String> tag = new ArrayList<String>();
 		
 		String description = parameterList.get(0);
@@ -108,7 +76,7 @@ public class Parser {
 			String key = Toolbox.getFirstWord(parameter);
 			String value = Toolbox.removeFirstWord(parameter);
 			switch(key) {
-				case KEY_TIME:
+				case Constant.KEY_TIME:
 					try {
 						if (hasTime) {
 							Toolbox.showToUser("You can only assign one time for a task");
@@ -125,15 +93,15 @@ public class Parser {
 					}
 					break;
 				
-				case KEY_CATEGORY:
+				case Constant.KEY_CATEGORY:
 					break;
 				
-				case KEY_PRIORITY:
+				case Constant.KEY_PRIORITY:
 					if (hasPriority) {
 						Toolbox.showToUser("You can only assign one priority to a task");
 					} else {
 						int tempPriority = parsePriority(value);
-						if (tempPriority == PRIORITY_INVALID) {
+						if (tempPriority == Constant.PRIORITY_INVALID) {
 							Toolbox.showToUser("invalid priority format: it should be 'priority none/high/medium/low'");
 						} else {
 							priority = tempPriority;
@@ -143,12 +111,12 @@ public class Parser {
 					}
 					break;
 				
-				case KEY_REPEATED_PERIOD:
+				case Constant.KEY_REPEATED_PERIOD:
 					if (hasRepeatedPeriod) {
 						Toolbox.showToUser("You can only assign one repeated period to a task");
 					} else {
 						int tempRepeatedPeriod = parseRepeatedPeriod(value);
-						if (tempRepeatedPeriod == REPEATED_PERIOD_INVALID) {
+						if (tempRepeatedPeriod == Constant.REPEATED_PERIOD_INVALID) {
 							Toolbox.showToUser("invalid repeat format: it should be 'repeat daily/weekly/monthly'");
 						} else {
 							repeatedPeriod = tempRepeatedPeriod;
@@ -157,7 +125,7 @@ public class Parser {
 					}
 					break;
 					
-				case KEY_TAG:
+				case Constant.KEY_TAG:
 					if (!tag.contains(value)) {
 						tag.add(value);
 					}
@@ -244,27 +212,27 @@ public class Parser {
 	
 	public static int parsePriority(String parameter) {
 		if (parameter.equalsIgnoreCase("high")) {
-			return PRIORITY_HIGH;
+			return Constant.PRIORITY_HIGH;
 		} else if (parameter.equalsIgnoreCase("medium")) {
-			return PRIORITY_MEDIUM;
+			return Constant.PRIORITY_MEDIUM;
 		} else if (parameter.equalsIgnoreCase("low")) {
-			return PRIORITY_LOW;
+			return Constant.PRIORITY_LOW;
 		} else {
-			return PRIORITY_INVALID;
+			return Constant.PRIORITY_INVALID;
 		}
 	}
 
 	public static int parseRepeatedPeriod(String parameter) {
 		if (parameter.equalsIgnoreCase("none")) {
-			return REPEATED_PERIOD_NONE;
+			return Constant.REPEATED_PERIOD_NONE;
 		} else if (parameter.equalsIgnoreCase("daily")) {
-			return REPEATED_PERIOD_DAILY;
+			return Constant.REPEATED_PERIOD_DAILY;
 		} else if (parameter.equalsIgnoreCase("weekly")) {
-			return REPEATED_PERIOD_WEEKLY;
+			return Constant.REPEATED_PERIOD_WEEKLY;
 		} else if (parameter.equalsIgnoreCase("monthly")) {
-			return REPEATED_PERIOD_MONTHLY;
+			return Constant.REPEATED_PERIOD_MONTHLY;
 		} else {
-			return REPEATED_PERIOD_INVALID;
+			return Constant.REPEATED_PERIOD_INVALID;
 		}
 	}
 }
