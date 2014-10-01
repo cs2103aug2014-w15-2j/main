@@ -19,40 +19,55 @@ public class DataStore {
 	protected final static int ATTRIBUTE_END_POSITION = 1;
 	private final static String SPLIT_SECTION = "**********";
 
+	/**
+	 * check whether an account exists
+	 * @param username
+	 * @return true if exists, no otherwise
+	 */
 	public static boolean isAccountExisting(String username) {
 		File account = new File(username);
-		if(account.exists()){
+		if(account.exists()) {
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * check if it is a valid account (valid username and correct password)
+	 * @param username
+	 * @param password
+	 * @return true if valid, false if account not exists or wrong password
+	 */
 	public static boolean authenticate(String username, String password) {
-		if(!isAccountExisting(username)){
+		if(!isAccountExisting(username)) {
 			return false;
 		}
-		
 		try {
 			String realPassword = getPassword(username);
 			return password.equals(realPassword);
 		} catch (FileNotFoundException e) {
 			return false;
-		} catch (IOException e){
+		} catch (IOException e) {
 			return false;
 		}
 	}
 
-	public static boolean createAccount(String username, String passwordInput1) {
-		if(isAccountExisting(username)){
+	/**
+	 * create a new account (can not create an existing account)
+	 * @param username
+	 * @param passwordInput
+	 * @return true if succeed, false otherwise 
+	 */
+	public static boolean createAccount(String username, String passwordInput) {
+		if(isAccountExisting(username)) {
 			return false;
 		}
-		
 		try {
 			File account = new File(username);
 			account.createNewFile();
 			
 			BufferedWriter bw = new BufferedWriter(new FileWriter(username));
-			bw.write(passwordInput1);
+			bw.write(passwordInput);
 			bw.newLine();
 			bw.write(SPLIT_SECTION);
 			bw.newLine();
@@ -64,20 +79,32 @@ public class DataStore {
 		}
 	}
 	
+	/**
+	 * delete an account (can not be undone)
+	 * @param username
+	 * @param password
+	 * @return true if succeed, false otherwise
+	 */
 	public static boolean destroy(String username, String password) {
 		//check whether it is a valid account
-		if(!authenticate(username, password)){
+		if(!authenticate(username, password)) {
 			return false;
 		}
 		File account = new File(username);
 		return account.delete();
 	}
 	
+	/**
+	 * save the changes, write all tasks into the account data
+	 * @param username
+	 * @param tasks
+	 * @return true if succeed, false otherwise
+	 */
 	public static boolean save(String username, ArrayList<Task> tasks) {
-		if(!isAccountExisting(username)){
+		//check if it is an existing account
+		if(!isAccountExisting(username)) {
 			return false;
 		}
-		
 		try {
 			String password = getPassword(username);
 			BufferedWriter bw = new BufferedWriter(new FileWriter(username));
@@ -86,8 +113,8 @@ public class DataStore {
 			bw.newLine();
 			bw.write(SPLIT_SECTION);
 			bw.newLine();
-			
-			for(int i=0; i<tasks.size(); i++){
+			bw.flush();
+			for(int i = 0; i < tasks.size(); i++) {
 				bw.write(tasks.get(i).toString());
 				bw.newLine();
 			}
@@ -216,7 +243,13 @@ public class DataStore {
 		return tag;
 	}
 	
-	private static String getPassword(String username) throws IOException{
+	/**
+	 * Read the password of the account and return it
+	 * @param username
+	 * @return password
+	 * @throws IOException
+	 */
+	private static String getPassword(String username) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(username));
 		String password = br.readLine();
 		br.close();
