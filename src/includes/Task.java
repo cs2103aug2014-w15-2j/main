@@ -118,7 +118,7 @@ public class Task {
 		task = task + Integer.toString(priority) + '`';
 		task = task + interval.getStartDate().toString() + '`';
 		task = task + interval.getEndDate().toString();
-		
+
 		return task;
 	}
 	
