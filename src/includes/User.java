@@ -117,6 +117,12 @@ public class User {
 		}
 	}
 	
+	/**
+	 * update
+	 * 
+	 * @param task, attributes to be updated
+	 * @param toBeUpdated
+	 */
 	public void update(Task task, Dictionary<String, Object> toBeUpdated){
 		Enumeration<String> attributes = toBeUpdated.keys();
 		if(attributes.hasMoreElements()) {
