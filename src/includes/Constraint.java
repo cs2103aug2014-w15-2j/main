@@ -32,22 +32,22 @@ public class Constraint {
 	 */
 	public boolean isMeeted(Task task) throws Exception {
 		// test description
-		if (task.description.toLowerCase().contains(this.keyword)) {
+		if (task.getDescription().toLowerCase().contains(this.keyword)) {
 			return true;
 		}
 		
 		// test category
-		if (task.category.toLowerCase().contains(this.keyword)) {
+		if (task.getCategory().toLowerCase().contains(this.keyword)) {
 			return true;
 		}
 		
 		// test task_id
-		if (task.task_id.toLowerCase().contains(this.keyword)) {
+		if (task.getTaskId().toLowerCase().contains(this.keyword)) {
 			return true;
 		}
 		
 		// test tag
-		Iterator<String> tagIterator = task.tag.iterator();
+		Iterator<String> tagIterator = task.getTag().iterator();
 		while (tagIterator.hasNext()) {
 			if (tagIterator.next().toLowerCase().contains(this.keyword)) {
 				return true;
