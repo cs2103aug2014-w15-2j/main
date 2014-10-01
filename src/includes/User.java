@@ -27,7 +27,7 @@ public class User {
 	 * constructor
 	 * 
 	 * @param recordFilePath
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public User(String recordFilePath) throws Exception {
 		String userFilePath = recordFilePath;
@@ -37,8 +37,6 @@ public class User {
 		currentTasks = DataStore.getCurrentTasks(userFile);
 		username = recordFilePath;
 	}
-
-	
 
 	/**
 	 * undo
@@ -108,7 +106,7 @@ public class User {
 	 * @throws CommandFailedException
 	 */
 	public void delete(int index) throws CommandFailedException {
-		if(!this.isValidIndex(index)) {
+		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
 					INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
@@ -116,33 +114,40 @@ public class User {
 			DataStore.save(this.username, this.currentTasks);
 		}
 	}
-	
+
 	/**
 	 * update
 	 * 
-	 * @param task, attributes to be updated
+	 * @param index
+	 *            , attributes to be updated
 	 * @param toBeUpdated
 	 * @throws CommandFailedException 
 	 */
-	public void update(Task task, Dictionary<String, Object> toBeUpdated) throws CommandFailedException{
-		Enumeration<String> attributes = toBeUpdated.keys();
-		if(attributes.hasMoreElements()) {
-			String currentAttribute = attributes.nextElement();
-			Object currentObject = toBeUpdated.get(currentAttribute);
-			if(currentAttribute == "description") {
-				task.setDescription((String) currentObject);
-			} else if(currentAttribute == "category") {
-				task.setCategory((String) currentObject);
-			} else if(currentAttribute == "priority") {
-				task.setPriority((int) currentObject);
-			} else if(currentAttribute == "repeated_period") {
-				task.setRepeatedPeriod((int) currentObject);
-			} else if(currentAttribute == "tag") {
-				task.setTag((ArrayList<String>) currentObject);
-			} else if (currentAttribute == "time_interval") {
-				task.setInterval((TimeInterval) currentObject);
-			} else {
-				throw new CommandFailedException(INVALID_UPDATE_MESSAGE);
+	public void update(int index, Dictionary<String, Object> toBeUpdated) throws CommandFailedException {
+		if (!this.isValidIndex(index)) {
+			throw new CommandFailedException(String.format(
+					INVALID_INDEX_ERROR_MESSAGE, index));
+		} else {
+			Task task = this.currentTasks.get(index);
+			Enumeration<String> attributes = toBeUpdated.keys();
+			if (attributes.hasMoreElements()) {
+				String currentAttribute = attributes.nextElement();
+				Object currentObject = toBeUpdated.get(currentAttribute);
+				if (currentAttribute == "description") {
+					task.setDescription((String) currentObject);
+				} else if (currentAttribute == "category") {
+					task.setCategory((String) currentObject);
+				} else if (currentAttribute == "priority") {
+					task.setPriority((int) currentObject);
+				} else if (currentAttribute == "repeated_period") {
+					task.setRepeatedPeriod((int) currentObject);
+				} else if (currentAttribute == "tag") {
+					task.setTag((ArrayList<String>) currentObject);
+				} else if (currentAttribute == "time_interval") {
+					task.setInterval((TimeInterval) currentObject);
+				} else {
+					throw new CommandFailedException(INVALID_UPDATE_MESSAGE);
+				}
 			}
 		}
 	}
@@ -159,7 +164,7 @@ public class User {
 			throw new CommandFailedException(String.format(
 					INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
-			return this.currentTasks.get(index).task_id;
+			return this.currentTasks.get(index).getTaskId();
 		}
 	}
 
@@ -178,7 +183,7 @@ public class User {
 			Iterator<Task> taskIterator = this.currentTasks.iterator();
 			while (taskIterator.hasNext()) {
 				Task task = taskIterator.next();
-				if (task.task_id.equals(this.getTaskIdByIndex(index))) {
+				if (task.getTaskId().equals(this.getTaskIdByIndex(index))) {
 					return task;
 				}
 			}
