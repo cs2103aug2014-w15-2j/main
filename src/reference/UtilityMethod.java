@@ -1,8 +1,10 @@
-package includes;
+package reference;
 
 import java.util.ArrayList;
 
-public class Toolbox {
+import dataStructure.Task;
+
+public class UtilityMethod {
 	
 	/**
 	 * methods to convert a task list to a string

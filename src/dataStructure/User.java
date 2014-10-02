@@ -1,4 +1,4 @@
-package includes;
+package dataStructure;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Stack;
 
-import data.DataStore;
+import dataStore.DataStore;
 
 public class User {
 	private static final String TRASHED_TAG = "trashed";

@@ -1,7 +1,4 @@
-package data;
-
-import includes.Task;
-import includes.TimeInterval;
+package dataStore;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,9 +7,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Date;
+
+import dataStructure.Task;
+import dataStructure.TimeInterval;
 
 public class DataStore {
 

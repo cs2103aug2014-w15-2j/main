@@ -1,4 +1,4 @@
-package includes;
+package dataStructure;
 
 public class Pair {
 	public Object head;

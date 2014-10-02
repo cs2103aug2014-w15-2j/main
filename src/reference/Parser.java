@@ -1,6 +1,4 @@
-package includes;
-
-import includes.Constant.COMMAND_TYPE;
+package reference;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +7,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import reference.Constant.COMMAND_TYPE;
+import dataStructure.Pair;
+import dataStructure.Task;
+import dataStructure.TimeInterval;
 
 
 
@@ -73,23 +76,23 @@ public class Parser {
 		boolean hasRepeatedPeriod = false;
 		
 		for (String parameter: parameterList) {
-			String key = Toolbox.getFirstWord(parameter);
-			String value = Toolbox.removeFirstWord(parameter);
+			String key = UtilityMethod.getFirstWord(parameter);
+			String value = UtilityMethod.removeFirstWord(parameter);
 			switch(key) {
 				case Constant.KEY_TIME:
 					try {
 						if (hasTime) {
-							Toolbox.showToUser("You can only assign one time for a task");
+							UtilityMethod.showToUser("You can only assign one time for a task");
 						} else {
 							timeInterval = parseTimeInterval(value);
 							if (timeInterval == null) {
-								Toolbox.showToUser("invalid time format: the correct format should be...");
+								UtilityMethod.showToUser("invalid time format: the correct format should be...");
 							} else {
 								hasTime = true;
 							}
 						}
 					} catch (Exception e) {
-						Toolbox.showToUser("start time should be earlier than end time");
+						UtilityMethod.showToUser("start time should be earlier than end time");
 					}
 					break;
 				
@@ -104,11 +107,11 @@ public class Parser {
 				
 				case Constant.KEY_PRIORITY:
 					if (hasPriority) {
-						Toolbox.showToUser("You can only assign one priority to a task");
+						UtilityMethod.showToUser("You can only assign one priority to a task");
 					} else {
 						int tempPriority = parsePriority(value);
 						if (tempPriority == Constant.PRIORITY_INVALID) {
-							Toolbox.showToUser("invalid priority format: it should be 'priority none/high/medium/low'");
+							UtilityMethod.showToUser("invalid priority format: it should be 'priority none/high/medium/low'");
 						} else {
 							priority = tempPriority;
 							hasPriority = true;
@@ -119,11 +122,11 @@ public class Parser {
 				
 				case Constant.KEY_REPEATED_PERIOD:
 					if (hasRepeatedPeriod) {
-						Toolbox.showToUser("You can only assign one repeated period to a task");
+						UtilityMethod.showToUser("You can only assign one repeated period to a task");
 					} else {
 						int tempRepeatedPeriod = parseRepeatedPeriod(value);
 						if (tempRepeatedPeriod == Constant.REPEATED_PERIOD_INVALID) {
-							Toolbox.showToUser("invalid repeat format: it should be 'repeat daily/weekly/monthly'");
+							UtilityMethod.showToUser("invalid repeat format: it should be 'repeat daily/weekly/monthly'");
 						} else {
 							repeatedPeriod = tempRepeatedPeriod;
 							hasRepeatedPeriod = true;
@@ -138,7 +141,7 @@ public class Parser {
 					break;
 					
 				default:
-					Toolbox.showToUser("Unrecognized parameter!");
+					UtilityMethod.showToUser("Unrecognized parameter!");
 					break;
 			}
 		}

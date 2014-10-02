@@ -1,10 +1,15 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import includes.*;
-import data.*;
-
-import includes.Constant.COMMAND_TYPE;
+import reference.*;
+import reference.Constant.COMMAND_TYPE;
+import dataStore.*;
+import dataStructure.CommandFailedException;
+import dataStructure.Constraint;
+import dataStructure.Pair;
+import dataStructure.Task;
+import dataStructure.TimeInterval;
+import dataStructure.User;
 
 
 public class ListOfXiaoMing {
@@ -30,9 +35,9 @@ public class ListOfXiaoMing {
 	public static void main(String[] args) {
 		while (true) {
 			ListOfXiaoMing list = null;
-			Toolbox.showToUser(Constant.PROMPT_MESSAGE_WELCOME);
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_WELCOME);
 			while (list == null) {
-				Toolbox.showToUser(Constant.PROMPT_MESSAGE_INSTRUCTION);
+				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_INSTRUCTION);
 				String userInput = ListOfXiaoMing.readCommand();
 				String recordFilePath = ListOfXiaoMing.exectueUpperLevelCommand(userInput);
 				if (recordFilePath != null  && !recordFilePath.equalsIgnoreCase(Constant.RETURN_VALUE_LOG_IN_CANCELLED)) {
@@ -48,7 +53,7 @@ public class ListOfXiaoMing {
 				String result = list.execute(userInput);
 				if (result.equals(Constant.RETURN_VALUE_LOGGED_OUT)) {
 					willContinue = false;
-					Toolbox.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY);
+					UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY);
 				}
 			}
 		}
@@ -75,18 +80,18 @@ public class ListOfXiaoMing {
 			
 			case CREATE_ACCOUNT:
 
-				Toolbox.showToUser(ListOfXiaoMing.createAccount((ArrayList<String>)parameter));
+				UtilityMethod.showToUser(ListOfXiaoMing.createAccount((ArrayList<String>)parameter));
 				return null;
 		
 			case HELP:
-				Toolbox.showToUser(ListOfXiaoMing.showHelp());
+				UtilityMethod.showToUser(ListOfXiaoMing.showHelp());
 				return null;
 			
 			case EXIT:
 				ListOfXiaoMing.exit();
 				
 			default:
-				Toolbox.showToUser(Constant.PROMPT_MESSAGE_NOT_LOG_IN);
+				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NOT_LOG_IN);
 				return null;
 		}
 	}
@@ -103,10 +108,10 @@ public class ListOfXiaoMing {
 		}
 		
 		while (username == null) {
-			Toolbox.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME);
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME);
 			String inputUsername = readCommand();
 			if (!DataStore.isAccountExisting(inputUsername)) {
-				Toolbox.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_NOT_EXSIT);
+				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_NOT_EXSIT);
 				 if (!readCommand().equalsIgnoreCase("Y")) {
 					return Constant.RETURN_VALUE_LOG_IN_CANCELLED;
 				 }
@@ -116,7 +121,7 @@ public class ListOfXiaoMing {
 		}
 			
 		while (password == null) {
-			Toolbox.showToUser(Constant.PROMPT_MESSAGE_NEED_PASSWORD);
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_PASSWORD);
 			password = readCommand();
 		}
 		
@@ -126,7 +131,7 @@ public class ListOfXiaoMing {
 			if (incorrectPasswordCount >= 3) {
 				return Constant.RETURN_VALUE_AUTHENTICATION_FAILED;
 			}
-			Toolbox.showToUser(Constant.PROMPT_MESSAGE_PASSWORD_INCORRECT);
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_PASSWORD_INCORRECT);
 			password = readCommand();
 		}
 		
@@ -143,10 +148,10 @@ public class ListOfXiaoMing {
 		}
 		
 		while (username == null) {
-			Toolbox.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME);
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME);
 			String inputUsername = readCommand();
 			if (DataStore.isAccountExisting(inputUsername)) {
-				Toolbox.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_EXSIT);
+				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_EXSIT);
 				 if (!readCommand().equalsIgnoreCase("Y")) {
 					return Constant.RETURN_VALUE_LOG_IN_CANCELLED;
 				 }
@@ -158,9 +163,9 @@ public class ListOfXiaoMing {
 		while(!(passwordInput1 != null && passwordInput2 != null && passwordInput1.equals(passwordInput2))) {
 			passwordInput1 = null;
 			passwordInput2 = null;
-			Toolbox.showToUser(Constant.PROMPT_MESSAGE_NEED_PASSWORD);
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_PASSWORD);
 			passwordInput1 = readCommand();
-			Toolbox.showToUser(Constant.PROMPT_MESSAGE_NEED_ENTER_AGAIN);
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_ENTER_AGAIN);
 			passwordInput2 = readCommand();
 		}
 		
@@ -175,7 +180,7 @@ public class ListOfXiaoMing {
 	}
 	
 	public static void exit() {
-		Toolbox.showToUser(Constant.PROMPT_MESSAGE_SESSION_END);
+		UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_SESSION_END);
 		System.exit(0);
 	}
 	
@@ -233,7 +238,7 @@ public class ListOfXiaoMing {
 		try {
 			this.user.delete(index);
 		} catch (CommandFailedException e) {
-			Toolbox.showToUser(e.toString());
+			UtilityMethod.showToUser(e.toString());
 		}
 		return "";
 	}	
@@ -250,7 +255,7 @@ public class ListOfXiaoMing {
 		try {
 			this.user.undo();
 		} catch (CommandFailedException e) {
-			Toolbox.showToUser(e.toString());
+			UtilityMethod.showToUser(e.toString());
 		}
 		return "";
 	}
@@ -261,7 +266,7 @@ public class ListOfXiaoMing {
 		try {
 			this.user.redo();
 		} catch (CommandFailedException e) {
-			Toolbox.showToUser(e.toString());
+			UtilityMethod.showToUser(e.toString());
 		}
 		return "";
 	}
@@ -284,9 +289,9 @@ public class ListOfXiaoMing {
 			Constraint thisConstraint = new Constraint(keyword, timeInterval);
 			ArrayList<Task> queryResult = this.user.find(thisConstraint);
 			
-			return Toolbox.taskListToString(queryResult);
+			return UtilityMethod.taskListToString(queryResult);
 		} catch(Exception e) {
-			Toolbox.showToUser(e.toString());
+			UtilityMethod.showToUser(e.toString());
 			return null;
 		}
 		
