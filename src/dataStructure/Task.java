@@ -116,8 +116,13 @@ public class Task {
 		task = task + toStringAddTags() + '`';
 		task = task + Integer.toString(repeated_period) + '`';
 		task = task + Integer.toString(priority) + '`';
-		task = task + interval.getStartDate().toString() + '`';
-		task = task + interval.getEndDate().toString();
+		
+		if (interval != null) {
+			task = task + interval.getStartDate() + '`';
+			task = task + interval.getEndDate();
+		}
+		
+		
 
 		return task;
 	}
@@ -266,9 +271,10 @@ public class Task {
 	private String toStringAddTags(){
 		String tags = new String();
 		for(String aTag : tag){
-			tags.concat(aTag).concat(",");
+//			tags.concat(aTag).concat(",");
+			tags = tags + aTag + ",";
 		}
-		tags.substring(0, tags.length() - REDUCE_CHAR);
+//		tags.substring(0, tags.length() - REDUCE_CHAR);
 		return tags;
 	}
 }
