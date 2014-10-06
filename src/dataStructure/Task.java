@@ -14,7 +14,7 @@ public class Task {
 	private int repeated_period;
 	private ArrayList<String> tag;
 	private TimeInterval interval;
-	
+
 	private final int REDUCE_CHAR = 1;
 
 	/**
@@ -28,7 +28,7 @@ public class Task {
 	 * @param tag
 	 */
 	public Task(String description, String category, int priority,
-			int repeated_period, ArrayList<String> tag, TimeInterval interval){
+			int repeated_period, ArrayList<String> tag, TimeInterval interval) {
 		this.description = description;
 		this.category = category;
 		this.priority = priority;
@@ -37,7 +37,7 @@ public class Task {
 		this.tag = tag;
 		this.interval = interval;
 	}
-	
+
 	/**
 	 * 
 	 * constructor
@@ -51,8 +51,9 @@ public class Task {
 	 * @param startDate
 	 * @param endDate
 	 */
-	public Task(String task_id, String description, String category, int priority,
-			int repeated_period, ArrayList<String> tag, TimeInterval interval){
+	public Task(String task_id, String description, String category,
+			int priority, int repeated_period, ArrayList<String> tag,
+			TimeInterval interval) {
 		this.description = description;
 		this.category = category;
 		this.priority = priority;
@@ -61,7 +62,7 @@ public class Task {
 		this.tag = tag;
 		this.interval = interval;
 	}
-    
+
 	/**
 	 * @override getInterval
 	 * @return interval
@@ -69,6 +70,7 @@ public class Task {
 	public TimeInterval getInterval() {
 		return this.interval;
 	}
+
 	/**
 	 * addTag user cannot add duplicated tag for a task
 	 * 
@@ -92,43 +94,60 @@ public class Task {
 	public void removeTag(String tag) {
 		this.tag.remove(tag);
 	}
-	
+
 	/**
 	 * parse task to string
 	 * 
 	 * @return a task string
 	 */
-	public String toString(){
+	public String toString() {
 		String task = new String();
-		
-//		task.concat(task_id).concat("`");
-//		task.concat(description).concat("`");
-//		task.concat(category).concat("`");
-//		task.concat(toStringAddTags()).concat("`");
-//		task.concat(Integer.toString(repeated_period)).concat("`");
-//		task.concat(Integer.toString(priority)).concat("`");
-//		task.concat(interval.getStartDate().toString()).concat("`");
-//		task.concat(interval.getEndDate().toString());
-		
-		task = task + task_id + '`';
-		task = task + description + '`';
-		task = task + category + '`';
+
+		// task.concat(task_id).concat("`");
+		// task.concat(description).concat("`");
+		// task.concat(category).concat("`");
+		// task.concat(toStringAddTags()).concat("`");
+		// task.concat(Integer.toString(repeated_period)).concat("`");
+		// task.concat(Integer.toString(priority)).concat("`");
+		// task.concat(interval.getStartDate().toString()).concat("`");
+		// task.concat(interval.getEndDate().toString());
+
+		task = task + getTaskId() + '`';
+		task = task + getDescription() + '`';
+		task = task + getCategory() + '`';
 		task = task + toStringAddTags() + '`';
 		task = task + Integer.toString(repeated_period) + '`';
 		task = task + Integer.toString(priority) + '`';
-		
+
 		if (interval != null) {
 			task = task + interval.getStartDate() + '`';
 			task = task + interval.getEndDate();
 		}
-		
-		
 
 		return task;
 	}
-	
+
+	/**
+	 * add tags for task string
+	 * 
+	 * @return tags string
+	 */
+	private String toStringAddTags() {
+		String tags = new String();
+		if (tag.isEmpty()) {
+			tags = "";
+		} else {
+			for (String aTag : tag) {
+				tags = tags + aTag + ",";
+			}
+			//to remove the last comma
+			tags.substring(0, tags.length() - REDUCE_CHAR);
+		}
+		return tags;
+	}
+
 	// setter and getter
-	
+
 	/**
 	 * getPriority getter of the priority attribute
 	 * 
@@ -137,7 +156,7 @@ public class Task {
 	public String getDescription() {
 		return this.description;
 	}
-	
+
 	/**
 	 * setDescription setter of the description attribute
 	 * 
@@ -147,10 +166,10 @@ public class Task {
 		try {
 			this.description = newDescription;
 		} catch (Exception e) {
-			
+
 		}
 	}
-	
+
 	/**
 	 * getDescription getter of the category attribute
 	 * 
@@ -159,7 +178,7 @@ public class Task {
 	public String getCategory() {
 		return this.category;
 	}
-	
+
 	/**
 	 * setDescription setter of the category attribute
 	 * 
@@ -169,10 +188,10 @@ public class Task {
 		try {
 			this.category = newCategory;
 		} catch (Exception e) {
-			
+
 		}
 	}
-	
+
 	/**
 	 * getPriority getter of the priority attribute
 	 * 
@@ -181,7 +200,7 @@ public class Task {
 	public int getPriority() {
 		return this.priority;
 	}
-	
+
 	/**
 	 * setPriority setter of the priority attribute
 	 * 
@@ -191,10 +210,10 @@ public class Task {
 		try {
 			this.priority = newPriority;
 		} catch (Exception e) {
-			
+
 		}
-	}	
-	
+	}
+
 	/**
 	 * getTaskId getter of the task_id attribute
 	 * 
@@ -203,7 +222,7 @@ public class Task {
 	public String getTaskId() {
 		return this.task_id;
 	}
-	
+
 	/**
 	 * getRepeatedPeriod getter of the repeated_period attribute
 	 * 
@@ -212,7 +231,7 @@ public class Task {
 	public int getRepeatedPeriod() {
 		return this.repeated_period;
 	}
-	
+
 	/**
 	 * setRepeatedPeriod setter of the repeated_period attribute
 	 * 
@@ -222,10 +241,10 @@ public class Task {
 		try {
 			this.repeated_period = newRepeatedPeriod;
 		} catch (Exception e) {
-			
+
 		}
 	}
-	
+
 	/**
 	 * getTag getter of the tag attribute
 	 * 
@@ -234,7 +253,7 @@ public class Task {
 	public ArrayList<String> getTag() {
 		return this.tag;
 	}
-	
+
 	/**
 	 * setTag setter of the tag attribute
 	 * 
@@ -244,11 +263,10 @@ public class Task {
 		try {
 			this.tag = newTag;
 		} catch (Exception e) {
-			
+
 		}
 	}
-	
-	
+
 	/**
 	 * setInterval setter of the interval attribute
 	 * 
@@ -258,23 +276,8 @@ public class Task {
 		try {
 			this.interval = inteval;
 		} catch (Exception e) {
-			
+
 		}
 	}
-	
-	
-	/**
-	 * add tags for task string
-	 * 
-	 * @return tags string
-	 */
-	private String toStringAddTags(){
-		String tags = new String();
-		for(String aTag : tag){
-//			tags.concat(aTag).concat(",");
-			tags = tags + aTag + ",";
-		}
-//		tags.substring(0, tags.length() - REDUCE_CHAR);
-		return tags;
-	}
+
 }
