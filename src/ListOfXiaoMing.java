@@ -204,7 +204,7 @@ public class ListOfXiaoMing {
 				return this.delete(parameterList);
 				
 			case UPDATE:
-				return "";
+				return this.update(parameterList);
 			
 			case SEARCH:
 				return this.search(parameterList);
@@ -222,13 +222,14 @@ public class ListOfXiaoMing {
 				return "";
 		}
 	}
-	
-	
-	
+
 	private String add(ArrayList<String> taskParameters) {
 		Task taskToAdd = Parser.getTaskFromParameterList(taskParameters);
-		this.user.add(taskToAdd);
-		return "";
+		if (taskToAdd != null) {
+			this.user.add(taskToAdd);
+		}
+		
+		return "task added";
 	}
 	
 	
@@ -240,9 +241,20 @@ public class ListOfXiaoMing {
 		} catch (CommandFailedException e) {
 			UtilityMethod.showToUser(e.toString());
 		}
-		return "";
+		return "task deleted";
 	}	
 	
+	
+	private String update(ArrayList<String> taskParameters) {
+		int index = Integer.parseInt(taskParameters.get(0));
+		try {
+			this.user.update(index, Parser.getTaskDictionary(taskParameters));
+			
+		} catch (CommandFailedException e) {
+			UtilityMethod.showToUser(e.toString());
+		}
+		return "task updated";
+	}
 	
 	
 	private String logOut() {
@@ -257,7 +269,7 @@ public class ListOfXiaoMing {
 		} catch (CommandFailedException e) {
 			UtilityMethod.showToUser(e.toString());
 		}
-		return "";
+		return "undone";
 	}
 	
 	
@@ -268,7 +280,7 @@ public class ListOfXiaoMing {
 		} catch (CommandFailedException e) {
 			UtilityMethod.showToUser(e.toString());
 		}
-		return "";
+		return "redone";
 	}
 	
 	

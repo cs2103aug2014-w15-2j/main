@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import reference.Constant.COMMAND_TYPE;
 import dataStructure.Pair;
@@ -60,6 +63,40 @@ public class Parser {
 		}
 	}
 	
+	
+	@SuppressWarnings("unchecked")
+	public static Dictionary<String, Object> getTaskDictionary(ArrayList<String> parameterList) {
+		Task newTask = Parser.getTaskFromParameterList(parameterList);
+		Map <String, Object> updateAttributes = new HashMap<String, Object> ();
+		
+		if (newTask.getDescription() != null) {
+			updateAttributes.put("discription", newTask.getDescription());
+		}
+		
+		if (newTask.getCategory() != null) {
+			updateAttributes.put("category", newTask.getCategory());
+		} 
+		
+		if (newTask.getInterval() != null) {
+			updateAttributes.put("time", newTask.getInterval());
+		} 
+		
+		if (newTask.getPriority() != Constant.PRIORITY_INVALID) {
+			updateAttributes.put("priority", newTask.getPriority());
+		}
+		
+		if (newTask.getRepeatedPeriod() != Constant.REPEATED_PERIOD_INVALID) { 
+			updateAttributes.put("repeated_period", newTask.getRepeatedPeriod());
+		}
+		
+		if (newTask.getTag().size() != 0) {
+			updateAttributes.put("tag", newTask.getTag());
+		}
+		
+		return (Dictionary<String, Object>) updateAttributes;
+	}
+	
+	
 	public static Task getTaskFromParameterList(ArrayList<String> parameterList) {
 		TimeInterval timeInterval = null;
 		String category = null; 
@@ -97,12 +134,11 @@ public class Parser {
 					break;
 				
 				case Constant.KEY_CATEGORY:
-					
-					//
-					//
-					//
-					//
-					
+					if (hasCategory) {
+						UtilityMethod.showToUser("You can only assign one category for a task");
+					} else {
+						category = value;
+					}
 					break;
 				
 				case Constant.KEY_PRIORITY:
