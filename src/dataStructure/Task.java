@@ -1,7 +1,6 @@
 package dataStructure;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
 
 public class Task {
@@ -15,7 +14,7 @@ public class Task {
 	private ArrayList<String> tag;
 	private TimeInterval interval;
 
-	private final int REDUCE_CHAR = 1;
+	private final int REDUCE_CHAR = 2;
 
 	/**
 	 * constructor
@@ -63,13 +62,7 @@ public class Task {
 		this.interval = interval;
 	}
 
-	/**
-	 * @override getInterval
-	 * @return interval
-	 */
-	public TimeInterval getInterval() {
-		return this.interval;
-	}
+	
 
 	/**
 	 * addTag user cannot add duplicated tag for a task
@@ -103,25 +96,18 @@ public class Task {
 	public String toString() {
 		String task = new String();
 
-		// task.concat(task_id).concat("`");
-		// task.concat(description).concat("`");
-		// task.concat(category).concat("`");
-		// task.concat(toStringAddTags()).concat("`");
-		// task.concat(Integer.toString(repeated_period)).concat("`");
-		// task.concat(Integer.toString(priority)).concat("`");
-		// task.concat(interval.getStartDate().toString()).concat("`");
-		// task.concat(interval.getEndDate().toString());
-
 		task = task + getTaskId() + '`';
 		task = task + getDescription() + '`';
 		task = task + getCategory() + '`';
 		task = task + toStringAddTags() + '`';
-		task = task + Integer.toString(repeated_period) + '`';
-		task = task + Integer.toString(priority) + '`';
+		task = task + Integer.toString(getRepeatedPeriod()) + '`';
+		task = task + Integer.toString(getPriority()) + '`';
 
-		if (interval != null) {
-			task = task + interval.getStartDate() + '`';
-			task = task + interval.getEndDate();
+		if (getInterval() != null) {
+			task = task + getInterval().getStartDate() + '`';
+			task = task + getInterval().getEndDate();
+		} else {
+			task = task + '`';
 		}
 
 		return task;
@@ -265,6 +251,14 @@ public class Task {
 		} catch (Exception e) {
 
 		}
+	}
+	
+	/**
+	 * @override getInterval
+	 * @return interval
+	 */
+	public TimeInterval getInterval() {
+		return this.interval;
 	}
 
 	/**

@@ -133,17 +133,17 @@ public class User {
 			if (attributes.hasMoreElements()) {
 				String currentAttribute = attributes.nextElement();
 				Object currentObject = toBeUpdated.get(currentAttribute);
-				if (currentAttribute == "description") {
+				if (currentAttribute.equals("description")) {
 					task.setDescription((String) currentObject);
-				} else if (currentAttribute == "category") {
+				} else if (currentAttribute.equals("category")) {
 					task.setCategory((String) currentObject);
-				} else if (currentAttribute == "priority") {
+				} else if (currentAttribute.equals("priority")) {
 					task.setPriority((int) currentObject);
-				} else if (currentAttribute == "repeated_period") {
+				} else if (currentAttribute.equals("repeated_period")) {
 					task.setRepeatedPeriod((int) currentObject);
-				} else if (currentAttribute == "tag") {
+				} else if (currentAttribute.equals("tag")) {
 					task.setTag((ArrayList<String>) currentObject);
-				} else if (currentAttribute == "time_interval") {
+				} else if (currentAttribute.equals("time_interval")) {
 					task.setInterval((TimeInterval) currentObject);
 				} else {
 					throw new CommandFailedException(INVALID_UPDATE_MESSAGE);
