@@ -39,7 +39,7 @@ public class ListOfXiaoMing {
 			while (list == null) {
 				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_INSTRUCTION);
 				String userInput = ListOfXiaoMing.readCommand();
-				String recordFilePath = ListOfXiaoMing.exectueUpperLevelCommand(userInput);
+				String recordFilePath = ListOfXiaoMing.executeUpperLevelCommand(userInput);
 				if (recordFilePath != null  && !recordFilePath.equalsIgnoreCase(Constant.RETURN_VALUE_LOG_IN_CANCELLED)) {
 					//already find the record
 					System.out.println(recordFilePath);
@@ -69,7 +69,7 @@ public class ListOfXiaoMing {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static String exectueUpperLevelCommand(String commandString) {
+	public static String executeUpperLevelCommand(String commandString) {
 		Pair commandPair = Parser.parse(commandString);
 		COMMAND_TYPE thisCommand = (COMMAND_TYPE) commandPair.head;
 		Object parameter = commandPair.tail;
@@ -111,7 +111,7 @@ public class ListOfXiaoMing {
 			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME);
 			String inputUsername = readCommand();
 			if (!DataStore.isAccountExisting(inputUsername)) {
-				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_NOT_EXSIT);
+				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_NOT_EXIST);
 				 if (!readCommand().equalsIgnoreCase("Y")) {
 					return Constant.RETURN_VALUE_LOG_IN_CANCELLED;
 				 }
@@ -151,7 +151,7 @@ public class ListOfXiaoMing {
 			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME);
 			String inputUsername = readCommand();
 			if (DataStore.isAccountExisting(inputUsername)) {
-				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_EXSIT);
+				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_EXIST);
 				 if (!readCommand().equalsIgnoreCase("Y")) {
 					return Constant.RETURN_VALUE_LOG_IN_CANCELLED;
 				 }

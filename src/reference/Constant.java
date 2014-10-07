@@ -11,8 +11,8 @@ public class Constant {
 	public static final String PROMPT_MESSAGE_NEED_PASSWORD = "Please enter your password: ";
 	public static final String PROMPT_MESSAGE_NEED_ENTER_AGAIN = "Please re-enter your password: ";
 	public static final String PROMPT_MESSAGE_PASSWORD_INCORRECT = "Incorrect password! Please try again.";
-	public static final String PROMPT_MESSAGE_ACCOUNT_NOT_EXSIT = "The account doesn't exist! Do you want to enter the name again? (Y/N)";
-	public static final String PROMPT_MESSAGE_ACCOUNT_EXSIT = "The account has exsited already. Do you want to change a name? (Y/N)";
+	public static final String PROMPT_MESSAGE_ACCOUNT_NOT_EXIST = "The account doesn't exist! Do you want to enter the name again? (Y/N)";
+	public static final String PROMPT_MESSAGE_ACCOUNT_EXIST = "The account has existed already. Do you want to change a name? (Y/N)";
 	public static final String PROMPT_MESSAGE_ACCOUNT_CREATED =  "Account Created";
 	public static final String PROMPT_MESSAGE_ACCOUNT_NOT_CREATED =  "Fail to create account: Please check again";
 	public static final String PROMPT_MESSAGE_SESSION_END =  "Session end!";
