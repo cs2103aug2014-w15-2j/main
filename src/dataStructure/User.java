@@ -88,8 +88,8 @@ public class User {
 	 */
 	public boolean add(Task task) {
 		this.updateUndoable();
-		boolean isSuccessful = this.currentTasks.add(task);
-		DataStore.save(this.username, this.currentTasks);
+		this.currentTasks.add(task);
+		boolean isSuccessful = DataStore.save(this.username, this.currentTasks);
 		return isSuccessful;
 	}
 

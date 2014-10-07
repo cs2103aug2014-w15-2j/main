@@ -14,7 +14,6 @@ import dataStructure.User;
 
 public class ListOfXiaoMing {
 	
-	
 
 	//a property to store the current user
 	private User user;
@@ -290,7 +289,7 @@ public class ListOfXiaoMing {
 	private String display() {
 		ArrayList<Task> queryResult;
 		try {
-			queryResult = this.user.find(new Constraint());
+			queryResult = this.user.display();
 			String resultString  = UtilityMethod.taskListToString(queryResult);
 			if (resultString.equalsIgnoreCase("")) {
 				return "--- no task in the list ---      _(:з」∠)_ ";
