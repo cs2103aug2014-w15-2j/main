@@ -214,7 +214,7 @@ public class ListOfXiaoMing {
 //User level commands
 	
 	@SuppressWarnings("unchecked")
-	private String execute (String userInput) {
+	public String execute (String userInput) {
 		Pair commandPair = Parser.parse(userInput);
 		COMMAND_TYPE thisCommand = (COMMAND_TYPE) commandPair.head;
 		ArrayList<String> parameterList = (ArrayList<String>) commandPair.tail;
