@@ -3,6 +3,8 @@ package dataStructure;
 import java.util.Date;
 import java.util.Iterator;
 
+import reference.*;
+
 public class Constraint {
 	public String keyword;
 	public TimeInterval interval;
@@ -38,6 +40,13 @@ public class Constraint {
 	public boolean isMeeted(Task task) throws Exception {
 		boolean isKeywordMatched = false;
 		boolean isIntervalMatched = false;
+		boolean isSearchingTrashed = false;
+		boolean isTrashedTask = false;
+		
+		if (this.keyword.contains("trash")) {
+			isSearchingTrashed = true;
+		}
+		
 		// test description
 		if (task.getDescription().toLowerCase().contains(this.keyword)) {
 			isKeywordMatched = true;
@@ -61,11 +70,19 @@ public class Constraint {
 			}
 		}
 		
+		// test trashed
+		Iterator<String> anotherTagIterator = task.getTag().iterator();
+		while (anotherTagIterator.hasNext()) {
+			if (anotherTagIterator.next().toLowerCase().contains(Constant.TRASHED_TAG)) {
+				isTrashedTask = true;
+			}
+		}
+		
 		// test interval
 		if (TimeInterval.isOverlapped(this.interval, task.getInterval())) {
 			isIntervalMatched = true;
 		}
-		return isIntervalMatched && isKeywordMatched;
+		return isIntervalMatched && isKeywordMatched && !(isSearchingTrashed ^ isTrashedTask);
 	}
 	
 }
