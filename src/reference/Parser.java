@@ -201,6 +201,8 @@ public class Parser {
 		String[] wordList = parameter.trim().split(" ");
 		Date startDate = null;
 		Date endDate = null;
+		
+		System.out.println(parameter);
 		if (wordList.length == 1) {
 			if (parameter.equalsIgnoreCase("today")) {
 				startDate = new Date();
