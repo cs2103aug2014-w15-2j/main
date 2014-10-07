@@ -101,7 +101,6 @@ public class Task {
 		task = task + toStringAddTags() + '`';
 		task = task + Integer.toString(getRepeatedPeriod()) + '`';
 		task = task + Integer.toString(getPriority()) + '`';
-
 		Long start = getInterval().getStartDate().getTime();
 		task = task + start + '`';
 		Long end = getInterval().getEndDate().getTime();
