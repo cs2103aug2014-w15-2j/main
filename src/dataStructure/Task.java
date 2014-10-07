@@ -128,6 +128,24 @@ public class Task {
 		return tags;
 	}
 
+	/**
+	 * toDisplayedString
+	 * 
+	 * @return 
+	 */
+	public String toDisplayedString() {
+		String task = new String();
+
+		task = task + getDescription();
+		task = task + "\n\t category: " + getCategory() + ';';
+		task = task + "\n\t tags: " + toStringAddTags() + ';';
+//		task = task + Integer.toString(getRepeatedPeriod()) + '`'; TODO
+		task = task + "\n\t priority: " + Integer.toString(getPriority()) + ';';
+		task = task + "\n\t from " + getInterval().getStartDate().getTime() + " to " + getInterval().getEndDate().getTime() + ";\n";
+
+		return task;
+	}
+	
 	// setter and getter
 
 	/**
