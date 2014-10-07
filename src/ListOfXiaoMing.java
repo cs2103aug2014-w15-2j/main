@@ -31,10 +31,14 @@ public class ListOfXiaoMing {
 		}
 	}
 	
-//main
+	//main
 	public static void main(String[] args) {
 		while (true) {
 			ListOfXiaoMing list = null;
+			String cached = DataStore.getCachedAccount();
+			if (!((cached == "") || (cached == null))) {
+				list = new ListOfXiaoMing(cached);
+			}
 			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_WELCOME);
 			while (list == null) {
 				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_INSTRUCTION);
@@ -44,6 +48,7 @@ public class ListOfXiaoMing {
 					//already find the record
 					System.out.println(recordFilePath);
 					list = new ListOfXiaoMing(recordFilePath);
+					DataStore.cacheAccount(recordFilePath);
 				}
 			}
 			
@@ -269,7 +274,12 @@ public class ListOfXiaoMing {
 	}
 	
 	private String logOut() {
-		return Constant.RETURN_VALUE_LOGGED_OUT;
+		
+		if (DataStore.clearCache()) {
+			return Constant.RETURN_VALUE_LOGGED_OUT;
+		} else {
+			return "error";
+		}
 	}
 	
 	
