@@ -6,10 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import reference.Constant.COMMAND_TYPE;
 import dataStructure.Pair;
@@ -30,6 +28,9 @@ public class Parser {
 				
 			case Constant.COMMAND_STRING_CREATE_ACCOUNT:
 				return COMMAND_TYPE.CREATE_ACCOUNT;
+				
+			case Constant.COMMAND_STRING_DELETE_ACCOUNT:
+				return COMMAND_TYPE.DELETE_ACCOUNT;
 				
 			case Constant.COMMAND_STRING_HELP:
 				return COMMAND_TYPE.HELP;
@@ -67,13 +68,12 @@ public class Parser {
 	}
 	
 	
-	@SuppressWarnings("unchecked")
-	public static Dictionary<String, Object> getTaskDictionary(ArrayList<String> parameterList) {
+	public static HashMap<String, Object> getTaskMap(ArrayList<String> parameterList) {
 		Task newTask = Parser.getTaskFromParameterList(parameterList);
-		Map <String, Object> updateAttributes = new HashMap<String, Object> ();
+		HashMap <String, Object> updateAttributes = new HashMap<String, Object> ();
 		
 		if (newTask.getDescription() != null) {
-			updateAttributes.put("discription", newTask.getDescription());
+			updateAttributes.put("description", newTask.getDescription());
 		}
 		
 		if (newTask.getCategory() != null) {
@@ -81,7 +81,7 @@ public class Parser {
 		} 
 		
 		if (newTask.getInterval() != null) {
-			updateAttributes.put("time", newTask.getInterval());
+			updateAttributes.put("time_interval", newTask.getInterval());
 		} 
 		
 		if (newTask.getPriority() != Constant.PRIORITY_INVALID) {
@@ -96,7 +96,7 @@ public class Parser {
 			updateAttributes.put("tag", newTask.getTag());
 		}
 		
-		return (Dictionary<String, Object>) updateAttributes;
+		return updateAttributes;
 	}
 	
 	
@@ -203,7 +203,6 @@ public class Parser {
 		Date startDate = null;
 		Date endDate = null;
 		
-		System.out.println(parameter);
 		if (wordList.length == 1) {
 			if (parameter.equalsIgnoreCase("today")) {
 				startDate = new Date();
@@ -243,12 +242,7 @@ public class Parser {
 			}
 		}
 		
-		if (startDate == null || endDate == null) {
-			return null;
-		} else {
-			return new TimeInterval(startDate, endDate);
-		}
-
+		return new TimeInterval(startDate, endDate);
 	}
 	
 	public static Date parseDateString (String dateString) {

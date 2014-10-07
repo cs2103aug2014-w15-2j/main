@@ -1,10 +1,18 @@
 package reference;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import dataStructure.Task;
 
 public class UtilityMethod {
+	private static Scanner scanner_ = new Scanner(System.in);
+	public static String readCommand() {
+		return scanner_.nextLine();
+	}
+	
+	
+	
 	
 	/**
 	 * methods to convert a task list to a string
@@ -15,9 +23,9 @@ public class UtilityMethod {
 		String returnValue = "";
 		for (int i = 0; i < list.size(); i++) {
 			if (i == 0) {
-				returnValue = i+ ". " + list.get(i).toString();
+				returnValue = (i+1) + ". " + list.get(i).toDisplayedString();
 			} else {
-				returnValue = returnValue + "\n" + i + ". " + list.get(i).toString();
+				returnValue = returnValue + "\n" + (i+1) + ". " + list.get(i).toDisplayedString();
 			}
 		}
 		
