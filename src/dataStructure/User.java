@@ -8,20 +8,14 @@ import java.util.Iterator;
 import java.util.Stack;
 
 import dataStore.DataStore;
+import reference.*;
 
 public class User {
-	private static final String TRASHED_TAG = "trashed";
-	private static final String NO_REDOABLE_ERROR_MESSAGE = "nothing available for redoing";
-	private static final String NO_UNDOABLE_ERROR_MESSAGE = "nothing available for undoing";
-	private static final String INVALID_INDEX_ERROR_MESSAGE = "invalid task index %1$d";
-	private static final String INVALID_UPDATE_MESSAGE = "invalid task attributes";
+	
 	ArrayList<Task> currentTasks;
 	Stack<ArrayList<Task>> undoable;
 	Stack<ArrayList<Task>> redoable;
 	String username;
-
-	protected final int MAXIMUM_UNDO_TIMES = 10;
-	protected final int MAXIMUM_REDO_TIMES = 10;
 
 	/**
 	 * constructor
@@ -45,11 +39,11 @@ public class User {
 	 */
 	public void undo() throws CommandFailedException {
 		if (this.undoable.empty()) {
-			throw new CommandFailedException(NO_UNDOABLE_ERROR_MESSAGE);
+			throw new CommandFailedException(Constant.NO_UNDOABLE_ERROR_MESSAGE);
 		} else {
 			this.redoable.push(this.currentTasks);
 
-			if (this.redoable.size() > MAXIMUM_REDO_TIMES) {
+			if (this.redoable.size() > Constant.MAXIMUM_REDO_TIMES) {
 				this.redoable.remove(0);
 			}
 
@@ -64,11 +58,11 @@ public class User {
 	 */
 	public void redo() throws CommandFailedException {
 		if (this.redoable.empty()) {
-			throw new CommandFailedException(NO_REDOABLE_ERROR_MESSAGE);
+			throw new CommandFailedException(Constant.NO_REDOABLE_ERROR_MESSAGE);
 		} else {
 			this.undoable.push(this.currentTasks);
 
-			if (this.undoable.size() > MAXIMUM_UNDO_TIMES) {
+			if (this.undoable.size() > Constant.MAXIMUM_UNDO_TIMES) {
 				this.undoable.remove(0);
 			}
 
@@ -83,7 +77,7 @@ public class User {
 	private void updateUndoable() {
 		this.redoable.clear();
 		this.undoable.push(this.currentTasks);
-		if (this.undoable.size() > MAXIMUM_UNDO_TIMES) {
+		if (this.undoable.size() > Constant.MAXIMUM_UNDO_TIMES) {
 			this.undoable.remove(0);
 		}
 	}
@@ -108,9 +102,9 @@ public class User {
 	public void delete(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
-					INVALID_INDEX_ERROR_MESSAGE, index));
+					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
-			this.currentTasks.get(index).addTag(TRASHED_TAG);
+			this.currentTasks.get(index).addTag(Constant.TRASHED_TAG);
 			DataStore.save(this.username, this.currentTasks);
 		}
 	}
@@ -126,7 +120,7 @@ public class User {
 	public void update(int index, Dictionary<String, Object> toBeUpdated) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
-					INVALID_INDEX_ERROR_MESSAGE, index));
+					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			Task task = this.currentTasks.get(index);
 			Enumeration<String> attributes = toBeUpdated.keys();
@@ -146,7 +140,7 @@ public class User {
 				} else if (currentAttribute.equals("time_interval")) {
 					task.setInterval((TimeInterval) currentObject);
 				} else {
-					throw new CommandFailedException(INVALID_UPDATE_MESSAGE);
+					throw new CommandFailedException(Constant.INVALID_UPDATE_MESSAGE);
 				}
 			}
 		}
@@ -162,7 +156,7 @@ public class User {
 	public String getTaskIdByIndex(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
-					INVALID_INDEX_ERROR_MESSAGE, index));
+					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			return this.currentTasks.get(index).getTaskId();
 		}
@@ -178,7 +172,7 @@ public class User {
 	public Task retrieve(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
-					INVALID_INDEX_ERROR_MESSAGE, index));
+					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			Iterator<Task> taskIterator = this.currentTasks.iterator();
 			while (taskIterator.hasNext()) {

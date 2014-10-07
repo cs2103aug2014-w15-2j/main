@@ -2,9 +2,10 @@ package dataStructure;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import reference.*;
 
 public class Task {
-	private static final String DUPLICATED_TAG_ERROR_MESSAGE = "tag %1$s already exists.";
+	
 
 	private String description;
 	private String category;
@@ -71,7 +72,7 @@ public class Task {
 	public void addTag(String tag) throws CommandFailedException {
 		if (this.tag.contains(tag)) {
 			throw new CommandFailedException(String.format(
-					DUPLICATED_TAG_ERROR_MESSAGE, tag));
+					Constant.DUPLICATED_TAG_ERROR_MESSAGE, tag));
 		} else {
 			this.tag.add(tag);
 		}
@@ -100,9 +101,10 @@ public class Task {
 		task = task + toStringAddTags() + '`';
 		task = task + Integer.toString(getRepeatedPeriod()) + '`';
 		task = task + Integer.toString(getPriority()) + '`';
-		
-		task = task + getInterval().getStartDate() + '`';
-		task = task + getInterval().getEndDate();
+		Long start = getInterval().getStartDate().getTime();
+		task = task + start + '`';
+		Long end = getInterval().getEndDate().getTime();
+		task = task + end;
 
 		return task;
 	}

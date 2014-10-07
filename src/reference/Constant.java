@@ -56,6 +56,22 @@ public class Constant {
 	public static final int REPEATED_PERIOD_WEEKLY = 3;
 	public static final int REPEATED_PERIOD_MONTHLY = 4;
 	
+	//DataStore
+	public static final int ATTRIBUTE_END_POSITION = 1;
+	public static final int NO_TAG_ENDINDEX = 0;
+	public static final int NO_STARTDATE_ENDINDEX = 0;
+	public static final int LAST_TAG_COMMAINDEX = -1;
+	
+	//Logic
+	public static final String TRASHED_TAG = "trashed";
+	public static final String NO_REDOABLE_ERROR_MESSAGE = "nothing available for redoing";
+	public static final String NO_UNDOABLE_ERROR_MESSAGE = "nothing available for undoing";
+	public static final String INVALID_INDEX_ERROR_MESSAGE = "invalid task index %1$d";
+	public static final String INVALID_UPDATE_MESSAGE = "invalid task attributes";
+	public static final int MAXIMUM_UNDO_TIMES = 10;
+	public static final int MAXIMUM_REDO_TIMES = 10;
+	
+	public static final String DUPLICATED_TAG_ERROR_MESSAGE = "tag %1$s already exists.";
 	
 	//command type
 	public static enum COMMAND_TYPE {
