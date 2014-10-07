@@ -270,8 +270,15 @@ public class ListOfXiaoMing {
 	
 	
 	private String display() {
-		ArrayList<Task> queryResult = this.user.find(new Constraint());
-		return UtilityMethod.taskListToString(queryResult);
+		ArrayList<Task> queryResult;
+		try {
+			queryResult = this.user.find(new Constraint());
+			return UtilityMethod.taskListToString(queryResult);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "display error";
+		}
 	}
 	
 	private String logOut() {
