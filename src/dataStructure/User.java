@@ -2,8 +2,7 @@ package dataStructure;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Stack;
 
@@ -117,15 +116,16 @@ public class User {
 	 * @param toBeUpdated
 	 * @throws CommandFailedException 
 	 */
-	public void update(int index, Dictionary<String, Object> toBeUpdated) throws CommandFailedException {
+	@SuppressWarnings("unchecked")
+	public void update(int index, HashMap<String, Object> toBeUpdated) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			Task task = this.currentTasks.get(index);
-			Enumeration<String> attributes = toBeUpdated.keys();
-			if (attributes.hasMoreElements()) {
-				String currentAttribute = attributes.nextElement();
+			Iterator<String> attributes = toBeUpdated.keySet().iterator();
+			if (attributes.hasNext()) {
+				String currentAttribute = attributes.next();
 				Object currentObject = toBeUpdated.get(currentAttribute);
 				if (currentAttribute.equals("description")) {
 					task.setDescription((String) currentObject);

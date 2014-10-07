@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import dataStore.DataStore;
 import userInterface.ListOfXiaoMing;
-import dataStore.*;
 
 public class ListOfXiaoMingTest {
 	
