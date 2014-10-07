@@ -54,6 +54,8 @@ public class ListOfXiaoMing {
 				if (result.equals(Constant.RETURN_VALUE_LOGGED_OUT)) {
 					willContinue = false;
 					UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY);
+				} else {
+					UtilityMethod.showToUser(result);
 				}
 			}
 		}
@@ -205,6 +207,9 @@ public class ListOfXiaoMing {
 				
 			case UPDATE:
 				return this.update(parameterList);
+				
+			case DISPLAY:
+				return this.display();
 			
 			case SEARCH:
 				return this.search(parameterList);
@@ -225,9 +230,10 @@ public class ListOfXiaoMing {
 
 	private String add(ArrayList<String> taskParameters) {
 		Task taskToAdd = Parser.getTaskFromParameterList(taskParameters);
-		if (taskToAdd != null) {
-			this.user.add(taskToAdd);
-		}
+		
+		assert(taskToAdd != null);
+		
+		this.user.add(taskToAdd);
 		
 		return "task added";
 	}
@@ -249,13 +255,18 @@ public class ListOfXiaoMing {
 		int index = Integer.parseInt(taskParameters.get(0));
 		try {
 			this.user.update(index, Parser.getTaskDictionary(taskParameters));
-			
 		} catch (CommandFailedException e) {
-			UtilityMethod.showToUser(e.toString());
+			return e.toString();
 		}
+		
 		return "task updated";
 	}
 	
+	
+	private String display() {
+		
+		return null;
+	}
 	
 	private String logOut() {
 		return Constant.RETURN_VALUE_LOGGED_OUT;
@@ -296,7 +307,7 @@ public class ListOfXiaoMing {
 					break;
 				}
 			}
-		
+			
 			String keyword = taskParameters.get(0);	
 			Constraint thisConstraint = new Constraint(keyword, timeInterval);
 			ArrayList<Task> queryResult = this.user.find(thisConstraint);

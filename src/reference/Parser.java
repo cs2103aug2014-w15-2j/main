@@ -45,6 +45,9 @@ public class Parser {
 				
 			case Constant.COMMAND_STRING_DELETE:
 				return COMMAND_TYPE.DELETE;
+				
+			case Constant.COMMAND_STRING_DISPLAY:
+				return COMMAND_TYPE.DISPLAY;
 
 			case Constant.COMMAND_STRING_SEARCH:
 				return COMMAND_TYPE.SEARCH;
