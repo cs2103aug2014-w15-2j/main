@@ -215,7 +215,7 @@ public class ListOfXiaoMing {
 //User level commands
 	
 	@SuppressWarnings("unchecked")
-	private String execute (String userInput) {
+	public String execute (String userInput) {
 		Pair commandPair = Parser.parse(userInput);
 		COMMAND_TYPE thisCommand = (COMMAND_TYPE) commandPair.head;
 		ArrayList<String> parameterList = (ArrayList<String>) commandPair.tail;
@@ -265,7 +265,7 @@ public class ListOfXiaoMing {
 	private String delete(ArrayList<String> taskParameters) {
 		int index = Integer.parseInt(taskParameters.get(0));
 		try {
-			this.user.delete(index);
+			this.user.delete(index - 1);
 		} catch (CommandFailedException e) {
 			UtilityMethod.showToUser(e.toString());
 		}
