@@ -278,6 +278,7 @@ public class ListOfXiaoMing {
 	private String update(ArrayList<String> taskParameters) {
 		int index = Integer.parseInt(taskParameters.get(0).trim());
 		try {
+			
 			this.user.update(index - 1, Parser.getTaskMap(taskParameters));
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
@@ -340,8 +341,9 @@ public class ListOfXiaoMing {
 			String keyword = "";
 			for (String parameter : taskParameters) {
 				String key = UtilityMethod.getFirstWord(parameter);
+				String value = UtilityMethod.removeFirstWord(parameter);
 				if (key.equalsIgnoreCase("time")) {
-					timeInterval = Parser.parseTimeInterval(parameter);
+					timeInterval = Parser.parseTimeInterval(value);
 					UtilityMethod.showToUser("searching for tasks within time Interval: " + timeInterval);
 				} else {
 					keyword = parameter;
