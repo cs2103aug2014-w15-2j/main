@@ -75,7 +75,7 @@ public class Parser {
 		HashMap <String, Object> updateAttributes = new HashMap<String, Object> ();
 		
 		if (newTask.getDescription() != null) {
-			updateAttributes.put("discription", newTask.getDescription());
+			updateAttributes.put("description", newTask.getDescription());
 		}
 		
 		if (newTask.getCategory() != null) {
@@ -83,7 +83,7 @@ public class Parser {
 		} 
 		
 		if (newTask.getInterval() != null) {
-			updateAttributes.put("time", newTask.getInterval());
+			updateAttributes.put("time_interval", newTask.getInterval());
 		} 
 		
 		if (newTask.getPriority() != Constant.PRIORITY_INVALID) {
