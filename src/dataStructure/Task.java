@@ -100,7 +100,7 @@ public class Task {
 		task = task + toStringAddTags() + '`';
 		task = task + Integer.toString(getRepeatedPeriod()) + '`';
 		task = task + Integer.toString(getPriority()) + '`';
-
+		
 		task = task + getInterval().getStartDate() + '`';
 		task = task + getInterval().getEndDate();
 

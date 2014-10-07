@@ -101,7 +101,7 @@ public class Parser {
 	
 	
 	public static Task getTaskFromParameterList(ArrayList<String> parameterList) {
-		TimeInterval timeInterval = null;
+		TimeInterval timeInterval = new TimeInterval();
 		String category = null; 
 		int priority = Constant.PRIORITY_DEFAULT;
 		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT; 
@@ -124,10 +124,11 @@ public class Parser {
 						if (hasTime) {
 							UtilityMethod.showToUser("You can only assign one time for a task");
 						} else {
-							timeInterval = parseTimeInterval(value);
-							if (timeInterval == null) {
+							TimeInterval parsedTimeInterval = parseTimeInterval(value);
+							if (parsedTimeInterval == null) {
 								UtilityMethod.showToUser("invalid time format: the correct format should be...");
 							} else {
+								timeInterval = parsedTimeInterval;
 								hasTime = true;
 							}
 						}
