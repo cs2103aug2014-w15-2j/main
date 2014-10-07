@@ -209,21 +209,21 @@ public class Parser {
 				
 				Calendar endCalendar = Calendar.getInstance();
 				endCalendar.setTime(new Date());
-				endCalendar.set(Calendar.HOUR, 23);
+				endCalendar.set(Calendar.HOUR_OF_DAY, 23);
 				endCalendar.set(Calendar.MINUTE, 59);
-				startDate = endCalendar.getTime();
+				endDate = endCalendar.getTime();
 			} else if (parameter.equalsIgnoreCase("tommorrow")) {
 				Calendar startCalendar = Calendar.getInstance();
 				startCalendar.setTime(new Date());
 				startCalendar.add(Calendar.DATE, 1);
-				startCalendar.set(Calendar.HOUR, 0);
+				startCalendar.set(Calendar.HOUR_OF_DAY, 0);
 				startCalendar.set(Calendar.MINUTE, 0);
 				startDate = startCalendar.getTime();
 				
 				Calendar endCalendar = Calendar.getInstance();
 				endCalendar.setTime(new Date());
 				endCalendar.add(Calendar.DATE, 1);
-				endCalendar.set(Calendar.HOUR, 23);
+				endCalendar.set(Calendar.HOUR_OF_DAY, 23);
 				endCalendar.set(Calendar.MINUTE, 59);
 				endDate = endCalendar.getTime();
 			}
