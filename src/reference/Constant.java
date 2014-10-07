@@ -32,6 +32,7 @@ public class Constant {
 	public static final String COMMAND_STRING_LOG_IN = "log in";
 	public static final String COMMAND_STRING_LOG_OUT = "log out";
 	public static final String COMMAND_STRING_CREATE_ACCOUNT = "create account";
+	public static final String COMMAND_STRING_DELETE_ACCOUNT = "delete account";
 	public static final String COMMAND_STRING_HELP = "help";
 	public static final String COMMAND_STRING_EXIT = "exit";
 	public static final String COMMAND_STRING_ADD = "add";
@@ -75,7 +76,7 @@ public class Constant {
 	
 	//command type
 	public static enum COMMAND_TYPE {
-		LOG_IN, LOG_OUT, CREATE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR
+		LOG_IN, LOG_OUT, CREATE_ACCOUNT, DELETE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR
 	}
 	
 	public static final String DEFAULT_CATEGORY = "default";

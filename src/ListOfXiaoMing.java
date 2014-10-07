@@ -91,6 +91,9 @@ public class ListOfXiaoMing {
 				UtilityMethod.showToUser(ListOfXiaoMing.createAccount((ArrayList<String>)parameter));
 				return null;
 		
+			case DELETE_ACCOUNT:	
+				return ListOfXiaoMing.deleteAccount();
+				
 			case HELP:
 				UtilityMethod.showToUser(ListOfXiaoMing.showHelp());
 				return null;
@@ -102,6 +105,10 @@ public class ListOfXiaoMing {
 				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NOT_LOG_IN);
 				return null;
 		}
+	}
+	
+	public static String deleteAccount() {
+		return "";
 	}
 	
 	public static String userLogIn(ArrayList<String> parameters) {
@@ -319,7 +326,6 @@ public class ListOfXiaoMing {
 		try {
 			TimeInterval timeInterval = null;
 			for (String parameter : taskParameters) {
-				System.out.println(parameter);
 				timeInterval = Parser.parseTimeInterval(parameter);
 				if (timeInterval != null) {
 					taskParameters.remove(parameter);
@@ -327,18 +333,15 @@ public class ListOfXiaoMing {
 				}
 			}
 			
-			if (timeInterval == null) {
-				timeInterval = new TimeInterval();
-			}
 			
 			String keyword = taskParameters.get(0);	
-			
-			System.out.println("keyword: " + keyword);
+			if (timeInterval == null) {
+				timeInterval = new TimeInterval();
+				System.out.println("searching for keywords: " + keyword);
+			}
 			Constraint thisConstraint = new Constraint(keyword, timeInterval);
 			
 			ArrayList<Task> queryResult = this.user.find(thisConstraint);
-			System.out.println("searching in progress");
-			
 			return UtilityMethod.taskListToString(queryResult);
 		} catch(Exception e) {
 			return e.toString();
