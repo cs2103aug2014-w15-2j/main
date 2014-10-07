@@ -124,7 +124,7 @@ public class User {
 		} else {
 			Task task = this.currentTasks.get(index);
 			Iterator<String> attributes = toBeUpdated.keySet().iterator();
-			if (attributes.hasNext()) {
+			while (attributes.hasNext()) {
 				String currentAttribute = attributes.next();
 				Object currentObject = toBeUpdated.get(currentAttribute);
 				if (currentAttribute.equals("description")) {

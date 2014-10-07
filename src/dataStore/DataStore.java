@@ -94,6 +94,7 @@ public class DataStore {
 			return false;
 		}
 		File account = new File(username);
+		DataStore.clearCache();
 		return account.delete();
 	}
 
