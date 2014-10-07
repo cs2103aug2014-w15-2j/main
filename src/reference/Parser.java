@@ -204,7 +204,7 @@ public class Parser {
 					break;
 					
 				default:
-					description = value;
+					description = parameter;
 					break;
 			}
 		}
