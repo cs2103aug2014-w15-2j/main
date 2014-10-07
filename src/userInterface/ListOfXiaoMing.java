@@ -278,7 +278,8 @@ public class ListOfXiaoMing {
 		try {
 			this.user.update(index - 1, Parser.getTaskMap(taskParameters));
 		} catch (CommandFailedException e) {
-			return e.toString();
+			e.printStackTrace();
+			return "update failed";
 		}
 		
 		return "task updated";
