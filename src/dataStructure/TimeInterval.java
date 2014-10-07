@@ -13,7 +13,7 @@ public class TimeInterval {
 	 * @throws Exception
 	 */
 	public TimeInterval(Date startDate, Date endDate) throws Exception {
-		if (startDate.after(endDate)) {
+		if ( (startDate != null) && (startDate.after(endDate)) ) {
 			throw new Exception("invalid time interval");
 		} else {
 			this.startDate = startDate;
