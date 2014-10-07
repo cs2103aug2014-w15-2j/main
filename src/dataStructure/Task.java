@@ -1,7 +1,9 @@
 package dataStructure;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.UUID;
+
 import reference.*;
 
 public class Task {
@@ -141,7 +143,9 @@ public class Task {
 		task = task + "\n\t tags: " + toStringAddTags() + ';';
 //		task = task + Integer.toString(getRepeatedPeriod()) + '`'; TODO
 		task = task + "\n\t priority: " + Integer.toString(getPriority()) + ';';
-		task = task + "\n\t from " + getInterval().getStartDate().toString() + " to " + getInterval().getEndDate().toString() + ";\n";
+		String start = new SimpleDateFormat("dd/MMMM HH:mm").format(getInterval().getStartDate());
+		String end = new SimpleDateFormat("dd/MMMM HH:mm").format(getInterval().getEndDate());
+		task = task + "\n\t from " + start + " to " + end + ";\n";
 
 		return task;
 	}
