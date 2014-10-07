@@ -270,8 +270,8 @@ public class ListOfXiaoMing {
 	
 	
 	private String display() {
-		
-		return null;
+		ArrayList<Task> queryResult = this.user.find(new Constraint());
+		return UtilityMethod.taskListToString(queryResult);
 	}
 	
 	private String logOut() {
@@ -312,6 +312,7 @@ public class ListOfXiaoMing {
 		try {
 			TimeInterval timeInterval = null;
 			for (String parameter : taskParameters) {
+				System.out.println(parameter);
 				timeInterval = Parser.parseTimeInterval(parameter);
 				if (timeInterval != null) {
 					taskParameters.remove(parameter);
@@ -319,14 +320,21 @@ public class ListOfXiaoMing {
 				}
 			}
 			
+			if (timeInterval == null) {
+				timeInterval = new TimeInterval();
+			}
+			
 			String keyword = taskParameters.get(0);	
+			
+			System.out.println("keyword: " + keyword);
 			Constraint thisConstraint = new Constraint(keyword, timeInterval);
+			
 			ArrayList<Task> queryResult = this.user.find(thisConstraint);
+			System.out.println("searching in progress");
 			
 			return UtilityMethod.taskListToString(queryResult);
 		} catch(Exception e) {
-			UtilityMethod.showToUser(e.toString());
-			return null;
+			return e.toString();
 		}
 		
 	}
