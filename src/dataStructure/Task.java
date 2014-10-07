@@ -143,9 +143,17 @@ public class Task {
 		task = task + "\n\t tags: " + toStringAddTags() + ';';
 //		task = task + Integer.toString(getRepeatedPeriod()) + '`'; TODO
 		task = task + "\n\t priority: " + Integer.toString(getPriority()) + ';';
-		String start = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(getInterval().getStartDate());
-		String end = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(getInterval().getEndDate());
-		task = task + "\n\t from " + start + " to " + end + ";\n";
+		if (this.interval.getStartDate().equals(Constant.FLOATING_START_DATE)) {
+			// floating task, do nothing
+		} else if (this.interval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
+			// deadline task
+			String deadline = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(getInterval().getEndDate());
+			task = task + "\n\t deadline: " + deadline + ";\n";
+		} else {
+			String start = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(getInterval().getStartDate());
+			String end = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(getInterval().getEndDate());
+			task = task + "\n\t from " + start + " to " + end + ";\n";
+		}
 
 		return task;
 	}
