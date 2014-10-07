@@ -95,7 +95,8 @@ public class ListOfXiaoMing {
 				return null;
 		
 			case DELETE_ACCOUNT:	
-				return ListOfXiaoMing.deleteAccount();
+				UtilityMethod.showToUser(ListOfXiaoMing.deleteAccount());
+				return null;
 				
 			case HELP:
 				UtilityMethod.showToUser(ListOfXiaoMing.showHelp());
@@ -264,7 +265,7 @@ public class ListOfXiaoMing {
 	private String delete(ArrayList<String> taskParameters) {
 		int index = Integer.parseInt(taskParameters.get(0));
 		try {
-			this.user.delete(index);
+			this.user.delete(index - 1);
 		} catch (CommandFailedException e) {
 			UtilityMethod.showToUser(e.toString());
 		}
