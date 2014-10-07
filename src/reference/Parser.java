@@ -70,10 +70,9 @@ public class Parser {
 	}
 	
 	
-	@SuppressWarnings("unchecked")
-	public static Dictionary<String, Object> getTaskDictionary(ArrayList<String> parameterList) {
+	public static HashMap<String, Object> getTaskMap(ArrayList<String> parameterList) {
 		Task newTask = Parser.getTaskFromParameterList(parameterList);
-		Map <String, Object> updateAttributes = new HashMap<String, Object> ();
+		HashMap <String, Object> updateAttributes = new HashMap<String, Object> ();
 		
 		if (newTask.getDescription() != null) {
 			updateAttributes.put("discription", newTask.getDescription());
@@ -99,7 +98,7 @@ public class Parser {
 			updateAttributes.put("tag", newTask.getTag());
 		}
 		
-		return (Dictionary<String, Object>) updateAttributes;
+		return updateAttributes;
 	}
 	
 	

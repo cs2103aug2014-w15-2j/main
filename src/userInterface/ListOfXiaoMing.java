@@ -276,7 +276,7 @@ public class ListOfXiaoMing {
 	private String update(ArrayList<String> taskParameters) {
 		int index = Integer.parseInt(taskParameters.get(0).trim());
 		try {
-			this.user.update(index - 1, Parser.getTaskDictionary(taskParameters));
+			this.user.update(index - 1, Parser.getTaskMap(taskParameters));
 		} catch (CommandFailedException e) {
 			return e.toString();
 		}
