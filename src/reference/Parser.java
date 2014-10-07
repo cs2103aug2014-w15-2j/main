@@ -235,7 +235,7 @@ public class Parser {
 				endCalendar.set(Calendar.HOUR_OF_DAY, 23);
 				endCalendar.set(Calendar.MINUTE, 59);
 				endDate = endCalendar.getTime();
-			} else if (parameter.equalsIgnoreCase("tommorrow")) {
+			} else if (parameter.equalsIgnoreCase("tomorrow")) {
 				Calendar startCalendar = Calendar.getInstance();
 				startCalendar.setTime(new Date());
 				startCalendar.add(Calendar.DATE, 1);

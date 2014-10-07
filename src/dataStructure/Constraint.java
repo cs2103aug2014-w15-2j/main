@@ -80,11 +80,11 @@ public class Constraint {
 		}
 		
 		// test interval
-		if (isSearchingFloating) {
-			if (task.isFloating()) {
+		if (!isSearchingFloating) {
+			if ((!task.isFloating()) && (TimeInterval.isOverlapped(this.interval, task.getInterval()))) {
 				isIntervalMatched = true;
 			}
-		} else if (TimeInterval.isOverlapped(this.interval, task.getInterval())) {
+		} else {
 			isIntervalMatched = true;
 		}
 		return isIntervalMatched && isKeywordMatched && !(isSearchingTrashed ^ isTrashedTask);

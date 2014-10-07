@@ -289,7 +289,7 @@ public class ListOfXiaoMing {
 	private String display() {
 		ArrayList<Task> queryResult;
 		try {
-			queryResult = this.user.display();
+			queryResult = this.user.getTaskList();
 			String resultString  = UtilityMethod.taskListToString(queryResult);
 			if (resultString.equalsIgnoreCase("")) {
 				return "--- no task in the list ---      _(:з」∠)_ ";
