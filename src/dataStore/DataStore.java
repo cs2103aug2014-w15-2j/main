@@ -10,16 +10,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import dataStructure.Task;
-import dataStructure.TimeInterval;
+import dataStructure.*;
+import reference.*;
 
 public class DataStore {
 
-	protected final static int ATTRIBUTE_END_POSITION = 1;
+	
 	private final static String SPLIT_SECTION = "**********";
-	private final static int NO_TAG_ENDINDEX = 0;
-	private final static int NO_STARTDATE_ENDINDEX = 0;
-	private final static int LAST_TAG_COMMAINDEX = -1;
 
 	/**
 	 * check whether an account exists
@@ -181,38 +178,38 @@ public class DataStore {
 		endIndex = taskDescription.indexOf("`");
 		task_id = taskDescription.substring(0, endIndex);
 		taskDescription = taskDescription.substring(endIndex
-				+ ATTRIBUTE_END_POSITION);
+				+ Constant.ATTRIBUTE_END_POSITION);
 
 		endIndex = taskDescription.indexOf("`");
 		description = taskDescription.substring(0, endIndex);
 		taskDescription = taskDescription.substring(endIndex
-				+ ATTRIBUTE_END_POSITION);
+				+ Constant.ATTRIBUTE_END_POSITION);
 
 		endIndex = taskDescription.indexOf("`");
 		category = taskDescription.substring(0, endIndex);
 		taskDescription = taskDescription.substring(endIndex
-				+ ATTRIBUTE_END_POSITION);
+				+ Constant.ATTRIBUTE_END_POSITION);
 
 		tag = getTaskTags(taskDescription);
 		endIndex = taskDescription.indexOf("`");
 		taskDescription = taskDescription.substring(endIndex
-				+ ATTRIBUTE_END_POSITION);
+				+ Constant.ATTRIBUTE_END_POSITION);
 
 		endIndex = taskDescription.indexOf("`");
 		repeated_period = Integer.parseInt(taskDescription.substring(0,
 				endIndex));
 		taskDescription = taskDescription.substring(endIndex
-				+ ATTRIBUTE_END_POSITION);
+				+ Constant.ATTRIBUTE_END_POSITION);
 
 		endIndex = taskDescription.indexOf("`");
 		priority = Integer.parseInt(taskDescription.substring(0, endIndex
 				));
 		taskDescription = taskDescription.substring(endIndex
-				+ ATTRIBUTE_END_POSITION);
+				+ Constant.ATTRIBUTE_END_POSITION);
 
 		endIndex = taskDescription.indexOf("`");
 		// no startDate
-		if (endIndex == NO_STARTDATE_ENDINDEX) {
+		if (endIndex == Constant.NO_STARTDATE_ENDINDEX) {
 			startDate = null;
 		} else {
 			startDate = new Date(Long.parseLong(taskDescription.substring(0,
@@ -220,11 +217,11 @@ public class DataStore {
 		}
 
 		// no endDate
-		if (endIndex == taskDescription.length() - ATTRIBUTE_END_POSITION) {
+		if (endIndex == taskDescription.length() - Constant.ATTRIBUTE_END_POSITION) {
 			endDate = null;
 		} else {
 			taskDescription = taskDescription.substring(endIndex
-					+ ATTRIBUTE_END_POSITION);
+					+ Constant.ATTRIBUTE_END_POSITION);
 			endDate = new Date(Long.parseLong(taskDescription));
 		}
 		
@@ -249,13 +246,13 @@ public class DataStore {
 		endIndex = taskDescription.indexOf("`");
 		commaIndex = taskDescription.indexOf(",");
 		// no tag
-		if (endIndex == NO_TAG_ENDINDEX) {
+		if (endIndex == Constant.NO_TAG_ENDINDEX) {
 			return tag;
 		}
-		while (commaIndex != LAST_TAG_COMMAINDEX) {
+		while (commaIndex != Constant.LAST_TAG_COMMAINDEX) {
 			tag.add(taskDescription.substring(0, commaIndex));
 			taskDescription = taskDescription.substring(commaIndex
-					+ ATTRIBUTE_END_POSITION);
+					+ Constant.ATTRIBUTE_END_POSITION);
 			endIndex = taskDescription.indexOf("`");
 			commaIndex = taskDescription.indexOf(",");
 		}
