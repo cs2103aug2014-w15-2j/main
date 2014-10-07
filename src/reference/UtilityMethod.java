@@ -12,6 +12,18 @@ public class UtilityMethod {
 	}
 	
 	
+	public static String priorityToString (int priority) {
+		switch (priority) {
+			case Constant.PRIORITY_LOW:
+				return "low";
+			case Constant.PRIORITY_MEDIUM:
+				return "medium";
+			case Constant.PRIORITY_HIGH:
+				return "high";
+			default:
+				return "not sure";
+		}
+	}
 	
 	
 	/**

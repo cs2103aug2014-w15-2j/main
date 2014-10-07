@@ -145,7 +145,7 @@ public class Task {
 		}
 		
 //		task = task + Integer.toString(getRepeatedPeriod()) + '`'; TODO
-		task = task + "\n\t priority: " + Integer.toString(getPriority()) + ';';
+		task = task + "\n\t priority: " + UtilityMethod.priorityToString(getPriority()) + ';';
 		if (this.interval.getStartDate().equals(Constant.FLOATING_START_DATE)) {
 			// floating task, do nothing
 		} else if (this.interval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {

@@ -270,11 +270,15 @@ public class Parser {
 	
 	public static Date parseDateString (String dateString) {
 		try {
-			//e.g. "20:00 04 Jan 2014"
-			Date date = new SimpleDateFormat("hh:mm dd MMMM yyyy", Locale.ENGLISH).parse(dateString);
+			Date date = new SimpleDateFormat("dd/MMMM/yyyy HH:mm", Locale.ENGLISH).parse(dateString);
 			return date;
-		} catch (ParseException e) {
-			return null;
+		} catch (ParseException e1) {
+			try {
+				Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(dateString);
+				return date;
+			} catch (ParseException e2) {
+				return null;
+			}
 		}
 	}
 	
