@@ -335,30 +335,26 @@ public class ListOfXiaoMing {
 	
 	private String search(ArrayList<String> taskParameters) {
 		
-		try {
-			TimeInterval timeInterval = null;
+		try {	
+			TimeInterval timeInterval = new TimeInterval();
+			String keyword = "";
 			for (String parameter : taskParameters) {
-				timeInterval = Parser.parseTimeInterval(parameter);
-				if (timeInterval != null) {
-					taskParameters.remove(parameter);
-					break;
+				String key = UtilityMethod.getFirstWord(parameter);
+				if (key.equalsIgnoreCase("time")) {
+					timeInterval = Parser.parseTimeInterval(parameter);
+					UtilityMethod.showToUser("searching for tasks within time Interval: " + timeInterval);
+				} else {
+					keyword = parameter;
+					UtilityMethod.showToUser("searching for tasks containing keywords: " + keyword);
 				}
 			}
 			
-			
-			String keyword = taskParameters.get(0);	
-			if (timeInterval == null) {
-				timeInterval = new TimeInterval();
-				System.out.println("searching for keywords: " + keyword);
-			}
 			Constraint thisConstraint = new Constraint(keyword, timeInterval);
-			
 			ArrayList<Task> queryResult = this.user.find(thisConstraint);
 			return UtilityMethod.taskListToString(queryResult);
 		} catch(Exception e) {
 			e.printStackTrace();
 			return e.toString();
 		}
-		
 	}
 }

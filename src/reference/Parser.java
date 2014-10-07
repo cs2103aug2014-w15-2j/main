@@ -203,7 +203,6 @@ public class Parser {
 		Date startDate = null;
 		Date endDate = null;
 		
-		System.out.println(parameter);
 		if (wordList.length == 1) {
 			if (parameter.equalsIgnoreCase("today")) {
 				startDate = new Date();

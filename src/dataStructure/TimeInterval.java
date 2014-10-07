@@ -57,7 +57,6 @@ public class TimeInterval {
 	 * @return
 	 */
 	public static boolean isOverlapped(TimeInterval firstInterval, TimeInterval secondInterval) {
-		
 		if ((firstInterval.getStartDate().after(secondInterval.getEndDate())) || 
 		   (firstInterval.getEndDate().before(secondInterval.getStartDate()))) {
 			return false;
