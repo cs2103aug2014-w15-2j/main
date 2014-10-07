@@ -30,7 +30,7 @@ public class Task {
 	public Task(String description, String category, int priority,
 			int repeated_period, ArrayList<String> tag, TimeInterval interval) {
 		this.description = description;
-		this.category = category;
+		this.category = (category == null) ? Constant.DEFAULT_CATEGORY : category;
 		this.priority = priority;
 		this.task_id = UUID.randomUUID().toString();
 		this.repeated_period = repeated_period;

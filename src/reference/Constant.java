@@ -78,4 +78,6 @@ public class Constant {
 		LOG_IN, LOG_OUT, CREATE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR
 	}
 	
+	public static final String DEFAULT_CATEGORY = "default";
+	
 }
