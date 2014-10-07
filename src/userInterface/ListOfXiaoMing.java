@@ -266,11 +266,10 @@ public class ListOfXiaoMing {
 	private String delete(ArrayList<String> taskParameters) {
 		int index = Integer.parseInt(taskParameters.get(0));
 		try {
-			this.user.delete(index - 1);
+			return (this.user.delete(index - 1)) ? "task deleted" : "deletion failed";
 		} catch (CommandFailedException e) {
-			UtilityMethod.showToUser(e.toString());
+			return e.toString();
 		}
-		return "task deleted";
 	}	
 	
 	
@@ -357,7 +356,12 @@ public class ListOfXiaoMing {
 			
 			Constraint thisConstraint = new Constraint(keyword, timeInterval);
 			ArrayList<Task> queryResult = this.user.find(thisConstraint);
-			return UtilityMethod.taskListToString(queryResult);
+			String queryResultString =  UtilityMethod.taskListToString(queryResult);
+			if (queryResultString.equals("")) {
+				return "--- no task found ---      _(:з」∠)_ ";
+			} else {
+				return queryResultString;
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 			return e.toString();

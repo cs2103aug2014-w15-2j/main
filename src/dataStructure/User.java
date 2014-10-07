@@ -99,13 +99,14 @@ public class User {
 	 * @param index
 	 * @throws CommandFailedException
 	 */
-	public void delete(int index) throws CommandFailedException {
+	public boolean delete(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
-			this.currentTasks.get(index).addTag(Constant.TRASHED_TAG);
+			boolean isSuccessful = this.currentTasks.get(index).addTag(Constant.TRASHED_TAG);
 			DataStore.save(this.username, this.currentTasks);
+			return isSuccessful;
 		}
 	}
 

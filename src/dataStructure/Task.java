@@ -70,12 +70,12 @@ public class Task {
 	 * @param tag
 	 * @throws CommandFailedException
 	 */
-	public void addTag(String tag) throws CommandFailedException {
+	public boolean addTag(String tag) throws CommandFailedException {
 		if (this.tag.contains(tag)) {
 			throw new CommandFailedException(String.format(
 					Constant.DUPLICATED_TAG_ERROR_MESSAGE, tag));
 		} else {
-			this.tag.add(tag);
+			return this.tag.add(tag);
 		}
 	}
 
