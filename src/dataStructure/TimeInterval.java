@@ -13,12 +13,26 @@ public class TimeInterval {
 	 * @throws Exception
 	 */
 	public TimeInterval(Date startDate, Date endDate) throws Exception {
-		if ( (startDate != null) && (startDate.after(endDate)) ) {
+		if (startDate == null) {
+			startDate = this.startDate = new Date(0L);
+		}
+		
+		if (endDate == null) {
+			endDate = this.endDate = new Date(Long.MAX_VALUE);
+		}
+		
+		
+		if (startDate.after(endDate)) {
 			throw new Exception("invalid time interval");
 		} else {
 			this.startDate = startDate;
 			this.endDate = endDate;
 		}
+	}
+	
+	public TimeInterval() {
+		this.startDate = new Date(0L);
+		this.endDate = new Date(Long.MAX_VALUE);
 	}
 
 	/**
