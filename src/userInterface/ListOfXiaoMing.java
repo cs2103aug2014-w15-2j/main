@@ -15,7 +15,7 @@ import dataStructure.User;
 
 public class ListOfXiaoMing {
 	
-	private static Scanner scanner_ = new Scanner(System.in);
+	
 
 	//a property to store the current user
 	private User user;
@@ -45,7 +45,7 @@ public class ListOfXiaoMing {
 			while (list == null) {
 				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_WELCOME);
 				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_INSTRUCTION);
-				String userInput = ListOfXiaoMing.readCommand();
+				String userInput = UtilityMethod.readCommand();
 				String recordFilePath = ListOfXiaoMing.executeUpperLevelCommand(userInput);
 				if (recordFilePath != null  && !recordFilePath.equalsIgnoreCase(Constant.RETURN_VALUE_LOG_IN_CANCELLED)) {
 					//already find the record
@@ -55,9 +55,13 @@ public class ListOfXiaoMing {
 				}
 			}
 			
+			
+			assert(list != null);
+			UtilityMethod.showToUser(list.execute("display"));
+			
 			boolean willContinue = true;
 			while (willContinue) {
-				String userInput = ListOfXiaoMing.readCommand();
+				String userInput = UtilityMethod.readCommand();
 				String result = list.execute(userInput);
 				if (result.equals(Constant.RETURN_VALUE_LOGGED_OUT)) {
 					willContinue = false;
@@ -69,9 +73,7 @@ public class ListOfXiaoMing {
 		}
     }
 	
-	public static String readCommand() {
-		return scanner_.nextLine();
-	}
+
 	
 	
 //system level commands
@@ -113,9 +115,9 @@ public class ListOfXiaoMing {
 	
 	public static String deleteAccount() {
 		UtilityMethod.showToUser("Please enter the username of the account you want to delete: ");
-		String username = readCommand();
+		String username = UtilityMethod.readCommand();
 		UtilityMethod.showToUser("Please enter the password to confirm: ");
-		String password = readCommand();
+		String password = UtilityMethod.readCommand();
 		boolean isDeleteSuccessfully = DataStore.destroy(username, password);
 		return isDeleteSuccessfully ? "deleted!" : "deletion failed";
 	}
@@ -133,10 +135,10 @@ public class ListOfXiaoMing {
 		
 		while (username == null) {
 			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME);
-			String inputUsername = readCommand();
+			String inputUsername = UtilityMethod.readCommand();
 			if (!DataStore.isAccountExisting(inputUsername)) {
 				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_NOT_EXIST);
-				 if (!readCommand().equalsIgnoreCase("Y")) {
+				 if (!UtilityMethod.readCommand().equalsIgnoreCase("Y")) {
 					return Constant.RETURN_VALUE_LOG_IN_CANCELLED;
 				 }
 			} else {
@@ -146,7 +148,7 @@ public class ListOfXiaoMing {
 			
 		while (password == null) {
 			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_PASSWORD);
-			password = readCommand();
+			password = UtilityMethod.readCommand();
 		}
 		
 		int incorrectPasswordCount = 0;
@@ -156,7 +158,7 @@ public class ListOfXiaoMing {
 				return Constant.RETURN_VALUE_AUTHENTICATION_FAILED;
 			}
 			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_PASSWORD_INCORRECT);
-			password = readCommand();
+			password = UtilityMethod.readCommand();
 		}
 		
 		return username;
@@ -173,10 +175,10 @@ public class ListOfXiaoMing {
 		
 		while (username == null) {
 			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME);
-			String inputUsername = readCommand();
+			String inputUsername = UtilityMethod.readCommand();
 			if (DataStore.isAccountExisting(inputUsername)) {
 				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_EXIST);
-				 if (!readCommand().equalsIgnoreCase("Y")) {
+				 if (!UtilityMethod.readCommand().equalsIgnoreCase("Y")) {
 					return Constant.RETURN_VALUE_LOG_IN_CANCELLED;
 				 }
 			} else {
@@ -188,9 +190,9 @@ public class ListOfXiaoMing {
 			passwordInput1 = null;
 			passwordInput2 = null;
 			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_PASSWORD);
-			passwordInput1 = readCommand();
+			passwordInput1 = UtilityMethod.readCommand();
 			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_ENTER_AGAIN);
-			passwordInput2 = readCommand();
+			passwordInput2 = UtilityMethod.readCommand();
 		}
 		
 		boolean successCreated = DataStore.createAccount(username, passwordInput1);
