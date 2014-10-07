@@ -1,6 +1,7 @@
 package dataStructure;
 
 import java.util.Date;
+import reference.*;
 
 public class TimeInterval {
 	private Date startDate;
@@ -13,12 +14,12 @@ public class TimeInterval {
 	 * @throws Exception
 	 */
 	public TimeInterval(Date startDate, Date endDate) throws Exception {
-		if (startDate == null) {
-			startDate = this.startDate = new Date(0L);
-		}
-		
-		if (endDate == null) {
-			endDate = this.endDate = new Date(Long.MAX_VALUE);
+		if ((startDate == null) && (endDate == null)) {
+			this.startDate = Constant.FLOATING_START_DATE;
+			this.endDate = Constant.FLOATING_END_DATE;
+			
+		} else if (startDate == null) {
+			this.startDate = Constant.DEADLINE_START_DATE;
 		}
 		
 		
@@ -31,8 +32,9 @@ public class TimeInterval {
 	}
 	
 	public TimeInterval() {
-		this.startDate = new Date(0L);
-		this.endDate = new Date(Long.MAX_VALUE);
+		// by default it is floating task
+		this.startDate = Constant.FLOATING_START_DATE;
+		this.endDate = Constant.FLOATING_END_DATE;
 	}
 
 	/**

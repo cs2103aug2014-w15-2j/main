@@ -143,8 +143,8 @@ public class Task {
 		task = task + "\n\t tags: " + toStringAddTags() + ';';
 //		task = task + Integer.toString(getRepeatedPeriod()) + '`'; TODO
 		task = task + "\n\t priority: " + Integer.toString(getPriority()) + ';';
-		String start = new SimpleDateFormat("dd/MMMM HH:mm").format(getInterval().getStartDate());
-		String end = new SimpleDateFormat("dd/MMMM HH:mm").format(getInterval().getEndDate());
+		String start = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(getInterval().getStartDate());
+		String end = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(getInterval().getEndDate());
 		task = task + "\n\t from " + start + " to " + end + ";\n";
 
 		return task;

@@ -1,5 +1,7 @@
 package reference;
 
+import java.util.Date;
+
 public class Constant {
 	
 	//prompt messages that will be printed for users
@@ -79,6 +81,11 @@ public class Constant {
 		LOG_IN, LOG_OUT, CREATE_ACCOUNT, DELETE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR
 	}
 	
+	//category
 	public static final String DEFAULT_CATEGORY = "default";
 	
+	//TimeInterval
+	public static final Date FLOATING_START_DATE = new Date(Long.MIN_VALUE);
+	public static final Date DEADLINE_START_DATE = new Date(Long.MIN_VALUE + 1);
+	public static final Date FLOATING_END_DATE = new Date(Long.MAX_VALUE);
 }
