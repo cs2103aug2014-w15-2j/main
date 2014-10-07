@@ -16,7 +16,7 @@ public class ListOfXiaoMingTest {
 	@Test
 	public void test() {
 		testOneCommand("Add a task", 
-					   "task added", 
+					   "Task added!", 
 					   "add @sampleTask");
 		
 		System.out.println("all search tests are passed");

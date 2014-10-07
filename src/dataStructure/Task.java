@@ -291,5 +291,44 @@ public class Task {
 
 		}
 	}
+	
+	/**
+	 * isFloating check whether the task is floating task, i.e. there is no start date or end date for it
+	 * 
+	 * @return boolean
+	 */
+	public boolean isFloating() {
+		if (this.getInterval().getStartDate().equals(Constant.FLOATING_START_DATE)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * isDeadline check whether the task is deadline task, i.e. there is only a deadline for it
+	 * 
+	 * @return boolean
+	 */
+	public boolean isDeadline() {
+		if (this.getInterval().getStartDate().equals(Constant.DEADLINE_START_DATE)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * isTimed check whether the task is timed task
+	 * 
+	 * @return boolean
+	 */
+	public boolean isTimed() {
+		if (!this.isDeadline() && !this.isFloating()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 
 }

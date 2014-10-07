@@ -41,10 +41,15 @@ public class Constraint {
 		boolean isKeywordMatched = false;
 		boolean isIntervalMatched = false;
 		boolean isSearchingTrashed = false;
+		boolean isSearchingFloating = false;
 		boolean isTrashedTask = false;
 		
 		if (this.keyword.contains("trash")) {
 			isSearchingTrashed = true;
+		}
+		
+		if (this.interval.getStartDate().equals(Constant.FLOATING_START_DATE)) {
+			isSearchingFloating = true;
 		}
 		
 		// test description
@@ -57,10 +62,6 @@ public class Constraint {
 			isKeywordMatched = true;
 		}
 		
-		// test task_id
-		if (task.getTaskId().toLowerCase().contains(this.keyword)) {
-			isKeywordMatched = true;
-		}
 		
 		// test tag
 		Iterator<String> tagIterator = task.getTag().iterator();
@@ -79,7 +80,11 @@ public class Constraint {
 		}
 		
 		// test interval
-		if (TimeInterval.isOverlapped(this.interval, task.getInterval())) {
+		if (isSearchingFloating) {
+			if (task.isFloating()) {
+				isIntervalMatched = true;
+			}
+		} else if (TimeInterval.isOverlapped(this.interval, task.getInterval())) {
 			isIntervalMatched = true;
 		}
 		return isIntervalMatched && isKeywordMatched && !(isSearchingTrashed ^ isTrashedTask);
