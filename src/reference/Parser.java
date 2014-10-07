@@ -31,6 +31,9 @@ public class Parser {
 			case Constant.COMMAND_STRING_CREATE_ACCOUNT:
 				return COMMAND_TYPE.CREATE_ACCOUNT;
 				
+			case Constant.COMMAND_STRING_DELETE_ACCOUNT:
+				return COMMAND_TYPE.DELETE_ACCOUNT;
+				
 			case Constant.COMMAND_STRING_HELP:
 				return COMMAND_TYPE.HELP;
 				

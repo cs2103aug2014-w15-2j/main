@@ -1,3 +1,4 @@
+package userInterface;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -40,6 +41,7 @@ public class ListOfXiaoMing {
 				System.out.println(cached);
 				list = new ListOfXiaoMing(cached);
 			}
+			
 			while (list == null) {
 				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_WELCOME);
 				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_INSTRUCTION);
@@ -66,6 +68,7 @@ public class ListOfXiaoMing {
 			}
 		}
     }
+	
 	public static String readCommand() {
 		return scanner_.nextLine();
 	}
@@ -108,7 +111,12 @@ public class ListOfXiaoMing {
 	}
 	
 	public static String deleteAccount() {
-		return "";
+		UtilityMethod.showToUser("Please enter the username of the account you want to delete: ");
+		String username = readCommand();
+		UtilityMethod.showToUser("Please enter the password to confirm: ");
+		String password = readCommand();
+		boolean isDeleteSuccessfully = DataStore.destroy(username, password);
+		return isDeleteSuccessfully ? "deleted!" : "deletion failed";
 	}
 	
 	public static String userLogIn(ArrayList<String> parameters) {
