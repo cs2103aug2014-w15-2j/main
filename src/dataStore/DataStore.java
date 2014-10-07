@@ -18,8 +18,7 @@ public class DataStore {
 	protected final static int ATTRIBUTE_END_POSITION = 1;
 	private final static String SPLIT_SECTION = "**********";
 	private final static int NO_TAG_ENDINDEX = 0;
-	private final static int NO_STARTDATE_ENDINDEX = -1;
-	private final static int NO_ENDDATE_ENDINDEX = -1;
+	private final static int NO_STARTDATE_ENDINDEX = 0;
 	private final static int LAST_TAG_COMMAINDEX = -1;
 
 	/**
@@ -149,7 +148,7 @@ public class DataStore {
 		reader.readLine();
 		reader.readLine();
 		String nextTask = reader.readLine();
-		while (nextTask!=null) {
+		while (!nextTask.equals(null)) {
 			task = parseTask(nextTask);
 			currentTasks.add(task);
 			nextTask = reader.readLine();
@@ -165,7 +164,7 @@ public class DataStore {
 	 * @return task
 	 * @throws Exception
 	 */
-	private static Task parseTask(String taskDescription) throws Exception {
+	public static Task parseTask(String taskDescription) throws Exception {
 		Task task;
 		String description;
 		String category;
@@ -206,7 +205,8 @@ public class DataStore {
 				+ ATTRIBUTE_END_POSITION);
 
 		endIndex = taskDescription.indexOf("`");
-		priority = Integer.parseInt(taskDescription.substring(0, endIndex));
+		priority = Integer.parseInt(taskDescription.substring(0, endIndex
+				));
 		taskDescription = taskDescription.substring(endIndex
 				+ ATTRIBUTE_END_POSITION);
 
@@ -219,12 +219,12 @@ public class DataStore {
 					endIndex)));
 		}
 
-		endIndex = taskDescription.indexOf("`");
 		// no endDate
-		if (endIndex == NO_ENDDATE_ENDINDEX) {
+		if (endIndex == taskDescription.length() - ATTRIBUTE_END_POSITION) {
 			endDate = null;
 		} else {
-			taskDescription = taskDescription.substring(endIndex);
+			taskDescription = taskDescription.substring(endIndex
+					+ ATTRIBUTE_END_POSITION);
 			endDate = new Date(Long.parseLong(taskDescription));
 		}
 		
@@ -246,24 +246,21 @@ public class DataStore {
 		ArrayList<String> tag = new ArrayList<String>();
 		int endIndex;
 		int commaIndex;
-		
 		endIndex = taskDescription.indexOf("`");
 		commaIndex = taskDescription.indexOf(",");
-		
-		if(endIndex == NO_TAG_ENDINDEX) {
+		// no tag
+		if (endIndex == NO_TAG_ENDINDEX) {
 			return tag;
 		}
 		while (commaIndex != LAST_TAG_COMMAINDEX) {
 			tag.add(taskDescription.substring(0, commaIndex));
 			taskDescription = taskDescription.substring(commaIndex
 					+ ATTRIBUTE_END_POSITION);
+			endIndex = taskDescription.indexOf("`");
 			commaIndex = taskDescription.indexOf(",");
 		}
-		
 		// add last tag
-		endIndex = taskDescription.indexOf("`");
 		tag.add(taskDescription.substring(0, endIndex));
-		
 		return tag;
 	}
 

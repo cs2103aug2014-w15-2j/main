@@ -101,8 +101,10 @@ public class Task {
 		task = task + Integer.toString(getRepeatedPeriod()) + '`';
 		task = task + Integer.toString(getPriority()) + '`';
 
-		task = task + getInterval().getStartDate() + '`';
-		task = task + getInterval().getEndDate();
+		Long start = getInterval().getStartDate().getTime();
+		task = task + start + '`';
+		Long end = getInterval().getEndDate().getTime();
+		task = task + end;
 
 		return task;
 	}
