@@ -140,7 +140,10 @@ public class Task {
 
 		task = task + getDescription();
 		task = task + "\n\t category: " + getCategory() + ';';
-		task = task + "\n\t tags: " + toStringAddTags() + ';';
+		if (!this.tag.isEmpty()) {
+			task = task + "\n\t tags: " + toStringAddTags() + ';';
+		}
+		
 //		task = task + Integer.toString(getRepeatedPeriod()) + '`'; TODO
 		task = task + "\n\t priority: " + Integer.toString(getPriority()) + ';';
 		if (this.interval.getStartDate().equals(Constant.FLOATING_START_DATE)) {
