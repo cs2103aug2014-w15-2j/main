@@ -86,10 +86,11 @@ public class User {
 	 * 
 	 * @param task
 	 */
-	public void add(Task task) {
+	public boolean add(Task task) {
 		this.updateUndoable();
-		this.currentTasks.add(task);
+		boolean isSuccessful = this.currentTasks.add(task);
 		DataStore.save(this.username, this.currentTasks);
+		return isSuccessful;
 	}
 
 	/**

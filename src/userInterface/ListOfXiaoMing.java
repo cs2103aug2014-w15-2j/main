@@ -256,9 +256,9 @@ public class ListOfXiaoMing {
 		
 		assert(taskToAdd != null);
 		
-		this.user.add(taskToAdd);
 		
-		return "task added";
+		
+		return (this.user.add(taskToAdd)) ? "Task added!" : "Failed to add task";
 	}
 	
 	
@@ -292,7 +292,12 @@ public class ListOfXiaoMing {
 		ArrayList<Task> queryResult;
 		try {
 			queryResult = this.user.find(new Constraint());
-			return UtilityMethod.taskListToString(queryResult);
+			String resultString  = UtilityMethod.taskListToString(queryResult);
+			if (resultString.equalsIgnoreCase("")) {
+				return "--- no task in the list ---      _(:з」∠)_ ";
+			} else {
+				return resultString;
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
