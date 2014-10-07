@@ -61,6 +61,7 @@ public class Constant {
 	public static final int NO_TAG_ENDINDEX = 0;
 	public static final int NO_STARTDATE_ENDINDEX = 0;
 	public static final int LAST_TAG_COMMAINDEX = -1;
+	public final static String SPLIT_SECTION = "**********";
 	
 	//Logic
 	public static final String TRASHED_TAG = "trashed";
