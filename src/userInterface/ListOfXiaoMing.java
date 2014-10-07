@@ -95,7 +95,8 @@ public class ListOfXiaoMing {
 				return null;
 		
 			case DELETE_ACCOUNT:	
-				return ListOfXiaoMing.deleteAccount();
+				UtilityMethod.showToUser(ListOfXiaoMing.deleteAccount());
+				return null;
 				
 			case HELP:
 				UtilityMethod.showToUser(ListOfXiaoMing.showHelp());
