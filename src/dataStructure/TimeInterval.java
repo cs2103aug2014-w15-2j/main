@@ -20,10 +20,7 @@ public class TimeInterval {
 			
 		} else if (startDate == null) {
 			this.startDate = Constant.DEADLINE_START_DATE;
-		}
-		
-		
-		if (startDate.after(endDate)) {
+		} else if (startDate.after(endDate)) {
 			throw new Exception("invalid time interval");
 		} else {
 			this.startDate = startDate;
