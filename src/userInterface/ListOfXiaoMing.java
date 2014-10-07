@@ -356,6 +356,7 @@ public class ListOfXiaoMing {
 			ArrayList<Task> queryResult = this.user.find(thisConstraint);
 			return UtilityMethod.taskListToString(queryResult);
 		} catch(Exception e) {
+			e.printStackTrace();
 			return e.toString();
 		}
 		
