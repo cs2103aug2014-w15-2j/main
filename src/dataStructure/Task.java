@@ -14,7 +14,7 @@ public class Task {
 	private ArrayList<String> tag;
 	private TimeInterval interval;
 
-	private final int REDUCE_CHAR = 2;
+	private final int REDUCE_CHAR = 1;
 
 	/**
 	 * constructor
@@ -62,8 +62,6 @@ public class Task {
 		this.interval = interval;
 	}
 
-	
-
 	/**
 	 * addTag user cannot add duplicated tag for a task
 	 * 
@@ -103,12 +101,8 @@ public class Task {
 		task = task + Integer.toString(getRepeatedPeriod()) + '`';
 		task = task + Integer.toString(getPriority()) + '`';
 
-		if (getInterval() != null) {
-			task = task + getInterval().getStartDate() + '`';
-			task = task + getInterval().getEndDate();
-		} else {
-			task = task + '`';
-		}
+		task = task + getInterval().getStartDate() + '`';
+		task = task + getInterval().getEndDate();
 
 		return task;
 	}
@@ -126,8 +120,8 @@ public class Task {
 			for (String aTag : tag) {
 				tags = tags + aTag + ",";
 			}
-			//to remove the last comma
-			tags.substring(0, tags.length() - REDUCE_CHAR);
+			// to remove the last comma
+			tags = tags.substring(0, tags.length() - REDUCE_CHAR);
 		}
 		return tags;
 	}
@@ -252,7 +246,7 @@ public class Task {
 
 		}
 	}
-	
+
 	/**
 	 * @override getInterval
 	 * @return interval
