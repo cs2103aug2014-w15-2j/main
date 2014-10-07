@@ -221,4 +221,13 @@ public class User {
 			return true;
 		}
 	}
+	
+	/**
+	 * getTaskList
+	 * 
+	 * @return
+	 */
+	public ArrayList<Task> getTaskList() {
+		return this.currentTasks;
+	}
 }
