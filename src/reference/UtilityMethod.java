@@ -15,9 +15,9 @@ public class UtilityMethod {
 		String returnValue = "";
 		for (int i = 0; i < list.size(); i++) {
 			if (i == 0) {
-				returnValue = i+ ". " + list.get(i).toString();
+				returnValue = i+ ". " + list.get(i).toDisplayedString();
 			} else {
-				returnValue = returnValue + "\n" + i + ". " + list.get(i).toString();
+				returnValue = returnValue + "\n" + i + ". " + list.get(i).toDisplayedString();
 			}
 		}
 		
