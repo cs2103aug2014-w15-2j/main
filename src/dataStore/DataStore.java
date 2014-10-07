@@ -145,7 +145,7 @@ public class DataStore {
 		reader.readLine();
 		reader.readLine();
 		String nextTask = reader.readLine();
-		while (!nextTask.equals(null)) {
+		while (nextTask != null) {
 			task = Parser.parseTask(nextTask);
 			currentTasks.add(task);
 			nextTask = reader.readLine();
@@ -153,8 +153,6 @@ public class DataStore {
 		reader.close();
 		return currentTasks;
 	}
-
-	
 
 	/**
 	 * Read the password of the account and return it
