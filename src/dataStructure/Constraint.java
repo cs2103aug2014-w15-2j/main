@@ -23,6 +23,11 @@ public class Constraint {
 		this.keyword = keyword.toLowerCase();
 		this.interval = timeInterval;
 	}
+	
+	public Constraint() {
+		this.keyword = "";
+		this.interval = new TimeInterval();
+	}
 
 	/**
 	 * isMeeted
@@ -31,34 +36,36 @@ public class Constraint {
 	 * @throws Exception 
 	 */
 	public boolean isMeeted(Task task) throws Exception {
+		boolean isKeywordMatched = false;
+		boolean isIntervalMatched = false;
 		// test description
 		if (task.getDescription().toLowerCase().contains(this.keyword)) {
-			return true;
+			isKeywordMatched = true;
 		}
 		
 		// test category
 		if (task.getCategory().toLowerCase().contains(this.keyword)) {
-			return true;
+			isKeywordMatched = true;
 		}
 		
 		// test task_id
 		if (task.getTaskId().toLowerCase().contains(this.keyword)) {
-			return true;
+			isKeywordMatched = true;
 		}
 		
 		// test tag
 		Iterator<String> tagIterator = task.getTag().iterator();
 		while (tagIterator.hasNext()) {
 			if (tagIterator.next().toLowerCase().contains(this.keyword)) {
-				return true;
+				isKeywordMatched = true;
 			}
 		}
 		
 		// test interval
 		if (TimeInterval.isOverlapped(this.interval, task.getInterval())) {
-			return true;
+			isIntervalMatched = true;
 		}
-		return false;
+		return isIntervalMatched && isKeywordMatched;
 	}
 	
 }
