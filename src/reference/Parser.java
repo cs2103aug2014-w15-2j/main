@@ -6,10 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import reference.Constant.COMMAND_TYPE;
 import dataStructure.Pair;
@@ -245,12 +243,7 @@ public class Parser {
 			}
 		}
 		
-		if (startDate == null || endDate == null) {
-			return null;
-		} else {
-			return new TimeInterval(startDate, endDate);
-		}
-
+		return new TimeInterval(startDate, endDate);
 	}
 	
 	public static Date parseDateString (String dateString) {
