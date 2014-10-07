@@ -37,10 +37,11 @@ public class ListOfXiaoMing {
 			ListOfXiaoMing list = null;
 			String cached = DataStore.getCachedAccount();
 			if (!((cached == "") || (cached == null))) {
+				System.out.println(cached);
 				list = new ListOfXiaoMing(cached);
 			}
-			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_WELCOME);
 			while (list == null) {
+				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_WELCOME);
 				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_INSTRUCTION);
 				String userInput = ListOfXiaoMing.readCommand();
 				String recordFilePath = ListOfXiaoMing.executeUpperLevelCommand(userInput);
