@@ -1,6 +1,8 @@
 package dataStructure;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import reference.*;
 
 public class TimeInterval {
@@ -63,5 +65,28 @@ public class TimeInterval {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * @override
+	 * toString
+	 * 
+	 * @return
+	 */
+	public String toString() {
+		String text = new String();
+		if (this.getStartDate().equals(Constant.FLOATING_START_DATE)) {
+			// floating task, do nothing
+		} else if (this.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
+			// deadline task
+			String deadline = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(this.getEndDate());
+			text = text + "\n\t deadline: " + deadline + ";\n";
+		} else {
+			String start = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(this.getStartDate());
+			String end = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(this.getEndDate());
+			text = text + "\n\t from " + start + " to " + end + ";\n";
+		}
+		
+		return text;
 	}
 }
