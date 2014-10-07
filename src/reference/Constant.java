@@ -46,7 +46,7 @@ public class Constant {
 	public static final String COMMAND_STRING_CLEAR = "clear";
 	public static final String COMMAND_STRING_DISPLAY = "display";
 	
-	public static final int PRIORITY_DEFAULT = 1;
+	public static final int PRIORITY_DEFAULT = 2;
 	public static final int PRIORITY_INVALID = 0;
 	public static final int PRIORITY_HIGH = 1;
 	public static final int PRIORITY_MEDIUM = 2;

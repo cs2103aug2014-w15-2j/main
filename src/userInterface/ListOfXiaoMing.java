@@ -1,6 +1,5 @@
 package userInterface;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import reference.*;
 import reference.Constant.COMMAND_TYPE;
@@ -278,7 +277,7 @@ public class ListOfXiaoMing {
 	private String update(ArrayList<String> taskParameters) {
 		int index = Integer.parseInt(taskParameters.get(0).trim());
 		try {
-			
+			taskParameters.remove(0);
 			this.user.update(index - 1, Parser.getTaskMap(taskParameters));
 		} catch (CommandFailedException e) {
 			e.printStackTrace();

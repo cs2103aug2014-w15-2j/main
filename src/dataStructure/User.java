@@ -126,8 +126,8 @@ public class User {
 			Iterator<String> attributes = toBeUpdated.keySet().iterator();
 			while (attributes.hasNext()) {
 				String currentAttribute = attributes.next();
-				System.out.println("attribute: " + currentAttribute);
 				Object currentObject = toBeUpdated.get(currentAttribute);
+				
 				if (currentAttribute.equals("description")) {
 					task.setDescription((String) currentObject);
 				} else if (currentAttribute.equals("category")) {
@@ -145,6 +145,7 @@ public class User {
 				}
 			}
 		}
+		DataStore.save(this.username, this.currentTasks);
 	}
 
 	/**

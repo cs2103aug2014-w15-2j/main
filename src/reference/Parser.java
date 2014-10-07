@@ -69,31 +69,54 @@ public class Parser {
 	
 	
 	public static HashMap<String, Object> getTaskMap(ArrayList<String> parameterList) {
-		Task newTask = Parser.getTaskFromParameterList(parameterList);
 		HashMap <String, Object> updateAttributes = new HashMap<String, Object> ();
 		
-		if (newTask.getDescription() != null) {
-			updateAttributes.put("description", newTask.getDescription());
-		}
-		
-		if (newTask.getCategory() != null) {
-			updateAttributes.put("category", newTask.getCategory());
-		} 
-		
-		if (newTask.getInterval() != null) {
-			updateAttributes.put("time_interval", newTask.getInterval());
-		} 
-		
-		if (newTask.getPriority() != Constant.PRIORITY_INVALID) {
-			updateAttributes.put("priority", newTask.getPriority());
-		}
-		
-		if (newTask.getRepeatedPeriod() != Constant.REPEATED_PERIOD_INVALID) { 
-			updateAttributes.put("repeated_period", newTask.getRepeatedPeriod());
-		}
-		
-		if (newTask.getTag().size() != 0) {
-			updateAttributes.put("tag", newTask.getTag());
+		for (String parameter: parameterList) {
+			String key = UtilityMethod.getFirstWord(parameter);
+			String value = UtilityMethod.removeFirstWord(parameter);
+			switch (key) {
+			case "category":
+				updateAttributes.put("category", value);
+				break;
+				
+			case "time":
+				try {
+					TimeInterval t = parseTimeInterval(value);
+					updateAttributes.put("time_interval", t);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+				
+			case "priority":
+				try {
+					Integer p = Integer.parseInt(value);
+					updateAttributes.put("priority", p);
+				} catch (Exception e) {
+					UtilityMethod.showToUser("invalid argument for priority");
+				}
+				
+				break;
+				
+			case "repeat":
+				try {
+					Integer r = Integer.parseInt(value);
+					updateAttributes.put("repeated_period", r);
+				} catch (Exception e) {
+					UtilityMethod.showToUser("invalid argument for repeated period");
+				}
+				break;
+				
+			case "tag":
+				ArrayList<String> tags = new ArrayList<String>();
+				tags.add(value);
+				updateAttributes.put("tag", tags);
+				break;
+				
+			default:
+				updateAttributes.put("description", parameter);
+				break;
+			}
 		}
 		
 		return updateAttributes;
@@ -106,9 +129,9 @@ public class Parser {
 		int priority = Constant.PRIORITY_DEFAULT;
 		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT; 
 		ArrayList<String> tag = new ArrayList<String>();
-		
-		String description = parameterList.get(0);
-		parameterList.remove(0);
+		String description = null;
+//		String description = parameterList.get(0);
+//		parameterList.remove(0);
 		
 		boolean hasTime = false;
 		boolean hasCategory = false;
@@ -181,7 +204,7 @@ public class Parser {
 					break;
 					
 				default:
-					UtilityMethod.showToUser("Unrecognized parameter!");
+					description = value;
 					break;
 			}
 		}
