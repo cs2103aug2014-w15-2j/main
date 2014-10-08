@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import reference.Constant.COMMAND_TYPE;
-import reference.Pair;
+import dataStructure.Pair;
 import dataStructure.Task;
-import reference.TimeInterval;
+import dataStructure.TimeInterval;
 
 
 

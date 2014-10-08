@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import reference.*;
 import reference.Constant.COMMAND_TYPE;
 import dataStore.*;
-import reference.CommandFailedException;
-import reference.Constraint;
-import reference.Pair;
+import dataStructure.CommandFailedException;
+import dataStructure.Constraint;
+import dataStructure.Pair;
 import dataStructure.Task;
-import reference.TimeInterval;
+import dataStructure.TimeInterval;
 import dataStructure.User;
 
 
