@@ -1,4 +1,4 @@
-package dataStructure;
+package reference;
 
 public class CommandFailedException extends Exception {
 
