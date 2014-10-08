@@ -228,12 +228,29 @@ public class User {
 	 * @return
 	 */
 	public ArrayList<Task> getTaskList() {
-		return this.currentTasks;
+		ArrayList<Task> nonTrashedTasks = new ArrayList<Task>();
+		for (Task task: this.currentTasks) {
+			Iterator<String> tagIterator = task.getTag().iterator();
+			boolean isTrashed = false;
+			while (tagIterator.hasNext()) {
+				if (tagIterator.next().toLowerCase().contains(Constant.TRASHED_TAG)) {
+					isTrashed = true;
+				}
+			}
+			
+			if (!isTrashed) {
+				nonTrashedTasks.add(task);
+			}
+		}
+		return nonTrashedTasks;
 	}
 	
 	
 	
 	//system level static methods
+	
+	
+	
 	public static String deleteAccount() {
 		UtilityMethod.showToUser("Please enter the username of the account you want to delete: ");
 		String username = UtilityMethod.readCommand();
