@@ -108,6 +108,7 @@ public class Parser {
 			case "tag":
 				ArrayList<String> tags = new ArrayList<String>();
 				tags.add(value);
+				System.out.println("value: " + value);
 				updateAttributes.put("tag", tags);
 				break;
 				
@@ -248,16 +249,17 @@ public class Parser {
 				endCalendar.set(Calendar.MINUTE, 59);
 				endDate = endCalendar.getTime();
 			}
-		} else if (wordList.length == 5) {
+		} else if (wordList.length == 3) {
 			if (wordList[0].equalsIgnoreCase("before")) {
 				parameter.replaceFirst("before ", "");
 				startDate = new Date();
 				endDate = parseDateString(parameter);
 			}
-		} else if (wordList.length == 10) {
-			if (wordList[0].equalsIgnoreCase("from") && wordList[5].equalsIgnoreCase("to")) {
-				String startDateString = wordList[1] + " " + wordList[2] + " " + wordList[3] + " " + wordList[4];
-				String endDateString = wordList[6] + " " + wordList[7] + " " + wordList[8] + " " + wordList[9];
+		} else if (wordList.length == 6) {
+
+			if (wordList[0].equalsIgnoreCase("from") && wordList[3].equalsIgnoreCase("to")) {
+				String startDateString = wordList[1] + " " + wordList[2];
+				String endDateString = wordList[4] + " " + wordList[5];
 				startDate = parseDateString(startDateString);
 				endDate = parseDateString(endDateString);
 			}

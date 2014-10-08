@@ -62,7 +62,7 @@ public class UtilityMethod {
 	 * @return
 	 */
 	public static String removeFirstWord(String userCommand) {
-		return userCommand.replace(getFirstWord(userCommand), "").trim();
+		return userCommand.replaceFirst(getFirstWord(userCommand), "").trim();
 	}
 	
 	
