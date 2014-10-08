@@ -5,7 +5,7 @@ import java.util.Date;
 public class Constant {
 	
 	//prompt messages that will be printed for users
-	public static final String PROMPT_MESSAGE_WELCOME = "Welcome to 小鸣的清单(List of Xiao Ming), you can log in or create a new accout.";
+	public static final String PROMPT_MESSAGE_WELCOME = "\n\nWelcome to 小鸣的清单(List of Xiao Ming)";
 	public static final String PROMPT_MESSAGE_INSTRUCTION = "You can type in 'log in', 'create account', 'help' or 'exit'.";
 	public static final String PROMPT_MESSAGE_NOT_LOG_IN = "you have not logged in yet";
 	public static final String PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY = "Successfully logged out\n\n\n";
