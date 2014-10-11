@@ -1,4 +1,6 @@
-package reference;
+package infrastructure;
+
+import infrastructure.Constant.COMMAND_TYPE;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,12 +11,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-import reference.Constant.COMMAND_TYPE;
+import reference.Pair;
+import reference.TimeInterval;
 import dataStructure.Task;
 
 
 
-public class Parser {
+public abstract class Parser {
 	
 	public static COMMAND_TYPE determineCommandType(String commandTypeString) {
 		switch (commandTypeString) {
@@ -213,7 +216,7 @@ public class Parser {
 	}
 
 	
-	public static Pair parse(String userInput) {
+	public static Pair parseCommandPair(String userInput) {
 		ArrayList<String> parameterList = new ArrayList<String>(Arrays.asList(userInput.trim().split("@")));
 		COMMAND_TYPE thisCommand = determineCommandType(parameterList.get(0).trim());
 		parameterList.remove(0);
@@ -268,7 +271,7 @@ public class Parser {
 		return new TimeInterval(startDate, endDate);
 	}
 	
-	public static Date parseDateString (String dateString) {
+	private static Date parseDateString (String dateString) {
 		try {
 			Date date = new SimpleDateFormat("dd/MMMM/yyyy HH:mm", Locale.ENGLISH).parse(dateString);
 			return date;
@@ -282,7 +285,7 @@ public class Parser {
 		}
 	}
 	
-	public static int parsePriority(String parameter) {
+	private static int parsePriority(String parameter) {
 		if (parameter.equalsIgnoreCase("high")) {
 			return Constant.PRIORITY_HIGH;
 		} else if (parameter.equalsIgnoreCase("medium")) {
@@ -294,7 +297,7 @@ public class Parser {
 		}
 	}
 
-	public static int parseRepeatedPeriod(String parameter) {
+	private static int parseRepeatedPeriod(String parameter) {
 		if (parameter.equalsIgnoreCase("none")) {
 			return Constant.REPEATED_PERIOD_NONE;
 		} else if (parameter.equalsIgnoreCase("daily")) {
@@ -315,7 +318,7 @@ public class Parser {
 	 * @return task
 	 * @throws Exception
 	 */
-	public static Task parseTask(String taskDescription) throws Exception {
+	public static Task parseTaskFromRecords(String taskDescription) throws Exception {
 		Task task;
 		String description;
 		String category;

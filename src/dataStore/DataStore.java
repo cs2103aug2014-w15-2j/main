@@ -1,5 +1,8 @@
 package dataStore;
 
+import infrastructure.Constant;
+import infrastructure.Parser;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,9 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import dataStructure.*;
-import reference.*;
 
-public class DataStore {
+public abstract class DataStore {
 
 	
 	
@@ -146,7 +148,7 @@ public class DataStore {
 		reader.readLine();
 		String nextTask = reader.readLine();
 		while (nextTask != null) {
-			task = Parser.parseTask(nextTask);
+			task = Parser.parseTaskFromRecords(nextTask);
 			currentTasks.add(task);
 			nextTask = reader.readLine();
 		}

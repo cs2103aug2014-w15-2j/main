@@ -1,5 +1,8 @@
 package dataStructure;
 
+import infrastructure.Constant;
+import infrastructure.UtilityMethod;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -84,8 +87,8 @@ public class Task {
 	 * 
 	 * @param tag
 	 */
-	public void removeTag(String tag) {
-		this.tag.remove(tag);
+	public boolean removeTag(String tag) {
+		return this.tag.remove(tag);
 	}
 
 	/**

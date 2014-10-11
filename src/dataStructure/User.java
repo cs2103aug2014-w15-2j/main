@@ -1,5 +1,8 @@
 package dataStructure;
 
+import infrastructure.Constant;
+import infrastructure.UtilityMethod;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,10 +14,10 @@ import reference.*;
 
 public class User {
 	
-	ArrayList<Task> currentTasks;
-	Stack<ArrayList<Task>> undoable;
-	Stack<ArrayList<Task>> redoable;
-	String username;
+	private ArrayList<Task> currentTasks;
+	private Stack<ArrayList<Task>> undoable;
+	private Stack<ArrayList<Task>> redoable;
+	private String username;
 
 	/**
 	 * constructor
@@ -157,7 +160,7 @@ public class User {
 	 * @return
 	 * @throws CommandFailedException
 	 */
-	public String getTaskIdByIndex(int index) throws CommandFailedException {
+	private String getTaskIdByIndex(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));

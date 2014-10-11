@@ -1,8 +1,12 @@
 package userInterface;
+import infrastructure.Constant;
+import infrastructure.Parser;
+import infrastructure.UtilityMethod;
+import infrastructure.Constant.COMMAND_TYPE;
+
 import java.util.ArrayList;
 
 import reference.*;
-import reference.Constant.COMMAND_TYPE;
 import dataStore.*;
 import dataStructure.Task;
 import dataStructure.User;
@@ -77,7 +81,7 @@ public class ListOfXiaoMing {
 	 */
 	@SuppressWarnings("unchecked")
 	public static String executeUpperLevelCommand(String commandString) {
-		Pair commandPair = Parser.parse(commandString);
+		Pair commandPair = Parser.parseCommandPair(commandString);
 		COMMAND_TYPE thisCommand = (COMMAND_TYPE) commandPair.head;
 		Object parameter = commandPair.tail;
 		
@@ -117,7 +121,7 @@ public class ListOfXiaoMing {
 	
 	@SuppressWarnings("unchecked")
 	public String execute (String userInput) {
-		Pair commandPair = Parser.parse(userInput);
+		Pair commandPair = Parser.parseCommandPair(userInput);
 		COMMAND_TYPE thisCommand = (COMMAND_TYPE) commandPair.head;
 		ArrayList<String> parameterList = (ArrayList<String>) commandPair.tail;
 		

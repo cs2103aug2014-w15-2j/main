@@ -1,8 +1,8 @@
-package reference;
+package infrastructure;
 
 import java.util.Date;
 
-public class Constant {
+public abstract class Constant {
 	
 	//prompt messages that will be printed for users
 	public static final String PROMPT_MESSAGE_WELCOME = "\n\nWelcome to 小鸣的清单(List of Xiao Ming)";
