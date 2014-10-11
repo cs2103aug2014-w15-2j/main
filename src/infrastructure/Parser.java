@@ -216,7 +216,7 @@ public abstract class Parser {
 	}
 
 	
-	public static Pair parse(String userInput) {
+	public static Pair parseCommandPair(String userInput) {
 		ArrayList<String> parameterList = new ArrayList<String>(Arrays.asList(userInput.trim().split("@")));
 		COMMAND_TYPE thisCommand = determineCommandType(parameterList.get(0).trim());
 		parameterList.remove(0);

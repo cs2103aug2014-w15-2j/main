@@ -176,7 +176,7 @@ public class User {
 	 * @return the Task, null if there is an error
 	 * @throws CommandFailedException
 	 */
-	private Task retrieve(int index) throws CommandFailedException {
+	public Task retrieve(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
