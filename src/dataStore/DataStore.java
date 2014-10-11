@@ -2,6 +2,7 @@ package dataStore;
 
 import infrastructure.Constant;
 import infrastructure.Parser;
+import dataStore.JSONtest;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -75,6 +76,9 @@ public abstract class DataStore {
 			bw.write(Constant.SPLIT_SECTION);
 			bw.newLine();
 			bw.close();
+			
+			File accountJSON = new File(username + ".json");
+			accountJSON.createNewFile();
 
 			return true;
 		} catch (IOException e) {
@@ -126,6 +130,9 @@ public abstract class DataStore {
 			}
 
 			bw.close();
+			
+			JSONtest.save(username, password, tasks);
+			
 			return true;
 		} catch (IOException e) {
 			return false;
@@ -140,6 +147,7 @@ public abstract class DataStore {
 	 * @throws Exception
 	 */
 	public static ArrayList<Task> getCurrentTasks(File file) throws Exception {
+		/*
 		ArrayList<Task> currentTasks = new ArrayList<Task>();
 		Task task;
 		BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -153,6 +161,8 @@ public abstract class DataStore {
 			nextTask = reader.readLine();
 		}
 		reader.close();
+		*/
+		ArrayList<Task> currentTasks = JSONtest.getCurrentTask(file.getName());
 		return currentTasks;
 	}
 
