@@ -17,7 +17,7 @@ import dataStructure.Task;
 
 
 
-public class Parser {
+public abstract class Parser {
 	
 	public static COMMAND_TYPE determineCommandType(String commandTypeString) {
 		switch (commandTypeString) {
@@ -271,7 +271,7 @@ public class Parser {
 		return new TimeInterval(startDate, endDate);
 	}
 	
-	public static Date parseDateString (String dateString) {
+	private static Date parseDateString (String dateString) {
 		try {
 			Date date = new SimpleDateFormat("dd/MMMM/yyyy HH:mm", Locale.ENGLISH).parse(dateString);
 			return date;
@@ -285,7 +285,7 @@ public class Parser {
 		}
 	}
 	
-	public static int parsePriority(String parameter) {
+	private static int parsePriority(String parameter) {
 		if (parameter.equalsIgnoreCase("high")) {
 			return Constant.PRIORITY_HIGH;
 		} else if (parameter.equalsIgnoreCase("medium")) {
@@ -297,7 +297,7 @@ public class Parser {
 		}
 	}
 
-	public static int parseRepeatedPeriod(String parameter) {
+	private static int parseRepeatedPeriod(String parameter) {
 		if (parameter.equalsIgnoreCase("none")) {
 			return Constant.REPEATED_PERIOD_NONE;
 		} else if (parameter.equalsIgnoreCase("daily")) {
