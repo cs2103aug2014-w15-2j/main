@@ -35,7 +35,7 @@ public class User {
 	}
 
 	/**
-	 * undo
+	 * undo resets the current task list to one step backwards.
 	 * 
 	 * @throws CommandFailedException
 	 */
@@ -54,7 +54,7 @@ public class User {
 	}
 
 	/**
-	 * redo
+	 * redo resets the current task list to one step forwards.
 	 * 
 	 * @throws CommandFailedException
 	 */
@@ -85,7 +85,7 @@ public class User {
 	}
 
 	/**
-	 * add
+	 * add adds a task into the task list.
 	 * 
 	 * @param task
 	 */
@@ -97,7 +97,7 @@ public class User {
 	}
 
 	/**
-	 * delete
+	 * delete deletes the task with the index from the task list.
 	 * 
 	 * @param index
 	 * @throws CommandFailedException
@@ -114,11 +114,10 @@ public class User {
 	}
 
 	/**
-	 * update
+	 * update updates the task with the index according to the key-value pairs in toBeUpdated.
 	 * 
 	 * @param index
-	 *            , attributes to be updated
-	 * @param toBeUpdated
+	 * @param toBeUpdated attributes to be updated
 	 * @throws CommandFailedException 
 	 */
 	@SuppressWarnings("unchecked")
@@ -170,7 +169,7 @@ public class User {
 	}
 
 	/**
-	 * retrieve
+	 * retrieve gets the task with the index.
 	 * 
 	 * @param index
 	 * @return the Task, null if there is an error
@@ -193,7 +192,7 @@ public class User {
 	}
 
 	/**
-	 * find
+	 * find gets the list of tasks that meet the constraint.
 	 * 
 	 * @param constraint
 	 * @return
@@ -212,7 +211,7 @@ public class User {
 	}
 
 	/**
-	 * isValidIndex
+	 * isValidIndex 
 	 * 
 	 * @param index
 	 * @return
@@ -226,7 +225,7 @@ public class User {
 	}
 	
 	/**
-	 * getTaskList
+	 * getTaskList gets the list of every non-trashed tasks of the user.
 	 * 
 	 * @return
 	 */
@@ -253,7 +252,11 @@ public class User {
 	//system level static methods
 	
 	
-	
+	/**
+	 * deleteAccount destroys the account
+	 * 
+	 * @return message
+	 */
 	public static String deleteAccount() {
 		UtilityMethod.showToUser("Please enter the username of the account you want to delete: ");
 		String username = UtilityMethod.readCommand();
@@ -263,6 +266,11 @@ public class User {
 		return isDeleteSuccessfully ? "deleted!" : "deletion failed";
 	}
 	
+	/**
+	 * userLogIn uses the user name and password in parameters to log in.
+	 * @param parameters
+	 * @return
+	 */
 	public static String userLogIn(ArrayList<String> parameters) {
 		String username = null;
 		String password = null;
@@ -305,6 +313,12 @@ public class User {
 		return username;
 	}
 	
+	/**
+	 * createAccount creates account for a user.
+	 * 
+	 * @param parameters
+	 * @return
+	 */
 	public static String createAccount(ArrayList<String> parameters) {
 		String username = null;
 		String passwordInput1 = null;
@@ -340,12 +354,19 @@ public class User {
 		return successCreated ?  Constant.PROMPT_MESSAGE_ACCOUNT_CREATED: Constant.PROMPT_MESSAGE_ACCOUNT_NOT_CREATED;
 	}
 	
-	
+	/**
+	 * showHelp shows the application manual.
+	 * 
+	 * @return
+	 */
 	public static String showHelp(){
 		
 		return "'Help' has not been implemented yet";
 	}
 	
+	/**
+	 * exit exits the application
+	 */
 	public static void exit() {
 		UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_SESSION_END);
 		System.exit(0);
