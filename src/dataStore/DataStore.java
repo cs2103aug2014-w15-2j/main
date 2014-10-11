@@ -3,7 +3,6 @@ package dataStore;
 import infrastructure.Constant;
 import infrastructure.Parser;
 import dataStore.JSONtest;
-import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -136,8 +135,6 @@ public abstract class DataStore {
 			
 			return true;
 		} catch (IOException e) {
-			return false;
-		} catch (JSONException e) {
 			return false;
 		}
 	}
