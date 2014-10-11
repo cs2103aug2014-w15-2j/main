@@ -87,8 +87,8 @@ public class Task {
 	 * 
 	 * @param tag
 	 */
-	public void removeTag(String tag) {
-		this.tag.remove(tag);
+	public boolean removeTag(String tag) {
+		return this.tag.remove(tag);
 	}
 
 	/**
