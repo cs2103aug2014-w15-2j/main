@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import dataStructure.*;
 
-public class DataStore {
+public abstract class DataStore {
 
 	
 	
