@@ -10,8 +10,9 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import reference.TimeInterval;
@@ -30,7 +31,7 @@ public class JSONtest {
 		bw.close();
 	}
 	
-	private static JSONObject representTask(Task task) {
+	private static JSONObject representTask(Task task) throws JSONException {
 		JSONObject taskObj = new JSONObject();
 		
 		taskObj.put("task-id", task.getTaskId());
@@ -39,7 +40,7 @@ public class JSONtest {
 		
 		JSONArray tags = new JSONArray();
 		for(int i=0; i<task.getTag().size(); i++) {
-			tags.add(task.getTag().get(i));
+			tags.put(task.getTag().get(i));
 		}
 		taskObj.put("tags", tags);
 		
@@ -57,9 +58,10 @@ public class JSONtest {
 		JSONParser parser = new JSONParser();
 		JSONArray allTasks = (JSONArray) parser.parse(new FileReader(username + ".json"));
 		
-		Iterator<JSONObject> iterator = allTasks.iterator();
-		while(iterator.hasNext()) {
-			JSONObject task = (JSONObject) iterator.next();
+		JSONObject task;
+		
+		for(int i=0; i<allTasks.length(); i++) {
+			task = (JSONObject) allTasks.getJSONObject(i);
 			Task newTask = getTask(task);
 			tasks.add(newTask);
 		}
@@ -77,9 +79,8 @@ public class JSONtest {
 		
 		JSONArray tags = (JSONArray) task.get("tags");
 		ArrayList<String> tag = new ArrayList<String>();
-		Iterator<String> iterator = tags.iterator();
-		while(iterator.hasNext()) {
-			tag.add(iterator.next());
+		for(int i=0; i<tags.length(); i++) { 
+			tag.add(tags.getString(i));
 		}
 		
 		TimeInterval interval = Parser.parseTimeInterval((String) task.get("interval"));
