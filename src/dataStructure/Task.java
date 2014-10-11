@@ -65,7 +65,7 @@ public class Task {
 	}
 
 	/**
-	 * addTag user cannot add duplicated tag for a task
+	 * addTag insert a tag for this task, user cannot add duplicated tag for a task
 	 * 
 	 * @param tag
 	 * @throws CommandFailedException
@@ -80,7 +80,7 @@ public class Task {
 	}
 
 	/**
-	 * removeTag
+	 * removeTag remove the tag from the task.
 	 * 
 	 * @param tag
 	 */
@@ -89,7 +89,7 @@ public class Task {
 	}
 
 	/**
-	 * parse task to string
+	 * toString convert the task information to a string for storage.
 	 * 
 	 * @return a task string
 	 */
@@ -99,7 +99,7 @@ public class Task {
 		task = task + getTaskId() + '`';
 		task = task + getDescription() + '`';
 		task = task + getCategory() + '`';
-		task = task + toStringAddTags() + '`';
+		task = task + tagToString() + '`';
 		task = task + Integer.toString(getRepeatedPeriod()) + '`';
 		task = task + Integer.toString(getPriority()) + '`';
 		Long start = getInterval().getStartDate().getTime();
@@ -111,11 +111,11 @@ public class Task {
 	}
 
 	/**
-	 * add tags for task string
+	 * tagToString convert the tag list to a string.
 	 * 
 	 * @return tags string
 	 */
-	private String toStringAddTags() {
+	private String tagToString() {
 		String tags = new String();
 		if (tag.isEmpty()) {
 			tags = "";
@@ -130,17 +130,17 @@ public class Task {
 	}
 
 	/**
-	 * toDisplayedString
+	 * toStringForDisplaying convert the task information to a string for displaying
 	 * 
 	 * @return 
 	 */
-	public String toDisplayedString() {
+	public String toStringForDisplaying() {
 		String task = new String();
 
 		task = task + getDescription();
 		task = task + "\n\t category: " + getCategory() + ';';
 		if (!this.tag.isEmpty()) {
-			task = task + "\n\t tags: " + toStringAddTags() + ';';
+			task = task + "\n\t tags: " + tagToString() + ';';
 		}
 		
 //		task = task + Integer.toString(getRepeatedPeriod()) + '`'; TODO
@@ -153,7 +153,7 @@ public class Task {
 	// setter and getter
 
 	/**
-	 * getPriority getter of the priority attribute
+	 * getPriority gets the task description
 	 * 
 	 * @return
 	 */
@@ -162,7 +162,7 @@ public class Task {
 	}
 
 	/**
-	 * setDescription setter of the description attribute
+	 * setDescription sets the task description to given newDescription.
 	 * 
 	 * @param newDescription
 	 */
@@ -282,11 +282,11 @@ public class Task {
 	/**
 	 * setInterval setter of the interval attribute
 	 * 
-	 * @param interval
+	 * @param newInterval
 	 */
-	public void setInterval(TimeInterval inteval) {
+	public void setInterval(TimeInterval newInterval) {
 		try {
-			this.interval = inteval;
+			this.interval = newInterval;
 		} catch (Exception e) {
 
 		}

@@ -35,9 +35,9 @@ public class UtilityMethod {
 		String returnValue = "";
 		for (int i = 0; i < list.size(); i++) {
 			if (i == 0) {
-				returnValue = (i+1) + ". " + list.get(i).toDisplayedString();
+				returnValue = (i+1) + ". " + list.get(i).toStringForDisplaying();
 			} else {
-				returnValue = returnValue + "\n" + (i+1) + ". " + list.get(i).toDisplayedString();
+				returnValue = returnValue + "\n" + (i+1) + ". " + list.get(i).toStringForDisplaying();
 			}
 		}
 		
