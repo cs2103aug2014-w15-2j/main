@@ -19,7 +19,7 @@ import reference.TimeInterval;
 
 public class JSONtest {
 
-	public static void save(String username, String password, ArrayList<Task> tasks) throws IOException {
+	public static void save(String username, String password, ArrayList<Task> tasks) throws IOException, JSONException {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(username + ".json"));
 			
 		for (int i = 0; i < tasks.size(); i++) {
