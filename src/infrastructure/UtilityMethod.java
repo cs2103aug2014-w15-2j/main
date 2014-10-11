@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import dataStructure.Task;
 
-public class UtilityMethod {
+public abstract class UtilityMethod {
 	private static Scanner scanner_ = new Scanner(System.in);
 	public static String readCommand() {
 		return scanner_.nextLine();
