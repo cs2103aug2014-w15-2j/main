@@ -318,7 +318,7 @@ public abstract class Parser {
 	 * @return task
 	 * @throws Exception
 	 */
-	public static Task parseTask(String taskDescription) throws Exception {
+	public static Task parseTaskFromRecords(String taskDescription) throws Exception {
 		Task task;
 		String description;
 		String category;

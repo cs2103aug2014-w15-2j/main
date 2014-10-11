@@ -148,7 +148,7 @@ public abstract class DataStore {
 		reader.readLine();
 		String nextTask = reader.readLine();
 		while (nextTask != null) {
-			task = Parser.parseTask(nextTask);
+			task = Parser.parseTaskFromRecords(nextTask);
 			currentTasks.add(task);
 			nextTask = reader.readLine();
 		}
