@@ -1,4 +1,4 @@
-package reference;
+package infrastructure;
 
 import java.util.ArrayList;
 import java.util.Scanner;

@@ -1,4 +1,6 @@
-package reference;
+package infrastructure;
+
+import infrastructure.Constant.COMMAND_TYPE;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,7 +11,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-import reference.Constant.COMMAND_TYPE;
+import reference.Pair;
+import reference.TimeInterval;
 import dataStructure.Task;
 
 

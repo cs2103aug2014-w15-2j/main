@@ -1,8 +1,12 @@
 package userInterface;
+import infrastructure.Constant;
+import infrastructure.Parser;
+import infrastructure.UtilityMethod;
+import infrastructure.Constant.COMMAND_TYPE;
+
 import java.util.ArrayList;
 
 import reference.*;
-import reference.Constant.COMMAND_TYPE;
 import dataStore.*;
 import dataStructure.Task;
 import dataStructure.User;
