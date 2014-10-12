@@ -60,6 +60,10 @@ public class JSONtest {
 		JSONParser parser = new JSONParser();
 		JSONArray allTasks = (JSONArray) parser.parse(new FileReader(username + ".json"));
 		
+		if(allTasks == null) {
+			return tasks;
+		}
+		
 		JSONObject task;
 		
 		for(int i=0; i<allTasks.size(); i++) {
