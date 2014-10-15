@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -31,9 +30,31 @@ public abstract class NERParser {
 	
 	public static Task parseTask (String userInput) {
 		String xmlString = parseToXML(userInput);
-		HashMap<String, String> xmlMap = parseToMap(xmlString);
+		ArrayList<Pair<String, String>> xmlList = parseToMap(xmlString);
+		ArrayList<String> dateList = new ArrayList<String>();
+		ArrayList<String> descriptionList = new ArrayList<String>();
+		ArrayList<String> tagList = new ArrayList<String>();
+		
+		for (Pair<String, String> p : xmlList) {
+			if (p.getHead().equals("DATE")) {
+				dateList.add(p.getTail());
+			} else if (p.getHead().equals("DESCRIPTION")){
+				descriptionList.add(p.getTail());
+			} else if (p.getHead().equals("TAG")){
+				tagList.add(p.getTail());
+			}
+		}
 		
 		
+		//Temp test, will be removed later
+		try {
+			TimeInterval a = NERParser.parseTimeInterval(dateList);
+			System.out.println("Description: \t" + descriptionList.get(0));
+			System.out.println("Time: \t\t" + a);
+		} catch (CommandFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return null;
 	}
@@ -47,7 +68,7 @@ public abstract class NERParser {
 	 * @param content
 	 * @return
 	 */
-	private static String parseToXML (String content) {
+	public static String parseToXML (String content) {
 		//parse the content to XML format, no reservation for spaces
 		return classifier.classifyToString(content, "inlineXML", false);
 	}
@@ -58,14 +79,14 @@ public abstract class NERParser {
 	 * @param xmlString
 	 * @return
 	 */
-	private static HashMap<String, String> parseToMap(String xmlString) {
+	private static ArrayList<Pair<String, String>> parseToMap(String xmlString) {
 		assert(xmlString != null);
 		assert(xmlString.length() > 5);
 		
 		//get rid of the first and last character
 		xmlString = xmlString.substring(1, xmlString.length()-2);
 		String[] xmlSegments = xmlString.split("> <");
-		HashMap<String, String> results = new HashMap<String, String>();
+		ArrayList<Pair<String, String>> results = new ArrayList<Pair<String, String>>();
 		
 		for (String segment : xmlSegments) {
 			//segment format should be like ADD>Add</ADD
@@ -76,7 +97,7 @@ public abstract class NERParser {
 			String value = segment.replace(key + ">", "").replace("</" + key, "");
 			//value format should be like Add
 			
-			results.put(key, value);
+			results.add(new Pair<String, String>(key, value));
 		}
 		return results;
 	}
@@ -146,10 +167,8 @@ public abstract class NERParser {
 	    ArrayList<Date> results = new ArrayList<Date>();
 	    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	    String stringForToday = format.format(Calendar.getInstance().getTime());
-	    System.out.println(stringForToday);
 	    
 	    for (String text : userInputStrings) {
-	    	System.out.println(text);
 	      Annotation annotation = new Annotation(text);
 	      annotation.set(CoreAnnotations.DocDateAnnotation.class, stringForToday);
 	      pipeline.annotate(annotation);
