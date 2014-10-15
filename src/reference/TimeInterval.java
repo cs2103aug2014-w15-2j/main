@@ -15,7 +15,7 @@ public class TimeInterval {
 	 * @param endDate
 	 * @throws Exception
 	 */
-	public TimeInterval(Date startDate, Date endDate) throws Exception {
+	public TimeInterval(Date startDate, Date endDate) throws CommandFailedException {
 		if ((startDate == null) && (endDate == null)) {
 			this.startDate = Constant.FLOATING_START_DATE;
 			this.endDate = Constant.FLOATING_END_DATE;
@@ -23,7 +23,7 @@ public class TimeInterval {
 		} else if (startDate == null) {
 			this.startDate = Constant.DEADLINE_START_DATE;
 		} else if (startDate.after(endDate)) {
-			throw new Exception("invalid time interval");
+			throw new CommandFailedException("invalid time interval");
 		} else {
 			this.startDate = startDate;
 			this.endDate = endDate;
