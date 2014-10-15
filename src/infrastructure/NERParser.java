@@ -88,7 +88,7 @@ public abstract class NERParser {
 		TimeInterval interval = new TimeInterval();
 		
 		if (dates.size() == 1) {
-			interval = new TimeInterval(null, dates.get(0));
+			interval = new TimeInterval(Constant.FLOATING_START_DATE, dates.get(0));
 		} else if (dates.size() == 2) {
 			Date d0 = dates.get(0);
 			Date d1 = dates.get(1);
@@ -140,14 +140,16 @@ public abstract class NERParser {
 	    props.put("sutime.binders","0");
 	    props.put("sutime.rules", "src/NLPTraining/defs.sutime.txt, src/NLPTraining/english.holidays.sutime.txt, src/NLPTraining/english.sutime.txt");
 	    AnnotationPipeline pipeline = new AnnotationPipeline();
-	    pipeline.addAnnotator(new TimeAnnotator("sutime", props));
 	    pipeline.addAnnotator(new TokenizerAnnotator(false));
+	    pipeline.addAnnotator(new TimeAnnotator("sutime", props));
 	    
 	    ArrayList<Date> results = new ArrayList<Date>();
 	    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	    String stringForToday = format.format(Calendar.getInstance().getTime());
+	    System.out.println(stringForToday);
 	    
 	    for (String text : userInputStrings) {
+	    	System.out.println(text);
 	      Annotation annotation = new Annotation(text);
 	      annotation.set(CoreAnnotations.DocDateAnnotation.class, stringForToday);
 	      pipeline.annotate(annotation);
@@ -169,6 +171,7 @@ public abstract class NERParser {
 		//2014-10-24
 		//2014-02
 		//2014
+		
 		Date date = null;
 		try {
 			if (timeString.length() == 4) {
@@ -177,15 +180,14 @@ public abstract class NERParser {
 				date = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).parse(timeString);
 			} else if (timeString.length() == 10) {
 				date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(timeString);
-			} else if (timeString.length() == 15) {
+			} else if (timeString.length() == 16) {
 				if (timeString.charAt(10) == 'T') {
-					timeString.replace('T', ' ');
+					timeString = timeString.replace("T", " ");
 					date = new SimpleDateFormat("yyyy-MM-dd hh:00", Locale.ENGLISH).parse(timeString);
 				} else {
 					timeString = timeString.substring(0, 10);
 					date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(timeString);
 				}
-				date = new SimpleDateFormat("yyyy", Locale.ENGLISH).parse(timeString);
 			} else {
 				Constant.logger.log(Level.INFO, "unrecognized format: " + timeString);
 				//will return null
