@@ -10,6 +10,7 @@ tag	TAG
 with	TAG
 important	TAG
 .	O
+
 Buy	DESCRIPTION
 a	DESCRIPTION
 book	DESCRIPTION
@@ -20,20 +21,30 @@ medium	TAG
 ,	O
 next	DATE
 Friday	DATE
+18:00	DATE
+to	DATE
+20:00	DATE
 .	O
+
 Today	DATE
+,	O
+18:00	DATE
+to	DATE
+20:00	DATE
+,	O
 watch	DESCRIPTION
 lsm	DESCRIPTION
 webcast	DESCRIPTION
 tag	TAG
 with	TAG
 important	TAG
+
 Add	ADD
 today	DESCRIPTION
 group	DESCRIPTION
 meeting DESCRIPTION
 with	DESCRIPTION
 gaby	DESCRIPTION
-14	TIME
-:	TIME
-00	TIME
+14:00	DATE
+to	DATE
+18:00	DATE
