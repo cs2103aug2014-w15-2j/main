@@ -1,12 +1,52 @@
 package infrastructure;
 
+import java.util.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Scanner;
 
+import reference.CommandFailedException;
 import dataStructure.Task;
 
 public abstract class UtilityMethod {
 	private static Scanner scanner_ = new Scanner(System.in);
+	
+	public static int selectDifferentDate(Calendar c1, Calendar c2, Calendar c3) throws CommandFailedException {
+		Calendar today = Calendar.getInstance();
+		boolean c1same = c1.get(Calendar.YEAR) == today.get(Calendar.YEAR) && c1.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR);
+		boolean c2same = c2.get(Calendar.YEAR) == today.get(Calendar.YEAR) && c2.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR);
+		boolean c3same = c3.get(Calendar.YEAR) == today.get(Calendar.YEAR) && c3.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR);
+
+		if (c1same && c2same && c2same) {
+			return 1;
+		} else if (!c1same && c2same && c3same) {
+			return 1;
+		} else if (c1same && !c2same && c3same) {
+			return 2;
+		} else  if (c1same && c2same && !c3same) {
+			return 3;
+		} else {
+			throw new CommandFailedException("two dates are different from today");
+		}
+	}
+	
+	public static Calendar dateToCalendar(Date date){ 
+		if (date == null) {
+			return null;
+		} else {
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			return cal;
+		}
+	}
+	
+	public static Date selectEarlierDate(Date d1, Date d2) {
+		return d1.before(d2) ? d1 : d2;
+	}
+	
+	public static Date selectLaterDate(Date d1, Date d2) {
+		return d1.before(d2) ? d2 : d1;
+	}
 	
 	public static String readCommand() {
 		return scanner_.nextLine();
