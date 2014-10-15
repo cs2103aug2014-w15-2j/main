@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.LogManager;
 import java.util.logging.SimpleFormatter;
 
 import reference.*;
@@ -24,7 +24,7 @@ public class ListOfXiaoMing {
 
 	//a property to store the current user
 	private User user;
-	private static Logger logger = Logger.getLogger(ListOfXiaoMing.class.getName());
+	
 	
 	/**
 	 * Constructor
@@ -40,12 +40,12 @@ public class ListOfXiaoMing {
 	
 	//main
 	public static void main(String[] args) {
-
+		LogManager.getLogManager().reset();
 		try {
-			SimpleDateFormat format = new SimpleDateFormat("MMdd_HHmmss");
+			SimpleDateFormat format = new SimpleDateFormat("MMMMdd_HHmmss");
 			FileHandler handler = new FileHandler("main " + format.format(Calendar.getInstance().getTime())+ ".log");
 			handler.setFormatter(new SimpleFormatter());
-			logger.addHandler(handler);
+			Constant.logger.addHandler(handler);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,9 +60,9 @@ public class ListOfXiaoMing {
 			if (!((cached == "") || (cached == null))) {
 				System.out.println(cached);
 				list = new ListOfXiaoMing(cached);
-				logger.log(Level.INFO, "reading from cache: " + cached);
+				Constant.logger.log(Level.INFO, "reading from cache: " + cached);
 			} else {
-				logger.log(Level.INFO, "no cache exists");
+				Constant.logger.log(Level.INFO, "no cache exists");
 			}
 			
 			while (list == null) {
@@ -75,17 +75,17 @@ public class ListOfXiaoMing {
 					System.out.println(recordFilePath);
 					list = new ListOfXiaoMing(recordFilePath);
 					DataStore.cacheAccount(recordFilePath);
-					logger.log(Level.INFO, "user: " + recordFilePath + " -- has been cached");
+					Constant.logger.log(Level.INFO, "user: " + recordFilePath + " -- has been cached");
 				} else {
 					
 				}
 			}
 			
 			assert(list != null);
-			logger.log(Level.INFO, "List initiated successfully");
+			Constant.logger.log(Level.INFO, "List initiated successfully");
 			
 			UtilityMethod.showToUser(list.execute("display"));
-			logger.log(Level.INFO, "User tasks displayed");
+			Constant.logger.log(Level.INFO, "User tasks displayed");
 			
 			
 			boolean willContinue = true;
@@ -94,7 +94,7 @@ public class ListOfXiaoMing {
 				String result = list.execute(userInput);
 				if (result.equals(Constant.RETURN_VALUE_LOGGED_OUT)) {
 					willContinue = false;
-					logger.log(Level.INFO, "user log out");
+					Constant.logger.log(Level.INFO, "user log out");
 					UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY);
 				} else {
 					UtilityMethod.showToUser(result);

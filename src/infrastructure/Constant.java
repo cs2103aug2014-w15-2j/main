@@ -1,8 +1,12 @@
 package infrastructure;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
 public abstract class Constant {
+	
+	//logger
+	public static Logger logger = Logger.getLogger("ListOfXiaoMing");
 	
 	//prompt messages that will be printed for users
 	public static final String PROMPT_MESSAGE_WELCOME = "\n\nWelcome to 小鸣的清单(List of Xiao Ming)";
