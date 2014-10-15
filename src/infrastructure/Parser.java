@@ -217,11 +217,11 @@ public abstract class Parser {
 	}
 
 	
-	public static Pair parseCommandPair(String userInput) {
+	public static Pair<COMMAND_TYPE, ArrayList<String>> parseCommandPair(String userInput) {
 		ArrayList<String> parameterList = new ArrayList<String>(Arrays.asList(userInput.trim().split("@")));
 		COMMAND_TYPE thisCommand = determineCommandType(parameterList.get(0).trim());
 		parameterList.remove(0);
-		return new Pair(thisCommand, parameterList);
+		return new Pair<COMMAND_TYPE, ArrayList<String>>(thisCommand, parameterList);
 	}
 	
 	public static TimeInterval parseTimeInterval(String parameter) throws Exception {

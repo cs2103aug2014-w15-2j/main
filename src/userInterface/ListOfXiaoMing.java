@@ -41,6 +41,9 @@ public class ListOfXiaoMing {
 	//main
 	public static void main(String[] args) {
 		LogManager.getLogManager().reset();
+
+//		NERParser.parseTask("Add attend the group meeting this Saturday, 10am to 1pm");
+		
 		try {
 			SimpleDateFormat format = new SimpleDateFormat("MMMMdd_HHmmss");
 			FileHandler handler = new FileHandler("main " + format.format(Calendar.getInstance().getTime())+ ".log");
@@ -111,19 +114,18 @@ public class ListOfXiaoMing {
 	 * method to execute the system-level command like log in or log out
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static String executeUpperLevelCommand(String commandString) {
-		Pair commandPair = Parser.parseCommandPair(commandString);
+		Pair<COMMAND_TYPE, ArrayList<String>> commandPair = Parser.parseCommandPair(commandString);
 		COMMAND_TYPE thisCommand = (COMMAND_TYPE) commandPair.head;
-		Object parameter = commandPair.tail;
+		ArrayList<String> parameter = commandPair.tail;
 		
 		switch(thisCommand) {
 			case LOG_IN:
-				return User.userLogIn((ArrayList<String>)parameter);
+				return User.userLogIn(parameter);
 			
 			case CREATE_ACCOUNT:
 
-				UtilityMethod.showToUser(User.createAccount((ArrayList<String>)parameter));
+				UtilityMethod.showToUser(User.createAccount(parameter));
 				return null;
 		
 			case DELETE_ACCOUNT:	
@@ -151,11 +153,10 @@ public class ListOfXiaoMing {
 	
 //User level commands
 	
-	@SuppressWarnings("unchecked")
 	public String execute (String userInput) {
-		Pair commandPair = Parser.parseCommandPair(userInput);
-		COMMAND_TYPE thisCommand = (COMMAND_TYPE) commandPair.head;
-		ArrayList<String> parameterList = (ArrayList<String>) commandPair.tail;
+		Pair<COMMAND_TYPE, ArrayList<String>> commandPair = Parser.parseCommandPair(userInput);
+		COMMAND_TYPE thisCommand = commandPair.head;
+		ArrayList<String> parameterList = commandPair.tail;
 		
 		switch(thisCommand) {
 			case ADD:
