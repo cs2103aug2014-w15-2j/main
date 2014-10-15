@@ -170,6 +170,7 @@ public class Task {
 	 */
 	public void setDescription(String newDescription) {
 		try {
+			// isValicDescription(newDexcriptions);
 			this.description = newDescription;
 		} catch (Exception e) {
 
@@ -192,6 +193,7 @@ public class Task {
 	 */
 	public void setCategory(String newCategory) {
 		try {
+			// isValidCategory(newCategory);
 			this.category = newCategory;
 		} catch (Exception e) {
 
@@ -214,6 +216,7 @@ public class Task {
 	 */
 	public void setPriority(int newPriority) {
 		try {
+			// isValidPriority(new Priority);
 			this.priority = newPriority;
 		} catch (Exception e) {
 
@@ -245,7 +248,7 @@ public class Task {
 	 */
 	public void setRepeatedPeriod(int newRepeatedPeriod) {
 		try {
-			assert newRepeatedPeriod >= 0;
+			// isValidRepeatedPeriod(newRepeatedPeriod);
 			this.repeated_period = newRepeatedPeriod;
 		} catch (Exception e) {
 
@@ -268,6 +271,7 @@ public class Task {
 	 */
 	public void setTag(ArrayList<String> newTag) {
 		try {
+			// isValidTag(newTag);
 			this.tag = newTag;
 		} catch (Exception e) {
 
@@ -289,6 +293,7 @@ public class Task {
 	 */
 	public void setInterval(TimeInterval newInterval) {
 		try {
+			// isValidInterval(newInterval);
 			this.interval = newInterval;
 		} catch (Exception e) {
 
