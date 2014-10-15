@@ -1,19 +1,17 @@
 package dataStore;
 
-import infrastructure.Constant;
 import dataStructure.*;
 import infrastructure.Parser;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.FileNotFoundException;
 
 import org.json.simple.JSONArray;
+import org.json.JSONException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -21,19 +19,21 @@ import reference.TimeInterval;
 
 public class JSONtest {
 
-	public static void save(String username, String password, ArrayList<Task> tasks) throws IOException {
+	public static void save(String username, String password, ArrayList<Task> tasks) throws IOException, JSONException {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(username + ".json"));
+		
+		JSONArray taskList = new JSONArray();
 			
 		for (int i = 0; i < tasks.size(); i++) {
 			JSONObject task = representTask(tasks.get(i));
-			bw.write(task.toString());
-			bw.newLine();
+			taskList.add(task);
 		}
-
+		
+		bw.write(taskList.toString());
 		bw.close();
 	}
 	
-	private static JSONObject representTask(Task task) {
+	private static JSONObject representTask(Task task) throws JSONException {
 		JSONObject taskObj = new JSONObject();
 		
 		taskObj.put("task-id", task.getTaskId());
@@ -60,9 +60,14 @@ public class JSONtest {
 		JSONParser parser = new JSONParser();
 		JSONArray allTasks = (JSONArray) parser.parse(new FileReader(username + ".json"));
 		
-		Iterator<JSONObject> iterator = allTasks.iterator();
-		while(iterator.hasNext()) {
-			JSONObject task = (JSONObject) iterator.next();
+		if(allTasks == null) {
+			return tasks;
+		}
+		
+		JSONObject task;
+		
+		for(int i=0; i<allTasks.size(); i++) {
+			task = (JSONObject) allTasks.get(i);
 			Task newTask = getTask(task);
 			tasks.add(newTask);
 		}
@@ -75,17 +80,19 @@ public class JSONtest {
 		String task_id = (String) task.get("task-id");
 		String description = (String) task.get("description");
 		String category = (String) task.get("category");
-		int priority = (int) task.get("priority");
-		int repeated_period = (int) task.get("repeated-period");
+		int priority = ((Long) task.get("priority")).intValue();
+		int repeated_period = ((Long) task.get("repeated-period")).intValue();
 		
 		JSONArray tags = (JSONArray) task.get("tags");
 		ArrayList<String> tag = new ArrayList<String>();
-		Iterator<String> iterator = tags.iterator();
-		while(iterator.hasNext()) {
-			tag.add(iterator.next());
+		for(int i=0; i<tags.size(); i++) { 
+			tag.add((String)tags.get(i));
 		}
 		
-		TimeInterval interval = Parser.parseTimeInterval((String) task.get("interval"));
+		String intervalString = (String) task.get("interval");
+		
+		TimeInterval interval = (intervalString!=null)?Parser.parseTimeInterval((String) task.get("interval")):
+									new TimeInterval(null, null);
 		
 		return new Task(task_id, description, category, priority,
 				repeated_period, tag, interval);

@@ -8,4 +8,20 @@ public class Pair {
 		this.head = thisHead;
 		this.tail = thisTail;
 	}
+	
+	public void setHead(Object h){
+		this.head = h;
+	}
+	
+	public Object getHead(){
+		return this.head;
+	}
+	
+	public void setTail(Object t){
+		this.tail = t;
+	}
+	
+	public Object getTail(){
+		return this.tail;
+	}
 }

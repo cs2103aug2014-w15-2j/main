@@ -7,6 +7,7 @@ import dataStructure.Task;
 
 public abstract class UtilityMethod {
 	private static Scanner scanner_ = new Scanner(System.in);
+	
 	public static String readCommand() {
 		return scanner_.nextLine();
 	}

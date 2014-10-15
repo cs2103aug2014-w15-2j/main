@@ -1,8 +1,6 @@
 package dataStructure;
 
-import infrastructure.Constant;
-import infrastructure.UtilityMethod;
-
+import infrastructure.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -128,6 +126,7 @@ public class Task {
 			}
 			// to remove the last comma
 			tags = tags.substring(0, tags.length() - REDUCE_CHAR);
+			assert tags.charAt(tags.length()) != ',';
 		}
 		return tags;
 	}
@@ -146,7 +145,7 @@ public class Task {
 			task = task + "\n\t tags: " + tagToString() + ';';
 		}
 		
-//		task = task + Integer.toString(getRepeatedPeriod()) + '`'; TODO
+//		task = task + Integer.toString(getRepeatedPeriod()) + '`'; 
 		task = task + "\n\t priority: " + UtilityMethod.priorityToString(getPriority()) + ';';
 		task = task + this.getInterval().toString();
 

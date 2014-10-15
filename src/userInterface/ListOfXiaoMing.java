@@ -4,7 +4,14 @@ import infrastructure.Parser;
 import infrastructure.UtilityMethod;
 import infrastructure.Constant.COMMAND_TYPE;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import reference.*;
 import dataStore.*;
@@ -17,6 +24,7 @@ public class ListOfXiaoMing {
 
 	//a property to store the current user
 	private User user;
+	private static Logger logger = Logger.getLogger(ListOfXiaoMing.class.getName());
 	
 	/**
 	 * Constructor
@@ -32,12 +40,29 @@ public class ListOfXiaoMing {
 	
 	//main
 	public static void main(String[] args) {
+
+		try {
+			SimpleDateFormat format = new SimpleDateFormat("MMdd_HHmmss");
+			FileHandler handler = new FileHandler("main " + format.format(Calendar.getInstance().getTime())+ ".log");
+			handler.setFormatter(new SimpleFormatter());
+			logger.addHandler(handler);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		while (true) {
 			ListOfXiaoMing list = null;
 			String cached = DataStore.getCachedAccount();
 			if (!((cached == "") || (cached == null))) {
 				System.out.println(cached);
 				list = new ListOfXiaoMing(cached);
+				logger.log(Level.INFO, "reading from cache: " + cached);
+			} else {
+				logger.log(Level.INFO, "no cache exists");
 			}
 			
 			while (list == null) {
@@ -50,12 +75,18 @@ public class ListOfXiaoMing {
 					System.out.println(recordFilePath);
 					list = new ListOfXiaoMing(recordFilePath);
 					DataStore.cacheAccount(recordFilePath);
+					logger.log(Level.INFO, "user: " + recordFilePath + " -- has been cached");
+				} else {
+					
 				}
 			}
 			
-			
 			assert(list != null);
+			logger.log(Level.INFO, "List initiated successfully");
+			
 			UtilityMethod.showToUser(list.execute("display"));
+			logger.log(Level.INFO, "User tasks displayed");
+			
 			
 			boolean willContinue = true;
 			while (willContinue) {
@@ -63,6 +94,7 @@ public class ListOfXiaoMing {
 				String result = list.execute(userInput);
 				if (result.equals(Constant.RETURN_VALUE_LOGGED_OUT)) {
 					willContinue = false;
+					logger.log(Level.INFO, "user log out");
 					UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY);
 				} else {
 					UtilityMethod.showToUser(result);
@@ -156,13 +188,14 @@ public class ListOfXiaoMing {
 	}
 
 	private String add(ArrayList<String> taskParameters) {
-		Task taskToAdd = Parser.getTaskFromParameterList(taskParameters);
-		
-		assert(taskToAdd != null);
-		
-		
-		
-		return (this.user.add(taskToAdd)) ? "Task added!" : "Failed to add task";
+		Task taskToAdd;
+		try {
+			taskToAdd = Parser.getTaskFromParameterList(taskParameters);
+			assert(taskToAdd != null);
+			return (this.user.add(taskToAdd)) ? "Task added!" : "Failed to add task";
+		} catch (CommandFailedException e) {
+			return e.toString();
+		}
 	}
 	
 	
@@ -262,7 +295,7 @@ public class ListOfXiaoMing {
 			ArrayList<Task> queryResult = this.user.find(thisConstraint);
 			String queryResultString =  UtilityMethod.taskListToString(queryResult);
 			if (queryResultString.equals("")) {
-				return "--- no task found ---      _(:з」∠)_ ";
+				return "--- no task found ---";
 			} else {
 				return queryResultString;
 			}
