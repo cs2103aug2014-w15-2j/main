@@ -143,7 +143,7 @@ public class Task {
 			task = task + "\n\t tags: " + toStringAddTags() + ';';
 		}
 		
-//		task = task + Integer.toString(getRepeatedPeriod()) + '`'; TODO
+//		task = task + Integer.toString(getRepeatedPeriod()) + '`'; 
 		task = task + "\n\t priority: " + UtilityMethod.priorityToString(getPriority()) + ';';
 		task = task + this.getInterval().toString();
 
