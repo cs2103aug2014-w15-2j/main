@@ -13,7 +13,7 @@
   { (/halloween/ ) => IsoDate(NIL, 10, 31) }
   { (/x-?mas|christmas/ /eve/ ) => IsoDate(NIL, 12, 24) }
   { (/x-?mas|christmas/ /day/? ) => IsoDate(NIL, 12, 25) }
-
+  { (/H-?ari/ $POSS /R-?aya/ $POSS /H-?aji/) => IsoDate(NIL, 10, 5) }
 
   { (/martin/ /luther/ /king/ /day/ | /mlk/ /day/) => JH_MARTIN_LUTHER_KING }
   { (/memorial/ /day/) => JH_MEMORIAL }
