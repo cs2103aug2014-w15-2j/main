@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="C:/Users/Gabriella/Documents/NUS/2103/main/json_simple.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Gabriella/Documents/NUS/2103/main/java-json.jar"/>
 	<classpathentry kind="lib" path="src/library/stanford-ner.jar"/>
+	<classpathentry kind="lib" path="src/library/java-json.jar"/>
+	<classpathentry kind="lib" path="src/library/json_simple.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
