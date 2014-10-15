@@ -75,7 +75,7 @@ public class TimeInterval {
 	 */
 	public String toString() {
 		String text = new String();
-		if (this.getStartDate().equals(Constant.FLOATING_START_DATE)) {
+		if (this.getEndDate().equals(Constant.FLOATING_END_DATE)) {
 			// floating task, do nothing
 		} else if (this.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 			// deadline task
