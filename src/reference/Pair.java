@@ -1,27 +1,27 @@
 package reference;
 
-public class Pair {
-	public Object head;
-	public Object tail;
+public class Pair<Object1, Object2> {
+	public Object1 head;
+	public Object2 tail;
 	
-	public Pair(Object thisHead, Object thisTail) {
+	public Pair(Object1 thisHead, Object2 thisTail) {
 		this.head = thisHead;
 		this.tail = thisTail;
 	}
 	
-	public void setHead(Object h){
+	public void setHead(Object1 h){
 		this.head = h;
 	}
 	
-	public Object getHead(){
+	public Object1 getHead(){
 		return this.head;
 	}
 	
-	public void setTail(Object t){
+	public void setTail(Object2 t){
 		this.tail = t;
 	}
 	
-	public Object getTail(){
+	public Object2 getTail(){
 		return this.tail;
 	}
 }
