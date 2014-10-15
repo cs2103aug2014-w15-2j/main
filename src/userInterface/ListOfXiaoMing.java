@@ -188,10 +188,14 @@ public class ListOfXiaoMing {
 	}
 
 	private String add(ArrayList<String> taskParameters) {
-		Task taskToAdd = Parser.getTaskFromParameterList(taskParameters);
-		
-		assert(taskToAdd != null);
-		return (this.user.add(taskToAdd)) ? "Task added!" : "Failed to add task";
+		Task taskToAdd;
+		try {
+			taskToAdd = Parser.getTaskFromParameterList(taskParameters);
+			assert(taskToAdd != null);
+			return (this.user.add(taskToAdd)) ? "Task added!" : "Failed to add task";
+		} catch (CommandFailedException e) {
+			return e.toString();
+		}
 	}
 	
 	

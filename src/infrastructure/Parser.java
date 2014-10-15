@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import reference.CommandFailedException;
 import reference.Pair;
 import reference.TimeInterval;
 import dataStructure.Task;
@@ -125,7 +126,7 @@ public abstract class Parser {
 	}
 	
 	
-	public static Task getTaskFromParameterList(ArrayList<String> parameterList) {
+	public static Task getTaskFromParameterList(ArrayList<String> parameterList) throws CommandFailedException {
 		TimeInterval timeInterval = new TimeInterval();
 		String category = null; 
 		int priority = Constant.PRIORITY_DEFAULT;
@@ -191,7 +192,7 @@ public abstract class Parser {
 					} else {
 						int tempRepeatedPeriod = parseRepeatedPeriod(value);
 						if (tempRepeatedPeriod == Constant.REPEATED_PERIOD_INVALID) {
-							UtilityMethod.showToUser("invalid repeat format: it should be 'repeat daily/weekly/monthly'");
+							throw new CommandFailedException("invalid repeat format: it should be 'repeat daily/weekly/monthly'");
 						} else {
 							repeatedPeriod = tempRepeatedPeriod;
 							hasRepeatedPeriod = true;
