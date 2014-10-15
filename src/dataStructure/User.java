@@ -1,5 +1,8 @@
 package dataStructure;
 
+import infrastructure.Constant;
+import infrastructure.UtilityMethod;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,10 +14,10 @@ import reference.*;
 
 public class User {
 	
-	ArrayList<Task> currentTasks;
-	Stack<ArrayList<Task>> undoable;
-	Stack<ArrayList<Task>> redoable;
-	String username;
+	private ArrayList<Task> currentTasks;
+	private Stack<ArrayList<Task>> undoable;
+	private Stack<ArrayList<Task>> redoable;
+	private String username;
 
 	/**
 	 * constructor
@@ -157,7 +160,7 @@ public class User {
 	 * @return
 	 * @throws CommandFailedException
 	 */
-	public String getTaskIdByIndex(int index) throws CommandFailedException {
+	private String getTaskIdByIndex(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
@@ -228,6 +231,123 @@ public class User {
 	 * @return
 	 */
 	public ArrayList<Task> getTaskList() {
-		return this.currentTasks;
+		ArrayList<Task> nonTrashedTasks = new ArrayList<Task>();
+		for (Task task: this.currentTasks) {
+			Iterator<String> tagIterator = task.getTag().iterator();
+			boolean isTrashed = false;
+			while (tagIterator.hasNext()) {
+				if (tagIterator.next().toLowerCase().contains(Constant.TRASHED_TAG)) {
+					isTrashed = true;
+				}
+			}
+			
+			if (!isTrashed) {
+				nonTrashedTasks.add(task);
+			}
+		}
+		return nonTrashedTasks;
+	}
+	
+	
+	
+	//system level static methods
+	
+	
+	
+	public static String deleteAccount() {
+		UtilityMethod.showToUser("Please enter the username of the account you want to delete: ");
+		String username = UtilityMethod.readCommand();
+		UtilityMethod.showToUser("Please enter the password to confirm: ");
+		String password = UtilityMethod.readCommand();
+		boolean isDeleteSuccessfully = DataStore.destroy(username, password);
+		return isDeleteSuccessfully ? "deleted!" : "deletion failed";
+	}
+	
+	public static String userLogIn(ArrayList<String> parameters) {
+		String username = null;
+		String password = null;
+		
+		if (parameters.size() >= 1) {
+			username = parameters.get(0);
+			if (parameters.size() >= 2) {
+				password = parameters.get(1);
+			}
+		}
+		
+		while (username == null) {
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME);
+			String inputUsername = UtilityMethod.readCommand();
+			if (!DataStore.isAccountExisting(inputUsername)) {
+				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_NOT_EXIST);
+				 if (!UtilityMethod.readCommand().equalsIgnoreCase("Y")) {
+					return Constant.RETURN_VALUE_LOG_IN_CANCELLED;
+				 }
+			} else {
+				username = inputUsername;
+			}
+		}
+			
+		while (password == null) {
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_PASSWORD);
+			password = UtilityMethod.readCommand();
+		}
+		
+		int incorrectPasswordCount = 0;
+		while (!DataStore.authenticate(username, password)) {
+			incorrectPasswordCount++;
+			if (incorrectPasswordCount >= 3) {
+				return Constant.RETURN_VALUE_AUTHENTICATION_FAILED;
+			}
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_PASSWORD_INCORRECT);
+			password = UtilityMethod.readCommand();
+		}
+		
+		return username;
+	}
+	
+	public static String createAccount(ArrayList<String> parameters) {
+		String username = null;
+		String passwordInput1 = null;
+		String passwordInput2 = null;
+		
+		if (parameters.size() >= 1) {
+			username = parameters.get(0);
+		}
+		
+		while (username == null) {
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME);
+			String inputUsername = UtilityMethod.readCommand();
+			if (DataStore.isAccountExisting(inputUsername)) {
+				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_EXIST);
+				 if (!UtilityMethod.readCommand().equalsIgnoreCase("Y")) {
+					return Constant.RETURN_VALUE_LOG_IN_CANCELLED;
+				 }
+			} else {
+				username = inputUsername;
+			}
+		}
+		
+		while(!(passwordInput1 != null && passwordInput2 != null && passwordInput1.equals(passwordInput2))) {
+			passwordInput1 = null;
+			passwordInput2 = null;
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_PASSWORD);
+			passwordInput1 = UtilityMethod.readCommand();
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_ENTER_AGAIN);
+			passwordInput2 = UtilityMethod.readCommand();
+		}
+		
+		boolean successCreated = DataStore.createAccount(username, passwordInput1);
+		return successCreated ?  Constant.PROMPT_MESSAGE_ACCOUNT_CREATED: Constant.PROMPT_MESSAGE_ACCOUNT_NOT_CREATED;
+	}
+	
+	
+	public static String showHelp(){
+		
+		return "'Help' has not been implemented yet";
+	}
+	
+	public static void exit() {
+		UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_SESSION_END);
+		System.exit(0);
 	}
 }

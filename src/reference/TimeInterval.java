@@ -1,9 +1,9 @@
-package dataStructure;
+package reference;
+
+import infrastructure.Constant;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import reference.*;
 
 public class TimeInterval {
 	private Date startDate;

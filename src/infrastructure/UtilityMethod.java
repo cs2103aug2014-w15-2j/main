@@ -1,12 +1,13 @@
-package reference;
+package infrastructure;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import dataStructure.Task;
 
-public class UtilityMethod {
+public abstract class UtilityMethod {
 	private static Scanner scanner_ = new Scanner(System.in);
+	
 	public static String readCommand() {
 		return scanner_.nextLine();
 	}
@@ -35,9 +36,9 @@ public class UtilityMethod {
 		String returnValue = "";
 		for (int i = 0; i < list.size(); i++) {
 			if (i == 0) {
-				returnValue = (i+1) + ". " + list.get(i).toDisplayedString();
+				returnValue = (i+1) + ". " + list.get(i).toStringForDisplaying();
 			} else {
-				returnValue = returnValue + "\n" + (i+1) + ". " + list.get(i).toDisplayedString();
+				returnValue = returnValue + "\n" + (i+1) + ". " + list.get(i).toStringForDisplaying();
 			}
 		}
 		
@@ -62,7 +63,7 @@ public class UtilityMethod {
 	 * @return
 	 */
 	public static String removeFirstWord(String userCommand) {
-		return userCommand.replace(getFirstWord(userCommand), "").trim();
+		return userCommand.replaceFirst(getFirstWord(userCommand), "").trim();
 	}
 	
 	

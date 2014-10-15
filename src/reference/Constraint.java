@@ -1,9 +1,11 @@
-package dataStructure;
+package reference;
+
+import infrastructure.Constant;
 
 import java.util.Date;
 import java.util.Iterator;
 
-import reference.*;
+import dataStructure.Task;
 
 public class Constraint {
 	public String keyword;

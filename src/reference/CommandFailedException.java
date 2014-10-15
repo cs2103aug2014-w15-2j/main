@@ -1,6 +1,11 @@
-package dataStructure;
+package reference;
 
 public class CommandFailedException extends Exception {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	//Parameterless Constructor
     public CommandFailedException() {
