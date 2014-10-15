@@ -245,6 +245,7 @@ public class Task {
 	 */
 	public void setRepeatedPeriod(int newRepeatedPeriod) {
 		try {
+			assert newRepeatedPeriod >= 0;
 			this.repeated_period = newRepeatedPeriod;
 		} catch (Exception e) {
 
