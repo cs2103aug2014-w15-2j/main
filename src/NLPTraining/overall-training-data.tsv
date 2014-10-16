@@ -1,4 +1,4 @@
-Add	ADD
+Add	COMMAND
 I’m	DESCRIPTION
 going	DESCRIPTION
 to	DESCRIPTION
@@ -39,7 +39,7 @@ tag	TAG
 with	TAG
 important	TAG
 
-Add	ADD
+Add	COMMAND
 today	DESCRIPTION
 group	DESCRIPTION
 meeting DESCRIPTION
