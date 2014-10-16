@@ -13,47 +13,46 @@ import edu.stanford.nlp.time.TimeAnnotator;
 import edu.stanford.nlp.time.TimeExpression;
 import edu.stanford.nlp.util.CoreMap;
 
+import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+
 
 
 public abstract class NERParser {
-	static AbstractSequenceClassifier<CoreLabel> classifier = CRFClassifier.getClassifierNoExceptions("NLPTraining/ner-model.ser.gz");
+	static AbstractSequenceClassifier<CoreLabel> classifierOverall = CRFClassifier.getClassifierNoExceptions("NLPTraining/overall-ner-model.ser.gz");
+	static AbstractSequenceClassifier<CoreLabel> classifierTag = CRFClassifier.getClassifierNoExceptions("NLPTraining/tag-ner-model.ser.gz");
+	static AbstractSequenceClassifier<CoreLabel> classifierCommand = CRFClassifier.getClassifierNoExceptions("NLPTraining/command-ner-model.ser.gz");
 	
-	public static Task parseTask (String userInput) {
+	public static Task parseTask (String userInput) throws CommandFailedException {
 		String xmlString = parseToXML(userInput);
-		ArrayList<Pair<String, String>> xmlList = parseToMap(xmlString);
-		ArrayList<String> dateList = new ArrayList<String>();
-		ArrayList<String> descriptionList = new ArrayList<String>();
-		ArrayList<String> tagList = new ArrayList<String>();
 		
-		for (Pair<String, String> p : xmlList) {
-			if (p.getHead().equals("DATE")) {
-				dateList.add(p.getTail());
-			} else if (p.getHead().equals("DESCRIPTION")){
-				descriptionList.add(p.getTail());
-			} else if (p.getHead().equals("TAG")){
-				tagList.add(p.getTail());
+		
+		HashMap<String, ArrayList<String>> xmlMap = parseToMap(xmlString);
+		for (String key : xmlMap.keySet()) {
+			if (key.equals("COMMAND")) {
+				System.out.println("COMMAND: " + parseCommand(xmlMap.get(key)));
+			} else if (key.equals("TAG")) {
+				System.out.println("TAG: " + parseTag(xmlMap.get(key)));
+			} else if (key.equals("DATE")) {
+				System.out.println("Time Interval: " + parseTimeInterval(xmlMap.get(key)));
+			} else {
+				System.out.println(key + ": " + xmlMap.get(key));	
 			}
-		}
-		
-		
-		//Temp test, will be removed later
-		try {
-			TimeInterval a = NERParser.parseTimeInterval(dateList);
-			System.out.println("Description: \t" + descriptionList.get(0));
-			System.out.println("Time: \t\t" + a);
-		} catch (CommandFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		return null;
@@ -70,7 +69,14 @@ public abstract class NERParser {
 	 */
 	public static String parseToXML (String content) {
 		//parse the content to XML format, no reservation for spaces
-		return classifier.classifyToString(content, "inlineXML", false);
+		return classifierOverall.classifyToString(content, "inlineXML", false);
+	}
+
+	public static Document loadXMLFromString(String xml) throws Exception {
+	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	    DocumentBuilder builder = factory.newDocumentBuilder();
+	    InputSource is = new InputSource(new StringReader(xml));
+	    return builder.parse(is);
 	}
 	
 	
@@ -79,27 +85,40 @@ public abstract class NERParser {
 	 * @param xmlString
 	 * @return
 	 */
-	private static ArrayList<Pair<String, String>> parseToMap(String xmlString) {
+	private static HashMap<String, ArrayList<String>> parseToMap(String xmlString) {
 		assert(xmlString != null);
 		assert(xmlString.length() > 5);
 		
+		HashMap<String, ArrayList<String>> taskMap = new HashMap<String, ArrayList<String>>();
+		taskMap.put("COMMAND", new ArrayList<String>());
 		//get rid of the first and last character
 		xmlString = xmlString.substring(1, xmlString.length()-2);
-		String[] xmlSegments = xmlString.split("> <");
-		ArrayList<Pair<String, String>> results = new ArrayList<Pair<String, String>>();
+		String[] xmlSegments = xmlString.split("</");
+		//string format: ADD>Add, ADD> <DESCRIPTION> ... , DESCRIPTION> <DATE>...
 		
-		for (String segment : xmlSegments) {
-			//segment format should be like ADD>Add</ADD
+		
+		int NumberOfSegments = xmlSegments.length-1;
+		
+		for (int i = 0; i < NumberOfSegments; i++) {
+			String segment = xmlSegments[i];
+			String nextSegment = xmlSegments[i+1];
+			String key = nextSegment.substring(0, nextSegment.indexOf(">"));
+			String temp = segment.replaceFirst(segment.substring(0, segment.indexOf(">") + 1), "");
 			
-			String key = segment.substring(0, segment.indexOf('>'));
-			//key format should be like ADD
+			String value = null;
+			if (temp.indexOf(">") != -1) {
+				value = temp.replaceFirst(temp.substring(0, temp.indexOf(">") + 1), "");
+			} else {
+				value = temp;
+			}
 			
-			String value = segment.replace(key + ">", "").replace("</" + key, "");
-			//value format should be like Add
-			
-			results.add(new Pair<String, String>(key, value));
+			if (taskMap.get(key) == null) {
+				taskMap.put(key, new ArrayList<String>());
+			}
+			taskMap.get(key).add(value);
 		}
-		return results;
+		
+		return taskMap;
 	}
 	
 	
@@ -219,7 +238,47 @@ public abstract class NERParser {
 		return date;
 	}
 	
+
 	
+	private static ArrayList<String> parseTag(ArrayList<String> tagMines) {
+		
+		ArrayList<String> results = new ArrayList<String>();
+		
+		for (String tagMine : tagMines) {
+			String parsedTagString = classifierTag.classifyToString(tagMine, "inlineXML", false);
+			HashMap<String, ArrayList<String>> tagMap = parseToMap(parsedTagString);
+			ArrayList<String> tagList = tagMap.get("TAG");
+			if (tagList != null) {
+				for (String tag: tagList) {
+					results.add(tag);
+				}
+			}
+		}
+		
+		return results;
+	}
+	
+	private static String parseCommand(ArrayList<String> commands) throws CommandFailedException {
+		
+		ArrayList<String> results = new ArrayList<String>();
+		
+		for (String cmd : commands) {
+			String parsedTagString = classifierCommand.classifyToString(cmd, "inlineXML", false);
+			HashMap<String, ArrayList<String>> cmdMap = parseToMap(parsedTagString);
+			for (String command: cmdMap.keySet()) {
+				if (!command.equals("COMMAND")) {
+					results.add(command);
+				}
+			}
+		}
+		
+		if (results.size() >= 1) {
+			return results.get(0);
+		} else {
+			return "ADD";
+		}
+		
+	}
 	
 	
 	

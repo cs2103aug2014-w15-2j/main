@@ -1,5 +1,6 @@
 package userInterface;
 import infrastructure.Constant;
+//import infrastructure.NERParser;
 import infrastructure.Parser;
 import infrastructure.UtilityMethod;
 import infrastructure.Constant.COMMAND_TYPE;
@@ -42,7 +43,12 @@ public class ListOfXiaoMing {
 	public static void main(String[] args) {
 		LogManager.getLogManager().reset();
 
-//		NERParser.parseTask("Add attend the group meeting this Saturday, 10am to 1pm");
+//		try {
+//			NERParser.parseTask("Add attend the group meeting this Saturday, 10am to 1pm, tag with important, urgent");
+//		} catch (CommandFailedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		try {
 			SimpleDateFormat format = new SimpleDateFormat("MMMMdd_HHmmss");
