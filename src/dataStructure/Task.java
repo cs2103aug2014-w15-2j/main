@@ -315,6 +315,7 @@ public class Task {
 			return true;
 		}
 	}
+	
 	/**
 	 * check whether a category is valid
 	 * 
@@ -329,11 +330,18 @@ public class Task {
 		}
 	}
 	
+	/**
+	 * check whether a priority is valid
+	 * 
+	 * @param priority
+	 * @return
+	 */
 	private boolean isValidPriority(int priority){
-		if () {
-			
+		// Todo
+		if (priority < 1 || priority > 3) {
+			return false;
 		} else {
-			
+			return true;
 		}
 	}
 	
