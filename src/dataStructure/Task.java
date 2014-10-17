@@ -248,7 +248,7 @@ public class Task {
 	 */
 	public void setRepeatedPeriod(int newRepeatedPeriod) {
 		try {
-			// isValidRepeatedPeriod(newRepeatedPeriod);
+			isValidRepeatedPeriod(newRepeatedPeriod);
 			this.repeated_period = newRepeatedPeriod;
 		} catch (Exception e) {
 
@@ -337,14 +337,26 @@ public class Task {
 	 * @return
 	 */
 	private boolean isValidPriority(int priority){
-		// Todo
-		if (priority < 1 || priority > 3) {
+		if (priority < 0 || priority > 3) {
 			return false;
 		} else {
 			return true;
 		}
 	}
 	
+	/**
+	 * check whether a repeated period is valid
+	 * 
+	 * @param repeatedPeriod
+	 * @return
+	 */
+	private boolean isValidRepeatedPeriod(int repeatedPeriod){
+		if (repeatedPeriod < 1 || repeatedPeriod > 4) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 	/**
 	 * isFloating check whether the task is floating task, i.e. there is no start date or end date for it
 	 * 
