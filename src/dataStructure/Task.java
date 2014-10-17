@@ -193,7 +193,7 @@ public class Task {
 	 */
 	public void setCategory(String newCategory) {
 		try {
-			// isValidCategory(newCategory);
+			isValidCategory(newCategory);
 			this.category = newCategory;
 		} catch (Exception e) {
 
@@ -216,7 +216,7 @@ public class Task {
 	 */
 	public void setPriority(int newPriority) {
 		try {
-			// isValidPriority(new Priority);
+			isValidPriority(newPriority);
 			this.priority = newPriority;
 		} catch (Exception e) {
 
@@ -302,11 +302,38 @@ public class Task {
 	
 	// check validity of attributes
 	
+	/**
+	 * check whether a description is valid
+	 * 
+	 * @param description
+	 * @return
+	 */
 	private boolean isValidDescription(String description){
 		if (description.equals(null) || description.equals("")) {
 			return false;
 		} else {
 			return true;
+		}
+	}
+	/**
+	 * check whether a category is valid
+	 * 
+	 * @param category
+	 * @return
+	 */
+	private boolean isValidCategory(String category){
+		if (description.equals(null) || description.equals("")) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	private boolean isValidPriority(int priority){
+		if () {
+			
+		} else {
+			
 		}
 	}
 	

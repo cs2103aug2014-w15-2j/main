@@ -22,7 +22,7 @@ public class TimeInterval {
 			
 		} else if (startDate == null) {
 			this.startDate = Constant.DEADLINE_START_DATE;
-		} else if (startDate.after(endDate)) {
+		} else if (!isValid(startDate, endDate)) {
 			throw new CommandFailedException("invalid time interval");
 		} else {
 			this.startDate = startDate;
@@ -52,6 +52,13 @@ public class TimeInterval {
 		return this.endDate;
 	}
 	
+	public static boolean isValid(Date startDate, Date endDate){
+		if (startDate.after(endDate)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 	/**
 	 * isOverlapped
 	 * @param firstInterval
