@@ -170,7 +170,7 @@ public class Task {
 	 */
 	public void setDescription(String newDescription) {
 		try {
-			// isValicDescription(newDexcriptions);
+			isValidDescription(newDescription);
 			this.description = newDescription;
 		} catch (Exception e) {
 
@@ -297,6 +297,16 @@ public class Task {
 			this.interval = newInterval;
 		} catch (Exception e) {
 
+		}
+	}
+	
+	// check validity of attributes
+	
+	private boolean isValidDescription(String description){
+		if (description.equals(null) || description.equals("")) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 	
