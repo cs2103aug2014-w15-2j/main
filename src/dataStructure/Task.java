@@ -373,6 +373,7 @@ public class Task {
 			return true;
 		}
 	}
+	
 	/**
 	 * check whether all tags in a tag list are valid
 	 * 
@@ -387,6 +388,23 @@ public class Task {
 		}
 		return true;
 	}
+	
+	/**
+	 * check whether a interval is valid
+	 * 
+	 * @param interval
+	 * @return
+	 */
+	private boolean isValidInterval(TimeInterval interval){
+		if (interval.equals(null)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	// check task type
+	
 	/**
 	 * isFloating check whether the task is floating task, i.e. there is no start date or end date for it
 	 * 
