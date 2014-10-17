@@ -153,6 +153,15 @@ public class User {
 	}
 
 	/**
+	 * show a joke to user
+	 */
+	public void showJoke(){
+		System.out.println("How can you expect a Todo-List software to provide you a joke!😨");
+		System.out.println("This function is actually the joke.");
+		System.out.println("If you really want some, go to jokes.cc.com ☺️");
+	}
+	
+	/**
 	 * getTaskIdByIndex
 	 * 
 	 * @param index
