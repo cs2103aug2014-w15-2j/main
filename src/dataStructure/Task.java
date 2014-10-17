@@ -271,7 +271,7 @@ public class Task {
 	 */
 	public void setTag(ArrayList<String> newTag) {
 		try {
-			// isValidTag(newTag);
+			isValidTag(newTag);
 			this.tag = newTag;
 		} catch (Exception e) {
 
@@ -293,7 +293,7 @@ public class Task {
 	 */
 	public void setInterval(TimeInterval newInterval) {
 		try {
-			// isValidInterval(newInterval);
+			isValidInterval(newInterval);
 			this.interval = newInterval;
 		} catch (Exception e) {
 
@@ -337,7 +337,7 @@ public class Task {
 	 * @return
 	 */
 	private boolean isValidPriority(int priority){
-		if (priority < 0 || priority > 3) {
+		if (priority < 1 || priority > 3) {
 			return false;
 		} else {
 			return true;
@@ -356,6 +356,29 @@ public class Task {
 		} else {
 			return true;
 		}
+	}
+	/**
+	 * check whether a list of tag is valid
+	 * @param tag
+	 * @return
+	 */
+	private boolean isValidTag(ArrayList<String> tag){
+		if (tag.equals(null) || tag.contains(null) || tag.contains("")) {
+			return false;
+		} else if (!isValidOneTag(tag)) {
+			return false;
+		}	else {	
+			return true;
+		}
+	}
+	
+	private boolean isValidOneTag(ArrayList<String> tags){
+		for(String tag : tags){
+			if (tag.contains(" ")){
+				return false;
+			}
+		}
+		return true;
 	}
 	/**
 	 * isFloating check whether the task is floating task, i.e. there is no start date or end date for it
