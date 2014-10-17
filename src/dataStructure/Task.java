@@ -357,8 +357,10 @@ public class Task {
 			return true;
 		}
 	}
+	
 	/**
 	 * check whether a list of tag is valid
+	 * 
 	 * @param tag
 	 * @return
 	 */
@@ -371,7 +373,12 @@ public class Task {
 			return true;
 		}
 	}
-	
+	/**
+	 * check whether all tags in a tag list are valid
+	 * 
+	 * @param tags
+	 * @return
+	 */
 	private boolean isValidOneTag(ArrayList<String> tags){
 		for(String tag : tags){
 			if (tag.contains(" ")){
