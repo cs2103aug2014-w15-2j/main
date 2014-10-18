@@ -1,7 +1,6 @@
 package dataStore;
 
 import infrastructure.Constant;
-import infrastructure.Parser;
 import dataStore.JSONtest;
 
 import java.io.BufferedReader;
@@ -64,6 +63,7 @@ public abstract class DataStore {
 			return false;
 		}
 		try {
+			
 			File account = new File(username);
 			account.createNewFile();
 
@@ -76,6 +76,7 @@ public abstract class DataStore {
 
 			File accountJSON = new File(username + ".json");
 			accountJSON.createNewFile();
+			save(username, null);
 
 			return true;
 		} catch (IOException e) {
@@ -117,6 +118,7 @@ public abstract class DataStore {
 		}
 		try {
 			String password = getPassword(username);
+			
 			BufferedWriter bw = new BufferedWriter(new FileWriter(username));
 
 			bw.write(password);
@@ -129,11 +131,12 @@ public abstract class DataStore {
 					bw.write(tasks.get(i).toString());
 					bw.newLine();
 				}
-				JSONtest.save(username, password, tasks);
 			}
 
 			bw.close();
-
+			
+			JSONtest.save(username, password, tasks);
+			
 			return true;
 		} catch (IOException e) {
 			return false;
