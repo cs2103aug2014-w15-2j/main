@@ -32,6 +32,7 @@ public class User {
 		undoable = new Stack<ArrayList<Task>>();
 		redoable = new Stack<ArrayList<Task>>();
 		currentTasks = DataStore.getCurrentTasks(userFile);
+		validCategory = getValidCategory();
 		username = recordFilePath;
 	}
 
@@ -152,7 +153,23 @@ public class User {
 		}
 		DataStore.save(this.username, this.currentTasks);
 	}
-
+	
+	/**
+	 * get valid categories from current tasks' categories
+	 * 
+	 * @return
+	 */
+	private ArrayList<String> getValidCategory(){
+		ArrayList<String> validCategory = new ArrayList<String>();
+		if(currentTasks.equals(null) || currentTasks.isEmpty()){
+			
+		} else {
+			for(Task task : currentTasks){
+				validCategory.add(task.getCategory());
+			}
+		}
+		return validCategory;
+	}
 	/**
 	 * create a new category
 	 * @param category
@@ -179,6 +196,7 @@ public class User {
 			validCategory.remove(category);
 		}
 	}
+	
 	/**
 	 * show a joke to user
 	 */
