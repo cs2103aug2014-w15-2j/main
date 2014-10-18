@@ -1,14 +1,15 @@
 package dataStore;
 
 import static org.junit.Assert.*;
-
 import infrastructure.Constant;
 
 import java.io.File;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 
 import org.junit.Test;
 
@@ -73,6 +74,18 @@ public class DataStoreTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testGetCurrentTask() {
+		DataStore.createAccount("testFile", "thisIsJustATestFile");
+		File testFile = new File("testFile");
+		try {
+			assertEquals(0, DataStore.getCurrentTasks(testFile).size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		testFile.delete();
 	}
 
 }
