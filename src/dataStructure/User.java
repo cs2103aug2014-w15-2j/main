@@ -15,6 +15,7 @@ import reference.*;
 public class User {
 	
 	private ArrayList<Task> currentTasks;
+	private ArrayList<String> validCategory;
 	private Stack<ArrayList<Task>> undoable;
 	private Stack<ArrayList<Task>> redoable;
 	private String username;
@@ -31,6 +32,7 @@ public class User {
 		undoable = new Stack<ArrayList<Task>>();
 		redoable = new Stack<ArrayList<Task>>();
 		currentTasks = DataStore.getCurrentTasks(userFile);
+		validCategory = getValidCategory();
 		username = recordFilePath;
 	}
 
@@ -134,7 +136,7 @@ public class User {
 				
 				if (currentAttribute.equals("description")) {
 					task.setDescription((String) currentObject);
-				} else if (currentAttribute.equals("category")) {
+				} else if (currentAttribute.equals("category") && validCategory.contains((String) currentObject)) {
 					task.setCategory((String) currentObject);
 				} else if (currentAttribute.equals("priority")) {
 					task.setPriority((int) currentObject);
@@ -151,7 +153,50 @@ public class User {
 		}
 		DataStore.save(this.username, this.currentTasks);
 	}
-
+	
+	/**
+	 * get valid categories from current tasks' categories
+	 * 
+	 * @return
+	 */
+	private ArrayList<String> getValidCategory(){
+		ArrayList<String> validCategory = new ArrayList<String>();
+		if(currentTasks.equals(null) || currentTasks.isEmpty()){
+			
+		} else {
+			for(Task task : currentTasks){
+				validCategory.add(task.getCategory());
+			}
+		}
+		return validCategory;
+	}
+	/**
+	 * create a new category
+	 * @param category
+	 * @throws CommandFailedException
+	 */
+	public void createCategory(String category) throws CommandFailedException{
+		if (validCategory.contains(category)) {
+			throw new CommandFailedException("invalid category");
+		} else {
+			validCategory.add(category);
+		}
+	}
+	
+	/**
+	 * delete a category
+	 *  
+	 * @param category
+	 * @throws CommandFailedException
+	 */
+	public void deleteCategory(String category) throws CommandFailedException{
+		if (!validCategory.contains(category)) {
+			throw new CommandFailedException("no such category");
+		} else {
+			validCategory.remove(category);
+		}
+	}
+	
 	/**
 	 * show a joke to user
 	 */

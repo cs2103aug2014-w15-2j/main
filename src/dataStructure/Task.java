@@ -1,6 +1,7 @@
 package dataStructure;
 
 import infrastructure.*;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -216,8 +217,11 @@ public class Task {
 	 */
 	public void setPriority(int newPriority) {
 		try {
-			isValidPriority(newPriority);
-			this.priority = newPriority;
+			if(isValidPriority(newPriority)){
+				this.priority = newPriority;
+			} else {
+				throw new CommandFailedException();
+			}
 		} catch (Exception e) {
 
 		}
@@ -248,8 +252,11 @@ public class Task {
 	 */
 	public void setRepeatedPeriod(int newRepeatedPeriod) {
 		try {
-			isValidRepeatedPeriod(newRepeatedPeriod);
-			this.repeated_period = newRepeatedPeriod;
+			if(isValidRepeatedPeriod(newRepeatedPeriod)){
+				this.repeated_period = newRepeatedPeriod;
+			} else {
+				throw new CommandFailedException();
+			}
 		} catch (Exception e) {
 
 		}
@@ -271,8 +278,11 @@ public class Task {
 	 */
 	public void setTag(ArrayList<String> newTag) {
 		try {
-			isValidTag(newTag);
-			this.tag = newTag;
+			if(isValidTag(newTag)) {
+				this.tag = newTag;
+			} else {
+				throw new CommandFailedException();
+			}			
 		} catch (Exception e) {
 
 		}
@@ -293,8 +303,11 @@ public class Task {
 	 */
 	public void setInterval(TimeInterval newInterval) {
 		try {
-			isValidInterval(newInterval);
-			this.interval = newInterval;
+			if(isValidInterval(newInterval)) {
+				this.interval = newInterval;
+			} else {
+				throw new CommandFailedException();
+			}
 		} catch (Exception e) {
 
 		}
