@@ -166,7 +166,19 @@ public class User {
 		}
 	}
 	
-	
+	/**
+	 * delete a category
+	 *  
+	 * @param category
+	 * @throws CommandFailedException
+	 */
+	public void deleteCategory(String category) throws CommandFailedException{
+		if (!validCategory.contains(category)) {
+			throw new CommandFailedException("no such category");
+		} else {
+			validCategory.remove(category);
+		}
+	}
 	/**
 	 * show a joke to user
 	 */
