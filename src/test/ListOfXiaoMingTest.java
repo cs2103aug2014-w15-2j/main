@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import dataStore.DataStore;
 import userInterface.ListOfXiaoMing;
+import infrastructure.*;
 
 public class ListOfXiaoMingTest {
 	
@@ -14,17 +15,17 @@ public class ListOfXiaoMingTest {
 	ListOfXiaoMing xiaoming = new ListOfXiaoMing("test");
 	
 	@Test
-	public void test() {
+	public void test() {		
 		testOneCommand("TC01-Add a task", 
-					   "Task added!", 
+					   Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY, 
 					   "add @sampleTask");
 		
 		testOneCommand("TC02a-Undo", 
-					   "Undo successfully!", 
+					   Constant.PROMPT_MESSAGE_UNDO_SUCCESSFULLY, 
 					   "undo");
 		
 		testOneCommand("TC02b-Undo", 
-					   "--- no task in the list ---      _(:з」∠)_ ", 
+					   Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED,
 					   "display");
 		
 		System.out.println("all search tests are passed");
