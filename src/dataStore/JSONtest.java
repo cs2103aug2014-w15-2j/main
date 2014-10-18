@@ -30,9 +30,11 @@ public class JSONtest {
 		
 		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
 		
-		for(int i = 0; i<tasks.size(); i++) {
-			LinkedHashMap task = convertTaskToMap(tasks.get(i));
-			tasksList.add(task);
+		if( tasks != null) {
+			for(int i = 0; i<tasks.size(); i++) {
+				LinkedHashMap task = convertTaskToMap(tasks.get(i));
+				tasksList.add(task);
+			}
 		}
 		JSONArray.writeJSONString(tasksList, bw);
 		
