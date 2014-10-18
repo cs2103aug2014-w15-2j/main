@@ -130,7 +130,7 @@ public abstract class DataStore {
 					bw.write(tasks.get(i).toString());
 					bw.newLine();
 				}
-				JSONtest.saveJSON(username, password, tasks);
+				JSONtest.save(username, password, tasks);
 			}
 
 			bw.close();

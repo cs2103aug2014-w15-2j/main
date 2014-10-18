@@ -19,23 +19,8 @@ import org.json.simple.parser.JSONParser;
 import reference.TimeInterval;
 
 public class JSONtest {
-
-	public static void save(String username, String password, ArrayList<Task> tasks) throws IOException, JSONException {
-		BufferedWriter bw = new BufferedWriter(new FileWriter(username + ".json"));
-		
-		JSONArray taskList = new JSONArray();
-			
-		for (int i = 0; i < tasks.size(); i++) {
-			JSONObject task = representTask(tasks.get(i));
-			taskList.add(task);
-		}
-		
-		bw.write(taskList.toString());
-		bw.close();
-
-	}
 	
-	public static void saveJSON(String username, String password, ArrayList<Task> tasks) throws IOException {
+	public static void save(String username, String password, ArrayList<Task> tasks) throws IOException {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(username + ".json"));
 		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
 		
@@ -66,26 +51,6 @@ public class JSONtest {
 		taskMap.put("time-interval", task.getInterval().toString());
 		
 		return taskMap;
-	}
-	
-	private static JSONObject representTask(Task task) throws JSONException {
-		JSONObject taskObj = new JSONObject();
-		
-		taskObj.put("task-id", task.getTaskId());
-		taskObj.put("description", task.getDescription());
-		taskObj.put("category", task.getCategory());
-		
-		JSONArray tags = new JSONArray();
-		for(int i=0; i<task.getTag().size(); i++) {
-			tags.add(task.getTag().get(i));
-		}
-		taskObj.put("tags", tags);
-		
-		taskObj.put("repeated-period", task.getRepeatedPeriod());
-		taskObj.put("priority", task.getPriority());
-		taskObj.put("time-interval", task.getInterval().toString());
-		
-		return taskObj;
 	}
 	
 	public static ArrayList<Task> getCurrentTask(String username) throws Exception {
