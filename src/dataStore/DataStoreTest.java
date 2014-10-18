@@ -1,23 +1,22 @@
 package dataStore;
 
 import static org.junit.Assert.*;
-import infrastructure.Constant;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
-import org.junit.Test;
+import infrastructure.Constant;
 
 public class DataStoreTest {
 	
 	public void initialize() {
 		File oldTestFile = new File("testFile");
-		if(oldTestFile.exists()){
+		if(oldTestFile.exists()) {
 			oldTestFile.delete();
 		}
 	}
@@ -62,7 +61,6 @@ public class DataStoreTest {
 	public void testSave() {
 		DataStore.createAccount("testFile", "thisIsJustATestFile");
 		assertFalse(DataStore.save("notTestFile", null));
-		
 		assertTrue(DataStore.save("testFile", null));
 		try {
 			BufferedReader bw = new BufferedReader(new FileReader("testFile"));

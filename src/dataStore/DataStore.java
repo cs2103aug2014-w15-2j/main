@@ -138,8 +138,6 @@ public abstract class DataStore {
 			return true;
 		} catch (IOException e) {
 			return false;
-		} catch (JSONException e) {
-			return false;
 		}
 	}
 

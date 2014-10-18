@@ -4,6 +4,8 @@ import dataStructure.*;
 import infrastructure.Parser;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -17,39 +19,38 @@ import org.json.simple.parser.JSONParser;
 import reference.TimeInterval;
 
 public class JSONtest {
-
-	public static void save(String username, String password, ArrayList<Task> tasks) throws IOException, JSONException {
+	
+	public static void save(String username, String password, ArrayList<Task> tasks) throws IOException {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(username + ".json"));
+		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
 		
-		JSONArray taskList = new JSONArray();
-			
-		for (int i = 0; i < tasks.size(); i++) {
-			JSONObject task = representTask(tasks.get(i));
-			taskList.add(task);
+		for(int i=0; i<tasks.size(); i++) {
+			LinkedHashMap task = convertTaskToMap(tasks.get(i));
+			tasksList.add(task);
 		}
+		JSONArray.writeJSONString(tasksList, bw);
 		
-		bw.write(taskList.toString());
 		bw.close();
 	}
 	
-	private static JSONObject representTask(Task task) throws JSONException {
-		JSONObject taskObj = new JSONObject();
+	private static LinkedHashMap convertTaskToMap(Task task) {
+		LinkedHashMap taskMap = new LinkedHashMap();
 		
-		taskObj.put("task-id", task.getTaskId());
-		taskObj.put("description", task.getDescription());
-		taskObj.put("category", task.getCategory());
+		taskMap.put("task-id", task.getTaskId());
+		taskMap.put("description", task.getDescription());
+		taskMap.put("category", task.getCategory());
 		
-		JSONArray tags = new JSONArray();
+		ArrayList<String> tags = new ArrayList<String>();
 		for(int i=0; i<task.getTag().size(); i++) {
 			tags.add(task.getTag().get(i));
 		}
-		taskObj.put("tags", tags);
+		taskMap.put("tags", tags);
 		
-		taskObj.put("repeated-period", task.getRepeatedPeriod());
-		taskObj.put("priority", task.getPriority());
-		taskObj.put("time-interval", task.getInterval().toString());
+		taskMap.put("repeated-period", task.getRepeatedPeriod());
+		taskMap.put("priority", task.getPriority());
+		taskMap.put("time-interval", task.getInterval().toString());
 		
-		return taskObj;
+		return taskMap;
 	}
 	
 	public static ArrayList<Task> getCurrentTask(String username) throws Exception {
