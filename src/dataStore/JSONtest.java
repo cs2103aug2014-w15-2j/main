@@ -13,7 +13,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import org.json.simple.JSONArray;
-import org.json.JSONException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -101,7 +100,6 @@ public class JSONtest {
 			timeInterval.put("startDate", startDate);
 			timeInterval.put("endDate", endDate);
 		}
-		
 		taskMap.put("time-interval", timeInterval);
 		
 		return taskMap;
