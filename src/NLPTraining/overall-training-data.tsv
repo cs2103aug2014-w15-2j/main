@@ -146,3 +146,10 @@ today	DATE
 end	DATE
 tomorrow	DATE
 
+display COMMAND
+trashed TAG
+
+search  COMMAND
+2101  KEYWORD
+
+
