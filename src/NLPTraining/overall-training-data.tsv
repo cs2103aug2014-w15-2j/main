@@ -11,21 +11,6 @@ with  TAG
 important TAG
 . O
 
-Buy DESCRIPTION
-a DESCRIPTION
-book  DESCRIPTION
-,	O
-tag TAG
-with  TAG
-medium  TAG
-,	O
-next  DATE
-Friday  DATE
-18:00 DATE
-to  DATE
-20:00 DATE
-.	O
-
 Today DATE
 ,	O
 18:00 DATE
@@ -152,4 +137,17 @@ trashed TAG
 search  COMMAND
 2101  KEYWORD
 
-
+Buy DESCRIPTION
+a DESCRIPTION
+book  DESCRIPTION
+,	O
+tag TAG
+with  TAG
+medium  TAG
+,	O
+next  DATE
+Friday  DATE
+18:00 DATE
+to  DATE
+20:00 DATE
+.	O
