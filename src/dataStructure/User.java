@@ -152,7 +152,7 @@ public class User {
 		DataStore.save(this.username, this.currentTasks);
 	}
 
-	/**
+	/**r
 	 * show a joke to user
 	 */
 	public void showJoke(){
