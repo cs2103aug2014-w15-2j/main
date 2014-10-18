@@ -110,6 +110,11 @@ TEAMMATE	DESCRIPTION
 due	DATE
 tmr	DATE
 
+CA3	DESCRIPTION
+starts	DATE
+next	DATE
+Mon	DATE
+
 create	COMMAND
 category	CATEGORY
 family	CATEGORY
@@ -117,3 +122,27 @@ family	CATEGORY
 delete	COMMAND
 category	CATEGORY
 family	CATEGORY
+
+display	COMMAND
+survey	DESCRIPTION
+
+display	COMMAND
+tasks	COMMAND
+with	COMMAND
+tag	TAG
+cs2103	TAG
+
+display	COMMAND
+tasks	COMMAND
+under	CATEGORY
+category	CATEGORY
+family	CATEGORY
+
+display	COMMAND
+tasks	COMMAND
+start	DATE
+from	DATE
+today	DATE
+end	DATE
+tomorrow	DATE
+
