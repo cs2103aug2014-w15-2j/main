@@ -1,11 +1,11 @@
 package dataStore;
 
 import dataStructure.*;
+import infrastructure.Constant;
 import infrastructure.Parser;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -46,8 +46,41 @@ public class JSONtest {
 		}
 		taskMap.put("tags", tags);
 		
-		taskMap.put("repeated-period", task.getRepeatedPeriod());
-		taskMap.put("priority", task.getPriority());
+		String repeatedPeriod = "none";
+		switch (task.getRepeatedPeriod()) {
+			case Constant.REPEATED_PERIOD_NONE:
+				repeatedPeriod = "none";
+				break;
+			case Constant.REPEATED_PERIOD_DAILY:
+				repeatedPeriod = "daily";
+				break;
+			case Constant.REPEATED_PERIOD_WEEKLY:
+				repeatedPeriod = "weekly";
+				break;
+			case Constant.REPEATED_PERIOD_MONTHLY:
+				repeatedPeriod = "monthly";
+				break;
+			default:
+				repeatedPeriod = "invalid";
+		}
+		taskMap.put("repeated-period", repeatedPeriod);
+		
+		String priority = "medium";
+		switch(task.getPriority()) {
+			case Constant.PRIORITY_HIGH:
+				priority = "high";
+				break;
+			case Constant.PRIORITY_MEDIUM:
+				priority = "medium";
+				break;
+			case Constant.PRIORITY_LOW:
+				priority = "low";
+				break;
+			default:
+				priority = "invalid";
+		}
+		taskMap.put("priority", priority);
+		
 		taskMap.put("time-interval", task.getInterval().toString());
 		
 		return taskMap;
