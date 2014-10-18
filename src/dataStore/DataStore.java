@@ -18,9 +18,6 @@ import dataStructure.*;
 
 public abstract class DataStore {
 
-	
-	
-
 	/**
 	 * check whether an account exists
 	 * 
@@ -77,7 +74,7 @@ public abstract class DataStore {
 			bw.write(Constant.SPLIT_SECTION);
 			bw.newLine();
 			bw.close();
-			
+
 			File accountJSON = new File(username + ".json");
 			accountJSON.createNewFile();
 
@@ -100,8 +97,11 @@ public abstract class DataStore {
 			return false;
 		}
 		File account = new File(username);
+		File accountJSON = new File(username + ".json");
+		account.delete();
+		accountJSON.delete();
 		DataStore.clearCache();
-		return account.delete();
+		return true;
 	}
 
 	/**
@@ -131,9 +131,9 @@ public abstract class DataStore {
 			}
 
 			bw.close();
-			
+
 			JSONtest.save(username, password, tasks);
-			
+
 			return true;
 		} catch (IOException e) {
 			return false;
@@ -150,13 +150,12 @@ public abstract class DataStore {
 	 * @throws Exception
 	 */
 	public static ArrayList<Task> getCurrentTasks(File file) throws Exception {
-		/*
+		
 		ArrayList<Task> currentTasks = new ArrayList<Task>();
 		Task task;
 		BufferedReader reader = new BufferedReader(new FileReader(file));
-		// tasks start from line 3
-		reader.readLine();
-		reader.readLine();
+		//tasks start from line 3
+		reader.readLine(); reader.readLine();
 		String nextTask = reader.readLine();
 		while (nextTask != null) {
 			task = Parser.parseTaskFromRecords(nextTask);
@@ -164,8 +163,7 @@ public abstract class DataStore {
 			nextTask = reader.readLine();
 		}
 		reader.close();
-		*/
-		ArrayList<Task> currentTasks = JSONtest.getCurrentTask(file.getName());
+		//ArrayList<Task> currentTasks = JSONtest.getCurrentTask(file.getName());
 		return currentTasks;
 	}
 
@@ -182,8 +180,7 @@ public abstract class DataStore {
 		br.close();
 		return password;
 	}
-	
-	
+
 	// FOR TESTING ONLY
 	/**
 	 * cacheAccount caching
@@ -210,7 +207,7 @@ public abstract class DataStore {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * getCachedAccount
 	 * 
@@ -224,7 +221,7 @@ public abstract class DataStore {
 			}
 			BufferedReader reader = new BufferedReader(new FileReader("_cache"));
 			String cachedName = reader.readLine();
-			
+
 			reader.close();
 			return cachedName;
 		} catch (IOException e) {
@@ -232,7 +229,7 @@ public abstract class DataStore {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * clearCache
 	 * 
