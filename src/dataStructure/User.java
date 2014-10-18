@@ -15,6 +15,7 @@ import reference.*;
 public class User {
 	
 	private ArrayList<Task> currentTasks;
+	private ArrayList<String> validCategory;
 	private Stack<ArrayList<Task>> undoable;
 	private Stack<ArrayList<Task>> redoable;
 	private String username;
@@ -152,7 +153,21 @@ public class User {
 		DataStore.save(this.username, this.currentTasks);
 	}
 
-	/**r
+	/**
+	 * create a new category
+	 * @param category
+	 * @throws CommandFailedException
+	 */
+	public void createCategory(String category) throws CommandFailedException{
+		if (validCategory.contains(category)) {
+			throw new CommandFailedException("invalid category");
+		} else {
+			validCategory.add(category);
+		}
+	}
+	
+	
+	/**
 	 * show a joke to user
 	 */
 	public void showJoke(){
