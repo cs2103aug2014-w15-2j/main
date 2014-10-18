@@ -1,153 +1,153 @@
-Add COMMAND
-I’m DESCRIPTION
-going DESCRIPTION
-to  DESCRIPTION
-swim  DESCRIPTION
-this  DATE
-Sunday  DATE
-, O
-tag TAG
-with  TAG
-important TAG
-. O
-  
-Add COMMAND
-today DESCRIPTION
-group DESCRIPTION
-meeting DESCRIPTION
-with  DESCRIPTION
-gaby  DESCRIPTION
-14:00 DATE
-to  DATE
-18:00 DATE
-  
-Add COMMAND
-coding  DESCRIPTION
-with  DESCRIPTION
-roommate  DESCRIPTION
-next  DATE
-Sat DATE
-2pm DATE
-- DATE
-6pm DATE
-category  CATEGORY
-is  CATEGORY
-work  CATEGORY
-tag TAG
-is  TAG
-cs2103  TAG
-  
-try DESCRIPTION
-new DESCRIPTION
-restaurant  DESCRIPTION
-@time DATE
-6pm DATE
-~ DATE
-8pm DATE
-@category CATEGORY
-family  CATEGORY
-@tag  TAG
-food  TAG
-  
-I DESCRIPTION
-will  DESCRIPTION
-write DESCRIPTION
-more  DESCRIPTION
-data  DESCRIPTION
-in  DESCRIPTION
-this  DESCRIPTION
-file  DESCRIPTION
-from  DATE
-tomorrow  DATE
-930 DATE
-till  DATE
-1200  DATE
-priority  PRIORITY
-high  PRIORITY
-category  CATEGORY
-work  CATEGORY
-  
-I DESCRIPTION
-will  DESCRIPTION
-sleep DESCRIPTION
-early DESCRIPTION
-from  DATE
-now DATE
-on  DATE
-  
-display COMMAND
-  
-2103  DESCRIPTION
-TEAMMATE  DESCRIPTION
-due DATE
-tmr DATE
-  
-CA3 DESCRIPTION
-starts  DATE
-next  DATE
-Mon DATE
-  
-create  COMMAND
-category  CATEGORY
-family  CATEGORY
-  
-delete  COMMAND
-category  CATEGORY
-family  CATEGORY
-  
-display COMMAND
-survey  DESCRIPTION
-  
-display COMMAND
-tasks COMMAND
-with  COMMAND
-tag TAG
-cs2103  TAG
-  
-display COMMAND
-tasks COMMAND
-under CATEGORY
-category  CATEGORY
-family  CATEGORY
-  
-display COMMAND
-tasks COMMAND
-start DATE
-from  DATE
-today DATE
-end DATE
-tomorrow  DATE
-  
-display COMMAND
-trashed TAG
-  
-search  COMMAND
-2101  KEYWORD
-  
-Buy DESCRIPTION
-a DESCRIPTION
-book  DESCRIPTION
-, O
-tag TAG
-with  TAG
-medium  TAG
-, O
-next  DATE
-Friday  DATE
-18:00 DATE
-to  DATE
-20:00 DATE
-. O
-  
-Today DATE
-, O
-18:00 DATE
-to  DATE
-20:00 DATE
-, O
-watch DESCRIPTION
-lsm DESCRIPTION
-webcast DESCRIPTION
-tag TAG
-with  TAG
-important TAG
+Add	COMMAND
+I’m	DESCRIPTION
+going	DESCRIPTION
+to	DESCRIPTION
+swim	DESCRIPTION
+this	DATE
+Sunday	DATE
+,	O
+tag	TAG
+with	TAG
+important	TAG
+.	O
+
+Add	COMMAND
+today	DESCRIPTION
+group	DESCRIPTION
+meeting	DESCRIPTION
+with	DESCRIPTION
+gaby	DESCRIPTION
+14:00	DATE
+to	DATE
+18:00	DATE
+
+Add	COMMAND
+coding	DESCRIPTION
+with	DESCRIPTION
+roommate	DESCRIPTION
+next	DATE
+Sat	DATE
+2pm	DATE
+-	DATE
+6pm	DATE
+category	CATEGORY
+is	CATEGORY
+work	CATEGORY
+tag	TAG
+is	TAG
+cs2103	TAG
+
+try	DESCRIPTION
+new	DESCRIPTION
+restaurant	DESCRIPTION
+@time	DATE
+6pm	DATE
+~	DATE
+8pm	DATE
+@category	CATEGORY
+family	CATEGORY
+@tag	TAG
+food	TAG
+
+I	DESCRIPTION
+will 	DESCRIPTION
+write	DESCRIPTION
+more	DESCRIPTION
+data	DESCRIPTION
+in	DESCRIPTION
+this	DESCRIPTION
+file	DESCRIPTION
+from	DATE
+tomorrow	DATE
+930	DATE
+till	DATE
+1200	DATE
+priority	PRIORITY
+high	PRIORITY
+category	CATEGORY
+work	CATEGORY
+
+I	DESCRIPTION
+will	DESCRIPTION
+sleep	DESCRIPTION
+early	DESCRIPTION
+from	DATE
+now	DATE
+on	DATE
+
+display	COMMAND
+
+2103	DESCRIPTION
+TEAMMATE	DESCRIPTION
+due	DATE
+tmr	DATE
+
+CA3	DESCRIPTION
+starts	DATE
+next	DATE
+Mon	DATE
+
+create	COMMAND
+category	CATEGORY
+family	CATEGORY
+
+delete	COMMAND
+category	CATEGORY
+family	CATEGORY
+
+display	COMMAND
+survey	DESCRIPTION
+
+display	COMMAND
+tasks	COMMAND
+with	COMMAND
+tag	TAG
+cs2103	TAG
+
+display	COMMAND
+tasks	COMMAND
+under	CATEGORY
+category	CATEGORY
+family	CATEGORY
+
+display	COMMAND
+tasks	COMMAND
+start	DATE
+from	DATE
+today	DATE
+end	DATE
+tomorrow	DATE
+
+display	COMMAND
+trashed	TAG
+
+search	COMMAND
+2101	KEYWORD
+
+Buy	DESCRIPTION
+a	DESCRIPTION
+book	DESCRIPTION
+,	O
+tag	TAG
+with	TAG
+medium	TAG
+,	O
+next	DATE
+Friday	DATE
+18:00	DATE
+to	DATE
+20:00	DATE
+.	O
+
+Today	DATE
+,	O
+18:00	DATE
+to	DATE
+20:00	DATE
+,	O
+watch	DESCRIPTION
+lsm	DESCRIPTION
+webcast	DESCRIPTION
+tag	TAG
+with	TAG
+important	TAG
