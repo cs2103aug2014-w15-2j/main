@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.SimpleFormatter;
 
+
 import reference.*;
 import dataStore.*;
 import dataStructure.Task;
@@ -22,7 +23,6 @@ import dataStructure.User;
 
 public class ListOfXiaoMing {
 	
-
 	//a property to store the current user
 	private User user;
 	
@@ -69,9 +69,9 @@ public class ListOfXiaoMing {
 			if (!((cached == "") || (cached == null))) {
 				System.out.println(cached);
 				list = new ListOfXiaoMing(cached);
-				Constant.logger.log(Level.INFO, "reading from cache: " + cached);
+				Constant.logger.log(Level.INFO, String.format(Constant.LOG_MESSAGE_READING_CACHE, cached));
 			} else {
-				Constant.logger.log(Level.INFO, "no cache exists");
+				Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_NO_CACHE_FOUND);
 			}
 			
 			while (list == null) {
@@ -84,26 +84,26 @@ public class ListOfXiaoMing {
 					System.out.println(recordFilePath);
 					list = new ListOfXiaoMing(recordFilePath);
 					DataStore.cacheAccount(recordFilePath);
-					Constant.logger.log(Level.INFO, "user: " + recordFilePath + " -- has been cached");
+					Constant.logger.log(Level.INFO, String.format(Constant.LOG_MESSAGE_USER_CACHED, recordFilePath));
 				} else {
 					
 				}
 			}
 			
 			assert(list != null);
-			Constant.logger.log(Level.INFO, "List initiated successfully");
+			Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_INITIATE_LIST);
 			
 			UtilityMethod.showToUser(list.execute("display"));
-			Constant.logger.log(Level.INFO, "User tasks displayed");
+			Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_USER_TASKS_DISPLAYED);
 			
 			
 			boolean willContinue = true;
 			while (willContinue) {
 				String userInput = UtilityMethod.readCommand();
 				String result = list.execute(userInput);
-				if (result.equals(Constant.RETURN_VALUE_LOGGED_OUT)) {
+				if (result.equals(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY)) {
 					willContinue = false;
-					Constant.logger.log(Level.INFO, "user log out");
+					Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_USER_LOG_OUT);
 					UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY);
 				} else {
 					UtilityMethod.showToUser(result);
@@ -199,7 +199,8 @@ public class ListOfXiaoMing {
 		try {
 			taskToAdd = Parser.getTaskFromParameterList(taskParameters);
 			assert(taskToAdd != null);
-			return (this.user.add(taskToAdd)) ? "Task added!" : "Failed to add task";
+			return (this.user.add(taskToAdd)) ? Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY : 
+												Constant.PROMPT_MESSAGE_ADD_TASK_FAILED;
 		} catch (CommandFailedException e) {
 			return e.toString();
 		}
@@ -210,7 +211,8 @@ public class ListOfXiaoMing {
 	private String delete(ArrayList<String> taskParameters) {
 		int index = Integer.parseInt(taskParameters.get(0));
 		try {
-			return (this.user.delete(index - 1)) ? "task deleted" : "deletion failed";
+			return (this.user.delete(index - 1)) ? Constant.PROMPT_MESSAGE_DELETE_TASK_SUCCESSFULLY : 
+												   Constant.PROMPT_MESSAGE_DELETE_TASK_FAILED;
 		} catch (CommandFailedException e) {
 			return e.toString();
 		}
@@ -224,10 +226,10 @@ public class ListOfXiaoMing {
 			this.user.update(index - 1, Parser.getTaskMap(taskParameters));
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
-			return "update failed";
+			return Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
 		}
 		
-		return "task updated";
+		return Constant.PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY;
 	}
 	
 	
@@ -237,23 +239,23 @@ public class ListOfXiaoMing {
 			queryResult = this.user.getTaskList();
 			String resultString  = UtilityMethod.taskListToString(queryResult);
 			if (resultString.equalsIgnoreCase("")) {
-				return "--- no task in the list ---      _(:з」∠)_ ";
+				return Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK;
 			} else {
 				return resultString;
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return "display error";
+			return Constant.PROMPT_MESSAGE_DISPLAY_ERROR;
 		}
 	}
 	
 	private String logOut() {
 		
 		if (DataStore.clearCache()) {
-			return Constant.RETURN_VALUE_LOGGED_OUT;
+			return Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY;
 		} else {
-			return "error";
+			return Constant.PROMPT_MESSAGE_CLEAR_CACHE_FAILED;
 		}
 	}
 	
@@ -262,10 +264,11 @@ public class ListOfXiaoMing {
 	private String undo() {
 		try {
 			this.user.undo();
+			return Constant.PROMPT_MESSAGE_UNDO_SUCCESSFULLY;
 		} catch (CommandFailedException e) {
 			UtilityMethod.showToUser(e.toString());
+			return Constant.PROMPT_MESSAGE_UNDO_FAILED;
 		}
-		return "undone";
 	}
 	
 	
@@ -273,10 +276,11 @@ public class ListOfXiaoMing {
 	private String redo() {
 		try {
 			this.user.redo();
+			return Constant.PROMPT_MESSAGE_REDO_SUCCESSFULLY;
 		} catch (CommandFailedException e) {
 			UtilityMethod.showToUser(e.toString());
+			return Constant.PROMPT_MESSAGE_REDO_FAILED;
 		}
-		return "redone";
 	}
 	
 	
@@ -291,10 +295,10 @@ public class ListOfXiaoMing {
 				String value = UtilityMethod.removeFirstWord(parameter);
 				if (key.equalsIgnoreCase("time")) {
 					timeInterval = Parser.parseTimeInterval(value);
-					UtilityMethod.showToUser("searching for tasks within time Interval: " + timeInterval);
+					UtilityMethod.showToUser(String.format(Constant.PROMPT_MESSAGE_SEARCH_TIME_INTERVAL, timeInterval));
 				} else {
 					keyword = parameter;
-					UtilityMethod.showToUser("searching for tasks containing keywords: " + keyword);
+					UtilityMethod.showToUser(String.format(Constant.PROMPT_MESSAGE_SEARCH_KEYWORD, keyword));
 				}
 			}
 			
@@ -302,7 +306,7 @@ public class ListOfXiaoMing {
 			ArrayList<Task> queryResult = this.user.find(thisConstraint);
 			String queryResultString =  UtilityMethod.taskListToString(queryResult);
 			if (queryResultString.equals("")) {
-				return "--- no task found ---";
+				return Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED;
 			} else {
 				return queryResultString;
 			}

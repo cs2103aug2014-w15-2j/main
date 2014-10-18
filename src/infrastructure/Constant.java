@@ -8,6 +8,7 @@ public abstract class Constant {
 	//logger
 	public static Logger logger = Logger.getLogger("ListOfXiaoMing");
 	
+	
 	//prompt messages that will be printed for users
 	public static final String PROMPT_MESSAGE_WELCOME = "\n\nWelcome to 小鸣的清单(List of Xiao Ming)";
 	public static final String PROMPT_MESSAGE_INSTRUCTION = "You can type in 'log in', 'create account', 'help' or 'exit'.";
@@ -22,11 +23,33 @@ public abstract class Constant {
 	public static final String PROMPT_MESSAGE_ACCOUNT_CREATED =  "Account Created";
 	public static final String PROMPT_MESSAGE_ACCOUNT_NOT_CREATED =  "Fail to create account: Please check again";
 	public static final String PROMPT_MESSAGE_SESSION_END =  "Session end!";
+	public static final String PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY = "Task added!";
+	public static final String PROMPT_MESSAGE_ADD_TASK_FAILED = "Failed to add task!";
+	public static final String PROMPT_MESSAGE_DELETE_TASK_SUCCESSFULLY = "Task deleted!";
+	public static final String PROMPT_MESSAGE_DELETE_TASK_FAILED = "Failed to delete task!";
+	public static final String PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY = "Task updated!";
+	public static final String PROMPT_MESSAGE_UPDATE_TASK_FAILED = "Failed to update task!";
+	public static final String PROMPT_MESSAGE_DISPLAY_EMPTY_TASK = "--- no task in the list ---      _(:з」∠)_ ";
+	public static final String PROMPT_MESSAGE_DISPLAY_ERROR = "display error";
+	public static final String PROMPT_MESSAGE_CLEAR_CACHE_FAILED = "Failed to clear cache!";
+	public static final String PROMPT_MESSAGE_UNDO_SUCCESSFULLY = "Undo successfully!";
+	public static final String PROMPT_MESSAGE_UNDO_FAILED = "Unable to undo!";
+	public static final String PROMPT_MESSAGE_REDO_SUCCESSFULLY = "Redo successfully!";
+	public static final String PROMPT_MESSAGE_REDO_FAILED = "Unable to redo!";
+	public static final String PROMPT_MESSAGE_SEARCH_TIME_INTERVAL = "Searching for tasks within time Interval: %1$s";
+	public static final String PROMPT_MESSAGE_SEARCH_KEYWORD = "Searching for tasks containing keywords: %1$s";
+	public static final String PROMPT_MESSAGE_NO_TASK_FOUNDED = "--- no task found ---";
+	
 	
 	public static final String RETURN_VALUE_LOG_IN_CANCELLED =  "user cancelled logging in";
 	public static final String RETURN_VALUE_AUTHENTICATION_FAILED =  "authentication failed.";
-	public static final String RETURN_VALUE_LOGGED_OUT =  "log out";
-
+	
+	public static final String LOG_MESSAGE_READING_CACHE = "reading from cache: %1$s";
+	public static final String LOG_MESSAGE_NO_CACHE_FOUND = "no cache found";
+	public static final String LOG_MESSAGE_USER_CACHED = "user: %1$s -- has been cached";
+	public static final String LOG_MESSAGE_USER_LOG_OUT = "user logs out";
+	public static final String LOG_MESSAGE_INITIATE_LIST = "List initiated successfully";
+	public static final String LOG_MESSAGE_USER_TASKS_DISPLAYED = "User tasks displayed";
 	
 	//parser
 	public static final String KEY_TIME = "time";
