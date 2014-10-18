@@ -11,19 +11,6 @@ with  TAG
 important TAG
 . O
 
-Today DATE
-,	O
-18:00 DATE
-to  DATE
-20:00 DATE
-,	O
-watch DESCRIPTION
-lsm	DESCRIPTION
-webcast DESCRIPTION
-tag	TAG
-with  TAG
-important	TAG
-
 Add COMMAND
 today	DESCRIPTION
 group	DESCRIPTION
@@ -151,3 +138,16 @@ Friday  DATE
 to  DATE
 20:00 DATE
 .	O
+
+Today DATE
+,	O
+18:00 DATE
+to  DATE
+20:00 DATE
+,	O
+watch DESCRIPTION
+lsm	DESCRIPTION
+webcast DESCRIPTION
+tag	TAG
+with  TAG
+important	TAG
