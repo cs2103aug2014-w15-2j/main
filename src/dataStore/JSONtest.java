@@ -26,8 +26,10 @@ import reference.TimeInterval;
 
 public class JSONtest {
 	
+	@SuppressWarnings("rawtypes")
 	public static void save(String username, String password, ArrayList<Task> tasks) throws IOException {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(username + ".json"));
+		
 		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
 		
 		for(int i = 0; i<tasks.size(); i++) {
@@ -39,6 +41,7 @@ public class JSONtest {
 		bw.close();
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static LinkedHashMap convertTaskToMap(Task task) {
 		LinkedHashMap taskMap = new LinkedHashMap();
 		
@@ -111,8 +114,8 @@ public class JSONtest {
 		return taskMap;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static ArrayList<Task> getCurrentTask(String username) throws Exception {
-		
 		ArrayList<Task> tasks = new ArrayList<Task>();
 		
 		JSONParser parser = new JSONParser();
@@ -144,6 +147,7 @@ public class JSONtest {
 		return tasks;
 	}
 	
+	@SuppressWarnings("rawtypes") 
 	private static Task getTask(LinkedHashMap task) throws Exception {
 		
 		String task_id = (String) task.get("task-id");
