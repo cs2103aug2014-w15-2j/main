@@ -130,15 +130,13 @@ public abstract class DataStore {
 					bw.write(tasks.get(i).toString());
 					bw.newLine();
 				}
-				JSONtest.save(username, password, tasks);
+				JSONtest.saveJSON(username, password, tasks);
 			}
 
 			bw.close();
 
 			return true;
 		} catch (IOException e) {
-			return false;
-		} catch (JSONException e) {
 			return false;
 		}
 	}

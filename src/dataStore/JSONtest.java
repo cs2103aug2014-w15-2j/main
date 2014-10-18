@@ -4,6 +4,8 @@ import dataStructure.*;
 import infrastructure.Parser;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -30,6 +32,40 @@ public class JSONtest {
 		
 		bw.write(taskList.toString());
 		bw.close();
+
+	}
+	
+	public static void saveJSON(String username, String password, ArrayList<Task> tasks) throws IOException {
+		BufferedWriter bw = new BufferedWriter(new FileWriter(username + ".json"));
+		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
+		
+		for(int i=0; i<tasks.size(); i++) {
+			LinkedHashMap task = convertTaskToMap(tasks.get(i));
+			tasksList.add(task);
+		}
+		JSONArray.writeJSONString(tasksList, bw);
+		
+		bw.close();
+	}
+	
+	private static LinkedHashMap convertTaskToMap(Task task) {
+		LinkedHashMap taskMap = new LinkedHashMap();
+		
+		taskMap.put("task-id", task.getTaskId());
+		taskMap.put("description", task.getDescription());
+		taskMap.put("category", task.getCategory());
+		
+		ArrayList<String> tags = new ArrayList<String>();
+		for(int i=0; i<task.getTag().size(); i++) {
+			tags.add(task.getTag().get(i));
+		}
+		taskMap.put("tags", tags);
+		
+		taskMap.put("repeated-period", task.getRepeatedPeriod());
+		taskMap.put("priority", task.getPriority());
+		taskMap.put("time-interval", task.getInterval().toString());
+		
+		return taskMap;
 	}
 	
 	private static JSONObject representTask(Task task) throws JSONException {
