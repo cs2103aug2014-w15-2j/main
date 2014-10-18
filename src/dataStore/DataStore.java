@@ -148,7 +148,7 @@ public abstract class DataStore {
 	 * @throws Exception
 	 */
 	public static ArrayList<Task> getCurrentTasks(File file) throws Exception {
-		
+		/*
 		ArrayList<Task> currentTasks = new ArrayList<Task>();
 		Task task;
 		BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -161,7 +161,8 @@ public abstract class DataStore {
 			nextTask = reader.readLine();
 		}
 		reader.close();
-		//ArrayList<Task> currentTasks = JSONtest.getCurrentTask(file.getName());
+		*/
+		ArrayList<Task> currentTasks = JSONtest.getCurrentTask(file.getName());
 		return currentTasks;
 	}
 
