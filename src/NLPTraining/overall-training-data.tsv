@@ -73,7 +73,7 @@ restaurant	DESCRIPTION
 ~	DATE
 8pm	DATE
 @category	CATEGORY
-family	DATEGORY
+family	CATEGORY
 @tag	TAG
 food	TAG
 
@@ -109,3 +109,11 @@ display	COMMAND
 TEAMMATE	DESCRIPTION
 due	DATE
 tmr	DATE
+
+create	COMMAND
+category	CATEGORY
+family	CATEGORY
+
+delete	COMMAND
+category	CATEGORY
+family	CATEGORY

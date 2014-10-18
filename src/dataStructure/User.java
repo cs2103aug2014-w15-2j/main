@@ -193,6 +193,11 @@ public class User {
 		if (!validCategory.contains(category)) {
 			throw new CommandFailedException("no such category");
 		} else {
+			for(Task task : currentTasks){
+				if(task.getCategory().equals(category)){
+					task.setCategory(Constant.DEFAULT_CATEGORY);
+				}
+			}
 			validCategory.remove(category);
 		}
 	}
