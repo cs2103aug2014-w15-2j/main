@@ -4,9 +4,8 @@ import dataStructure.*;
 import infrastructure.Parser;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.IOException;
 
