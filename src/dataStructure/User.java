@@ -135,7 +135,7 @@ public class User {
 				
 				if (currentAttribute.equals("description")) {
 					task.setDescription((String) currentObject);
-				} else if (currentAttribute.equals("category")) {
+				} else if (currentAttribute.equals("category") && validCategory.contains((String) currentObject)) {
 					task.setCategory((String) currentObject);
 				} else if (currentAttribute.equals("priority")) {
 					task.setPriority((int) currentObject);
