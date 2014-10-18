@@ -4,6 +4,7 @@ import dataStructure.*;
 import infrastructure.Constant;
 import infrastructure.Parser;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.io.FileWriter;
@@ -81,7 +82,27 @@ public class JSONtest {
 		}
 		taskMap.put("priority", priority);
 		
-		taskMap.put("time-interval", task.getInterval().toString());
+		LinkedHashMap timeInterval = new LinkedHashMap();
+		
+		if(task.getInterval().getStartDate() == Constant.FLOATING_START_DATE &&
+				task.getInterval().getEndDate() == Constant.FLOATING_END_DATE) {
+			timeInterval.put("startDate", "-");
+			timeInterval.put("endDate", "-");
+		} else if(task.getInterval().getStartDate() == Constant.DEADLINE_START_DATE) {
+			String endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm").
+					format(task.getInterval().getEndDate());
+			timeInterval.put("startDate", "-");
+			timeInterval.put("endDate", endDate);
+		} else {
+			String startDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm").
+					format(task.getInterval().getStartDate());
+			String endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm").
+					format(task.getInterval().getEndDate());
+			timeInterval.put("startDate", startDate);
+			timeInterval.put("endDate", endDate);
+		}
+		
+		taskMap.put("time-interval", timeInterval);
 		
 		return taskMap;
 	}
