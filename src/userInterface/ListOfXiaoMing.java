@@ -130,9 +130,7 @@ public class ListOfXiaoMing {
 				return User.userLogIn(parameter);
 			
 			case CREATE_ACCOUNT:
-
-				UtilityMethod.showToUser(User.createAccount(parameter));
-				return null;
+				return User.createAccount(parameter);
 		
 			case DELETE_ACCOUNT:	
 				UtilityMethod.showToUser(User.deleteAccount());

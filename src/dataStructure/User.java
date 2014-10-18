@@ -405,7 +405,9 @@ public class User {
 		}
 		
 		boolean successCreated = DataStore.createAccount(username, passwordInput1);
-		return successCreated ?  Constant.PROMPT_MESSAGE_ACCOUNT_CREATED: Constant.PROMPT_MESSAGE_ACCOUNT_NOT_CREATED;
+		UtilityMethod.showToUser(successCreated ?  Constant.PROMPT_MESSAGE_ACCOUNT_CREATED: 
+								 Constant.PROMPT_MESSAGE_ACCOUNT_NOT_CREATED);
+		return successCreated ? username : null;
 	}
 	
 	/**
