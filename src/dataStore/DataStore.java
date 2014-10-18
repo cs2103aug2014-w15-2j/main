@@ -125,14 +125,15 @@ public abstract class DataStore {
 			bw.write(Constant.SPLIT_SECTION);
 			bw.newLine();
 			bw.flush();
-			for (int i = 0; i < tasks.size(); i++) {
-				bw.write(tasks.get(i).toString());
-				bw.newLine();
+			if(tasks != null) {
+				for (int i = 0; i < tasks.size(); i++) {
+					bw.write(tasks.get(i).toString());
+					bw.newLine();
+				}
+				JSONtest.save(username, password, tasks);
 			}
 
 			bw.close();
-
-			JSONtest.save(username, password, tasks);
 
 			return true;
 		} catch (IOException e) {

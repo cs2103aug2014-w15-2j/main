@@ -14,6 +14,13 @@ import org.junit.Test;
 
 public class DataStoreTest {
 	
+	public void initialize() {
+		File oldTestFile = new File("testFile");
+		if(oldTestFile.exists()){
+			oldTestFile.delete();
+		}
+	}
+	
 	@Test
 	public void testCreateAccount() {
 		assertTrue(DataStore.createAccount("testFile", "thisIsJustATestFile"));
