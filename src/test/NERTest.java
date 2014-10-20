@@ -10,15 +10,15 @@ import edu.stanford.nlp.ling.CoreLabel;
 
 public class NERTest {
 	static final String TERMINATOR = " \n";
-	static AbstractSequenceClassifier<CoreLabel> classifierOverall = CRFClassifier.getClassifierNoExceptions("NLPTraining/overall-ner-model.ser.gz");
+	static AbstractSequenceClassifier<CoreLabel> classifierOverall = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/overall-ner-model.ser.gz");
 	static AbstractSequenceClassifier<CoreLabel> classifierTag = CRFClassifier.getClassifierNoExceptions("NLPTraining/tag-ner-model.ser.gz");
 	static AbstractSequenceClassifier<CoreLabel> classifierCommand = CRFClassifier.getClassifierNoExceptions("NLPTraining/command-ner-model.ser.gz");
 	
 	
 	@Test
 	public void testOverall1() {
-		String content = "Add gourp meeting, this friday";
-		String expected = "<COMMAND>Add</COMMAND> <DESCRIPTION>gourp meeting</DESCRIPTION> , <DATE>this friday</DATE>";
+		String content = "Add gourp meeting this friday";
+		String expected = "<COMMAND>Add</COMMAND> <DESCRIPTION>gourp meeting</DESCRIPTION> <DATE>this friday</DATE>";
 		String results = classifierOverall.classifyToString(content, "inlineXML", false);
 		System.out.println("testOverall1:");
 		System.out.println("expects: " + expected);
