@@ -1,7 +1,6 @@
 package dataStore;
 
 import infrastructure.Constant;
-import infrastructure.Parser;
 import dataStore.JSONtest;
 
 import java.io.BufferedReader;
@@ -150,20 +149,6 @@ public abstract class DataStore {
 	 * @throws Exception
 	 */
 	public static ArrayList<Task> getCurrentTasks(File file) throws Exception {
-		/*
-		ArrayList<Task> currentTasks = new ArrayList<Task>();
-		Task task;
-		BufferedReader reader = new BufferedReader(new FileReader(file));
-		//tasks start from line 3
-		reader.readLine(); reader.readLine();
-		String nextTask = reader.readLine();
-		while (nextTask != null) {
-			task = Parser.parseTaskFromRecords(nextTask);
-			currentTasks.add(task);
-			nextTask = reader.readLine();
-		}
-		reader.close();
-		*/
 		ArrayList<Task> currentTasks = JSONtest.getCurrentTask(file.getName());
 		return currentTasks;
 	}
