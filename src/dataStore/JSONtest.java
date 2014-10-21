@@ -3,6 +3,7 @@ package dataStore;
 import dataStructure.*;
 import infrastructure.Constant;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +21,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ContainerFactory;
 
+import reference.CommandFailedException;
 import reference.TimeInterval;
 
 public class JSONtest {
@@ -27,7 +29,6 @@ public class JSONtest {
 	@SuppressWarnings("rawtypes")
 	public static void save(String username, String password, ArrayList<Task> tasks) throws IOException {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(username + ".json"));
-		
 		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
 		
 		if( tasks != null) {
@@ -36,9 +37,28 @@ public class JSONtest {
 				tasksList.add(task);
 			}
 		}
-		JSONArray.writeJSONString(tasksList, bw);
 		
+		JSONArray.writeJSONString(tasksList, bw);
 		bw.close();
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static ArrayList<Task> getCurrentTask(String username) throws Exception {
+		ArrayList<Task> tasks = new ArrayList<Task>();
+		JSONParser parser = new JSONParser();
+		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
+		LinkedList allTasks = (LinkedList) parser.parse(new FileReader(username + ".json"), orderedKeyFactory);
+		
+		LinkedHashMap task;
+		if(allTasks != null) {
+			for(int i=0; i<allTasks.size(); i++) {
+				task = (LinkedHashMap) allTasks.get(i);
+				Task newTask = getTask(task);
+				tasks.add(newTask);
+			}
+		}
+		
+		return tasks;
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -55,6 +75,99 @@ public class JSONtest {
 		}
 		taskMap.put("tags", tags);
 		
+		taskMap.put("repeated-period", convertRepeatedPeriodIntToString(task));
+		taskMap.put("priority", convertPriorityIntToString(task));
+		taskMap.put("time-interval", convertTimeIntervalToString(task));
+		
+		return taskMap;
+	}
+	
+	@SuppressWarnings("rawtypes") 
+	private static Task getTask(LinkedHashMap task) throws Exception {
+		String task_id = (String) task.get("task-id");
+		String description = (String) task.get("description");
+		String category = (String) task.get("category");
+		int priority = convertPriorityStringToInt(task);
+		int repeated_period = convertRepeatedPeriodStringToInt(task);
+		
+		LinkedList tags = (LinkedList) task.get("tags");
+		ArrayList<String> tag = new ArrayList<String>();
+		for(int i=0; i<tags.size(); i++) { 
+			tag.add((String)tags.get(i));
+		}
+		
+		LinkedHashMap intervalObj = (LinkedHashMap) task.get("time-interval");
+		TimeInterval interval = convertStringToTimeInterval(intervalObj);
+		
+		return new Task(task_id, description, category, priority,
+				repeated_period, tag, interval);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private static ContainerFactory setOrderedKeyFactory() {
+		ContainerFactory orderedKeyFactory = new ContainerFactory()
+		{
+			@Override
+		    public List creatArrayContainer() {
+		      return new LinkedList();
+		    }
+
+			public Map createObjectContainer() {
+		      return new LinkedHashMap();
+		    }
+		};
+		return orderedKeyFactory;
+	}
+
+	@SuppressWarnings("rawtypes") 
+	private static int convertPriorityStringToInt(LinkedHashMap task) {
+		int priority = 0;
+		if(task.get("priority").equals("high")) {
+			priority = Constant.PRIORITY_HIGH;
+		} else if(task.get("priority").equals("medium")) {
+			priority = Constant.PRIORITY_MEDIUM;
+		} else if(task.get("priority").equals("low")) {
+			priority = Constant.PRIORITY_LOW;
+		}
+		return priority;
+	}
+	
+	private static String convertPriorityIntToString(Task task) {
+		String priority = "medium";
+		switch(task.getPriority()) {
+			case Constant.PRIORITY_HIGH:
+				priority = "high";
+				break;
+			case Constant.PRIORITY_MEDIUM:
+				priority = "medium";
+				break;
+			case Constant.PRIORITY_LOW:
+				priority = "low";
+				break;
+			default:
+				priority = "invalid";
+		}
+		return priority;
+	}
+
+	@SuppressWarnings("rawtypes") 
+	private static int convertRepeatedPeriodStringToInt(LinkedHashMap task) {
+		int repeated_period = 0;
+		if (task.get("repeated-period").equals("none")) {
+			repeated_period = Constant.REPEATED_PERIOD_NONE;
+		} else if (task.get("repeated-period").equals("none")) {
+			repeated_period = Constant.REPEATED_PERIOD_DAILY;
+		} else if (task.get("repeated-period").equals("none")) {
+			repeated_period =  Constant.REPEATED_PERIOD_WEEKLY;
+		} else if (task.get("repeated-period").equals("none")) {
+			repeated_period = Constant.REPEATED_PERIOD_MONTHLY;
+		} else {
+			repeated_period = Constant.REPEATED_PERIOD_INVALID;
+		}
+		return repeated_period;
+	}
+	
+	private static String convertRepeatedPeriodIntToString(Task task) {
 		String repeatedPeriod = "none";
 		switch (task.getRepeatedPeriod()) {
 			case Constant.REPEATED_PERIOD_NONE:
@@ -72,24 +185,28 @@ public class JSONtest {
 			default:
 				repeatedPeriod = "invalid";
 		}
-		taskMap.put("repeated-period", repeatedPeriod);
-		
-		String priority = "medium";
-		switch(task.getPriority()) {
-			case Constant.PRIORITY_HIGH:
-				priority = "high";
-				break;
-			case Constant.PRIORITY_MEDIUM:
-				priority = "medium";
-				break;
-			case Constant.PRIORITY_LOW:
-				priority = "low";
-				break;
-			default:
-				priority = "invalid";
+		return repeatedPeriod;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private static TimeInterval convertStringToTimeInterval(
+			LinkedHashMap intervalObj) throws ParseException,
+			CommandFailedException {
+		Date startDate = null;
+		if(!intervalObj.get("startDate").equals("-")) {
+			startDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).
+					parse((String) intervalObj.get("startDate"));
 		}
-		taskMap.put("priority", priority);
-		
+		Date endDate = null;
+		if(!intervalObj.get("endDate").equals("-")) {
+			endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).
+					parse((String) intervalObj.get("endDate"));
+		}
+		return new TimeInterval(startDate, endDate);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static LinkedHashMap convertTimeIntervalToString(Task task) {
 		LinkedHashMap timeInterval = new LinkedHashMap();
 		
 		if(task.getInterval().getStartDate() == Constant.FLOATING_START_DATE &&
@@ -109,93 +226,8 @@ public class JSONtest {
 			timeInterval.put("startDate", startDate);
 			timeInterval.put("endDate", endDate);
 		}
-		taskMap.put("time-interval", timeInterval);
 		
-		return taskMap;
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public static ArrayList<Task> getCurrentTask(String username) throws Exception {
-		ArrayList<Task> tasks = new ArrayList<Task>();
-		
-		JSONParser parser = new JSONParser();
-		ContainerFactory orderedKeyFactory = new ContainerFactory()
-		{
-			@Override
-		    public List creatArrayContainer() {
-		      return new LinkedList();
-		    }
-
-		    public Map createObjectContainer() {
-		      return new LinkedHashMap();
-		    }
-		};
-		LinkedList allTasks = (LinkedList) parser.parse(new FileReader(username + ".json"), orderedKeyFactory);
-		
-		if(allTasks == null) {
-			return tasks;
-		}
-		
-		LinkedHashMap task;
-		
-		for(int i=0; i<allTasks.size(); i++) {
-			task = (LinkedHashMap) allTasks.get(i);
-			Task newTask = getTask(task);
-			tasks.add(newTask);
-		}
-		
-		return tasks;
-	}
-	
-	@SuppressWarnings("rawtypes") 
-	private static Task getTask(LinkedHashMap task) throws Exception {
-		
-		String task_id = (String) task.get("task-id");
-		String description = (String) task.get("description");
-		String category = (String) task.get("category");
-		
-		int priority = 0;
-		if(task.get("priority").equals("high")) {
-			priority = Constant.PRIORITY_HIGH;
-		} else if(task.get("priority").equals("medium")) {
-			priority = Constant.PRIORITY_MEDIUM;
-		} else if(task.get("priority").equals("low")) {
-			priority = Constant.PRIORITY_LOW;
-		}
-		
-		int repeated_period = 0;
-		if (task.get("repeated-period").equals("none")) {
-			repeated_period = Constant.REPEATED_PERIOD_NONE;
-		} else if (task.get("repeated-period").equals("none")) {
-			repeated_period = Constant.REPEATED_PERIOD_DAILY;
-		} else if (task.get("repeated-period").equals("none")) {
-			repeated_period =  Constant.REPEATED_PERIOD_WEEKLY;
-		} else if (task.get("repeated-period").equals("none")) {
-			repeated_period = Constant.REPEATED_PERIOD_MONTHLY;
-		} else {
-			repeated_period = Constant.REPEATED_PERIOD_INVALID;
-		}
-		
-		LinkedList tags = (LinkedList) task.get("tags");
-		ArrayList<String> tag = new ArrayList<String>();
-		for(int i=0; i<tags.size(); i++) { 
-			tag.add((String)tags.get(i));
-		}
-		
-		LinkedHashMap intervalObj = (LinkedHashMap) task.get("time-interval");
-		
-		Date startDate = null;
-		if(!intervalObj.get("startDate").equals("-")) {
-			startDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).parse((String) intervalObj.get("startDate"));
-		}
-		Date endDate = null;
-		if(!intervalObj.get("endDate").equals("-")) {
-			endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).parse((String) intervalObj.get("endDate"));
-		}
-		TimeInterval interval = new TimeInterval(startDate, endDate);
-		
-		return new Task(task_id, description, category, priority,
-				repeated_period, tag, interval);
+		return timeInterval;
 	}
 	
 }
