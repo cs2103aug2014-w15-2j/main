@@ -34,7 +34,7 @@ import org.xml.sax.InputSource;
 
 
 public abstract class NERParser {
-	static AbstractSequenceClassifier<CoreLabel> classifierOverall = CRFClassifier.getClassifierNoExceptions("NLPTraining/overall-ner-model.ser.gz");
+	static AbstractSequenceClassifier<CoreLabel> classifierOverall = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/overall-ner-model.ser.gz");
 	static AbstractSequenceClassifier<CoreLabel> classifierTag = CRFClassifier.getClassifierNoExceptions("NLPTraining/tag-ner-model.ser.gz");
 	static AbstractSequenceClassifier<CoreLabel> classifierCommand = CRFClassifier.getClassifierNoExceptions("NLPTraining/command-ner-model.ser.gz");
 	
@@ -128,7 +128,13 @@ public abstract class NERParser {
 		TimeInterval interval = new TimeInterval();
 		
 		if (dates.size() == 1) {
-			interval = new TimeInterval(Constant.FLOATING_START_DATE, dates.get(0));
+			Calendar c1 = UtilityMethod.dateToCalendar(dates.get(0));
+			Calendar c2 = UtilityMethod.dateToCalendar(dates.get(0));
+			c1.set(Calendar.HOUR_OF_DAY, 0);
+			c1.set(Calendar.MINUTE, 1);
+			c2.set(Calendar.HOUR_OF_DAY, 23);
+			c2.set(Calendar.MINUTE, 59);
+			interval = new TimeInterval(c1.getTime(), c2.getTime());
 		} else if (dates.size() == 2) {
 			Date d0 = dates.get(0);
 			Date d1 = dates.get(1);
@@ -175,7 +181,8 @@ public abstract class NERParser {
 		return interval;
 	}
 	
-	private static ArrayList<Date> parseTimeToDate (ArrayList<String> userInputStrings) {
+	public static ArrayList<Date> parseTimeToDate (ArrayList<String> userInputStrings) {
+		System.out.println("here");
 	    Properties props = new Properties();
 	    props.put("sutime.binders","0");
 	    props.put("sutime.rules", "src/NLPTraining/defs.sutime.txt, src/NLPTraining/english.holidays.sutime.txt, src/NLPTraining/english.sutime.txt");
