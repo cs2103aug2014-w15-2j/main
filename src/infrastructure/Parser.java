@@ -2,14 +2,10 @@ package infrastructure;
 
 import infrastructure.Constant.COMMAND_TYPE;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 
 import reference.CommandFailedException;
 import reference.Pair;
@@ -225,65 +221,10 @@ public abstract class Parser {
 	}
 	
 	public static TimeInterval parseTimeInterval(String parameter) throws Exception {
-		String[] wordList = parameter.trim().split(" ");
-		Date startDate = null;
-		Date endDate = null;
-		
-		if (wordList.length == 1) {
-			if (parameter.equalsIgnoreCase("today")) {
-				startDate = new Date();
-				
-				Calendar endCalendar = Calendar.getInstance();
-				endCalendar.setTime(new Date());
-				endCalendar.set(Calendar.HOUR_OF_DAY, 23);
-				endCalendar.set(Calendar.MINUTE, 59);
-				endDate = endCalendar.getTime();
-			} else if (parameter.equalsIgnoreCase("tomorrow")) {
-				Calendar startCalendar = Calendar.getInstance();
-				startCalendar.setTime(new Date());
-				startCalendar.add(Calendar.DATE, 1);
-				startCalendar.set(Calendar.HOUR_OF_DAY, 0);
-				startCalendar.set(Calendar.MINUTE, 0);
-				startDate = startCalendar.getTime();
-				
-				Calendar endCalendar = Calendar.getInstance();
-				endCalendar.setTime(new Date());
-				endCalendar.add(Calendar.DATE, 1);
-				endCalendar.set(Calendar.HOUR_OF_DAY, 23);
-				endCalendar.set(Calendar.MINUTE, 59);
-				endDate = endCalendar.getTime();
-			}
-		} else if (wordList.length == 3) {
-			if (wordList[0].equalsIgnoreCase("before")) {
-				parameter.replaceFirst("before ", "");
-				startDate = new Date();
-				endDate = parseDateString(parameter);
-			}
-		} else if (wordList.length == 6) {
-
-			if (wordList[0].equalsIgnoreCase("from") && wordList[3].equalsIgnoreCase("to")) {
-				String startDateString = wordList[1] + " " + wordList[2];
-				String endDateString = wordList[4] + " " + wordList[5];
-				startDate = parseDateString(startDateString);
-				endDate = parseDateString(endDateString);
-			}
-		}
-		
-		return new TimeInterval(startDate, endDate);
-	}
-	
-	private static Date parseDateString (String dateString) {
-		try {
-			Date date = new SimpleDateFormat("dd/MMMM/yyyy HH:mm", Locale.ENGLISH).parse(dateString);
-			return date;
-		} catch (ParseException e1) {
-			try {
-				Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(dateString);
-				return date;
-			} catch (ParseException e2) {
-				return null;
-			}
-		}
+		System.out.println(NERParser.pasreTimeToXML(parameter));
+		HashMap<String, ArrayList<String>> map = NERParser.parseToMap(NERParser.pasreTimeToXML(parameter));
+		ArrayList<String> dateList = map.get("DATE");
+		return NERParser.parseTimeInterval(dateList);
 	}
 	
 	private static int parsePriority(String parameter) {

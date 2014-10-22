@@ -13,7 +13,6 @@ import edu.stanford.nlp.time.TimeAnnotator;
 import edu.stanford.nlp.time.TimeExpression;
 import edu.stanford.nlp.util.CoreMap;
 
-import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,18 +24,13 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-
 
 
 public abstract class NERParser {
 	static AbstractSequenceClassifier<CoreLabel> classifierOverall = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/overall-ner-model.ser.gz");
 	static AbstractSequenceClassifier<CoreLabel> classifierTag = CRFClassifier.getClassifierNoExceptions("NLPTraining/tag-ner-model.ser.gz");
 	static AbstractSequenceClassifier<CoreLabel> classifierCommand = CRFClassifier.getClassifierNoExceptions("NLPTraining/command-ner-model.ser.gz");
+	static AbstractSequenceClassifier<CoreLabel> classifierTime = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/time-ner-model.ser.gz");
 	
 	public static Task parseTask (String userInput) throws CommandFailedException {
 		String xmlString = parseToXML(userInput);
@@ -59,6 +53,9 @@ public abstract class NERParser {
 	}
 	
 	
+	public static String pasreTimeToXML (String content) {
+		return classifierTime.classifyToString(content, "inlineXML", false);
+	}
 	
 	
 	
@@ -71,21 +68,13 @@ public abstract class NERParser {
 		//parse the content to XML format, no reservation for spaces
 		return classifierOverall.classifyToString(content, "inlineXML", false);
 	}
-
-	public static Document loadXMLFromString(String xml) throws Exception {
-	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	    DocumentBuilder builder = factory.newDocumentBuilder();
-	    InputSource is = new InputSource(new StringReader(xml));
-	    return builder.parse(is);
-	}
-	
 	
 	/**
 	 * return the key-value map parsed from the xmlString
 	 * @param xmlString
 	 * @return
 	 */
-	private static HashMap<String, ArrayList<String>> parseToMap(String xmlString) {
+	public static HashMap<String, ArrayList<String>> parseToMap(String xmlString) {
 		assert(xmlString != null);
 		assert(xmlString.length() > 5);
 		
@@ -126,6 +115,7 @@ public abstract class NERParser {
 		ArrayList<Date> dates = parseTimeToDate(userInputStrings);
 		assert(dates != null);
 		TimeInterval interval = new TimeInterval();
+		System.out.println("datesize:" + dates.size());
 		
 		if (dates.size() == 1) {
 			Calendar c1 = UtilityMethod.dateToCalendar(dates.get(0));
@@ -228,7 +218,7 @@ public abstract class NERParser {
 			} else if (timeString.length() == 16) {
 				if (timeString.charAt(10) == 'T') {
 					timeString = timeString.replace("T", " ");
-					date = new SimpleDateFormat("yyyy-MM-dd hh:00", Locale.ENGLISH).parse(timeString);
+					date = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.ENGLISH).parse(timeString);
 				} else {
 					timeString = timeString.substring(0, 10);
 					date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(timeString);
