@@ -34,6 +34,7 @@ public class NERParser {
 	private AbstractSequenceClassifier<CoreLabel> classifierTime;
 	private AbstractSequenceClassifier<CoreLabel> classifierTimePicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierCommandPicker;
+	private AbstractSequenceClassifier<CoreLabel> classifierDescriptionPicker;
 	
 	public NERParser () {
 		super();
@@ -43,6 +44,7 @@ public class NERParser {
 		classifierTime = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/time-ner-model.ser.gz");
 		classifierTimePicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/time-picker-ner-model.ser.gz");
 		classifierCommandPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/command-picker-ner-model.ser.gz");
+		classifierDescriptionPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/description-picker-ner-model.ser.gz");
 	}
 	
 	public Task parseTask (String userInput) throws CommandFailedException {
@@ -121,6 +123,18 @@ public class NERParser {
 	}
 	
 	
+	
+	public String pickDescription (String userInputString) throws CommandFailedException {
+		String xmlStr = classifierDescriptionPicker.classifyToString(userInputString, "inlineXML", false);
+		System.err.println("XML STRING - pickDescription: " + xmlStr);
+		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
+		ArrayList<String> resultList =  result.get("DESCRIPTION");
+		if (resultList == null || resultList.size() == 0) {
+			throw new CommandFailedException("Description should not be empty");
+		} else {
+			return result.get("DESCRIPTION").get(0);
+		}
+	}
 	
 	
 	
@@ -351,6 +365,7 @@ public class NERParser {
 			return Parser.determineCommandType(results.get(0).toLowerCase());
 		} else {
 			return COMMAND_TYPE.ADD;
+
 		}
 		
 	}
