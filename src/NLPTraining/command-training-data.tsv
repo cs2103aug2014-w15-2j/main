@@ -1,22 +1,76 @@
 Add	ADD
 .	O
+
 add	ADD
 .	O
+
 update	UPDATE
 .	O
+
 change	UPDATE
 .	O
+
 create	ADD
 .	O
+
 delete	DELETE
 .	O
+
 remove	DELETE
 .	O
+
 display	DISPLAY
 .	O
+
 show	DISPLAY
 .	O
+
 undo	UNDO
 .	O
+
 redo	REDO
+.	O
+
+search	SEARCH
+.	O
+
+find	SEARCH
+.	O
+
+clear	CLEAR
+.	O
+
+exit	EXIT
+.	O
+
+log	LOGIN
+in	LOGIN
+.	O
+
+log	LOGIN
+in	LOGIN
+.	O
+
+log	LOGIN
+in	LOGIN
+.	O
+
+log	LOGIN
+in	LOGIN
+.	O
+
+log	LOGOUT
+log	LOGOUT
+.	O
+
+log	LOGOUT
+log	LOGOUT
+.	O
+
+log	LOGOUT
+log	LOGOUT
+.	O
+
+log	LOGOUT
+log	LOGOUT
 .	O

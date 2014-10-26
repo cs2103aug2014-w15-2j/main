@@ -59,7 +59,9 @@ public abstract class Constant {
 	public static final String KEY_TAG = "tag";
 	
 	public static final String COMMAND_STRING_LOG_IN = "log in";
+	public static final String COMMAND_STRING_LOG_IN_ALT = "login";
 	public static final String COMMAND_STRING_LOG_OUT = "log out";
+	public static final String COMMAND_STRING_LOG_OUT_ALT = "logout";
 	public static final String COMMAND_STRING_CREATE_ACCOUNT = "create account";
 	public static final String COMMAND_STRING_DELETE_ACCOUNT = "delete account";
 	public static final String COMMAND_STRING_HELP = "help";

@@ -1,0 +1,162 @@
+Add	COMMAND
+I’m	O
+going	O
+to	O
+swim	O
+this	O
+Sunday	O
+,	O
+tag	O
+with	O
+important	O
+.	O
+
+Buy	O
+a	O
+book	O
+,	O
+tag	O
+with	O
+medium	O
+,	O
+next	O
+friday	O
+18:00	O
+to	O
+20:00	O
+.	O
+
+add	COMMAND
+go	O
+to	O
+grandma’s	O
+home	O
+this	O
+Friday	O
+.	O
+
+Add	COMMAND
+reading	O
+books	O
+tomorrow O
+,	O
+18:00	O
+to	O
+20:00	O
+.	O
+
+Add	COMMAND
+repair	O
+computer	O
+10	O
+Oct 	O
+.	O
+
+add	COMMAND
+dog	O
+fooding	O
+Oct	O
+26	O
+.	O
+
+add	COMMAND
+buy	O
+food	O
+Sep	O
+20	O
+.	O
+
+add	COMMAND
+level	O
+party	O
+October	O
+30	O
+.	O
+
+
+delete 	COMMAND
+1	O
+.	O
+
+delete 	COMMAND
+5	O
+.	O
+
+delete 	COMMAND
+6	O
+.	O
+
+remove 	COMMAND
+2	O
+.	O
+
+update	COMMAND
+3	O
+swiming	O
+this	O
+Friday	O
+.	O
+
+change	COMMAND
+3	O
+swiming	O
+this	O
+Friday	O
+.	O
+
+undo	COMMAND
+.	O
+
+redo	COMMAND
+.	O
+
+search	COMMAND
+books	O
+.	O
+
+search	COMMAND
+today	O
+.	O
+
+search	COMMAND
+2014-12-21	O
+.	O
+
+search	COMMAND
+Oct	O
+31	O
+.	O
+
+log	COMMAND
+out	COMMAND
+.	O
+
+log	COMMAND
+in	COMMAND
+.	O
+
+log	COMMAND
+out	COMMAND
+.	O
+
+log	COMMAND
+in	COMMAND
+.	O
+
+display	COMMAND
+.	O
+
+display	COMMAND
+.	O
+
+clear	COMMAND
+.	O
+
+clear	COMMAND
+.	O
+
+clear	COMMAND
+.	O
+
+exit	COMMAND
+.	O

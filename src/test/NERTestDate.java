@@ -11,6 +11,7 @@ import reference.CommandFailedException;
 
 public class NERTestDate {
 	static final String TERMINATOR = "\n";
+	static NERParser nerParser = new NERParser();
 	
 	@Test
 	public void testDate1() {
@@ -21,7 +22,7 @@ public class NERTestDate {
 		System.out.println("testDate1:");
 		System.out.println("expects: " + expected);
 		try {
-			results = NERParser.parseTimeInterval(dateList).toString();
+			results = nerParser.parseTimeInterval(dateList).toString();
 			System.out.println("results: " + results);
 			assertEquals(expected + TERMINATOR, results);
 		} catch (CommandFailedException e) {
@@ -39,7 +40,7 @@ public class NERTestDate {
 		System.out.println("testDate2:");
 		System.out.println("expects: " + expected);
 		try {
-			results = NERParser.parseTimeInterval(dateList).toString();
+			results = nerParser.parseTimeInterval(dateList).toString();
 			System.out.println("results: " + results);
 			assertEquals(expected + TERMINATOR, results);
 		} catch (CommandFailedException e) {
@@ -57,7 +58,7 @@ public class NERTestDate {
 		System.out.println("testDate3:");
 		System.out.println("expects: " + expected);
 		try {
-			results = NERParser.parseTimeInterval(dateList).toString();
+			results = nerParser.parseTimeInterval(dateList).toString();
 			System.out.println("results: " + results);
 			assertEquals(expected + TERMINATOR, results);
 		} catch (CommandFailedException e) {
@@ -75,7 +76,7 @@ public class NERTestDate {
 		System.out.println("testDate4:");
 		System.out.println("expects: " + expected);
 		try {
-			results = NERParser.parseTimeInterval(dateList).toString();
+			results = nerParser.parseTimeInterval(dateList).toString();
 			System.out.println("results: " + results);
 			assertEquals(expected + TERMINATOR, results);
 		} catch (CommandFailedException e) {
@@ -94,7 +95,7 @@ public class NERTestDate {
 		System.out.println("testDate5:");
 		System.out.println("expects: " + expected);
 		try {
-			results = NERParser.parseTimeInterval(dateList).toString();
+			results = nerParser.parseTimeInterval(dateList).toString();
 			System.out.println("results: " + results);
 			assertEquals(expected + TERMINATOR, results);
 		} catch (CommandFailedException e) {
@@ -113,7 +114,7 @@ public class NERTestDate {
 		System.out.println("testDate6:");
 		System.out.println("expects: " + expected);
 		try {
-			results = NERParser.parseTimeInterval(dateList).toString();
+			results = nerParser.parseTimeInterval(dateList).toString();
 			System.out.println("results: " + results);
 			assertEquals(expected + TERMINATOR, results);
 		} catch (CommandFailedException e) {

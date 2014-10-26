@@ -194,6 +194,11 @@ public class ListOfXiaoMing {
 			
 			case CLEAR:
 				return this.clear();
+				
+			case EXIT:
+				System.setErr(err);  
+				User.exit();
+				
 			default:
 				return "";
 		}

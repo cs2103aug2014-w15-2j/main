@@ -12,6 +12,7 @@ import edu.stanford.nlp.time.TimeAnnotations;
 import edu.stanford.nlp.time.TimeAnnotator;
 import edu.stanford.nlp.time.TimeExpression;
 import edu.stanford.nlp.util.CoreMap;
+import infrastructure.Constant.COMMAND_TYPE;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,6 +32,8 @@ public class NERParser {
 	private AbstractSequenceClassifier<CoreLabel> classifierTag;
 	private AbstractSequenceClassifier<CoreLabel> classifierCommand;
 	private AbstractSequenceClassifier<CoreLabel> classifierTime;
+	private AbstractSequenceClassifier<CoreLabel> classifierTimePicker;
+	private AbstractSequenceClassifier<CoreLabel> classifierCommandPicker;
 	
 	public NERParser () {
 		super();
@@ -38,6 +41,8 @@ public class NERParser {
 		classifierTag = CRFClassifier.getClassifierNoExceptions("NLPTraining/tag-ner-model.ser.gz");
 		classifierCommand = CRFClassifier.getClassifierNoExceptions("NLPTraining/command-ner-model.ser.gz");
 		classifierTime = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/time-ner-model.ser.gz");
+		classifierTimePicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/time-picker-ner-model.ser.gz");
+		classifierCommandPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/command-picker-ner-model.ser.gz");
 	}
 	
 	public Task parseTask (String userInput) throws CommandFailedException {
@@ -77,6 +82,67 @@ public class NERParser {
 		return classifierOverall.classifyToString(content, "inlineXML", false);
 	}
 	
+	
+	/**
+	 * pick out the date fragments from an unparsed input string and translate to TimeInterval
+	 * @param userInputString
+	 * @return
+	 * @throws CommandFailedException 
+	 */
+	public TimeInterval pickDate(String userInputString) throws CommandFailedException {
+		String xmlStr = classifierTimePicker.classifyToString(userInputString, "inlineXML", false);
+		System.err.println("XML STRING - pickDate: " + xmlStr);
+		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
+		ArrayList<String> resultList =  result.get("DATE");
+		if (resultList == null) {
+			throw new CommandFailedException("Unparseble Date");
+		} else {
+			return parseTimeInterval(result.get("DATE"));
+		}
+	}
+	
+	
+	/**
+	 * pick out the cmd fragments and tranlsate to the enum
+	 * @param userInputString
+	 * @return
+	 * @throws CommandFailedException
+	 */
+	public COMMAND_TYPE pickCommand (String userInputString) throws CommandFailedException {
+		String xmlStr = classifierCommandPicker.classifyToString(userInputString, "inlineXML", false);
+		System.err.println("XML STRING - pickCommand: " + xmlStr);
+		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
+		ArrayList<String> resultList =  result.get("COMMAND");
+		if (resultList == null || resultList.size() == 0) {
+			return COMMAND_TYPE.ADD;
+		} else {
+			return this.parseCommand(result.get("COMMAND"));
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * return the key-value map parsed from the xmlString
 	 * @param xmlString
@@ -86,7 +152,7 @@ public class NERParser {
 		assert(xmlString != null);
 		assert(xmlString.length() > 5);
 		
-		System.err.println("INPUT TIME STRING - parseToMap: " + xmlString);
+		System.err.println("INPUT XML STRING - parseToMap: " + xmlString);
 		HashMap<String, ArrayList<String>> taskMap = new HashMap<String, ArrayList<String>>();
 		taskMap.put("COMMAND", new ArrayList<String>());
 		//get rid of the first and last character
@@ -266,7 +332,7 @@ public class NERParser {
 		return results;
 	}
 	
-	private String parseCommand(ArrayList<String> commands) throws CommandFailedException {
+	private COMMAND_TYPE parseCommand(ArrayList<String> commands) throws CommandFailedException {
 		
 		ArrayList<String> results = new ArrayList<String>();
 		
@@ -281,9 +347,10 @@ public class NERParser {
 		}
 		
 		if (results.size() >= 1) {
-			return results.get(0);
+			System.err.println("PARSED CMD - parseCommand: " + results.get(0).toLowerCase());
+			return Parser.determineCommandType(results.get(0).toLowerCase());
 		} else {
-			return "ADD";
+			return COMMAND_TYPE.ADD;
 		}
 		
 	}

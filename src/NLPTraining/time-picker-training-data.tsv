@@ -1,0 +1,201 @@
+Add	O
+I’m	O
+going	O
+to	O
+swim	O
+this	DATE
+Sunday	DATE
+,	O
+tag	O
+with	O
+important	O
+.	O
+
+Buy	O
+a	O
+book	O
+,	O
+tag	O
+with	O
+medium	O
+,	O
+next	DATE
+friday	DATE
+18:00	DATE
+to	DATE
+20:00	DATE
+.	O
+
+Today	DATE
+,	O
+18:00	DATE
+to	DATE
+20:00	DATE
+,	O
+watch	O
+lsm	O
+webcast	O
+tag	O
+with	O
+important	O
+.	O
+
+add	O
+buy	O
+a	O
+pen	O
+tomorrow	DATE
+.	O
+
+add	O
+clean	O
+blackboard	O
+tomorrow	DATE
+.	O
+
+add	O
+turn	O
+on	O
+the	O
+computer	O
+tomorrow	DATE
+.	O
+
+add	O
+buy	O
+a	O
+keyboar	O
+today	DATE
+.	O
+
+add	O
+go	O
+toilet	O
+today	DATE
+.	O
+
+add	O
+attend	O
+cs2103	O
+lecture	O
+this	DATE
+Friday	DATE
+.	O
+
+add	O
+go	O
+to	O
+grandma’s	O
+home	O
+this	DATE
+Friday	DATE
+.	O
+
+Add	O
+reading	O
+books	O
+tomorrow DATE
+,	O
+18:00	DATE
+to	DATE
+20:00	DATE
+.	O
+
+Add	O
+repair	O
+computer	O
+10	DATE
+Oct 	DATE
+.	O
+
+add	O
+dog	O
+fooding	O
+Oct	DATE
+26	DATE
+.	O
+
+add	O
+buy	O
+food	O
+Sep	DATE
+20	DATE
+.	O
+
+add	O
+level	O
+party	O
+October	DATE
+30	DATE
+.	O
+
+add	O
+clean	O
+keyboard	O
+25	DATE
+Oct	DATE
+.	O
+
+add	O
+buy	O
+a	O
+book	O
+stand	O
+28	DATE
+Nov	DATE
+.	O
+
+add	O
+group	O
+meeting	O
+this	DATE
+Fri	DATE
+.	O
+
+add	O
+report	O
+to	O
+maintenance	O
+October	DATE
+31	DATE
+.	O
+
+add	O
+report	O
+to	O
+maintenance	O
+October	DATE
+31	DATE
+.	O
+
+add	O
+report	O
+to	O
+maintenance	O
+October	DATE
+31	DATE
+.	O
+
+add	O
+report	O
+to	O
+maintenance	O
+Oct	DATE
+31	DATE
+.	O
+
+add	O
+report	O
+to	O
+maintenance	O
+Oct	DATE
+31	DATE
+.	O
+
+add	O
+report	O
+to	O
+maintenance	O
+Oct	DATE
+31	DATE
+.	O

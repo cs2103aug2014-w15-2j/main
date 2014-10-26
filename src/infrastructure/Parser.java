@@ -16,7 +16,7 @@ import dataStructure.Task;
 
 public class Parser {
 	
-	private NERParser nerPaser;
+	public NERParser nerPaser;
 	
 	public Parser() {
 		nerPaser = new NERParser();
@@ -65,7 +65,13 @@ public class Parser {
 	
 			case Constant.COMMAND_STRING_CLEAR:
 				return COMMAND_TYPE.CLEAR;	
-		
+	
+			case Constant.COMMAND_STRING_LOG_IN_ALT:
+				return COMMAND_TYPE.LOG_IN;
+				
+			case Constant.COMMAND_STRING_LOG_OUT_ALT:
+				return COMMAND_TYPE.LOG_OUT;
+				
 			default:
 				return COMMAND_TYPE.HELP;
 		}
@@ -127,6 +133,27 @@ public class Parser {
 		return updateAttributes;
 	}
 	
+	
+	public Task getTaskFromString(String inputString) throws CommandFailedException {
+		TimeInterval timeInterval = new TimeInterval();
+		String category = null; 
+		int priority = Constant.PRIORITY_DEFAULT;
+		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT; 
+		ArrayList<String> tag = new ArrayList<String>();
+		String description = null;
+		
+		
+		timeInterval = this.nerPaser.pickDate(inputString);
+		
+		
+		
+		
+		
+		
+		
+		
+		return null;
+	}
 	
 	public Task getTaskFromParameterList(ArrayList<String> parameterList) throws CommandFailedException {
 		TimeInterval timeInterval = new TimeInterval();
