@@ -166,10 +166,17 @@ public class User {
 	
 	/**
 	 * clear current tasks
+	 * @throws CommandFailedException 
 	 * 
 	 */
-	public void clear() {
-		currentTasks.clear();
+	public void clear() throws CommandFailedException {
+		for (Task task : currentTasks){
+			if(task.isTrashed()){
+				
+			} else {
+				task.addTag(Constant.TRASHED_TAG);
+			}
+		}
 		DataStore.save(this.username, this.currentTasks);
 	}
 	
