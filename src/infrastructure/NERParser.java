@@ -86,6 +86,7 @@ public class NERParser {
 		assert(xmlString != null);
 		assert(xmlString.length() > 5);
 		
+		System.err.println("INPUT TIME STRING - parseToMap: " + xmlString);
 		HashMap<String, ArrayList<String>> taskMap = new HashMap<String, ArrayList<String>>();
 		taskMap.put("COMMAND", new ArrayList<String>());
 		//get rid of the first and last character

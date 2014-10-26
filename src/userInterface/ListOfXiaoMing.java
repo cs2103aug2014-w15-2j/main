@@ -214,12 +214,16 @@ public class ListOfXiaoMing {
 	
 	
 	private String delete(ArrayList<String> taskParameters) {
-		int index = Integer.parseInt(taskParameters.get(0));
-		try {
-			return (this.user.delete(index - 1)) ? Constant.PROMPT_MESSAGE_DELETE_TASK_SUCCESSFULLY : 
-												   Constant.PROMPT_MESSAGE_DELETE_TASK_FAILED;
-		} catch (CommandFailedException e) {
-			return e.toString();
+		if (taskParameters.size() == 0) {
+			return "Please enter the task index you want to delete";
+		} else {
+			int index = Integer.parseInt(taskParameters.get(0));
+			try {
+				return (this.user.delete(index - 1)) ? Constant.PROMPT_MESSAGE_DELETE_TASK_SUCCESSFULLY : 
+													   Constant.PROMPT_MESSAGE_DELETE_TASK_FAILED;
+			} catch (CommandFailedException e) {
+				return e.toString();
+			}
 		}
 	}	
 	
