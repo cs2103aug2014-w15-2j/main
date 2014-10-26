@@ -29,27 +29,36 @@ import java.util.logging.Level;
 
 public class NERParser {
 	private AbstractSequenceClassifier<CoreLabel> classifierOverall;
+	
 	private AbstractSequenceClassifier<CoreLabel> classifierTag;
 	private AbstractSequenceClassifier<CoreLabel> classifierCommand;
 	private AbstractSequenceClassifier<CoreLabel> classifierTime;
+	private AbstractSequenceClassifier<CoreLabel> classifierPriority;
+	
+	
 	private AbstractSequenceClassifier<CoreLabel> classifierTimePicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierCommandPicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierDescriptionPicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierIndexPicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierTagPicker;
+	private AbstractSequenceClassifier<CoreLabel> classifierPriorityPicker;
 	
 	
 	public NERParser () {
 		super();
 		classifierOverall = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/overall-ner-model.ser.gz");
+		
 		classifierTag = CRFClassifier.getClassifierNoExceptions("NLPTraining/tag-ner-model.ser.gz");
 		classifierCommand = CRFClassifier.getClassifierNoExceptions("NLPTraining/command-ner-model.ser.gz");
 		classifierTime = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/time-ner-model.ser.gz");
+		classifierPriority = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/priority-ner-model.ser.gz");
+		
 		classifierTimePicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/time-picker-ner-model.ser.gz");
 		classifierCommandPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/command-picker-ner-model.ser.gz");
 		classifierDescriptionPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/description-picker-ner-model.ser.gz");
 		classifierIndexPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/index-picker-ner-model.ser.gz");
 		classifierTagPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/tag-picker-ner-model.ser.gz");
+		classifierPriorityPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/priority-picker-ner-model.ser.gz");
 	}
 	
 	public Task parseTask (String userInput) throws CommandFailedException {
@@ -147,7 +156,12 @@ public class NERParser {
 		}
 	}
 	
-	
+	/**
+	 * pick out the index segment and translate it to integer
+	 * @param userInputString
+	 * @return
+	 * @throws CommandFailedException
+	 */
 	public int pickIndex (String userInputString) throws CommandFailedException {
 		String xmlStr = classifierIndexPicker.classifyToString(userInputString, "inlineXML", false);
 		System.err.println("XML STRING - pickIndex: " + xmlStr);
@@ -160,7 +174,11 @@ public class NERParser {
 		}
 	}
 	
-	
+	/**
+	 * pick out the tag segments
+	 * @param userInputString
+	 * @return
+	 */
 	public ArrayList<String> pickTag (String userInputString){
 		String xmlStr = classifierTagPicker.classifyToString(userInputString, "inlineXML", false);
 		System.err.println("XML STRING - pickTag: " + xmlStr);
@@ -174,7 +192,17 @@ public class NERParser {
 	}
 	
 	
-	
+	public int pickPriority (String userInputString) {
+		String xmlStr = classifierPriorityPicker.classifyToString(userInputString, "inlineXML", false);
+		System.err.println("XML STRING - pickPriority: " + xmlStr);
+		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
+		ArrayList<String> resultList =  result.get("PRIORITY");
+		if (resultList == null || resultList.size() == 0) {
+			return Constant.PRIORITY_DEFAULT;
+		} else {
+			return parsePriority(resultList.get(0));
+		}
+	}
 	
 	
 	
@@ -197,9 +225,11 @@ public class NERParser {
 		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
 		ArrayList<String> tag = this.pickTag(userInputString);
 		String description = this.pickDescription(userInputString);
+		int priority = this.pickPriority(userInputString);
+		
 		
 		String category = null; 
-		int priority = Constant.PRIORITY_DEFAULT;
+		
 		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT; 
 		
 		return new Task(description, category, priority, repeatedPeriod, tag, timeInterval);
@@ -412,6 +442,27 @@ public class NERParser {
 		return results;
 	}
 	
+	
+	private int parsePriority (String priorityMines) {
+		
+		String parsedTagString = classifierPriority.classifyToString(priorityMines, "inlineXML", false);
+		HashMap<String, ArrayList<String>> cmdMap = parseToMap(parsedTagString);
+		int result = Constant.PRIORITY_INVALID;
+		for (String command: cmdMap.keySet()) {
+			if (!command.equals("COMMAND")) {
+				result = Parser.parsePriority(command);
+			}
+		}
+		
+		if (result == Constant.PRIORITY_INVALID) {
+			return Constant.PRIORITY_DEFAULT;
+		} else {
+			return result;
+		}
+		
+	}
+	
+	
 	private COMMAND_TYPE parseCommand(ArrayList<String> commands) throws CommandFailedException {
 		
 		ArrayList<String> results = new ArrayList<String>();
@@ -431,9 +482,7 @@ public class NERParser {
 			return Parser.determineCommandType(results.get(0).toLowerCase());
 		} else {
 			return COMMAND_TYPE.ADD;
-
 		}
-		
 	}
 	
 	

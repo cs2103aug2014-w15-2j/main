@@ -259,7 +259,7 @@ public class Parser {
 		return nerPaser.parseTimeInterval(dateList);
 	}
 	
-	private static int parsePriority(String parameter) {
+	public static int parsePriority(String parameter) {
 		if (parameter.equalsIgnoreCase("high")) {
 			return Constant.PRIORITY_HIGH;
 		} else if (parameter.equalsIgnoreCase("medium")) {
