@@ -416,6 +416,17 @@ public class Task {
 		}
 	}
 	
+	/**
+	 * check whether a task is trashed
+	 * @return
+	 */
+	public boolean isTrashed() {
+		if (tag.contains(Constant.TRASHED_TAG)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	// check task type
 	
 	/**

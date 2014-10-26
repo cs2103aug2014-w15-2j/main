@@ -19,6 +19,7 @@ public class User {
 	private Stack<ArrayList<Task>> undoable;
 	private Stack<ArrayList<Task>> redoable;
 	private String username;
+	private int taskEndIndex = -1;
 
 	/**
 	 * constructor
@@ -93,7 +94,13 @@ public class User {
 	 */
 	public boolean add(Task task) {
 		this.updateUndoable();
-		this.currentTasks.add(task);
+		if (taskEndIndex == currentTasks.size() - 1){
+			this.currentTasks.add(task);
+		} else {
+			this.currentTasks.add(task);
+			moveAddedTask(taskEndIndex);
+		}
+		taskEndIndex++;
 		boolean isSuccessful = DataStore.save(this.username, this.currentTasks);
 		return isSuccessful;
 	}
@@ -110,6 +117,8 @@ public class User {
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			boolean isSuccessful = this.currentTasks.get(index).addTag(Constant.TRASHED_TAG);
+			moveTrashedTask(index);
+			taskEndIndex--;
 			DataStore.save(this.username, this.currentTasks);
 			return isSuccessful;
 		}
@@ -154,6 +163,7 @@ public class User {
 		DataStore.save(this.username, this.currentTasks);
 	}
 	
+	
 	/**
 	 * clear current tasks
 	 * 
@@ -164,11 +174,36 @@ public class User {
 	}
 	
 	/**
+	 * move new added task to correct position
+	 * @param index
+	 */
+	private void moveAddedTask(int index) {
+		Task newAddedTask = currentTasks.get(currentTasks.size() - 1);
+		for (int i = currentTasks.size() - 1; i > index + 1; i--){
+			currentTasks.set(i, currentTasks.get(i - 1));
+		}
+		currentTasks.set(index + 1, newAddedTask);
+	}
+	
+	/**
+	 * move new trashed task to the end of currentTasks
+	 * @param index
+	 */
+	private void moveTrashedTask(int index) {
+		int lastTaskIndex = currentTasks.size();
+		Task newTrashedTask = currentTasks.get(index);
+		currentTasks.add(newTrashedTask);
+		for (int i = index; i < lastTaskIndex; i++) {
+			currentTasks.set(i, currentTasks.get(i + 1));
+		}
+		currentTasks.remove(lastTaskIndex);
+	}
+	/**
 	 * get valid categories from current tasks' categories
 	 * 
 	 * @return
 	 */
-	private ArrayList<String> getValidCategory(){
+	private ArrayList<String> getValidCategory() {
 		ArrayList<String> validCategory = new ArrayList<String>();
 		if(currentTasks.equals(null) || currentTasks.isEmpty()){
 			
@@ -184,7 +219,7 @@ public class User {
 	 * @param category
 	 * @throws CommandFailedException
 	 */
-	public void createCategory(String category) throws CommandFailedException{
+	public void createCategory(String category) throws CommandFailedException {
 		if (validCategory.contains(category)) {
 			throw new CommandFailedException("invalid category");
 		} else {
@@ -198,7 +233,7 @@ public class User {
 	 * @param category
 	 * @throws CommandFailedException
 	 */
-	public void deleteCategory(String category) throws CommandFailedException{
+	public void deleteCategory(String category) throws CommandFailedException {
 		if (!validCategory.contains(category)) {
 			throw new CommandFailedException("no such category");
 		} else {
@@ -215,9 +250,9 @@ public class User {
 	 * show a joke to user
 	 */
 	public void showJoke(){
-		System.out.println("How can you expect a Todo-List software to provide you a joke!����");
+		System.out.println("How can you expect a Todo-List software to provide you a joke!");
 		System.out.println("This function is actually the joke.");
-		System.out.println("If you really want some, go to jokes.cc.com ������");
+		System.out.println("If you really want some, go to jokes.cc.com ");
 	}
 	
 	/**
