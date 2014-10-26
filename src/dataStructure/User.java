@@ -155,6 +155,15 @@ public class User {
 	}
 	
 	/**
+	 * clear current tasks
+	 * 
+	 */
+	public void clear() {
+		currentTasks.clear();
+		DataStore.save(this.username, this.currentTasks);
+	}
+	
+	/**
 	 * get valid categories from current tasks' categories
 	 * 
 	 * @return
