@@ -22,7 +22,7 @@ import dataStructure.User;
 
 public class ListOfXiaoMing {
 	
-	private final static boolean ERROR_PRINT_ON = true;
+	private final static boolean ERROR_PRINT_ON = false;
 	private Parser parser = new Parser();
 	private static PrintStream err = System.err;
 	//a property to store the current user
@@ -165,6 +165,10 @@ public class ListOfXiaoMing {
 	public String executeNLP (String userInput) {
 		COMMAND_TYPE thisCommand;
 		try {
+			if (userInput.equals("")) {
+				return "";
+			}
+			
 			thisCommand = this.parser.nerParser.pickCommand(userInput);
 			System.err.println("CMD - executeNER: " + thisCommand);
 			switch(thisCommand) {
@@ -416,8 +420,13 @@ public class ListOfXiaoMing {
 	
 	
 	private String clear() {
-		System.out.println("clear not implemented");
-		return null;
+		try {
+			this.user.clear();
+			return "All tasks trashed";
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
 	}
 	
 	private String undo() {

@@ -319,6 +319,10 @@ public class NERParser {
 	public static HashMap<String, ArrayList<String>> parseToMap(String xmlString) {
 		assert(xmlString != null);
 		assert(xmlString.length() > 5);
+		if (xmlString == null || xmlString.length() <= 5) {
+			System.err.println("Invalid input");
+			return new HashMap<String, ArrayList<String>>();
+		}
 		
 		System.err.println("INPUT XML STRING - parseToMap: " + xmlString);
 		HashMap<String, ArrayList<String>> taskMap = new HashMap<String, ArrayList<String>>();
