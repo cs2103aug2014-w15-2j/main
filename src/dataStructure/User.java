@@ -215,9 +215,9 @@ public class User {
 	 * show a joke to user
 	 */
 	public void showJoke(){
-		System.out.println("How can you expect a Todo-List software to provide you a joke!😨");
+		System.out.println("How can you expect a Todo-List software to provide you a joke!����");
 		System.out.println("This function is actually the joke.");
-		System.out.println("If you really want some, go to jokes.cc.com ☺️");
+		System.out.println("If you really want some, go to jokes.cc.com ������");
 	}
 	
 	/**
@@ -437,7 +437,7 @@ public class User {
 	/**
 	 * exit exits the application
 	 */
-	public static void exit() {
+	public static void exit() {  
 		UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_SESSION_END);
 		System.exit(0);
 	}

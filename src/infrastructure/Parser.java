@@ -14,7 +14,13 @@ import dataStructure.Task;
 
 
 
-public abstract class Parser {
+public class Parser {
+	
+	private NERParser nerPaser;
+	
+	public Parser() {
+		nerPaser = new NERParser();
+	}
 	
 	public static COMMAND_TYPE determineCommandType(String commandTypeString) {
 		switch (commandTypeString) {
@@ -66,7 +72,7 @@ public abstract class Parser {
 	}
 	
 	
-	public static HashMap<String, Object> getTaskMap(ArrayList<String> parameterList) {
+	public HashMap<String, Object> getTaskMap(ArrayList<String> parameterList) {
 		HashMap <String, Object> updateAttributes = new HashMap<String, Object> ();
 		
 		for (String parameter: parameterList) {
@@ -122,7 +128,7 @@ public abstract class Parser {
 	}
 	
 	
-	public static Task getTaskFromParameterList(ArrayList<String> parameterList) throws CommandFailedException {
+	public Task getTaskFromParameterList(ArrayList<String> parameterList) throws CommandFailedException {
 		TimeInterval timeInterval = new TimeInterval();
 		String category = null; 
 		int priority = Constant.PRIORITY_DEFAULT;
@@ -220,11 +226,10 @@ public abstract class Parser {
 		return new Pair<COMMAND_TYPE, ArrayList<String>>(thisCommand, parameterList);
 	}
 	
-	public static TimeInterval parseTimeInterval(String parameter) throws Exception {
-		System.out.println(NERParser.pasreTimeToXML(parameter));
-		HashMap<String, ArrayList<String>> map = NERParser.parseToMap(NERParser.pasreTimeToXML(parameter));
+	public TimeInterval parseTimeInterval(String parameter) throws Exception {
+		HashMap<String, ArrayList<String>> map = NERParser.parseToMap(nerPaser.pasreTimeToXML(parameter));
 		ArrayList<String> dateList = map.get("DATE");
-		return NERParser.parseTimeInterval(dateList);
+		return nerPaser.parseTimeInterval(dateList);
 	}
 	
 	private static int parsePriority(String parameter) {

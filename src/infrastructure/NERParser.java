@@ -26,13 +26,21 @@ import java.util.logging.Level;
 
 
 
-public abstract class NERParser {
-	static AbstractSequenceClassifier<CoreLabel> classifierOverall = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/overall-ner-model.ser.gz");
-	static AbstractSequenceClassifier<CoreLabel> classifierTag = CRFClassifier.getClassifierNoExceptions("NLPTraining/tag-ner-model.ser.gz");
-	static AbstractSequenceClassifier<CoreLabel> classifierCommand = CRFClassifier.getClassifierNoExceptions("NLPTraining/command-ner-model.ser.gz");
-	static AbstractSequenceClassifier<CoreLabel> classifierTime = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/time-ner-model.ser.gz");
+public class NERParser {
+	private AbstractSequenceClassifier<CoreLabel> classifierOverall;
+	private AbstractSequenceClassifier<CoreLabel> classifierTag;
+	private AbstractSequenceClassifier<CoreLabel> classifierCommand;
+	private AbstractSequenceClassifier<CoreLabel> classifierTime;
 	
-	public static Task parseTask (String userInput) throws CommandFailedException {
+	public NERParser () {
+		super();
+		classifierOverall = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/overall-ner-model.ser.gz");
+		classifierTag = CRFClassifier.getClassifierNoExceptions("NLPTraining/tag-ner-model.ser.gz");
+		classifierCommand = CRFClassifier.getClassifierNoExceptions("NLPTraining/command-ner-model.ser.gz");
+		classifierTime = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/time-ner-model.ser.gz");
+	}
+	
+	public Task parseTask (String userInput) throws CommandFailedException {
 		String xmlString = parseToXML(userInput);
 		
 		
@@ -53,7 +61,7 @@ public abstract class NERParser {
 	}
 	
 	
-	public static String pasreTimeToXML (String content) {
+	public String pasreTimeToXML (String content) {
 		return classifierTime.classifyToString(content, "inlineXML", false);
 	}
 	
@@ -64,7 +72,7 @@ public abstract class NERParser {
 	 * @param content
 	 * @return
 	 */
-	public static String parseToXML (String content) {
+	public String parseToXML (String content) {
 		//parse the content to XML format, no reservation for spaces
 		return classifierOverall.classifyToString(content, "inlineXML", false);
 	}
@@ -111,11 +119,10 @@ public abstract class NERParser {
 	}
 	
 	
-	public static TimeInterval parseTimeInterval (ArrayList<String> userInputStrings) throws CommandFailedException {
+	public TimeInterval parseTimeInterval (ArrayList<String> userInputStrings) throws CommandFailedException {
 		ArrayList<Date> dates = parseTimeToDate(userInputStrings);
 		assert(dates != null);
 		TimeInterval interval = new TimeInterval();
-		System.out.println("datesize:" + dates.size());
 		
 		if (dates.size() == 1) {
 			Calendar c1 = UtilityMethod.dateToCalendar(dates.get(0));
@@ -171,8 +178,7 @@ public abstract class NERParser {
 		return interval;
 	}
 	
-	public static ArrayList<Date> parseTimeToDate (ArrayList<String> userInputStrings) {
-		System.out.println("here");
+	public ArrayList<Date> parseTimeToDate (ArrayList<String> userInputStrings) {
 	    Properties props = new Properties();
 	    props.put("sutime.binders","0");
 	    props.put("sutime.rules", "src/NLPTraining/defs.sutime.txt, src/NLPTraining/english.holidays.sutime.txt, src/NLPTraining/english.sutime.txt");
@@ -185,27 +191,31 @@ public abstract class NERParser {
 	    String stringForToday = format.format(Calendar.getInstance().getTime());
 	    
 	    for (String text : userInputStrings) {
-	      Annotation annotation = new Annotation(text);
-	      annotation.set(CoreAnnotations.DocDateAnnotation.class, stringForToday);
-	      pipeline.annotate(annotation);
-	      List<CoreMap> timexAnnsAll = annotation.get(TimeAnnotations.TimexAnnotations.class);
-	      for (CoreMap cm : timexAnnsAll) {
-	    	  String interpretedTimeString = cm.get(TimeExpression.Annotation.class).getTemporal().toString();
-	    	  if (parseStringToDate(interpretedTimeString) != null) {
-	    		  results.add(parseStringToDate(interpretedTimeString));
-	    	  }
-	      }
+	    	System.err.println("INPUT TIME STRING - parseTimeToDate: " + text);
+	    	Annotation annotation = new Annotation(text);
+	    	annotation.set(CoreAnnotations.DocDateAnnotation.class, stringForToday);
+	    	pipeline.annotate(annotation);
+	    	List<CoreMap> timexAnnsAll = annotation.get(TimeAnnotations.TimexAnnotations.class);
+		    for (CoreMap cm : timexAnnsAll) {
+		    	String interpretedTimeString = cm.get(TimeExpression.Annotation.class).getTemporal().toString();
+		    	Date d = parseStringToDate(interpretedTimeString);
+		   	  	if (d!= null) {
+		   	  		results.add(d);
+		   		}
+		   	}
 	    }
 	    return results;
 	}
 	
-	private static Date parseStringToDate (String timeString) {
+	private Date parseStringToDate (String timeString) {
 		//the four possible format:
 		//2014-10-15T14:00
 		//2014-10-24-WXX-5
 		//2014-10-24
 		//2014-02
 		//2014
+		
+		System.err.println("INPUT TIME STRING - parseStringToDate: " + timeString);
 		
 		Date date = null;
 		try {
@@ -237,7 +247,7 @@ public abstract class NERParser {
 	
 
 	
-	private static ArrayList<String> parseTag(ArrayList<String> tagMines) {
+	private ArrayList<String> parseTag(ArrayList<String> tagMines) {
 		
 		ArrayList<String> results = new ArrayList<String>();
 		
@@ -255,7 +265,7 @@ public abstract class NERParser {
 		return results;
 	}
 	
-	private static String parseCommand(ArrayList<String> commands) throws CommandFailedException {
+	private String parseCommand(ArrayList<String> commands) throws CommandFailedException {
 		
 		ArrayList<String> results = new ArrayList<String>();
 		

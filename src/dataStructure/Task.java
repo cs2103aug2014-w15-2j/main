@@ -127,7 +127,7 @@ public class Task {
 			}
 			// to remove the last comma
 			tags = tags.substring(0, tags.length() - REDUCE_CHAR);
-			assert tags.charAt(tags.length()) != ',';
+			assert tags.charAt(tags.length()-1) != ',';
 		}
 		return tags;
 	}
