@@ -1,11 +1,12 @@
 package userInterface;
 import infrastructure.Constant;
-//import infrastructure.NERParser;
 import infrastructure.Parser;
 import infrastructure.UtilityMethod;
 import infrastructure.Constant.COMMAND_TYPE;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,15 +15,16 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.SimpleFormatter;
 
-
 import reference.*;
 import dataStore.*;
 import dataStructure.Task;
 import dataStructure.User;
 
-
 public class ListOfXiaoMing {
 	
+	private final static boolean ERROR_PRINT_ON = true;
+	private Parser parser = new Parser();
+	private static PrintStream err = System.err;
 	//a property to store the current user
 	private User user;
 	
@@ -39,16 +41,18 @@ public class ListOfXiaoMing {
 		}
 	}
 	
+	
 	//main
 	public static void main(String[] args) {
 		LogManager.getLogManager().reset();
 
-//		try {
-//			NERParser.parseTask("Add attend the group meeting this Saturday, 10am to 1pm, tag with important, urgent");
-//		} catch (CommandFailedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		if (!ERROR_PRINT_ON) {
+			// now make all writes to the System.err stream silent 
+			System.setErr(new PrintStream(new OutputStream() {
+			    public void write(int b) {
+			    }
+			}));
+		}
 		
 		try {
 			SimpleDateFormat format = new SimpleDateFormat("MMMMdd_HHmmss");
@@ -141,6 +145,7 @@ public class ListOfXiaoMing {
 				return null;
 			
 			case EXIT:
+				System.setErr(err);  
 				User.exit();
 				
 			default:
@@ -187,6 +192,8 @@ public class ListOfXiaoMing {
 			case REDO:
 				return this.redo();
 			
+			case CLEAR:
+				return this.clear();
 			default:
 				return "";
 		}
@@ -195,7 +202,7 @@ public class ListOfXiaoMing {
 	private String add(ArrayList<String> taskParameters) {
 		Task taskToAdd;
 		try {
-			taskToAdd = Parser.getTaskFromParameterList(taskParameters);
+			taskToAdd = parser.getTaskFromParameterList(taskParameters);
 			assert(taskToAdd != null);
 			return (this.user.add(taskToAdd)) ? Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY : 
 												Constant.PROMPT_MESSAGE_ADD_TASK_FAILED;
@@ -221,7 +228,7 @@ public class ListOfXiaoMing {
 		int index = Integer.parseInt(taskParameters.get(0).trim());
 		try {
 			taskParameters.remove(0);
-			this.user.update(index - 1, Parser.getTaskMap(taskParameters));
+			this.user.update(index - 1, parser.getTaskMap(taskParameters));
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
 			return Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
@@ -292,7 +299,7 @@ public class ListOfXiaoMing {
 				String key = UtilityMethod.getFirstWord(parameter);
 				String value = UtilityMethod.removeFirstWord(parameter);
 				if (key.equalsIgnoreCase("time")) {
-					timeInterval = Parser.parseTimeInterval(value);
+					timeInterval = parser.parseTimeInterval(value);
 					UtilityMethod.showToUser(String.format(Constant.PROMPT_MESSAGE_SEARCH_TIME_INTERVAL, timeInterval));
 				} else {
 					keyword = parameter;
@@ -312,5 +319,10 @@ public class ListOfXiaoMing {
 			e.printStackTrace();
 			return e.toString();
 		}
+	}
+	
+	private String clear() {
+		System.out.println("clear not implemented");
+		return null;
 	}
 }
