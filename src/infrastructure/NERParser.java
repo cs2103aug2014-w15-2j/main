@@ -35,6 +35,7 @@ public class NERParser {
 	private AbstractSequenceClassifier<CoreLabel> classifierTimePicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierCommandPicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierDescriptionPicker;
+	private AbstractSequenceClassifier<CoreLabel> classifierIndexPicker;
 	
 	public NERParser () {
 		super();
@@ -45,6 +46,7 @@ public class NERParser {
 		classifierTimePicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/time-picker-ner-model.ser.gz");
 		classifierCommandPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/command-picker-ner-model.ser.gz");
 		classifierDescriptionPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/description-picker-ner-model.ser.gz");
+		classifierIndexPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/index-picker-ner-model.ser.gz");
 	}
 	
 	public Task parseTask (String userInput) throws CommandFailedException {
@@ -143,7 +145,30 @@ public class NERParser {
 	}
 	
 	
+	public int pickIndex (String userInputString) throws CommandFailedException {
+		String xmlStr = classifierIndexPicker.classifyToString(userInputString, "inlineXML", false);
+		System.err.println("XML STRING - pickIndex: " + xmlStr);
+		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
+		ArrayList<String> resultList =  result.get("INDEX");
+		if (resultList == null || resultList.size() == 0) {
+			throw new CommandFailedException("No index found!");
+		} else {
+			return Integer.parseInt(result.get("INDEX").get(0));
+		}
+	}
 	
+	
+	
+	
+	
+	
+	
+	/**
+	 * parse a task from the given string
+	 * @param userInputString
+	 * @return
+	 * @throws CommandFailedException
+	 */
 	
 	public Task getTask(String userInputString) throws CommandFailedException {
 		

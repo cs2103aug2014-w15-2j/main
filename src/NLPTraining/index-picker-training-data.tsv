@@ -1,0 +1,65 @@
+delete 	O
+2	INDEX
+.	O
+
+delete 	O
+5	INDEX
+.	O
+
+delete 	O
+6	INDEX
+.	O
+
+delete 	O
+7	INDEX
+.	O
+
+delete 	O
+9	INDEX
+.	O
+
+update	O
+12	INDEX
+moving	O
+to	O
+next	O
+place	O
+.	O
+
+update	O
+12	INDEX
+moving	O
+to	O
+next	O
+place	O
+.	O
+
+update	O
+12	INDEX
+moving	O
+to	O
+next	O
+place	O
+.	O
+
+change	O
+12	INDEX
+today	O
+.	O
+
+update	O
+12	INDEX
+today	O
+.	O
+
+update	O
+12	INDEX
+today	O
+.	O
+
+update	O
+12	INDEX
+next	O
+friday	O
+.	O
+
