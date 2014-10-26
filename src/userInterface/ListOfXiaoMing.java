@@ -169,14 +169,10 @@ public class ListOfXiaoMing {
 			System.err.println("CMD - executeNER: " + thisCommand);
 			switch(thisCommand) {
 				case ADD:
-					Task t = parser.nerPaser.getTask(userInput);
-					this.user.add(t);
-					break;
+					return this.addNLP(userInput);
 					
 				case DELETE:
-					int index = parser.nerPaser.pickIndex(userInput);
-					this.user.delete(index - 1);
-					break;
+					return this.deleteNLP(userInput);
 					
 				case UPDATE:
 					parser.nerPaser.pickIndex(userInput);
@@ -260,6 +256,9 @@ public class ListOfXiaoMing {
 		}
 	}
 
+	
+	//add
+	
 	private String add(ArrayList<String> taskParameters) {
 		Task taskToAdd;
 		try {
@@ -272,7 +271,20 @@ public class ListOfXiaoMing {
 		}
 	}
 	
+	private String addNLP(String userInput) {
+		try {
+			Task taskToAdd = parser.nerPaser.getTask(userInput);
+			assert(taskToAdd != null);
+			return (this.user.add(taskToAdd)) ? Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY : 
+				Constant.PROMPT_MESSAGE_ADD_TASK_FAILED;
+		} catch (CommandFailedException e) {
+			return e.toString();
+		}
+	}
 	
+	
+	
+	//delete 
 	
 	private String delete(ArrayList<String> taskParameters) {
 		if (taskParameters.size() == 0) {
@@ -288,6 +300,17 @@ public class ListOfXiaoMing {
 		}
 	}	
 	
+	private String deleteNLP (String userInput) {
+		try {
+			int index = parser.nerPaser.pickIndex(userInput);
+			return (this.user.delete(index - 1)) ? Constant.PROMPT_MESSAGE_DELETE_TASK_SUCCESSFULLY : 
+												   Constant.PROMPT_MESSAGE_DELETE_TASK_FAILED;
+		} catch (CommandFailedException e) {
+			return e.toString();
+		}
+	}
+	
+	//update
 	
 	private String update(ArrayList<String> taskParameters) {
 		int index = Integer.parseInt(taskParameters.get(0).trim());
@@ -300,6 +323,41 @@ public class ListOfXiaoMing {
 		}
 		
 		return Constant.PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY;
+	}
+	
+	
+	
+	//search
+	
+	private String search(ArrayList<String> taskParameters) {
+		
+		try {	
+			TimeInterval timeInterval = new TimeInterval();
+			String keyword = "";
+			for (String parameter : taskParameters) {
+				String key = UtilityMethod.getFirstWord(parameter);
+				String value = UtilityMethod.removeFirstWord(parameter);
+				if (key.equalsIgnoreCase("time")) {
+					timeInterval = parser.parseTimeInterval(value);
+					UtilityMethod.showToUser(String.format(Constant.PROMPT_MESSAGE_SEARCH_TIME_INTERVAL, timeInterval));
+				} else {
+					keyword = parameter;
+					UtilityMethod.showToUser(String.format(Constant.PROMPT_MESSAGE_SEARCH_KEYWORD, keyword));
+				}
+			}
+			
+			Constraint thisConstraint = new Constraint(keyword, timeInterval);
+			ArrayList<Task> queryResult = this.user.find(thisConstraint);
+			String queryResultString =  UtilityMethod.taskListToString(queryResult);
+			if (queryResultString.equals("")) {
+				return Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED;
+			} else {
+				return queryResultString;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			return e.toString();
+		}
 	}
 	
 	
@@ -350,39 +408,6 @@ public class ListOfXiaoMing {
 		} catch (CommandFailedException e) {
 			UtilityMethod.showToUser(e.toString());
 			return Constant.PROMPT_MESSAGE_REDO_FAILED;
-		}
-	}
-	
-	
-	
-	private String search(ArrayList<String> taskParameters) {
-		
-		try {	
-			TimeInterval timeInterval = new TimeInterval();
-			String keyword = "";
-			for (String parameter : taskParameters) {
-				String key = UtilityMethod.getFirstWord(parameter);
-				String value = UtilityMethod.removeFirstWord(parameter);
-				if (key.equalsIgnoreCase("time")) {
-					timeInterval = parser.parseTimeInterval(value);
-					UtilityMethod.showToUser(String.format(Constant.PROMPT_MESSAGE_SEARCH_TIME_INTERVAL, timeInterval));
-				} else {
-					keyword = parameter;
-					UtilityMethod.showToUser(String.format(Constant.PROMPT_MESSAGE_SEARCH_KEYWORD, keyword));
-				}
-			}
-			
-			Constraint thisConstraint = new Constraint(keyword, timeInterval);
-			ArrayList<Task> queryResult = this.user.find(thisConstraint);
-			String queryResultString =  UtilityMethod.taskListToString(queryResult);
-			if (queryResultString.equals("")) {
-				return Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED;
-			} else {
-				return queryResultString;
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-			return e.toString();
 		}
 	}
 	
