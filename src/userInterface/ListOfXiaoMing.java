@@ -104,7 +104,7 @@ public class ListOfXiaoMing {
 			boolean willContinue = true;
 			while (willContinue) {
 				String userInput = UtilityMethod.readCommand();
-				String result = list.execute(userInput);
+				String result = list.executeNER(userInput);
 				if (result.equals(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY)) {
 					willContinue = false;
 					Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_USER_LOG_OUT);
@@ -161,6 +161,61 @@ public class ListOfXiaoMing {
 		
 	
 //User level commands
+	
+	public String executeNER (String userInput) {
+		COMMAND_TYPE thisCommand;
+		try {
+			thisCommand = this.parser.nerPaser.pickCommand(userInput);
+			System.err.println("CMD - executeNER: " + thisCommand);
+			switch(thisCommand) {
+				case ADD:
+					Task t = parser.nerPaser.getTask(userInput);
+					this.user.add(t);
+					break;
+					
+				case DELETE:
+					int index = parser.nerPaser.pickIndex(userInput);
+					this.user.delete(index - 1);
+					break;
+					
+				case UPDATE:
+					parser.nerPaser.pickIndex(userInput);
+					break;
+					
+				case DISPLAY:
+					return this.display();
+					
+				case SEARCH:
+					break;
+					
+				case LOG_OUT:
+					return this.logOut();
+					
+				case UNDO:
+					return this.undo();
+					
+				case REDO:
+					return this.redo();
+					
+				case CLEAR:
+					return this.display();
+					
+				case EXIT:
+					System.setErr(err);  
+					User.exit();
+					break;
+					
+				default:
+					return "";
+			}
+			return "";
+		} catch (CommandFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return e.toString();
+		}
+	}
+	
 	
 	public String execute (String userInput) {
 		Pair<COMMAND_TYPE, ArrayList<String>> commandPair = Parser.parseCommandPair(userInput);
