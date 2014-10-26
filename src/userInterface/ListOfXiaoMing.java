@@ -198,7 +198,8 @@ public class ListOfXiaoMing {
 					return this.redo();
 					
 				case CLEAR:
-					return this.display();
+					this.user.clear();
+					break;
 					
 				case EXIT:
 					System.setErr(err);  
