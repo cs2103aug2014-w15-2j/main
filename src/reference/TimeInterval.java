@@ -96,4 +96,14 @@ public class TimeInterval {
 		
 		return text;
 	}
+	
+	/**
+	 * Two time intervals are equal if and only if their start date and end date are both equal
+	 * @param t
+	 * @return
+	 */
+	public boolean equals(TimeInterval t) {
+		return (this.getStartDate().compareTo(t.getStartDate()) == 0) &&
+				(this.getEndDate().compareTo(t.getEndDate()) == 0);
+	}
 }
