@@ -114,9 +114,9 @@ public class NERParser {
 		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
 		ArrayList<String> resultList =  result.get("COMMAND");
 		if (resultList == null || resultList.size() == 0) {
-			throw new CommandFailedException("Unparseble Command");
+			return COMMAND_TYPE.ADD;
 		} else {
-			return Parser.determineCommandType(result.get("COMMAND").get(0));
+			return this.parseCommand(result.get("COMMAND"));
 		}
 	}
 	
@@ -152,7 +152,7 @@ public class NERParser {
 		assert(xmlString != null);
 		assert(xmlString.length() > 5);
 		
-		System.err.println("INPUT TIME STRING - parseToMap: " + xmlString);
+		System.err.println("INPUT XML STRING - parseToMap: " + xmlString);
 		HashMap<String, ArrayList<String>> taskMap = new HashMap<String, ArrayList<String>>();
 		taskMap.put("COMMAND", new ArrayList<String>());
 		//get rid of the first and last character
@@ -332,7 +332,7 @@ public class NERParser {
 		return results;
 	}
 	
-	private String parseCommand(ArrayList<String> commands) throws CommandFailedException {
+	private COMMAND_TYPE parseCommand(ArrayList<String> commands) throws CommandFailedException {
 		
 		ArrayList<String> results = new ArrayList<String>();
 		
@@ -347,9 +347,10 @@ public class NERParser {
 		}
 		
 		if (results.size() >= 1) {
-			return results.get(0);
+			System.err.println("PARSED CMD - parseCommand: " + results.get(0).toLowerCase());
+			return Parser.determineCommandType(results.get(0).toLowerCase());
 		} else {
-			return "ADD";
+			return COMMAND_TYPE.ADD;
 		}
 		
 	}
