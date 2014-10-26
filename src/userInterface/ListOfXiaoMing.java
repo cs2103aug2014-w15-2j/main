@@ -22,7 +22,7 @@ import dataStructure.User;
 
 public class ListOfXiaoMing {
 	
-	private final static boolean ERROR_PRINT_ON = true;
+	private final static boolean ERROR_PRINT_ON = false;
 	private Parser parser = new Parser();
 	private static PrintStream err = System.err;
 	//a property to store the current user

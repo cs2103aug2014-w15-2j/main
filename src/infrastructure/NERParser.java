@@ -48,37 +48,21 @@ public class NERParser {
 		super();
 		classifierOverall = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/overall-ner-model.ser.gz");
 		
+		
+		//NER parsers
 		classifierTag = CRFClassifier.getClassifierNoExceptions("NLPTraining/tag-ner-model.ser.gz");
 		classifierCommand = CRFClassifier.getClassifierNoExceptions("NLPTraining/command-ner-model.ser.gz");
 		classifierTime = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/time-ner-model.ser.gz");
 		classifierPriority = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/priority-ner-model.ser.gz");
 		
+		
+		//NER pickers
 		classifierTimePicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/time-picker-ner-model.ser.gz");
 		classifierCommandPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/command-picker-ner-model.ser.gz");
 		classifierDescriptionPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/description-picker-ner-model.ser.gz");
 		classifierIndexPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/index-picker-ner-model.ser.gz");
 		classifierTagPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/tag-picker-ner-model.ser.gz");
 		classifierPriorityPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/priority-picker-ner-model.ser.gz");
-	}
-	
-	public Task parseTask (String userInput) throws CommandFailedException {
-		String xmlString = parseToXML(userInput);
-		
-		
-		HashMap<String, ArrayList<String>> xmlMap = parseToMap(xmlString);
-		for (String key : xmlMap.keySet()) {
-			if (key.equals("COMMAND")) {
-				System.out.println("COMMAND: " + parseCommand(xmlMap.get(key)));
-			} else if (key.equals("TAG")) {
-				System.out.println("TAG: " + parseTag(xmlMap.get(key)));
-			} else if (key.equals("DATE")) {
-				System.out.println("Time Interval: " + parseTimeInterval(xmlMap.get(key)));
-			} else {
-				System.out.println(key + ": " + xmlMap.get(key));	
-			}
-		}
-		
-		return null;
 	}
 	
 	
@@ -191,7 +175,11 @@ public class NERParser {
 		}
 	}
 	
-	
+	/**
+	 * pick out the priority segments
+	 * @param userInputString
+	 * @return
+	 */
 	public int pickPriority (String userInputString) {
 		String xmlStr = classifierPriorityPicker.classifyToString(userInputString, "inlineXML", false);
 		System.err.println("XML STRING - pickPriority: " + xmlStr);
@@ -205,6 +193,12 @@ public class NERParser {
 	}
 	
 	
+	
+	public String pickCategroy (String userInputString) {
+		
+		
+		return null;
+	}
 	
 	
 	
@@ -226,8 +220,6 @@ public class NERParser {
 		ArrayList<String> tag = this.pickTag(userInputString);
 		String description = this.pickDescription(userInputString);
 		int priority = this.pickPriority(userInputString);
-		
-		
 		String category = null; 
 		
 		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT; 
@@ -296,6 +288,12 @@ public class NERParser {
 	}
 	
 	
+	/**
+	 * get a TimeInterval object from a list of date strings
+	 * @param userInputStrings
+	 * @return
+	 * @throws CommandFailedException
+	 */
 	public TimeInterval parseTimeInterval (ArrayList<String> userInputStrings) throws CommandFailedException {
 		ArrayList<Date> dates = parseTimeToDate(userInputStrings);
 		assert(dates != null);
@@ -355,6 +353,12 @@ public class NERParser {
 		return interval;
 	}
 	
+	
+	/**
+	 * translate a list of date string to a list of date objects
+	 * @param userInputStrings
+	 * @return
+	 */
 	public ArrayList<Date> parseTimeToDate (ArrayList<String> userInputStrings) {
 	    Properties props = new Properties();
 	    props.put("sutime.binders","0");
@@ -384,6 +388,12 @@ public class NERParser {
 	    return results;
 	}
 	
+	
+	/**
+	 * parse a time string
+	 * @param timeString
+	 * @return
+	 */
 	private Date parseStringToDate (String timeString) {
 		//the four possible format:
 		//2014-10-15T14:00
@@ -423,7 +433,11 @@ public class NERParser {
 	}
 	
 
-	
+	/**
+	 * parse tags
+	 * @param tagMines
+	 * @return
+	 */
 	private ArrayList<String> parseTag(ArrayList<String> tagMines) {
 		
 		ArrayList<String> results = new ArrayList<String>();
@@ -443,6 +457,11 @@ public class NERParser {
 	}
 	
 	
+	/**
+	 * parse priorities
+	 * @param priorityMines
+	 * @return
+	 */
 	private int parsePriority (String priorityMines) {
 		
 		String parsedTagString = classifierPriority.classifyToString(priorityMines, "inlineXML", false);
@@ -463,6 +482,12 @@ public class NERParser {
 	}
 	
 	
+	/**
+	 * parse commands
+	 * @param commands
+	 * @return
+	 * @throws CommandFailedException
+	 */
 	private COMMAND_TYPE parseCommand(ArrayList<String> commands) throws CommandFailedException {
 		
 		ArrayList<String> results = new ArrayList<String>();
