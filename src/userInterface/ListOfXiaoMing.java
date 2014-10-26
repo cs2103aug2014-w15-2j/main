@@ -22,7 +22,7 @@ import dataStructure.User;
 
 public class ListOfXiaoMing {
 	
-	private final static boolean ERROR_PRINT_ON = false;
+	private final static boolean ERROR_PRINT_ON = true;
 	private Parser parser = new Parser();
 	private static PrintStream err = System.err;
 	//a property to store the current user
@@ -104,7 +104,7 @@ public class ListOfXiaoMing {
 			boolean willContinue = true;
 			while (willContinue) {
 				String userInput = UtilityMethod.readCommand();
-				String result = list.executeNER(userInput);
+				String result = list.executeNLP(userInput);
 				if (result.equals(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY)) {
 					willContinue = false;
 					Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_USER_LOG_OUT);
@@ -162,10 +162,10 @@ public class ListOfXiaoMing {
 	
 //User level commands
 	
-	public String executeNER (String userInput) {
+	public String executeNLP (String userInput) {
 		COMMAND_TYPE thisCommand;
 		try {
-			thisCommand = this.parser.nerPaser.pickCommand(userInput);
+			thisCommand = this.parser.nerParser.pickCommand(userInput);
 			System.err.println("CMD - executeNER: " + thisCommand);
 			switch(thisCommand) {
 				case ADD:
@@ -175,14 +175,14 @@ public class ListOfXiaoMing {
 					return this.deleteNLP(userInput);
 					
 				case UPDATE:
-					parser.nerPaser.pickIndex(userInput);
+					parser.nerParser.pickIndex(userInput);
 					break;
-					
-				case DISPLAY:
-					return this.display();
 					
 				case SEARCH:
-					break;
+					return this.searchNLP(userInput);
+				
+				case DISPLAY:
+					return this.display();
 					
 				case LOG_OUT:
 					return this.logOut();
@@ -194,8 +194,7 @@ public class ListOfXiaoMing {
 					return this.redo();
 					
 				case CLEAR:
-					this.user.clear();
-					break;
+					return this.clear();
 					
 				case EXIT:
 					System.setErr(err);  
@@ -273,7 +272,7 @@ public class ListOfXiaoMing {
 	
 	private String addNLP(String userInput) {
 		try {
-			Task taskToAdd = parser.nerPaser.getTask(userInput);
+			Task taskToAdd = parser.nerParser.getTask(userInput);
 			assert(taskToAdd != null);
 			return (this.user.add(taskToAdd)) ? Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY : 
 				Constant.PROMPT_MESSAGE_ADD_TASK_FAILED;
@@ -302,7 +301,7 @@ public class ListOfXiaoMing {
 	
 	private String deleteNLP (String userInput) {
 		try {
-			int index = parser.nerPaser.pickIndex(userInput);
+			int index = parser.nerParser.pickIndex(userInput);
 			return (this.user.delete(index - 1)) ? Constant.PROMPT_MESSAGE_DELETE_TASK_SUCCESSFULLY : 
 												   Constant.PROMPT_MESSAGE_DELETE_TASK_FAILED;
 		} catch (CommandFailedException e) {
@@ -361,6 +360,32 @@ public class ListOfXiaoMing {
 	}
 	
 	
+	private String searchNLP (String userInput) {
+		Constraint thisConstraint;
+		try {
+			thisConstraint = parser.nerParser.getConstraint(userInput);
+			ArrayList<Task> queryResult = this.user.find(thisConstraint);
+			String queryResultString =  UtilityMethod.taskListToString(queryResult);
+			if (queryResultString.equals("")) {
+				return Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED;
+			} else {
+				return queryResultString;
+			}
+		} catch (CommandFailedException e) {
+			return e.toString();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return e.toString();
+		}
+		
+		
+	}
+	
+	
+	
+	//common methods for NLP and non-NLP
+	
 	private String display() {
 		ArrayList<Task> queryResult;
 		try {
@@ -378,16 +403,11 @@ public class ListOfXiaoMing {
 		}
 	}
 	
-	private String logOut() {
-		
-		if (DataStore.clearCache()) {
-			return Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY;
-		} else {
-			return Constant.PROMPT_MESSAGE_CLEAR_CACHE_FAILED;
-		}
+	
+	private String clear() {
+		System.out.println("clear not implemented");
+		return null;
 	}
-	
-	
 	
 	private String undo() {
 		try {
@@ -411,8 +431,13 @@ public class ListOfXiaoMing {
 		}
 	}
 	
-	private String clear() {
-		System.out.println("clear not implemented");
-		return null;
+	private String logOut() {
+		
+		if (DataStore.clearCache()) {
+			return Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY;
+		} else {
+			return Constant.PROMPT_MESSAGE_CLEAR_CACHE_FAILED;
+		}
 	}
+
 }

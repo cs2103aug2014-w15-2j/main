@@ -16,10 +16,10 @@ import dataStructure.Task;
 
 public class Parser {
 	
-	public NERParser nerPaser;
+	public NERParser nerParser;
 	
 	public Parser() {
-		nerPaser = new NERParser();
+		nerParser = new NERParser();
 	}
 	
 	public static COMMAND_TYPE determineCommandType(String commandTypeString) {
@@ -143,7 +143,7 @@ public class Parser {
 		String description = null;
 		
 		
-		timeInterval = this.nerPaser.pickTimeInterval(inputString);
+		timeInterval = this.nerParser.pickTimeInterval(inputString);
 		
 		
 		
@@ -254,9 +254,9 @@ public class Parser {
 	}
 	
 	public TimeInterval parseTimeInterval(String parameter) throws Exception {
-		HashMap<String, ArrayList<String>> map = NERParser.parseToMap(nerPaser.pasreTimeToXML(parameter));
+		HashMap<String, ArrayList<String>> map = NERParser.parseToMap(nerParser.pasreTimeToXML(parameter));
 		ArrayList<String> dateList = map.get("DATE");
-		return nerPaser.parseTimeInterval(dateList);
+		return nerParser.parseTimeInterval(dateList);
 	}
 	
 	public static int parsePriority(String parameter) {

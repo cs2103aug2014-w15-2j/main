@@ -209,6 +209,7 @@ public class NERParser {
 	
 	/**
 	 * parse a task from the given string
+	 * used when adding an task
 	 * @param userInputString
 	 * @return
 	 * @throws CommandFailedException
@@ -228,8 +229,22 @@ public class NERParser {
 	}
 	
 	
-	
-	
+	/**
+	 * parse a search constraint
+	 * used when searching for tasks
+	 * @param userIntputStirng
+	 * @return
+	 * @throws CommandFailedException 
+	 */
+	public Constraint getConstraint(String userInputString) throws CommandFailedException {
+		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
+		String keyword = "";
+		if (timeInterval.equals(new TimeInterval())) {
+			keyword = UtilityMethod.removeFirstWord(userInputString);
+		}
+		
+		return new Constraint(keyword, timeInterval);
+	}
 	
 	
 	
