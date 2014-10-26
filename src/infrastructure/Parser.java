@@ -16,7 +16,7 @@ import dataStructure.Task;
 
 public class Parser {
 	
-	private NERParser nerPaser;
+	public NERParser nerPaser;
 	
 	public Parser() {
 		nerPaser = new NERParser();
@@ -127,6 +127,14 @@ public class Parser {
 		return updateAttributes;
 	}
 	
+	
+	public Task getTaskFromString(String inputString) {
+		
+		
+		
+		
+		return null;
+	}
 	
 	public Task getTaskFromParameterList(ArrayList<String> parameterList) throws CommandFailedException {
 		TimeInterval timeInterval = new TimeInterval();
