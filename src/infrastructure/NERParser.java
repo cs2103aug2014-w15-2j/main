@@ -36,6 +36,8 @@ public class NERParser {
 	private AbstractSequenceClassifier<CoreLabel> classifierCommandPicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierDescriptionPicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierIndexPicker;
+	private AbstractSequenceClassifier<CoreLabel> classifierTagPicker;
+	
 	
 	public NERParser () {
 		super();
@@ -47,6 +49,7 @@ public class NERParser {
 		classifierCommandPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/command-picker-ner-model.ser.gz");
 		classifierDescriptionPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/description-picker-ner-model.ser.gz");
 		classifierIndexPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/index-picker-ner-model.ser.gz");
+		classifierTagPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/tag-picker-ner-model.ser.gz");
 	}
 	
 	public Task parseTask (String userInput) throws CommandFailedException {
@@ -101,7 +104,7 @@ public class NERParser {
 		if (resultList == null || resultList.size() == 0) {
 			return COMMAND_TYPE.ADD;
 		} else {
-			return this.parseCommand(result.get("COMMAND"));
+			return this.parseCommand(resultList);
 		}
 	}
 	
@@ -119,9 +122,9 @@ public class NERParser {
 		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
 		ArrayList<String> resultList =  result.get("DATE");
 		if (resultList == null) {
-			return null;
+			return new TimeInterval();
 		} else {
-			return parseTimeInterval(result.get("DATE"));
+			return parseTimeInterval(resultList);
 		}
 	}
 	
@@ -140,7 +143,7 @@ public class NERParser {
 		if (resultList == null || resultList.size() == 0) {
 			throw new CommandFailedException("Description should not be empty");
 		} else {
-			return result.get("DESCRIPTION").get(0);
+			return resultList.get(0);
 		}
 	}
 	
@@ -153,9 +156,28 @@ public class NERParser {
 		if (resultList == null || resultList.size() == 0) {
 			throw new CommandFailedException("No index found!");
 		} else {
-			return Integer.parseInt(result.get("INDEX").get(0));
+			return Integer.parseInt(resultList.get(0));
 		}
 	}
+	
+	
+	public ArrayList<String> pickTag (String userInputString){
+		String xmlStr = classifierTagPicker.classifyToString(userInputString, "inlineXML", false);
+		System.err.println("XML STRING - pickTag: " + xmlStr);
+		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
+		ArrayList<String> resultList =  result.get("TAG");
+		if (resultList == null || resultList.size() == 0) {
+			return new ArrayList<String>();
+		} else {
+			return parseTag(resultList);
+		}
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -172,19 +194,13 @@ public class NERParser {
 	
 	public Task getTask(String userInputString) throws CommandFailedException {
 		
-		//load the time
 		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
-		if (timeInterval == null) {
-			timeInterval = new TimeInterval();
-		}
-		
-		//load the description
+		ArrayList<String> tag = this.pickTag(userInputString);
 		String description = this.pickDescription(userInputString);
 		
 		String category = null; 
 		int priority = Constant.PRIORITY_DEFAULT;
 		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT; 
-		ArrayList<String> tag = new ArrayList<String>();
 		
 		return new Task(description, category, priority, repeatedPeriod, tag, timeInterval);
 	}

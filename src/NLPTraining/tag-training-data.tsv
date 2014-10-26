@@ -8,6 +8,7 @@ nice	TAG
 ,	O
 popular	TAG
 .	O
+
 Tag	O
 with	O
 ongoing	TAG
@@ -15,3 +16,52 @@ ongoing	TAG
 urgent	TAG
 ,	O
 compulsory	TAG
+.	O
+
+Tag	O
+with	O
+ongoing	TAG
+,	O
+urgent	TAG
+,	O
+compulsory	TAG
+.	O
+
+Tag	O
+with	O
+ongoing	TAG
+,	O
+urgent	TAG
+,	O
+compulsory	TAG
+,	O
+next	TAG
+.	O
+
+tag	O
+with	O
+next	TAG
+and	O
+urgent	TAG
+.	O
+
+tag	O
+with	O
+cs2101	TAG
+and	O
+cs2105	TAG
+.	O
+
+tag	O
+with	O
+bio	TAG
+and	O
+math	TAG
+.	O
+
+tag	O
+with	O
+you	TAG
+and	O
+me	TAG
+.	O
