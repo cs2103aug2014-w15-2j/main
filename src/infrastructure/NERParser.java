@@ -86,25 +86,6 @@ public class NERParser {
 	
 	
 	/**
-	 * pick out the date fragments from an unparsed input string and translate to TimeInterval
-	 * @param userInputString
-	 * @return
-	 * @throws CommandFailedException 
-	 */
-	public TimeInterval pickDate(String userInputString) throws CommandFailedException {
-		String xmlStr = classifierTimePicker.classifyToString(userInputString, "inlineXML", false);
-		System.err.println("XML STRING - pickDate: " + xmlStr);
-		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
-		ArrayList<String> resultList =  result.get("DATE");
-		if (resultList == null) {
-			throw new CommandFailedException("Unparseble Date");
-		} else {
-			return parseTimeInterval(result.get("DATE"));
-		}
-	}
-	
-	
-	/**
 	 * pick out the cmd fragments and tranlsate to the enum
 	 * @param userInputString
 	 * @return
@@ -124,6 +105,31 @@ public class NERParser {
 	
 	
 	
+	/**
+	 * pick out the date fragments from an unparsed input string and translate to TimeInterval
+	 * @param userInputString
+	 * @return
+	 * @throws CommandFailedException 
+	 */
+	public TimeInterval pickTimeInterval (String userInputString) throws CommandFailedException {
+		String xmlStr = classifierTimePicker.classifyToString(userInputString, "inlineXML", false);
+		System.err.println("XML STRING - pickDate: " + xmlStr);
+		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
+		ArrayList<String> resultList =  result.get("DATE");
+		if (resultList == null) {
+			return null;
+		} else {
+			return parseTimeInterval(result.get("DATE"));
+		}
+	}
+	
+	
+	/**
+	 * pick out the description segments
+	 * @param userInputString
+	 * @return
+	 * @throws CommandFailedException
+	 */
 	public String pickDescription (String userInputString) throws CommandFailedException {
 		String xmlStr = classifierDescriptionPicker.classifyToString(userInputString, "inlineXML", false);
 		System.err.println("XML STRING - pickDescription: " + xmlStr);
@@ -138,6 +144,25 @@ public class NERParser {
 	
 	
 	
+	
+	public Task getTask(String userInputString) throws CommandFailedException {
+		
+		//load the time
+		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
+		if (timeInterval == null) {
+			timeInterval = new TimeInterval();
+		}
+		
+		//load the description
+		String description = this.pickDescription(userInputString);
+		
+		String category = null; 
+		int priority = Constant.PRIORITY_DEFAULT;
+		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT; 
+		ArrayList<String> tag = new ArrayList<String>();
+		
+		return new Task(description, category, priority, repeatedPeriod, tag, timeInterval);
+	}
 	
 	
 	

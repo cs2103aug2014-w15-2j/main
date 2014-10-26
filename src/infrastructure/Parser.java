@@ -143,7 +143,7 @@ public class Parser {
 		String description = null;
 		
 		
-		timeInterval = this.nerPaser.pickDate(inputString);
+		timeInterval = this.nerPaser.pickTimeInterval(inputString);
 		
 		
 		
