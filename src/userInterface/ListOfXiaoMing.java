@@ -175,8 +175,7 @@ public class ListOfXiaoMing {
 					return this.deleteNLP(userInput);
 					
 				case UPDATE:
-					parser.nerParser.pickIndex(userInput);
-					break;
+					return this.updateNLP(userInput);
 					
 				case SEARCH:
 					return this.searchNLP(userInput);
@@ -316,6 +315,18 @@ public class ListOfXiaoMing {
 		try {
 			taskParameters.remove(0);
 			this.user.update(index - 1, parser.getTaskMap(taskParameters));
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+			return Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
+		}
+		
+		return Constant.PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY;
+	}
+	
+	private String updateNLP (String userInput) {
+		try {
+			int index = parser.nerParser.pickIndex(userInput);
+			this.user.update(index - 1, parser.nerParser.getUpdatedTaskMap(userInput));
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
 			return Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;

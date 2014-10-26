@@ -309,7 +309,8 @@ public class Task {
 				throw new CommandFailedException();
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
+			System.err.println(e);
 		}
 	}
 	
@@ -409,7 +410,7 @@ public class Task {
 	 * @return
 	 */
 	private boolean isValidInterval(TimeInterval interval){
-		if (interval.equals(null)) {
+		if (interval == null) {
 			return false;
 		} else {
 			return true;
