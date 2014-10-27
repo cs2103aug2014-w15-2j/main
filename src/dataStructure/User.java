@@ -42,17 +42,18 @@ public class User {
 	 * 
 	 * @throws CommandFailedException
 	 */
+	@SuppressWarnings("unchecked")
 	public void undo() throws CommandFailedException {
 		if (this.undoable.empty()) {
 			throw new CommandFailedException(Constant.NO_UNDOABLE_ERROR_MESSAGE);
 		} else {
-			this.redoable.push(this.currentTasks);
+			this.redoable.push((ArrayList<Task>) this.currentTasks.clone());
 
 			if (this.redoable.size() > Constant.MAXIMUM_REDO_TIMES) {
 				this.redoable.remove(0);
 			}
 
-			this.currentTasks = this.undoable.pop();
+			this.currentTasks = (ArrayList<Task>) this.undoable.pop().clone();
 		}
 	}
 
@@ -61,17 +62,18 @@ public class User {
 	 * 
 	 * @throws CommandFailedException
 	 */
+	@SuppressWarnings("unchecked")
 	public void redo() throws CommandFailedException {
 		if (this.redoable.empty()) {
 			throw new CommandFailedException(Constant.NO_REDOABLE_ERROR_MESSAGE);
 		} else {
-			this.undoable.push(this.currentTasks);
+			this.undoable.push((ArrayList<Task>) this.currentTasks.clone());
 
 			if (this.undoable.size() > Constant.MAXIMUM_UNDO_TIMES) {
 				this.undoable.remove(0);
 			}
 
-			this.currentTasks = this.redoable.pop();
+			this.currentTasks = (ArrayList<Task>) this.redoable.pop().clone();
 		}
 	}
 
@@ -79,9 +81,10 @@ public class User {
 	 * updateUndoable this method should be called BEFORE every operation
 	 * involving task list
 	 */
+	@SuppressWarnings("unchecked")
 	private void updateUndoable() {
 		this.redoable.clear();
-		this.undoable.push(this.currentTasks);
+		this.undoable.push((ArrayList<Task>) this.currentTasks.clone());
 		if (this.undoable.size() > Constant.MAXIMUM_UNDO_TIMES) {
 			this.undoable.remove(0);
 		}
