@@ -18,7 +18,13 @@ public abstract class UtilityMethod {
 		boolean c3same = c3.get(Calendar.YEAR) == today.get(Calendar.YEAR) && c3.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR);
 
 		if (c1same && c2same && c2same) {
-			return 1;
+			if (c1.get(Calendar.HOUR_OF_DAY) == 0 && c1.get(Calendar.MINUTE) == 0) {
+				return 1;
+			} else if (c2.get(Calendar.HOUR_OF_DAY) == 0 && c2.get(Calendar.MINUTE) == 0) {
+				return 2;
+			} else {
+				return 3;
+			}
 		} else if (!c1same && c2same && c3same) {
 			return 1;
 		} else if (c1same && !c2same && c3same) {

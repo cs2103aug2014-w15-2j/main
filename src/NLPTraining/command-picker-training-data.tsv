@@ -11,21 +11,6 @@ with	O
 important	O
 .	O
 
-Buy	O
-a	O
-book	O
-,	O
-tag	O
-with	O
-medium	O
-,	O
-next	O
-friday	O
-18:00	O
-to	O
-20:00	O
-.	O
-
 add	COMMAND
 go	O
 to	O
@@ -33,20 +18,6 @@ grandma’s	O
 home	O
 this	O
 Friday	O
-.	O
-
-
-Meet	O
-friends	O
-tomorrow	O
-.	O
-
-attend	O
-party	O
-.	O
-
-read	O
-books	O
 .	O
 
 Add	COMMAND
@@ -59,13 +30,6 @@ to	O
 20:00	O
 .	O
 
-write	O
-more	O
-data	O
-in	O
-this	O
-file	O
-.	O
 
 Add	COMMAND
 repair	O
@@ -181,4 +145,7 @@ clear	COMMAND
 .	O
 
 exit	COMMAND
+.	O
+
+NLP	COMMAND
 .	O

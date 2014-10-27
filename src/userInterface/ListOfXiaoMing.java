@@ -23,6 +23,7 @@ import dataStructure.User;
 public class ListOfXiaoMing {
 	
 	private final static boolean ERROR_PRINT_ON = false;
+	private boolean isNlpOn = false;
 	private Parser parser = new Parser();
 	private static PrintStream err = System.err;
 	//a property to store the current user
@@ -104,7 +105,14 @@ public class ListOfXiaoMing {
 			boolean willContinue = true;
 			while (willContinue) {
 				String userInput = UtilityMethod.readCommand();
-				String result = list.executeNLP(userInput);
+				
+				String result;
+				if (list.isNlpOn) {
+					result = list.executeNLP(userInput);
+				} else {
+					result = list.execute(userInput);
+				}
+				
 				if (result.equals(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY)) {
 					willContinue = false;
 					Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_USER_LOG_OUT);
@@ -204,6 +212,9 @@ public class ListOfXiaoMing {
 					User.exit();
 					break;
 					
+				case NLP:
+					return this.toggleNLP();
+					
 				default:
 					return "";
 			}
@@ -253,12 +264,24 @@ public class ListOfXiaoMing {
 				System.setErr(err);  
 				User.exit();
 				
+			case NLP:
+				return this.toggleNLP();
+				
 			default:
 				return "";
 		}
 	}
 
-	
+	/**
+	 * toggle between NLP mode and non-NLP mode
+	 * @return
+	 */
+	private String toggleNLP() {
+		this.isNlpOn = !this.isNlpOn;
+		return (this.isNlpOn) ? "NLP ON" : "NLP OFF";
+	}
+
+
 	//add
 	
 	private String add(ArrayList<String> taskParameters) {

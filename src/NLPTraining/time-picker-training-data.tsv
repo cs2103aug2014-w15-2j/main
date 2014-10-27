@@ -213,3 +213,54 @@ Going	O
 home	O
 tomorrow	DATE
 .	O
+
+Add	O
+group	O
+meeting	O
+today	DATE
+,	O
+10am	DATE
+to	O
+12am	DATE
+.	O
+
+Add	O
+group	O
+meeting	O
+today	DATE
+,	O
+10am	DATE
+to	O
+12pm	DATE
+.	O
+
+Add	O
+group	O
+meeting	O
+tomorrow	DATE
+,	O
+2pm	DATE
+to	O
+4pm	DATE
+.	O
+
+Add	O
+group	O
+meeting	O
+tomorrow	DATE
+,	O
+2pm	DATE
+to	O
+4pm	DATE
+.	O
+
+Add	O
+group	O
+meeting	O
+tomorrow	DATE
+,	O
+2pm	DATE
+to	O
+4pm	DATE
+.	O
+

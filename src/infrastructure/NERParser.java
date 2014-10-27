@@ -387,7 +387,6 @@ public class NERParser {
 			Calendar c3 = UtilityMethod.dateToCalendar(dates.get(2));
 			
 			int differentIndex = UtilityMethod.selectDifferentDate(c1, c2, c3);
-			
 			switch (differentIndex) {
 				case 1:
 					c2.set(c1.get(Calendar.YEAR), c1.get(Calendar.MONTH), c1.get(Calendar.DAY_OF_MONTH));
@@ -485,7 +484,7 @@ public class NERParser {
 			} else if (timeString.length() == 16) {
 				if (timeString.charAt(10) == 'T') {
 					timeString = timeString.replace("T", " ");
-					date = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.ENGLISH).parse(timeString);
+					date = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH).parse(timeString);
 				} else {
 					timeString = timeString.substring(0, 10);
 					date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(timeString);

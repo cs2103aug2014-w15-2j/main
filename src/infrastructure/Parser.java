@@ -72,6 +72,9 @@ public class Parser {
 			case Constant.COMMAND_STRING_LOG_OUT_ALT:
 				return COMMAND_TYPE.LOG_OUT;
 				
+			case Constant.COMMAND_STRING_NLP:
+				return COMMAND_TYPE.NLP;
+				
 			default:
 				return COMMAND_TYPE.HELP;
 		}
@@ -131,28 +134,6 @@ public class Parser {
 		}
 		
 		return updateAttributes;
-	}
-	
-	
-	public Task getTaskFromString(String inputString) throws CommandFailedException {
-		TimeInterval timeInterval = new TimeInterval();
-		String category = null; 
-		int priority = Constant.PRIORITY_DEFAULT;
-		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT; 
-		ArrayList<String> tag = new ArrayList<String>();
-		String description = null;
-		
-		
-		timeInterval = this.nerParser.pickTimeInterval(inputString);
-		
-		
-		
-		
-		
-		
-		
-		
-		return null;
 	}
 	
 	public Task getTaskFromParameterList(ArrayList<String> parameterList) throws CommandFailedException {
