@@ -22,7 +22,7 @@ import dataStructure.User;
 
 public class ListOfXiaoMing {
 	
-	private final static boolean ERROR_PRINT_ON = true;
+	private final static boolean ERROR_PRINT_ON = false;
 	private Parser parser = new Parser();
 	private static PrintStream err = System.err;
 	//a property to store the current user
@@ -165,6 +165,10 @@ public class ListOfXiaoMing {
 	public String executeNLP (String userInput) {
 		COMMAND_TYPE thisCommand;
 		try {
+			if (userInput.equals("")) {
+				return "";
+			}
+			
 			thisCommand = this.parser.nerParser.pickCommand(userInput);
 			System.err.println("CMD - executeNER: " + thisCommand);
 			switch(thisCommand) {
@@ -175,8 +179,7 @@ public class ListOfXiaoMing {
 					return this.deleteNLP(userInput);
 					
 				case UPDATE:
-					parser.nerParser.pickIndex(userInput);
-					break;
+					return this.updateNLP(userInput);
 					
 				case SEARCH:
 					return this.searchNLP(userInput);
@@ -324,6 +327,18 @@ public class ListOfXiaoMing {
 		return Constant.PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY;
 	}
 	
+	private String updateNLP (String userInput) {
+		try {
+			int index = parser.nerParser.pickIndex(userInput);
+			this.user.update(index - 1, parser.nerParser.getUpdatedTaskMap(userInput));
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+			return Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
+		}
+		
+		return Constant.PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY;
+	}
+	
 	
 	
 	//search
@@ -405,8 +420,13 @@ public class ListOfXiaoMing {
 	
 	
 	private String clear() {
-		System.out.println("clear not implemented");
-		return null;
+		try {
+			this.user.clear();
+			return "All tasks trashed";
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
 	}
 	
 	private String undo() {

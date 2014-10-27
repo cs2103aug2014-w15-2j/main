@@ -44,6 +44,12 @@ public class NERParser {
 	private AbstractSequenceClassifier<CoreLabel> classifierPriorityPicker;
 	
 	
+	private boolean isTimeChanged = false;
+	private boolean isTagChanged = false;
+	private boolean isDescriptionChanged = false;
+	private boolean isPriorityChanged = false;
+//	private boolean isCategoryChanged = false;
+	
 	public NERParser () {
 		super();
 		classifierOverall = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/overall-ner-model.ser.gz");
@@ -110,6 +116,7 @@ public class NERParser {
 	 * @throws CommandFailedException 
 	 */
 	public TimeInterval pickTimeInterval (String userInputString) throws CommandFailedException {
+		this.isTimeChanged = false;
 		String xmlStr = classifierTimePicker.classifyToString(userInputString, "inlineXML", false);
 		System.err.println("XML STRING - pickDate: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
@@ -117,6 +124,7 @@ public class NERParser {
 		if (resultList == null) {
 			return new TimeInterval();
 		} else {
+			this.isTimeChanged = true;
 			return parseTimeInterval(resultList);
 		}
 	}
@@ -129,13 +137,15 @@ public class NERParser {
 	 * @throws CommandFailedException
 	 */
 	public String pickDescription (String userInputString) throws CommandFailedException {
+		this.isDescriptionChanged = false;
 		String xmlStr = classifierDescriptionPicker.classifyToString(userInputString, "inlineXML", false);
 		System.err.println("XML STRING - pickDescription: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
 		ArrayList<String> resultList =  result.get("DESCRIPTION");
 		if (resultList == null || resultList.size() == 0) {
-			throw new CommandFailedException("Description should not be empty");
+			return "";
 		} else {
+			this.isDescriptionChanged = true;
 			return resultList.get(0);
 		}
 	}
@@ -164,6 +174,7 @@ public class NERParser {
 	 * @return
 	 */
 	public ArrayList<String> pickTag (String userInputString){
+		this.isTagChanged = false;
 		String xmlStr = classifierTagPicker.classifyToString(userInputString, "inlineXML", false);
 		System.err.println("XML STRING - pickTag: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
@@ -171,6 +182,7 @@ public class NERParser {
 		if (resultList == null || resultList.size() == 0) {
 			return new ArrayList<String>();
 		} else {
+			this.isTagChanged = true;
 			return parseTag(resultList);
 		}
 	}
@@ -181,6 +193,7 @@ public class NERParser {
 	 * @return
 	 */
 	public int pickPriority (String userInputString) {
+		this.isPriorityChanged = false;
 		String xmlStr = classifierPriorityPicker.classifyToString(userInputString, "inlineXML", false);
 		System.err.println("XML STRING - pickPriority: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
@@ -188,6 +201,7 @@ public class NERParser {
 		if (resultList == null || resultList.size() == 0) {
 			return Constant.PRIORITY_DEFAULT;
 		} else {
+			this.isPriorityChanged = true;
 			return parsePriority(resultList.get(0));
 		}
 	}
@@ -222,7 +236,7 @@ public class NERParser {
 		String description = this.pickDescription(userInputString);
 		int priority = this.pickPriority(userInputString);
 		String category = null; 
-		
+
 		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT; 
 		
 		return new Task(description, category, priority, repeatedPeriod, tag, timeInterval);
@@ -248,6 +262,43 @@ public class NERParser {
 	
 	
 	
+	/**
+	 * get updated keys and values
+	 * @param userInputStirng
+	 * @return
+	 * @throws CommandFailedException 
+	 */
+	public  HashMap<String, Object> getUpdatedTaskMap (String userInputString) throws CommandFailedException {
+		
+		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
+		ArrayList<String> tag = this.pickTag(userInputString);
+		String description = this.pickDescription(userInputString);
+		int priority = this.pickPriority(userInputString);
+		
+		HashMap <String, Object> updateAttributes = new HashMap<String, Object> ();
+		
+		if (this.isTimeChanged) {
+			System.err.println("getUpdatedTaskMap: time updated to " + timeInterval);
+			updateAttributes.put("time_interval", timeInterval);
+		}
+		
+		if (this.isTagChanged) {
+			System.err.println("getUpdatedTaskMap: tag updated to " + tag);
+			updateAttributes.put("tag", tag);
+		}
+		
+		if (this.isDescriptionChanged) {
+			System.err.println("getUpdatedTaskMap: description updated to " + description);
+			updateAttributes.put("description", description);
+		}
+		
+		if (this.isPriorityChanged) {
+			System.err.println("getUpdatedTaskMap: priority updated to " + priority);
+			updateAttributes.put("priority", priority);
+		}
+		
+		return updateAttributes;
+	}
 	
 	
 	
@@ -268,6 +319,10 @@ public class NERParser {
 	public static HashMap<String, ArrayList<String>> parseToMap(String xmlString) {
 		assert(xmlString != null);
 		assert(xmlString.length() > 5);
+		if (xmlString == null || xmlString.length() <= 5) {
+			System.err.println("Invalid input");
+			return new HashMap<String, ArrayList<String>>();
+		}
 		
 		System.err.println("INPUT XML STRING - parseToMap: " + xmlString);
 		HashMap<String, ArrayList<String>> taskMap = new HashMap<String, ArrayList<String>>();

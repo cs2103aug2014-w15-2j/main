@@ -157,6 +157,7 @@ public class User {
 				} else if (currentAttribute.equals("tag")) {
 					task.setTag((ArrayList<String>) currentObject);
 				} else if (currentAttribute.equals("time_interval")) {
+					System.err.println("USER UPDATE INTERVAL: " + (TimeInterval)currentObject);
 					task.setInterval((TimeInterval) currentObject);
 				} else {
 					throw new CommandFailedException(Constant.INVALID_UPDATE_MESSAGE);
