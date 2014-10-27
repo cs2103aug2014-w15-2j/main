@@ -22,7 +22,7 @@ import dataStructure.User;
 
 public class ListOfXiaoMing {
 	
-	private final static boolean ERROR_PRINT_ON = true;
+	private final static boolean ERROR_PRINT_ON = false;
 	private boolean isNlpOn = false;
 	private Parser parser = new Parser();
 	private static PrintStream err = System.err;
@@ -45,7 +45,7 @@ public class ListOfXiaoMing {
 	
 	//main
 	public static void main(String[] args) {
-		LogManager.getLogManager().reset();
+//		LogManager.getLogManager().reset();
 
 		if (!ERROR_PRINT_ON) {
 			// now make all writes to the System.err stream silent 
@@ -55,18 +55,18 @@ public class ListOfXiaoMing {
 			}));
 		}
 		
-		try {
-			SimpleDateFormat format = new SimpleDateFormat("MMMMdd_HHmmss");
-			FileHandler handler = new FileHandler("main " + format.format(Calendar.getInstance().getTime())+ ".log");
-			handler.setFormatter(new SimpleFormatter());
-			Constant.logger.addHandler(handler);
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			SimpleDateFormat format = new SimpleDateFormat("MMMMdd_HHmmss");
+//			FileHandler handler = new FileHandler("main " + format.format(Calendar.getInstance().getTime())+ ".log");
+//			handler.setFormatter(new SimpleFormatter());
+//			Constant.logger.addHandler(handler);
+//		} catch (SecurityException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		while (true) {
 			ListOfXiaoMing list = null;
