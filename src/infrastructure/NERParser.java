@@ -28,8 +28,6 @@ import java.util.logging.Level;
 
 
 public class NERParser {
-	private AbstractSequenceClassifier<CoreLabel> classifierOverall;
-	
 	private AbstractSequenceClassifier<CoreLabel> classifierTag;
 	private AbstractSequenceClassifier<CoreLabel> classifierCommand;
 	private AbstractSequenceClassifier<CoreLabel> classifierTime;
@@ -51,43 +49,27 @@ public class NERParser {
 //	private boolean isCategoryChanged = false;
 	
 	public NERParser () {
-		super();
-		classifierOverall = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/overall-ner-model.ser.gz");
-		
-		
+		super();		
 		//NER parsers
 		classifierTag = CRFClassifier.getClassifierNoExceptions("NLPTraining/tag-ner-model.ser.gz");
 		classifierCommand = CRFClassifier.getClassifierNoExceptions("NLPTraining/command-ner-model.ser.gz");
-		classifierTime = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/time-ner-model.ser.gz");
-		classifierPriority = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/priority-ner-model.ser.gz");
+		classifierTime = CRFClassifier.getClassifierNoExceptions("NLPTraining/time-ner-model.ser.gz");
+		classifierPriority = CRFClassifier.getClassifierNoExceptions("NLPTraining/priority-ner-model.ser.gz");
 		
 		
 		//NER pickers
-		classifierTimePicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/time-picker-ner-model.ser.gz");
-		classifierCommandPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/command-picker-ner-model.ser.gz");
-		classifierDescriptionPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/description-picker-ner-model.ser.gz");
-		classifierIndexPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/index-picker-ner-model.ser.gz");
-		classifierTagPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/tag-picker-ner-model.ser.gz");
-		classifierPriorityPicker = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/priority-picker-ner-model.ser.gz");
+		classifierTimePicker = CRFClassifier.getClassifierNoExceptions("NLPTraining/time-picker-ner-model.ser.gz");
+		classifierCommandPicker = CRFClassifier.getClassifierNoExceptions("NLPTraining/command-picker-ner-model.ser.gz");
+		classifierDescriptionPicker = CRFClassifier.getClassifierNoExceptions("NLPTraining/description-picker-ner-model.ser.gz");
+		classifierIndexPicker = CRFClassifier.getClassifierNoExceptions("NLPTraining/index-picker-ner-model.ser.gz");
+		classifierTagPicker = CRFClassifier.getClassifierNoExceptions("NLPTraining/tag-picker-ner-model.ser.gz");
+		classifierPriorityPicker = CRFClassifier.getClassifierNoExceptions("NLPTraining/priority-picker-ner-model.ser.gz");
 	}
 	
 	
 	public String pasreTimeToXML (String content) {
 		return classifierTime.classifyToString(content, "inlineXML", false);
 	}
-	
-	
-	
-	/**
-	 * Crucial part of NLP, parse the content to XML with 
-	 * @param content
-	 * @return
-	 */
-	public String parseToXML (String content) {
-		//parse the content to XML format, no reservation for spaces
-		return classifierOverall.classifyToString(content, "inlineXML", false);
-	}
-	
 	
 	/**
 	 * pick out the cmd fragments and tranlsate to the enum
@@ -431,7 +413,7 @@ public class NERParser {
 	public ArrayList<Date> parseTimeToDate (ArrayList<String> userInputStrings) {
 	    Properties props = new Properties();
 	    props.put("sutime.binders","0");
-	    props.put("sutime.rules", "src/NLPTraining/defs.sutime.txt, src/NLPTraining/english.holidays.sutime.txt, src/NLPTraining/english.sutime.txt");
+	    props.put("sutime.rules", "NLPTraining/defs.sutime.txt, NLPTraining/english.holidays.sutime.txt, NLPTraining/english.sutime.txt");
 	    AnnotationPipeline pipeline = new AnnotationPipeline();
 	    pipeline.addAnnotator(new TokenizerAnnotator(false));
 	    pipeline.addAnnotator(new TimeAnnotator("sutime", props));
