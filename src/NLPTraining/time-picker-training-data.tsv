@@ -237,7 +237,17 @@ to	O
 Add	O
 group	O
 meeting	O
-tomorrow	DATE
+tmr	DATE
+,	O
+2pm	DATE
+to	O
+4pm	DATE
+.	O
+
+Add	O
+group	O
+meeting	O
+tmr	DATE
 ,	O
 2pm	DATE
 to	O
@@ -257,10 +267,60 @@ to	O
 Add	O
 group	O
 meeting	O
-tomorrow	DATE
+tmr	DATE
 ,	O
 2pm	DATE
 to	O
 4pm	DATE
+.	O
+
+Add	O
+group	O
+meeting	O
+tmr	DATE
+,	O
+2pm	DATE
+to	O
+4pm	DATE
+.	O
+
+Going	O
+home	O
+tmr	DATE
+.	O
+
+Going	O
+home	O
+tmr	DATE
+.	O
+
+Going	O
+home	O
+tmr	DATE
+.	O
+
+Going	O
+home	O
+tmr	DATE
+.	O
+
+add	O
+task	O
+tmr	DATE
+.	O
+
+add	O
+task	O
+tmr	DATE
+.	O
+
+add	O
+task	O
+tmr	DATE
+.	O
+
+add	O
+task	O
+tmr	DATE
 .	O
 

@@ -261,6 +261,7 @@
   { (/yesterdays?/) => YESTERDAY }
   { (/todays?/) => TODAY }
   { (/tomorrows?/) => TOMORROW }
+  { (/tmrs?/) => TOMORROW }
   { (/tonights?|tonites?/) => TONIGHT }
 
   # Day of Week

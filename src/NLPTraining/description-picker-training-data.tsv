@@ -209,3 +209,53 @@ home	DESCRIPTION
 priority	O
 high	O
 tomorrow	O
+
+add	O
+task	DESCRIPTION
+tomorrow	O
+.	O
+
+add	O
+task	DESCRIPTION
+tomorrow	O
+.	O
+
+add	O
+task	DESCRIPTION
+tomorrow	O
+.	O
+
+add	O
+task	DESCRIPTION
+tomorrow	O
+.	O
+
+add	O
+task1	DESCRIPTION
+tmr	O
+.	O
+
+add	O
+task1	DESCRIPTION
+tmr	O
+.	O
+
+add	O
+task1	DESCRIPTION
+tmr	O
+.	O
+
+add	O
+task2	DESCRIPTION
+today	O
+.	O
+
+add	O
+task2	DESCRIPTION
+today	O
+.	O
+
+add	O
+task2	DESCRIPTION
+today	O
+.	O
