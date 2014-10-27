@@ -7,6 +7,13 @@ Supervisor: 	Christopher Chak Hanrui
 Extra Feature: 	Power Cooperative Tasks
 
 
+Build A User Model
+-----------------------
+```
+cd directory
+java -cp stanford-ner.jar edu.stanford.nlp.ie.crf.CRFClassifier -prop propery_file_name.prop
+```
+
 
 User Guide
 -------------
