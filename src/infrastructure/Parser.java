@@ -103,7 +103,7 @@ public class Parser {
 				
 			case "priority":
 				try {
-					Integer p = Integer.parseInt(value);
+					Integer p = Parser.parsePriority(value);
 					updateAttributes.put("priority", p);
 				} catch (Exception e) {
 					UtilityMethod.showToUser("invalid argument for priority");
