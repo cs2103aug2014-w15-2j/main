@@ -41,6 +41,8 @@ public class NERParser {
 	private AbstractSequenceClassifier<CoreLabel> classifierTagPicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierPriorityPicker;
 	
+	private Properties props;
+	
 	
 	private boolean isTimeChanged = false;
 	private boolean isTagChanged = false;
@@ -64,6 +66,11 @@ public class NERParser {
 		classifierIndexPicker = CRFClassifier.getClassifierNoExceptions("NLPTraining/index-picker-ner-model.ser.gz");
 		classifierTagPicker = CRFClassifier.getClassifierNoExceptions("NLPTraining/tag-picker-ner-model.ser.gz");
 		classifierPriorityPicker = CRFClassifier.getClassifierNoExceptions("NLPTraining/priority-picker-ner-model.ser.gz");
+		
+		//Time parsers
+		props = new Properties();
+	    props.put("sutime.binders","0");
+	    props.put("sutime.rules", "NLPTraining/defs.sutime.txt, NLPTraining/english.holidays.sutime.txt, NLPTraining/english.sutime.txt");
 	}
 	
 	
@@ -411,9 +418,6 @@ public class NERParser {
 	 * @return
 	 */
 	public ArrayList<Date> parseTimeToDate (ArrayList<String> userInputStrings) {
-	    Properties props = new Properties();
-	    props.put("sutime.binders","0");
-	    props.put("sutime.rules", "NLPTraining/defs.sutime.txt, NLPTraining/english.holidays.sutime.txt, NLPTraining/english.sutime.txt");
 	    AnnotationPipeline pipeline = new AnnotationPipeline();
 	    pipeline.addAnnotator(new TokenizerAnnotator(false));
 	    pipeline.addAnnotator(new TimeAnnotator("sutime", props));
