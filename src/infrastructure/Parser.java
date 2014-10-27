@@ -123,7 +123,6 @@ public class Parser {
 			case "tag":
 				ArrayList<String> tags = new ArrayList<String>();
 				tags.add(value);
-				System.out.println("value: " + value);
 				updateAttributes.put("tag", tags);
 				break;
 				
