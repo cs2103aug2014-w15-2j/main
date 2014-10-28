@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ContainerFactory;
 
@@ -27,19 +28,24 @@ import reference.TimeInterval;
 
 public class JSONtest {
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void save(String username, String password, ArrayList<Task> tasks) throws IOException {
 		FileWriter fw = new FileWriter(username + ".json");
-		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
 		
+		LinkedHashMap account = new LinkedHashMap();
+		account.put("password", password);
+		
+		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
 		if( tasks != null) {
 			for(int i = 0; i<tasks.size(); i++) {
 				LinkedHashMap task = convertTaskToMap(tasks.get(i));
 				tasksList.add(task);
 			}
 		}
+		account.put("tasks", tasksList);
+		
 		Writer writer = new JSonWriter();
-		JSONArray.writeJSONString(tasksList, writer);
+		JSONObject.writeJSONString(account, writer);
 		fw.write(writer.toString());
 		fw.close();
 	}
@@ -49,8 +55,12 @@ public class JSONtest {
 		ArrayList<Task> tasks = new ArrayList<Task>();
 		JSONParser parser = new JSONParser();
 		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
-		LinkedList allTasks = (LinkedList) parser.parse(new FileReader(username + ".json"), orderedKeyFactory);
+		LinkedHashMap account = (LinkedHashMap) parser.parse(new FileReader(username + ".json"), orderedKeyFactory);
 		
+		String password = (String) account.get("password");
+		System.out.println(password);
+		
+		LinkedList allTasks = (LinkedList) account.get("tasks");
 		LinkedHashMap task;
 		if(allTasks != null) {
 			for(int i=0; i<allTasks.size(); i++) {
