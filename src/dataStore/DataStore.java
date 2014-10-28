@@ -2,8 +2,6 @@ package dataStore;
 
 import dataStore.Converter;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -97,10 +95,17 @@ public abstract class DataStore {
 		}
 		File account = new File(username);
 		account.delete();
-		DataStore.clearCache();
+		TestingCache.clearCache();
 		return true;
 	}
 	
+	/**
+	 * save the changes, write all tasks into the account data
+	 * 
+	 * @param username
+	 * @param tasks
+	 * @return true if succeed, false otherwise
+	 */
 	public static boolean save(String username, ArrayList<Task> tasks) {
 		String password;
 		try {
@@ -111,15 +116,37 @@ public abstract class DataStore {
 		return saveFile(username, password, tasks);
 	}
 	
+	
 	/**
-	 * save the changes, write all tasks into the account data
+	 * read file and get user current tasks
 	 * 
-	 * @param username
-	 * @param tasks
-	 * @return true if succeed, false otherwise
+	 * @param file
+	 * @return user current tasks
+	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
+	public static ArrayList<Task> getCurrentTasks(File userFile) throws Exception {
+		ArrayList<Task> tasks = new ArrayList<Task>();
+		JSONParser parser = new JSONParser();
+		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
+		FileReader thisFile = new FileReader(userFile);
+		LinkedHashMap account = (LinkedHashMap) parser.parse(thisFile, orderedKeyFactory);
+		
+		LinkedList allTasks = (LinkedList) account.get("tasks");
+		LinkedHashMap task;
+		if(allTasks != null) {
+			for(int i=0; i<allTasks.size(); i++) {
+				task = (LinkedHashMap) allTasks.get(i);
+				Task newTask = Converter.getTask(task);
+				tasks.add(newTask);
+			}
+		}
+		
+		return tasks;
+	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static boolean saveFile(String username, String password, ArrayList<Task> tasks) {
+	private static boolean saveFile(String username, String password, ArrayList<Task> tasks) {
 		if (!isAccountExisting(username)) {
 			return false;
 		}
@@ -150,34 +177,6 @@ public abstract class DataStore {
 			return false;
 		}				
 		return true;
-	}
-
-	/**
-	 * read file and get user current tasks
-	 * 
-	 * @param file
-	 * @return user current tasks
-	 * @throws Exception
-	 */
-	@SuppressWarnings("rawtypes")
-	public static ArrayList<Task> getCurrentTasks(File userFile) throws Exception {
-		ArrayList<Task> tasks = new ArrayList<Task>();
-		JSONParser parser = new JSONParser();
-		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
-		FileReader thisFile = new FileReader(userFile);
-		LinkedHashMap account = (LinkedHashMap) parser.parse(thisFile, orderedKeyFactory);
-		
-		LinkedList allTasks = (LinkedList) account.get("tasks");
-		LinkedHashMap task;
-		if(allTasks != null) {
-			for(int i=0; i<allTasks.size(); i++) {
-				task = (LinkedHashMap) allTasks.get(i);
-				Task newTask = Converter.getTask(task);
-				tasks.add(newTask);
-			}
-		}
-		
-		return tasks;
 	}
 
 	/**
@@ -214,65 +213,6 @@ public abstract class DataStore {
 		    }
 		};
 		return orderedKeyFactory;
-	}
-
-	// FOR TESTING ONLY
-	/**
-	 * cacheAccount caching
-	 * 
-	 * @param username
-	 * @return true if succeed, false otherwise
-	 */
-	public static boolean cacheAccount(String username) {
-		if (!isAccountExisting(username)) {
-			return false;
-		}
-		try {
-			File cached = new File("_cache");
-			if (!cached.exists()) {
-				cached.createNewFile();
-			}
-
-			BufferedWriter bw = new BufferedWriter(new FileWriter("_cache"));
-			bw.write(username);
-			bw.close();
-
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
-	}
-
-	/**
-	 * getCachedAccount
-	 * 
-	 * @return cached account name
-	 */
-	public static String getCachedAccount() {
-		try {
-			File cached = new File("_cache");
-			if (!cached.exists()) {
-				cached.createNewFile();
-			}
-			BufferedReader reader = new BufferedReader(new FileReader("_cache"));
-			String cachedName = reader.readLine();
-
-			reader.close();
-			return cachedName;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 * clearCache
-	 * 
-	 * @return boolean
-	 */
-	public static boolean clearCache() {
-		File cache = new File("_cache");
-		return cache.delete();
 	}
 
 }

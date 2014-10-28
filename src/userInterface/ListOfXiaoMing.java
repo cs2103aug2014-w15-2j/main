@@ -70,7 +70,7 @@ public class ListOfXiaoMing {
 		
 		while (true) {
 			ListOfXiaoMing list = null;
-			String cached = DataStore.getCachedAccount();
+			String cached = TestingCache.getCachedAccount();
 			if (!((cached == "") || (cached == null))) {
 				System.out.println(cached);
 				list = new ListOfXiaoMing(cached);
@@ -88,7 +88,7 @@ public class ListOfXiaoMing {
 					//already find the record
 					System.out.println(recordFilePath);
 					list = new ListOfXiaoMing(recordFilePath);
-					DataStore.cacheAccount(recordFilePath);
+					TestingCache.cacheAccount(recordFilePath);
 					Constant.logger.log(Level.INFO, String.format(Constant.LOG_MESSAGE_USER_CACHED, recordFilePath));
 				} else {
 					
@@ -476,7 +476,7 @@ public class ListOfXiaoMing {
 	
 	private String logOut() {
 		
-		if (DataStore.clearCache()) {
+		if (TestingCache.clearCache()) {
 			return Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY;
 		} else {
 			return Constant.PROMPT_MESSAGE_CLEAR_CACHE_FAILED;
