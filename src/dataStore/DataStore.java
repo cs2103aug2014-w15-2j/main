@@ -10,7 +10,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ContainerFactory;
+import org.json.simple.parser.JSONParser;
 
 import dataStructure.*;
 
@@ -102,7 +111,7 @@ public abstract class DataStore {
 		DataStore.clearCache();
 		return true;
 	}
-
+	
 	/**
 	 * save the changes, write all tasks into the account data
 	 * 
@@ -110,35 +119,37 @@ public abstract class DataStore {
 	 * @param tasks
 	 * @return true if succeed, false otherwise
 	 */
-	public static boolean save(String username, ArrayList<Task> tasks) {
-		// check if it is an existing account
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static boolean save(String username, ArrayList<Task> tasks) throws IOException {
 		if (!isAccountExisting(username)) {
 			return false;
 		}
-		try {
-			String password = getPassword(username);
-			BufferedWriter bw = new BufferedWriter(new FileWriter(username));
-
-			bw.write(password);
-			bw.newLine();
-			bw.write(Constant.SPLIT_SECTION);
-			bw.newLine();
-			bw.flush();
-			if(tasks != null) {
-				for (int i = 0; i < tasks.size(); i++) {
-					bw.write(tasks.get(i).toString());
-					bw.newLine();
-				}
+		
+		String password = getPassword(username);
+		
+		FileWriter fw = new FileWriter(username);
+	
+		//write password
+		LinkedHashMap account = new LinkedHashMap();
+		account.put("password", password);
+		
+		//list all tasks
+		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
+		if( tasks != null) {
+			for(int i = 0; i<tasks.size(); i++) {
+				LinkedHashMap task = Converter.convertTaskToMap(tasks.get(i));
+				tasksList.add(task);
 			}
-
-			bw.close();
-			
-			Converter.save(username, password, tasks);
-
-			return true;
-		} catch (IOException e) {
-			return false;
 		}
+		account.put("tasks", tasksList);
+		
+		//write to file
+		Writer writer = new JSonWriter();
+		JSONObject.writeJSONString(account, writer);
+		fw.write(writer.toString());
+		fw.close();
+		
+		return true;
 	}
 
 	/**
@@ -148,9 +159,24 @@ public abstract class DataStore {
 	 * @return user current tasks
 	 * @throws Exception
 	 */
-	public static ArrayList<Task> getCurrentTasks(File file) throws Exception {
-		ArrayList<Task> currentTasks = Converter.getCurrentTask(file.getName());
-		return currentTasks;
+	@SuppressWarnings("rawtypes")
+	public static ArrayList<Task> getCurrentTask(File file) throws Exception {
+		ArrayList<Task> tasks = new ArrayList<Task>();
+		JSONParser parser = new JSONParser();
+		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
+		LinkedHashMap account = (LinkedHashMap) parser.parse(new FileReader(file), orderedKeyFactory);
+		
+		LinkedList allTasks = (LinkedList) account.get("tasks");
+		LinkedHashMap task;
+		if(allTasks != null) {
+			for(int i=0; i<allTasks.size(); i++) {
+				task = (LinkedHashMap) allTasks.get(i);
+				Task newTask = Converter.getTask(task);
+				tasks.add(newTask);
+			}
+		}
+		
+		return tasks;
 	}
 
 	/**
@@ -165,6 +191,22 @@ public abstract class DataStore {
 		String password = br.readLine();
 		br.close();
 		return password;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private static ContainerFactory setOrderedKeyFactory() {
+		ContainerFactory orderedKeyFactory = new ContainerFactory()
+		{
+			@Override
+		    public List creatArrayContainer() {
+		      return new LinkedList();
+		    }
+
+			public Map createObjectContainer() {
+		      return new LinkedHashMap();
+		    }
+		};
+		return orderedKeyFactory;
 	}
 
 	// FOR TESTING ONLY

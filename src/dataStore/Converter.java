@@ -8,86 +8,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.LinkedList;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Writer;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ContainerFactory;
-
 import reference.CommandFailedException;
 import reference.TimeInterval;
 
 public class Converter {
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static void save(String username, String password, ArrayList<Task> tasks) throws IOException {
-		FileWriter fw = new FileWriter(username + ".json");
-		
-		//write password
-		LinkedHashMap account = new LinkedHashMap();
-		account.put("password", password);
-		
-		//list all tasks
-		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
-		if( tasks != null) {
-			for(int i = 0; i<tasks.size(); i++) {
-				LinkedHashMap task = convertTaskToMap(tasks.get(i));
-				tasksList.add(task);
-			}
-		}
-		account.put("tasks", tasksList);
-		
-		//write to file
-		Writer writer = new JSonWriter();
-		JSONObject.writeJSONString(account, writer);
-		fw.write(writer.toString());
-		fw.close();
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public static ArrayList<Task> getCurrentTask(String username) throws Exception {
-		ArrayList<Task> tasks = new ArrayList<Task>();
-		JSONParser parser = new JSONParser();
-		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
-		LinkedHashMap account = (LinkedHashMap) parser.parse(new FileReader(username + ".json"), orderedKeyFactory);
-		
-		LinkedList allTasks = (LinkedList) account.get("tasks");
-		LinkedHashMap task;
-		if(allTasks != null) {
-			for(int i=0; i<allTasks.size(); i++) {
-				task = (LinkedHashMap) allTasks.get(i);
-				Task newTask = getTask(task);
-				tasks.add(newTask);
-			}
-		}
-		
-		return tasks;
-	}
-	
-	@SuppressWarnings("rawtypes")
-	private static ContainerFactory setOrderedKeyFactory() {
-		ContainerFactory orderedKeyFactory = new ContainerFactory()
-		{
-			@Override
-		    public List creatArrayContainer() {
-		      return new LinkedList();
-		    }
-
-			public Map createObjectContainer() {
-		      return new LinkedHashMap();
-		    }
-		};
-		return orderedKeyFactory;
-	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static LinkedHashMap convertTaskToMap(Task task) {
