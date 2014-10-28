@@ -4,13 +4,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.BufferedReader;
-import java.io.FileReader;
-
-import java.io.IOException;
-import java.io.FileNotFoundException;
-
-import infrastructure.Constant;
 
 public class DataStoreTest {
 

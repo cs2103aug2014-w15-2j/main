@@ -1,6 +1,5 @@
 package dataStore;
 
-import infrastructure.Constant;
 import dataStore.Converter;
 
 import java.io.BufferedReader;
