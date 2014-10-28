@@ -20,6 +20,7 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import dataStructure.*;
 
@@ -57,6 +58,8 @@ public abstract class DataStore {
 			return false;
 		} catch (IOException e) {
 			return false;
+		} catch (ParseException e) {
+			return false;
 		}
 	}
 
@@ -74,18 +77,7 @@ public abstract class DataStore {
 		try {
 			File account = new File(username);
 			account.createNewFile();
-
-			BufferedWriter bw = new BufferedWriter(new FileWriter(username));
-			bw.write(passwordInput);
-			bw.newLine();
-			bw.write(Constant.SPLIT_SECTION);
-			bw.newLine();
-			bw.close();
-
-			File accountJSON = new File(username + ".json");
-			accountJSON.createNewFile();
-			save(username, null);
-
+			saveFile(username, passwordInput, null);
 			return true;
 		} catch (IOException e) {
 			return false;
@@ -105,11 +97,19 @@ public abstract class DataStore {
 			return false;
 		}
 		File account = new File(username);
-		File accountJSON = new File(username + ".json");
 		account.delete();
-		accountJSON.delete();
 		DataStore.clearCache();
 		return true;
+	}
+	
+	public static boolean save(String username, ArrayList<Task> tasks) {
+		String password;
+		try {
+			password = getPassword(username);
+		} catch (IOException | ParseException e) {
+			return false;
+		}
+		return saveFile(username, password, tasks);
 	}
 	
 	/**
@@ -120,35 +120,36 @@ public abstract class DataStore {
 	 * @return true if succeed, false otherwise
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static boolean save(String username, ArrayList<Task> tasks) throws IOException {
+	public static boolean saveFile(String username, String password, ArrayList<Task> tasks) {
 		if (!isAccountExisting(username)) {
 			return false;
 		}
-		
-		String password = getPassword(username);
-		
-		FileWriter fw = new FileWriter(username);
-	
-		//write password
-		LinkedHashMap account = new LinkedHashMap();
-		account.put("password", password);
-		
-		//list all tasks
-		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
-		if( tasks != null) {
-			for(int i = 0; i<tasks.size(); i++) {
-				LinkedHashMap task = Converter.convertTaskToMap(tasks.get(i));
-				tasksList.add(task);
+		try {
+			FileWriter fw = new FileWriter(username);
+			
+			//write password
+			LinkedHashMap account = new LinkedHashMap();
+			account.put("password", password);
+			
+			//list all tasks
+			ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
+			if( tasks != null) {
+				for(int i = 0; i<tasks.size(); i++) {
+					LinkedHashMap task = Converter.convertTaskToMap(tasks.get(i));
+					tasksList.add(task);
+				}
 			}
-		}
-		account.put("tasks", tasksList);
-		
-		//write to file
-		Writer writer = new JSonWriter();
-		JSONObject.writeJSONString(account, writer);
-		fw.write(writer.toString());
-		fw.close();
-		
+			account.put("tasks", tasksList);
+			
+			//write to file
+			Writer writer = new JSonWriter();
+			JSONObject.writeJSONString(account, writer);
+			fw.write(writer.toString());
+			writer.close();
+			fw.close();
+		} catch (IOException e) {
+			return false;
+		}				
 		return true;
 	}
 
@@ -160,11 +161,12 @@ public abstract class DataStore {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
-	public static ArrayList<Task> getCurrentTask(File file) throws Exception {
+	public static ArrayList<Task> getCurrentTasks(File userFile) throws Exception {
 		ArrayList<Task> tasks = new ArrayList<Task>();
 		JSONParser parser = new JSONParser();
 		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
-		LinkedHashMap account = (LinkedHashMap) parser.parse(new FileReader(file), orderedKeyFactory);
+		FileReader thisFile = new FileReader(userFile);
+		LinkedHashMap account = (LinkedHashMap) parser.parse(thisFile, orderedKeyFactory);
 		
 		LinkedList allTasks = (LinkedList) account.get("tasks");
 		LinkedHashMap task;
@@ -185,11 +187,16 @@ public abstract class DataStore {
 	 * @param username
 	 * @return password
 	 * @throws IOException
+	 * @throws ParseException 
 	 */
-	private static String getPassword(String username) throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(username));
-		String password = br.readLine();
-		br.close();
+	@SuppressWarnings("rawtypes")
+	private static String getPassword(String username) throws IOException, ParseException {
+		JSONParser parser = new JSONParser();
+		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
+		FileReader thisFile = new FileReader(username);
+		LinkedHashMap account = (LinkedHashMap) parser.parse(thisFile, orderedKeyFactory);
+		String password = (String) account.get("password");
+		thisFile.close();
 		return password;
 	}
 	
@@ -202,6 +209,7 @@ public abstract class DataStore {
 		      return new LinkedList();
 		    }
 
+			@Override
 			public Map createObjectContainer() {
 		      return new LinkedHashMap();
 		    }
