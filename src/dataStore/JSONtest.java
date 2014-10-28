@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Writer;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -28,7 +29,7 @@ public class JSONtest {
 	
 	@SuppressWarnings("rawtypes")
 	public static void save(String username, String password, ArrayList<Task> tasks) throws IOException {
-		BufferedWriter bw = new BufferedWriter(new FileWriter(username + ".json"));
+		FileWriter fw = new FileWriter(username + ".json");
 		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
 		
 		if( tasks != null) {
@@ -37,9 +38,10 @@ public class JSONtest {
 				tasksList.add(task);
 			}
 		}
-		
-		JSONArray.writeJSONString(tasksList, bw);
-		bw.close();
+		Writer writer = new JSonWriter();
+		JSONArray.writeJSONString(tasksList, writer);
+		fw.write(writer.toString());
+		fw.close();
 	}
 	
 	@SuppressWarnings("rawtypes")
