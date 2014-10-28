@@ -118,11 +118,12 @@ public abstract class DataStore {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static ArrayList<Task> getCurrentTasks(File userFile) throws Exception {
+		FileReader user = new FileReader(userFile);
 		ArrayList<Task> currentTasks = new ArrayList<Task>();
 		JSONParser parser = new JSONParser();
 		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
 		LinkedHashMap account = (LinkedHashMap) parser.parse
-								(new FileReader(userFile), orderedKeyFactory);
+								(user, orderedKeyFactory);
 		
 		LinkedList allTasks = (LinkedList) account.get("tasks");
 		LinkedHashMap task;
@@ -134,6 +135,7 @@ public abstract class DataStore {
 			}
 		}
 		
+		user.close();
 		return currentTasks;
 	}
 	
@@ -201,9 +203,11 @@ public abstract class DataStore {
 	private static String getPassword(String username) throws IOException, ParseException {
 		JSONParser parser = new JSONParser();
 		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
+		FileReader userFile = new FileReader(username);
 		LinkedHashMap account = (LinkedHashMap) parser.parse
-								(new FileReader(username), orderedKeyFactory);
+								(userFile, orderedKeyFactory);
 		String password = (String) account.get("password");
+		userFile.close();
 		return password;
 	}
 	

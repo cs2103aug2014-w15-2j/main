@@ -1,15 +1,17 @@
 package dataStore;
 
-import dataStructure.*;
+import dataStructure.Task;
 import infrastructure.Constant;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+
 import reference.CommandFailedException;
 import reference.TimeInterval;
 
@@ -24,7 +26,7 @@ public class Converter {
 		taskMap.put("category", task.getCategory());
 		
 		ArrayList<String> tags = new ArrayList<String>();
-		for(int i=0; i<task.getTag().size(); i++) {
+		for(int i = 0; i < task.getTag().size(); i++) {
 			tags.add(task.getTag().get(i));
 		}
 		taskMap.put("tags", tags);
@@ -36,6 +38,12 @@ public class Converter {
 		return taskMap;
 	}
 	
+	/**
+	 * convert map to task
+	 * @param task
+	 * @return
+	 * @throws Exception
+	 */
 	@SuppressWarnings("rawtypes") 
 	public static Task getTask(LinkedHashMap task) throws Exception {
 		String task_id = (String) task.get("task-id");
@@ -46,7 +54,7 @@ public class Converter {
 		
 		LinkedList tags = (LinkedList) task.get("tags");
 		ArrayList<String> tag = new ArrayList<String>();
-		for(int i=0; i<tags.size(); i++) { 
+		for(int i = 0; i < tags.size(); i++) { 
 			tag.add((String)tags.get(i));
 		}
 		
@@ -59,7 +67,7 @@ public class Converter {
 
 	@SuppressWarnings("rawtypes") 
 	public static int convertPriorityStringToInt(LinkedHashMap task) {
-		int priority = 0;
+		int priority = Constant.PRIORITY_DEFAULT;
 		if(task.get("priority").equals("high")) {
 			priority = Constant.PRIORITY_HIGH;
 		} else if(task.get("priority").equals("medium")) {
@@ -90,7 +98,7 @@ public class Converter {
 
 	@SuppressWarnings("rawtypes") 
 	public static int convertRepeatedPeriodStringToInt(LinkedHashMap task) {
-		int repeated_period = 0;
+		int repeated_period = Constant.REPEATED_PERIOD_DEFAULT;
 		if (task.get("repeated-period").equals("none")) {
 			repeated_period = Constant.REPEATED_PERIOD_NONE;
 		} else if (task.get("repeated-period").equals("none")) {
@@ -127,9 +135,8 @@ public class Converter {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static TimeInterval convertStringToTimeInterval(
-			LinkedHashMap intervalObj) throws ParseException,
-			CommandFailedException {
+	public static TimeInterval convertStringToTimeInterval(LinkedHashMap intervalObj)
+			throws ParseException, CommandFailedException {
 		Date startDate = null;
 		if(!intervalObj.get("startDate").equals("-")) {
 			startDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).
