@@ -1,7 +1,7 @@
 package dataStore;
 
 import infrastructure.Constant;
-import dataStore.JSONtest;
+import dataStore.Converter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -133,7 +133,7 @@ public abstract class DataStore {
 
 			bw.close();
 			
-			JSONtest.save(username, password, tasks);
+			Converter.save(username, password, tasks);
 
 			return true;
 		} catch (IOException e) {
@@ -149,7 +149,7 @@ public abstract class DataStore {
 	 * @throws Exception
 	 */
 	public static ArrayList<Task> getCurrentTasks(File file) throws Exception {
-		ArrayList<Task> currentTasks = JSONtest.getCurrentTask(file.getName());
+		ArrayList<Task> currentTasks = Converter.getCurrentTask(file.getName());
 		return currentTasks;
 	}
 

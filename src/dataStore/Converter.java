@@ -26,15 +26,17 @@ import org.json.simple.parser.ContainerFactory;
 import reference.CommandFailedException;
 import reference.TimeInterval;
 
-public class JSONtest {
+public class Converter {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void save(String username, String password, ArrayList<Task> tasks) throws IOException {
 		FileWriter fw = new FileWriter(username + ".json");
 		
+		//write password
 		LinkedHashMap account = new LinkedHashMap();
 		account.put("password", password);
 		
+		//list all tasks
 		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
 		if( tasks != null) {
 			for(int i = 0; i<tasks.size(); i++) {
@@ -44,6 +46,7 @@ public class JSONtest {
 		}
 		account.put("tasks", tasksList);
 		
+		//write to file
 		Writer writer = new JSonWriter();
 		JSONObject.writeJSONString(account, writer);
 		fw.write(writer.toString());
@@ -56,9 +59,6 @@ public class JSONtest {
 		JSONParser parser = new JSONParser();
 		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
 		LinkedHashMap account = (LinkedHashMap) parser.parse(new FileReader(username + ".json"), orderedKeyFactory);
-		
-		String password = (String) account.get("password");
-		System.out.println(password);
 		
 		LinkedList allTasks = (LinkedList) account.get("tasks");
 		LinkedHashMap task;
@@ -73,8 +73,24 @@ public class JSONtest {
 		return tasks;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	private static ContainerFactory setOrderedKeyFactory() {
+		ContainerFactory orderedKeyFactory = new ContainerFactory()
+		{
+			@Override
+		    public List creatArrayContainer() {
+		      return new LinkedList();
+		    }
+
+			public Map createObjectContainer() {
+		      return new LinkedHashMap();
+		    }
+		};
+		return orderedKeyFactory;
+	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static LinkedHashMap convertTaskToMap(Task task) {
+	public static LinkedHashMap convertTaskToMap(Task task) {
 		LinkedHashMap taskMap = new LinkedHashMap();
 		
 		taskMap.put("task-id", task.getTaskId());
@@ -95,7 +111,7 @@ public class JSONtest {
 	}
 	
 	@SuppressWarnings("rawtypes") 
-	private static Task getTask(LinkedHashMap task) throws Exception {
+	public static Task getTask(LinkedHashMap task) throws Exception {
 		String task_id = (String) task.get("task-id");
 		String description = (String) task.get("description");
 		String category = (String) task.get("category");
@@ -114,25 +130,9 @@ public class JSONtest {
 		return new Task(task_id, description, category, priority,
 				repeated_period, tag, interval);
 	}
-	
-	@SuppressWarnings("rawtypes")
-	private static ContainerFactory setOrderedKeyFactory() {
-		ContainerFactory orderedKeyFactory = new ContainerFactory()
-		{
-			@Override
-		    public List creatArrayContainer() {
-		      return new LinkedList();
-		    }
-
-			public Map createObjectContainer() {
-		      return new LinkedHashMap();
-		    }
-		};
-		return orderedKeyFactory;
-	}
 
 	@SuppressWarnings("rawtypes") 
-	private static int convertPriorityStringToInt(LinkedHashMap task) {
+	public static int convertPriorityStringToInt(LinkedHashMap task) {
 		int priority = 0;
 		if(task.get("priority").equals("high")) {
 			priority = Constant.PRIORITY_HIGH;
@@ -144,7 +144,7 @@ public class JSONtest {
 		return priority;
 	}
 	
-	private static String convertPriorityIntToString(Task task) {
+	public static String convertPriorityIntToString(Task task) {
 		String priority = "medium";
 		switch(task.getPriority()) {
 			case Constant.PRIORITY_HIGH:
@@ -163,7 +163,7 @@ public class JSONtest {
 	}
 
 	@SuppressWarnings("rawtypes") 
-	private static int convertRepeatedPeriodStringToInt(LinkedHashMap task) {
+	public static int convertRepeatedPeriodStringToInt(LinkedHashMap task) {
 		int repeated_period = 0;
 		if (task.get("repeated-period").equals("none")) {
 			repeated_period = Constant.REPEATED_PERIOD_NONE;
@@ -179,7 +179,7 @@ public class JSONtest {
 		return repeated_period;
 	}
 	
-	private static String convertRepeatedPeriodIntToString(Task task) {
+	public static String convertRepeatedPeriodIntToString(Task task) {
 		String repeatedPeriod = "none";
 		switch (task.getRepeatedPeriod()) {
 			case Constant.REPEATED_PERIOD_NONE:
@@ -201,7 +201,7 @@ public class JSONtest {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static TimeInterval convertStringToTimeInterval(
+	public static TimeInterval convertStringToTimeInterval(
 			LinkedHashMap intervalObj) throws ParseException,
 			CommandFailedException {
 		Date startDate = null;
@@ -218,7 +218,7 @@ public class JSONtest {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static LinkedHashMap convertTimeIntervalToString(Task task) {
+	public static LinkedHashMap convertTimeIntervalToString(Task task) {
 		LinkedHashMap timeInterval = new LinkedHashMap();
 		
 		if(task.getInterval().getStartDate() == Constant.FLOATING_START_DATE &&
