@@ -13,7 +13,7 @@ import java.io.FileNotFoundException;
 import infrastructure.Constant;
 
 public class DataStoreTest {
-	
+
 	public void initialize() {
 		File oldTestFile = new File("testFile");
 		if(oldTestFile.exists()) {
@@ -23,6 +23,7 @@ public class DataStoreTest {
 	
 	@Test
 	public void testCreateAccount() {
+		initialize();
 		assertTrue(DataStore.createAccount("testFile", "thisIsJustATestFile"));
 		assertFalse(DataStore.createAccount("testFile", "thisIsJustATestFile"));
 		File testFile = new File("testFile");
@@ -31,59 +32,34 @@ public class DataStoreTest {
 	
 	@Test
 	public void testIsAccountExisting() {
+		initialize();
 		DataStore.createAccount("testFile", "thisIsJustATestFile");
 		assertTrue(DataStore.isAccountExisting("testFile"));
 		assertFalse(DataStore.isAccountExisting("fileNotExisted"));
 		File testFile = new File("testFile");
-		testFile.delete();
+		testFile.delete();		
 	}
 	
 	@Test
 	public void testAuthenticate() {
+		initialize();
 		DataStore.createAccount("testFile", "thisIsJustATestFile");
 		assertTrue(DataStore.authenticate("testFile", "thisIsJustATestFile"));
 		assertFalse(DataStore.authenticate("testFile", "wrongPassword"));
-		assertFalse(DataStore.authenticate("notTestFie", "thisIsJustATestFile"));
+		assertFalse(DataStore.authenticate("notTestFile", "thisIsJustATestFile"));
 		File testFile = new File("testFile");
 		testFile.delete();
 	}
 	
 	@Test
 	public void testDestroy() {
+		initialize();
 		DataStore.createAccount("testFile", "thisIsJustATestFile");
 		assertFalse(DataStore.destroy("notTestFile", "thisIsJustATestFile"));
 		assertFalse(DataStore.destroy("testFile", "wrongPassword"));
 		assertTrue(DataStore.destroy("testFile", "thisIsJustATestFile"));
-		assertFalse(DataStore.isAccountExisting("testFile"));
-	}
-	
-	@Test
-	public void testSave() {
-		DataStore.createAccount("testFile", "thisIsJustATestFile");
-		assertFalse(DataStore.save("notTestFile", null));
-		assertTrue(DataStore.save("testFile", null));
-		try {
-			BufferedReader bw = new BufferedReader(new FileReader("testFile"));
-			assertTrue(bw.readLine().equals("thisIsJustATestFile"));
-			assertTrue(bw.readLine().equals(Constant.SPLIT_SECTION));
-			bw.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
-	public void testGetCurrentTask() {
-		DataStore.createAccount("testFile", "thisIsJustATestFile");
 		File testFile = new File("testFile");
-		try {
-			assertEquals(0, DataStore.getCurrentTasks(testFile).size());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		testFile.delete();
+		assertFalse(testFile.exists());
 	}
-
+	
 }

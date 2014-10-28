@@ -1,0 +1,19 @@
+{
+   "password":"",
+   "tasks":[
+      {
+         "task-id":"7c10a44f-dc65-44e0-8e15-6be6e1c49468",
+         "description":"task1",
+         "category":"default",
+         "tags":[
+            
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      }
+   ]
+}
