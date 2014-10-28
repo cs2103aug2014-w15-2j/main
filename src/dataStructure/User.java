@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Stack;
+import com.rits.cloning.*;
 
 import dataStore.DataStore;
 import reference.*;
@@ -20,6 +21,7 @@ public class User {
 	private Stack<ArrayList<Task>> redoable;
 	private String username;
 	private int taskEndIndex = -1;
+	private Cloner cloner = new Cloner();
 
 	/**
 	 * constructor
@@ -42,18 +44,17 @@ public class User {
 	 * 
 	 * @throws CommandFailedException
 	 */
-	@SuppressWarnings("unchecked")
 	public void undo() throws CommandFailedException {
 		if (this.undoable.empty()) {
 			throw new CommandFailedException(Constant.NO_UNDOABLE_ERROR_MESSAGE);
 		} else {
-			this.redoable.push((ArrayList<Task>) this.currentTasks.clone());
+			this.redoable.push(cloner.deepClone(this.currentTasks));
 
 			if (this.redoable.size() > Constant.MAXIMUM_REDO_TIMES) {
 				this.redoable.remove(0);
 			}
 
-			this.currentTasks = (ArrayList<Task>) this.undoable.pop().clone();
+			this.currentTasks = cloner.deepClone(this.undoable.pop());
 		}
 	}
 
@@ -62,18 +63,17 @@ public class User {
 	 * 
 	 * @throws CommandFailedException
 	 */
-	@SuppressWarnings("unchecked")
 	public void redo() throws CommandFailedException {
 		if (this.redoable.empty()) {
 			throw new CommandFailedException(Constant.NO_REDOABLE_ERROR_MESSAGE);
 		} else {
-			this.undoable.push((ArrayList<Task>) this.currentTasks.clone());
+			this.undoable.push(cloner.deepClone(this.currentTasks));
 
 			if (this.undoable.size() > Constant.MAXIMUM_UNDO_TIMES) {
 				this.undoable.remove(0);
 			}
 
-			this.currentTasks = (ArrayList<Task>) this.redoable.pop().clone();
+			this.currentTasks = cloner.deepClone(this.redoable.pop());
 		}
 	}
 
@@ -81,10 +81,9 @@ public class User {
 	 * updateUndoable this method should be called BEFORE every operation
 	 * involving task list
 	 */
-	@SuppressWarnings("unchecked")
 	private void updateUndoable() {
 		this.redoable.clear();
-		this.undoable.push((ArrayList<Task>) this.currentTasks.clone());
+		this.undoable.push(cloner.deepClone(this.currentTasks));
 		if (this.undoable.size() > Constant.MAXIMUM_UNDO_TIMES) {
 			this.undoable.remove(0);
 		}
@@ -119,6 +118,7 @@ public class User {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
+			this.updateUndoable();
 			boolean isSuccessful = this.currentTasks.get(index).addTag(Constant.TRASHED_TAG);
 			moveTrashedTask(index);
 			taskEndIndex--;

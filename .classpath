@@ -9,5 +9,7 @@
 	<classpathentry kind="lib" path="src/library/jollyday.jar"/>
 	<classpathentry kind="lib" path="src/library/stanford-corenlp.jar"/>
 	<classpathentry kind="lib" path="src/library/json-simple-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/library/cloning-1.8.5.jar"/>
+	<classpathentry kind="lib" path="src/library/objenesis-tck-2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
