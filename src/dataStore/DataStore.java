@@ -1,13 +1,10 @@
 package dataStore;
 
-import dataStore.Converter;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -19,7 +16,7 @@ import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import dataStructure.*;
+import dataStructure.Task;
 
 public abstract class DataStore {
 
@@ -51,11 +48,7 @@ public abstract class DataStore {
 		try {
 			String realPassword = getPassword(username);
 			return password.equals(realPassword);
-		} catch (FileNotFoundException e) {
-			return false;
-		} catch (IOException e) {
-			return false;
-		} catch (ParseException e) {
+		} catch (IOException | ParseException e) {
 			return false;
 		}
 	}
@@ -116,7 +109,6 @@ public abstract class DataStore {
 		return saveFile(username, password, tasks);
 	}
 	
-	
 	/**
 	 * read file and get user current tasks
 	 * 
@@ -126,11 +118,11 @@ public abstract class DataStore {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static ArrayList<Task> getCurrentTasks(File userFile) throws Exception {
-		ArrayList<Task> tasks = new ArrayList<Task>();
+		ArrayList<Task> currentTasks = new ArrayList<Task>();
 		JSONParser parser = new JSONParser();
 		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
-		FileReader thisFile = new FileReader(userFile);
-		LinkedHashMap account = (LinkedHashMap) parser.parse(thisFile, orderedKeyFactory);
+		LinkedHashMap account = (LinkedHashMap) parser.parse
+								(new FileReader(userFile), orderedKeyFactory);
 		
 		LinkedList allTasks = (LinkedList) account.get("tasks");
 		LinkedHashMap task;
@@ -138,45 +130,63 @@ public abstract class DataStore {
 			for(int i=0; i<allTasks.size(); i++) {
 				task = (LinkedHashMap) allTasks.get(i);
 				Task newTask = Converter.getTask(task);
-				tasks.add(newTask);
+				currentTasks.add(newTask);
 			}
 		}
 		
-		return tasks;
+		return currentTasks;
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	/**
+	 * write to file
+	 * @param username
+	 * @param password
+	 * @param tasks
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes" })
 	private static boolean saveFile(String username, String password, ArrayList<Task> tasks) {
 		if (!isAccountExisting(username)) {
 			return false;
 		}
 		try {
 			FileWriter fw = new FileWriter(username);
-			
-			//write password
-			LinkedHashMap account = new LinkedHashMap();
-			account.put("password", password);
-			
-			//list all tasks
-			ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
-			if( tasks != null) {
-				for(int i = 0; i<tasks.size(); i++) {
-					LinkedHashMap task = Converter.convertTaskToMap(tasks.get(i));
-					tasksList.add(task);
-				}
-			}
-			account.put("tasks", tasksList);
-			
-			//write to file
+			LinkedHashMap account = getContent(password, tasks);
 			Writer writer = new JSonWriter();
 			JSONObject.writeJSONString(account, writer);
 			fw.write(writer.toString());
 			writer.close();
 			fw.close();
+			return true;
 		} catch (IOException e) {
 			return false;
 		}				
-		return true;
+	}
+	
+	/**
+	 * return the content of the file to be written(password and list of tasks)
+	 * @param password
+	 * @param tasks
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static LinkedHashMap getContent(String password, ArrayList<Task> tasks) {
+		LinkedHashMap account = new LinkedHashMap();
+		
+		//write password
+		account.put("password", password);
+		
+		//list all tasks
+		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
+		if( tasks != null) {
+			for(int i = 0; i < tasks.size(); i++) {
+				LinkedHashMap task = Converter.convertTaskToMap(tasks.get(i));
+				tasksList.add(task);
+			}
+		}
+		account.put("tasks", tasksList);
+		
+		return account;
 	}
 
 	/**
@@ -191,13 +201,15 @@ public abstract class DataStore {
 	private static String getPassword(String username) throws IOException, ParseException {
 		JSONParser parser = new JSONParser();
 		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
-		FileReader thisFile = new FileReader(username);
-		LinkedHashMap account = (LinkedHashMap) parser.parse(thisFile, orderedKeyFactory);
+		LinkedHashMap account = (LinkedHashMap) parser.parse
+								(new FileReader(username), orderedKeyFactory);
 		String password = (String) account.get("password");
-		thisFile.close();
 		return password;
 	}
 	
+	/**
+	 * return an ordered key factory (maintain the ordering from the file)
+	 */
 	@SuppressWarnings("rawtypes")
 	private static ContainerFactory setOrderedKeyFactory() {
 		ContainerFactory orderedKeyFactory = new ContainerFactory()
