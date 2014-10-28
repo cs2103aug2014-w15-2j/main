@@ -117,7 +117,7 @@ public class Task {
 	 * 
 	 * @return tags string
 	 */
-	private String tagToString() {
+	public String tagToString() {
 		String tags = new String();
 		if (tag.isEmpty()) {
 			tags = "";
