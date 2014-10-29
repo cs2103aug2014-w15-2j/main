@@ -96,14 +96,14 @@ clear	COMMAND
 
 update	COMMAND
 3	O
-swiming	O
+swimming	O
 this	O
 Friday	O
 .	O
 
 change	COMMAND
 3	O
-swiming	O
+swimming	O
 this	O
 Friday	O
 .	O
@@ -160,6 +160,23 @@ tmr	O
 2pm	O
 -	O
 3pm	O
+.	O
+
+search	COMMAND
+31	O
+October	O
+.	O
+
+search	COMMAND
+31/10/2014	O
+.	O
+
+search	COMMAND
+31/10	O
+.	O
+
+search	COMMAND
+trashed	O
 .	O
 
 search	COMMAND
