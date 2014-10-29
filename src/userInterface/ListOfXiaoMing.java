@@ -108,6 +108,7 @@ public class ListOfXiaoMing {
 					// already find the record
 					System.out.println(recordFilePath);
 					list = new ListOfXiaoMing(recordFilePath, null);
+					System.out.println(recordFilePath);
 					TestingCache.cacheAccount(recordFilePath);
 					Constant.logger.log(Level.INFO, String.format(
 							Constant.LOG_MESSAGE_USER_CACHED, recordFilePath));
@@ -121,6 +122,7 @@ public class ListOfXiaoMing {
 	}
 
 	public static void processUserInteraction(ListOfXiaoMing list) {
+		// still gui
 		assert (list != null);
 		IO io = list.io;
 		Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_INITIATE_LIST);

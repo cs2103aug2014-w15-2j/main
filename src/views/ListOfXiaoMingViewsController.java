@@ -63,76 +63,24 @@ public class ListOfXiaoMingViewsController extends GridPane {
 		fxmlLoader.setController(this);
 		fxmlLoader.load();
         
+		this.core = new ListOfXiaoMing("haha", this);
         updatePage();
 	}
 
 	private void updatePage() {
-		String cached = TestingCache.getCachedAccount();
-		if (!((cached == "") || (cached == null))) {
-			this.core = new ListOfXiaoMing(cached, this);
-			Constant.logger.log(Level.INFO, String.format(
-					Constant.LOG_MESSAGE_READING_CACHE, cached));
-		} else {
-			Constant.logger.log(Level.INFO,
-					Constant.LOG_MESSAGE_NO_CACHE_FOUND);
-		}
-		
 		this.setDisplay(Constant.PROMPT_MESSAGE_WELCOME + '\n' + Constant.PROMPT_MESSAGE_INSTRUCTION);
 	}
 	
 	public String getUserInput() {
-		return input.getText();
+		String text = input.getText();
+		input.clear();
+		return text;
 	}
 	
 	@FXML
     private void onEnter() {
 		String command = getUserInput();
-		
-		if (!command.equals("")) {			
-			if (core == null) {
-				String recordFilePath = ListOfXiaoMing.executeUpperLevelCommand(command, this);
-				if (recordFilePath != null
-						&& !recordFilePath
-								.equalsIgnoreCase(Constant.RETURN_VALUE_LOG_IN_CANCELLED)) {
-					// already find the record
-					this.setDisplay(recordFilePath);
-					core = new ListOfXiaoMing(recordFilePath, this);
-					TestingCache.cacheAccount(recordFilePath);
-					Constant.logger.log(Level.INFO, String.format(
-							Constant.LOG_MESSAGE_USER_CACHED, recordFilePath));
-				}
-			}
-
-			assert (core != null);
-			Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_INITIATE_LIST);
-
-//			UtilityMethod.showToUser(core.execute("display"));
-//			UtilityMethod.showToUser("\n\n\n");
-//			Constant.logger.log(Level.INFO,
-//					Constant.LOG_MESSAGE_USER_TASKS_DISPLAYED);
-	//
-//			boolean willContinue = true;
-//			while (willContinue) {
-//				String userInput = UtilityMethod.readCommand();
-//				String result;
-//				if (list.isNlpOn) {
-//					result = list.executeNLP(userInput);
-//				} else {
-//					result = list.execute(userInput);
-//				}
-	//
-//				if (result.equals(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY)) {
-//					willContinue = false;
-//					Constant.logger.log(Level.INFO,
-//							Constant.LOG_MESSAGE_USER_LOG_OUT);
-//					UtilityMethod
-//							.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY);
-//				} else {
-//					UtilityMethod.showToUser(result);
-//					UtilityMethod.showToUser("\n\n\n");
-//				}
-//			}
-		}
+		setDisplay(this.core.executeNLP(command));
     }
 	
 	public void setDisplay(String displayedText) {
