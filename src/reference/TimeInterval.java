@@ -91,7 +91,7 @@ public class TimeInterval {
 		} else {
 			String start = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(this.getStartDate());
 			String end = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(this.getEndDate());
-			text = text + "\n\t from " + start + " to " + end + ";\n";
+			text = text + "\n\t from " + start + " to " + end + ";";
 		}
 		
 		return text;
