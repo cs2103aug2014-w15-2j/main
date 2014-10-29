@@ -348,10 +348,32 @@ Nov	DATE
 .	O
 
 
-search O
+search	O
 this	DATE
 week	DATE
 .	O
+
+search	O
+this	DATE
+week	DATE
+.	O
+
+search	O
+this	DATE
+week	DATE
+.	O
+
+search	O
+next	DATE
+week	DATE
+.	O
+
+
+search	O
+next	DATE
+week	DATE
+.	O
+
 
 update	O
 2	O
