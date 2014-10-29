@@ -42,6 +42,7 @@ public class NERParser {
 	private AbstractSequenceClassifier<CoreLabel> classifierPriorityPicker;
 	
 	private Properties props;
+	private AnnotationPipeline pipeline;
 	
 	
 	private boolean isTimeChanged = false;
@@ -71,6 +72,9 @@ public class NERParser {
 		props = new Properties();
 	    props.put("sutime.binders","0");
 	    props.put("sutime.rules", "NLPTraining/defs.sutime.txt, NLPTraining/english.holidays.sutime.txt, NLPTraining/english.sutime.txt");
+	    pipeline = new AnnotationPipeline();
+	    pipeline.addAnnotator(new TokenizerAnnotator(false));
+	    pipeline.addAnnotator(new TimeAnnotator("sutime", props));
 	}
 	
 	
@@ -418,9 +422,7 @@ public class NERParser {
 	 * @return
 	 */
 	public ArrayList<Date> parseTimeToDate (ArrayList<String> userInputStrings) {
-	    AnnotationPipeline pipeline = new AnnotationPipeline();
-	    pipeline.addAnnotator(new TokenizerAnnotator(false));
-	    pipeline.addAnnotator(new TimeAnnotator("sutime", props));
+	   
 	    
 	    ArrayList<Date> results = new ArrayList<Date>();
 	    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
