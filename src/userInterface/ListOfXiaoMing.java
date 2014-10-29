@@ -140,7 +140,8 @@ public class ListOfXiaoMing {
 	}
 
 	// system level commands
-	/** 
+
+	/**
 	 * method to execute the system-level command like log in or log out
 	 * 
 	 * @return
@@ -249,6 +250,7 @@ public class ListOfXiaoMing {
 					
 				default:
 					return "";
+
 			}
 			return "";
 		} catch (CommandFailedException e) {
@@ -257,7 +259,7 @@ public class ListOfXiaoMing {
 			return e.toString();
 		}
 	}
-	
+
 	public String execute(String userInput) {
 		Pair<COMMAND_TYPE, ArrayList<String>> commandPair = Parser
 				.parseCommandPair(userInput);
@@ -501,7 +503,7 @@ public class ListOfXiaoMing {
 		}
 	}
 
-	private String logOut() {
+	private String logOut() {		
 		
 		NERParser.updateModal();
 

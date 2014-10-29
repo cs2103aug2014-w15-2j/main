@@ -67,11 +67,14 @@ and	O
 me	TAG
 .	O
 
+<<<<<<< HEAD
 
 tag	O
 done	TAG
 .	O
 
+=======
+>>>>>>> FETCH_HEAD
 tags	O
 are	O
 :	O
@@ -103,4 +106,8 @@ done	TAG
 mark	O
 as	O
 done	TAG
+<<<<<<< HEAD
 .	O
+=======
+.	O
+>>>>>>> FETCH_HEAD
