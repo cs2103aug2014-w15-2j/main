@@ -233,3 +233,159 @@ mark	COMMAND
 as	O
 done	TAG
 .	O
+
+Add	COMMAND
+I’m	DESCRIPTION
+going	DESCRIPTION
+to	DESCRIPTION
+swim	DESCRIPTION
+this	DATE
+Sunday	DATE
+,	O
+tag	TAG
+with	TAG
+important	TAG
+.	O
+
+add	COMMAND
+go	DESCRIPTION
+to	DESCRIPTION
+grandma’s	DESCRIPTION
+home	DESCRIPTION
+this	DATE
+Friday	DATE
+.	O
+
+Add	COMMAND
+reading	DESCRIPTION
+books	DESCRIPTION
+tomorrow DATE
+,	O
+18:00	DATE
+to	DATE
+20:00	DATE
+.	O
+
+
+Add	COMMAND
+repair	DESCRIPTION
+computer	DESCRIPTION
+10	DATE
+Oct 	DATE
+.	O
+
+add	COMMAND
+dog	DESCRIPTION
+fooding	DESCRIPTION
+Oct	DATE
+26	DATE
+.	O
+
+add	COMMAND
+buy	DESCRIPTION
+food	DESCRIPTION
+Sep	DATE
+20	DATE
+.	O
+
+add	COMMAND
+level	DESCRIPTION
+party	DESCRIPTION
+October	DATE
+30	DATE
+.	O
+
+create	COMMAND
+task	O
+meeting	DESCRIPTION
+,	O
+done	O
+by	DATE
+Sunday	DATE
+.	O
+
+add	COMMAND
+create	DESCRIPTION
+a	DESCRIPTION
+new	DESCRIPTION
+task	DESCRIPTION
+.	O
+
+update	COMMAND
+3	INDEX
+swimming	DESCRIPTION
+this	DATE
+Friday	DATE
+.	O
+
+change	COMMAND
+3	INDEX
+swimming	DESCRIPTION
+this	DATE
+Friday	DATE
+.	O
+
+search	COMMAND
+books	DESCRIPTION
+.	O
+
+search	COMMAND
+today	DATE
+.	O
+
+search	COMMAND
+2014-12-21	DATE
+.	O
+
+search	COMMAND
+Oct	DATE
+31	DATE
+.	O
+
+search	COMMAND
+today	DATE
+2pm	DATE
+.	O
+
+search	COMMAND
+tmr	DATE
+14:00	DATE
+.	O
+
+search	COMMAND
+tomorrow	DATE
+2pm	DATE
+to	DATE
+3pm	DATE
+.	O
+
+search	COMMAND
+tomorrow	DATE
+2:00	DATE
+to	DATE
+3:00	DATE
+.	O
+
+search	COMMAND
+tmr	DATE
+2pm	DATE
+-	DATE
+3pm	DATE
+.	O
+
+search	COMMAND
+31	DATE
+October	DATE
+.	O
+
+search	COMMAND
+31/10/2014	DATE
+.	O
+
+search	COMMAND
+31/10	DATE
+.	O
+
+search	COMMAND
+trashed	TAG
+.	O
