@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root xmlns:fx="http://javafx.com/fxml" type="GridPane" fx:controller="views.ListOfXiaoMingViewsController">
+<fx:root type="GridPane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="views.ListOfXiaoMingViewsController">
 <children>
 	<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	  <columnConstraints>
@@ -64,8 +64,14 @@
 	            <Label prefHeight="30.0" prefWidth="493.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 	         </children>
 	      </GridPane>
-	      <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2" />
+	      <ScrollPane fx:id="display" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2" />
 	   </children>
 	</GridPane>
-</children>	
+</children>
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>	
 </fx:root>
