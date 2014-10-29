@@ -199,3 +199,9 @@ maintenance	DESCRIPTION
 Oct	DATE
 31	DATE
 .	O
+
+search	COMMAND
+done	TAG
+
+display	COMMAND
+done	TAG
