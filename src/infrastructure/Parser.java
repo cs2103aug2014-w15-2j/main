@@ -340,7 +340,6 @@ public class Parser {
 
 		task = new Task(task_id, description, category, priority,
 				repeated_period, tag, interval);
-
 		return task;
 	}
 

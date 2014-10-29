@@ -363,13 +363,13 @@ public class NERParser {
 		TimeInterval interval = new TimeInterval();
 		
 		if (dates.size() == 1) {
-			Calendar c1 = UtilityMethod.dateToCalendar(dates.get(0));
+//			Calendar c1 = UtilityMethod.dateToCalendar(dates.get(0));
 			Calendar c2 = UtilityMethod.dateToCalendar(dates.get(0));
-			c1.set(Calendar.HOUR_OF_DAY, 0);
-			c1.set(Calendar.MINUTE, 1);
+//			c1.set(Calendar.HOUR_OF_DAY, 0); 
+//			c1.set(Calendar.MINUTE, 1);
 			c2.set(Calendar.HOUR_OF_DAY, 23);
 			c2.set(Calendar.MINUTE, 59);
-			interval = new TimeInterval(c1.getTime(), c2.getTime());
+			interval = new TimeInterval(Constant.DEADLINE_START_DATE, c2.getTime());
 		} else if (dates.size() == 2) {
 			Date d0 = dates.get(0);
 			Date d1 = dates.get(1);
