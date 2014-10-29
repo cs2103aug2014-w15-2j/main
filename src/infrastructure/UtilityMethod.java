@@ -84,7 +84,7 @@ public abstract class UtilityMethod {
 			if (i == 0) {
 				returnValue = (i+1) + ". " + list.get(i).toStringForDisplaying();
 			} else {
-				returnValue = returnValue + "\n" + (i+1) + ". " + list.get(i).toStringForDisplaying();
+				returnValue = returnValue + "\n\n" + (i+1) + ". " + list.get(i).toStringForDisplaying();
 			}
 		}
 		
