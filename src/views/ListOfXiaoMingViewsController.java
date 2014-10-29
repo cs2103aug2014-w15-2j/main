@@ -59,74 +59,25 @@ public class ListOfXiaoMingViewsController extends GridPane {
 	
 	public ListOfXiaoMingViewsController() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ListOfXiaoMingViews.fxml"));
-//		fxmlLoader.setRoot(this);
-//      fxmlLoader.setController(this);
-//      fxmlLoader.load();
+		fxmlLoader.setRoot(this);
+		fxmlLoader.setController(this);
+		fxmlLoader.load();
         
         updatePage();
 	}
 
 	private void updatePage() {
-//		String cached = TestingCache.getCachedAccount();
-//		if (!((cached == "") || (cached == null))) {
-//			System.out.println(cached);
-//			this.core = new ListOfXiaoMing(cached);
-//			Constant.logger.log(Level.INFO, String.format(
-//					Constant.LOG_MESSAGE_READING_CACHE, cached));
-//		} else {
-//			Constant.logger.log(Level.INFO,
-//					Constant.LOG_MESSAGE_NO_CACHE_FOUND);
-//		}
-//
-//		while (list == null) {
-//			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_WELCOME);
-//			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_INSTRUCTION);
-//			String userInput = UtilityMethod.readCommand();
-//			String recordFilePath = ListOfXiaoMing
-//					.executeUpperLevelCommand(userInput);
-//			if (recordFilePath != null
-//					&& !recordFilePath
-//							.equalsIgnoreCase(Constant.RETURN_VALUE_LOG_IN_CANCELLED)) {
-//				// already find the record
-//				System.out.println(recordFilePath);
-//				list = new ListOfXiaoMing(recordFilePath);
-//				TestingCache.cacheAccount(recordFilePath);
-//				Constant.logger.log(Level.INFO, String.format(
-//						Constant.LOG_MESSAGE_USER_CACHED, recordFilePath));
-//			} else {
-//
-//			}
-//		}
-//
-//		assert (list != null);
-//		Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_INITIATE_LIST);
-//
-//		UtilityMethod.showToUser(list.execute("display"));
-//		UtilityMethod.showToUser("\n\n\n");
-//		Constant.logger.log(Level.INFO,
-//				Constant.LOG_MESSAGE_USER_TASKS_DISPLAYED);
-//
-//		boolean willContinue = true;
-//		while (willContinue) {
-//			String userInput = UtilityMethod.readCommand();
-//			String result;
-//			if (list.isNlpOn) {
-//				result = list.executeNLP(userInput);
-//			} else {
-//				result = list.execute(userInput);
-//			}
-//
-//			if (result.equals(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY)) {
-//				willContinue = false;
-//				Constant.logger.log(Level.INFO,
-//						Constant.LOG_MESSAGE_USER_LOG_OUT);
-//				UtilityMethod
-//						.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY);
-//			} else {
-//				UtilityMethod.showToUser(result);
-//				UtilityMethod.showToUser("\n\n\n");
-//			}
-//		}
+		String cached = TestingCache.getCachedAccount();
+		if (!((cached == "") || (cached == null))) {
+			this.core = new ListOfXiaoMing(cached);
+			Constant.logger.log(Level.INFO, String.format(
+					Constant.LOG_MESSAGE_READING_CACHE, cached));
+		} else {
+			Constant.logger.log(Level.INFO,
+					Constant.LOG_MESSAGE_NO_CACHE_FOUND);
+		}
+		
+		this.setDisplay(Constant.PROMPT_MESSAGE_WELCOME + '\n' + Constant.PROMPT_MESSAGE_INSTRUCTION);
 	}
 	
 	private String getUserInput() {
@@ -138,8 +89,49 @@ public class ListOfXiaoMingViewsController extends GridPane {
 		String command = getUserInput();
 		
 		if (!command.equals("")) {			
-			System.out.println(command);
-			this.setDisplay(command);
+			if (core == null) {
+				String recordFilePath = ListOfXiaoMing.executeUpperLevelCommand(command);
+				if (recordFilePath != null
+						&& !recordFilePath
+								.equalsIgnoreCase(Constant.RETURN_VALUE_LOG_IN_CANCELLED)) {
+					// already find the record
+					this.setDisplay(recordFilePath);
+					core = new ListOfXiaoMing(recordFilePath);
+					TestingCache.cacheAccount(recordFilePath);
+					Constant.logger.log(Level.INFO, String.format(
+							Constant.LOG_MESSAGE_USER_CACHED, recordFilePath));
+				}
+			}
+
+			assert (core != null);
+			Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_INITIATE_LIST);
+
+//			UtilityMethod.showToUser(core.execute("display"));
+//			UtilityMethod.showToUser("\n\n\n");
+//			Constant.logger.log(Level.INFO,
+//					Constant.LOG_MESSAGE_USER_TASKS_DISPLAYED);
+	//
+//			boolean willContinue = true;
+//			while (willContinue) {
+//				String userInput = UtilityMethod.readCommand();
+//				String result;
+//				if (list.isNlpOn) {
+//					result = list.executeNLP(userInput);
+//				} else {
+//					result = list.execute(userInput);
+//				}
+	//
+//				if (result.equals(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY)) {
+//					willContinue = false;
+//					Constant.logger.log(Level.INFO,
+//							Constant.LOG_MESSAGE_USER_LOG_OUT);
+//					UtilityMethod
+//							.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY);
+//				} else {
+//					UtilityMethod.showToUser(result);
+//					UtilityMethod.showToUser("\n\n\n");
+//				}
+//			}
 		}
     }
 	
