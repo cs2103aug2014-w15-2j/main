@@ -179,37 +179,40 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	@Override
 	public void onHotKey(HotKey key) {
 		System.out.println("HOTKEY: " + key.keyStroke.getKeyCode());
+		String tag = "";
+		int cursorPosition = this.input.getCaretPosition();
 		switch (key.keyStroke.getKeyCode()) {
 			case KEY_VALUE_CTRL_D:
 				descriptionTag = toggleTag(descriptionTag);
-				this.input.setText(this.input.getText() + descriptionTag);
+				tag = descriptionTag;
 				break;
 
 			case KEY_VALUE_CTRL_A:
 				dateTag = toggleTag(dateTag);
-				this.input.setText(this.input.getText() + dateTag);
+				tag = dateTag;
 				break;
 				
 			case KEY_VALUE_CTRL_C:
 				commandTag = toggleTag(commandTag);
-				this.input.setText(this.input.getText() + commandTag);
+				tag = commandTag;
 				break;
 				
 			case KEY_VALUE_CTRL_T:
 				tagTag = toggleTag(tagTag);
-				this.input.setText(this.input.getText() + tagTag);
+				tag = tagTag;
 				break;
 				
 			case KEY_VALUE_CTRL_I:
 				indexTag = toggleTag(indexTag);
-				this.input.setText(this.input.getText() + indexTag);
+				tag = indexTag;
 				break;
 				
 			case KEY_VALUE_CTRL_P:
 				priorityTag = toggleTag(priorityTag);
-				this.input.setText(this.input.getText() + priorityTag);
+				tag = priorityTag;
 				break;
 		}
 		
+		this.input.insertText(cursorPosition, tag);	
 	}
 }
