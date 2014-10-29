@@ -49,3 +49,77 @@ love	TAG
 and	TAG
 hate	TAG
 .	O
+
+clean	O
+my	O
+room	O
+,	O
+tag	TAG
+with	TAG
+:	TAG
+private	TAG
+,	TAG
+house	TAG
+.	O
+
+buy	O
+a	O
+new	O
+3dsll	O
+tag	TAG
+with	TAG
+:	TAG
+game	TAG
+.	O
+
+mark	TAG
+task	O
+1	O
+as	TAG
+done	TAG
+.	O
+
+mark	TAG
+1	O
+as	TAG
+done	TAG
+.	O
+
+tag	TAG
+task	O
+1	O
+with	TAG
+done	TAG
+.	O
+
+tag	TAG
+1	O
+with	TAG
+done	TAG
+.	O
+
+task	O
+1	O
+tag	TAG
+with	TAG
+done	TAG
+.	O
+
+1	O
+tag	TAG
+with	TAG
+done	TAG
+.	O
+
+1	O
+mark	TAG
+as	TAG
+done	TAG
+.	O
+
+task	O
+1	O
+mark	TAG
+as	TAG
+done	TAG
+.	O
