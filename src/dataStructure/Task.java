@@ -141,7 +141,7 @@ public class Task {
 		String task = new String();
 
 		task = task + getDescription();
-		task = task + "\n\t category: " + getCategory() + ';';
+//		task = task + "\n\t category: " + getCategory() + ';';
 		if (!this.tag.isEmpty()) {
 			task = task + "\n\t tags: " + tagToString() + ';';
 		}
