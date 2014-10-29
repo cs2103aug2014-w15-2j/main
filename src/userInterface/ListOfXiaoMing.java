@@ -1,12 +1,9 @@
 package userInterface;
 
 import infrastructure.Constant;
-import infrastructure.IO;
 import infrastructure.Parser;
 import infrastructure.UtilityMethod;
 import infrastructure.Constant.COMMAND_TYPE;
-
-
 
 //import java.io.IOException;
 import java.io.OutputStream;
@@ -19,10 +16,7 @@ import java.util.logging.Level;
 //import java.util.logging.LogManager;
 //import java.util.logging.SimpleFormatter;
 
-
-
 import reference.*;
-import views.ListOfXiaoMingViewsController;
 import dataStore.*;
 import dataStructure.Task;
 import dataStructure.User;
@@ -35,21 +29,13 @@ public class ListOfXiaoMing {
 	private static PrintStream err = System.err;
 	// a property to store the current user
 	private User user;
-	public IO io = null;
-	public ListOfXiaoMingViewsController GUIController = null;
 
 	/**
 	 * Constructor
 	 */
-	public ListOfXiaoMing(String recordFilePath, ListOfXiaoMingViewsController controller) {
+	public ListOfXiaoMing(String recordFilePath) {
 		try {
 			user = new User(recordFilePath);
-			if (controller == null) {
-				this.io = new IO(Constant.UI_MODE.CLI);
-			} else {
-				this.GUIController = controller;
-				this.io = new IO(Constant.UI_MODE.GUI);
-			}
 		} catch (Exception e) {
 			// impossible errors
 			e.printStackTrace();
@@ -83,12 +69,11 @@ public class ListOfXiaoMing {
 		// }
 
 		while (true) {
-			// CLI
 			ListOfXiaoMing list = null;
 			String cached = TestingCache.getCachedAccount();
 			if (!((cached == "") || (cached == null))) {
 				System.out.println(cached);
-				list = new ListOfXiaoMing(cached, null);
+				list = new ListOfXiaoMing(cached);
 				Constant.logger.log(Level.INFO, String.format(
 						Constant.LOG_MESSAGE_READING_CACHE, cached));
 			} else {
@@ -97,18 +82,17 @@ public class ListOfXiaoMing {
 			}
 
 			while (list == null) {
-				IO.cliIO.showToUser(Constant.PROMPT_MESSAGE_WELCOME, list);
-				IO.cliIO.showToUser(Constant.PROMPT_MESSAGE_INSTRUCTION, list);
-				String userInput = IO.cliIO.readCommand(list);
+				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_WELCOME);
+				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_INSTRUCTION);
+				String userInput = UtilityMethod.readCommand();
 				String recordFilePath = ListOfXiaoMing
-						.executeUpperLevelCommand(userInput, null);
+						.executeUpperLevelCommand(userInput);
 				if (recordFilePath != null
 						&& !recordFilePath
 								.equalsIgnoreCase(Constant.RETURN_VALUE_LOG_IN_CANCELLED)) {
 					// already find the record
 					System.out.println(recordFilePath);
-					list = new ListOfXiaoMing(recordFilePath, null);
-					System.out.println(recordFilePath);
+					list = new ListOfXiaoMing(recordFilePath);
 					TestingCache.cacheAccount(recordFilePath);
 					Constant.logger.log(Level.INFO, String.format(
 							Constant.LOG_MESSAGE_USER_CACHED, recordFilePath));
@@ -116,40 +100,35 @@ public class ListOfXiaoMing {
 
 				}
 			}
-			
-			processUserInteraction(list);
-		}
-	}
 
-	public static void processUserInteraction(ListOfXiaoMing list) {
-		// still gui
-		assert (list != null);
-		IO io = list.io;
-		Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_INITIATE_LIST);
+			assert (list != null);
+			Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_INITIATE_LIST);
 
-		io.showToUser(list.execute("display"), list);
-		io.showToUser("\n\n\n", list);
-		Constant.logger.log(Level.INFO,
-				Constant.LOG_MESSAGE_USER_TASKS_DISPLAYED);
+			UtilityMethod.showToUser(list.execute("display"));
+			UtilityMethod.showToUser("\n\n\n");
+			Constant.logger.log(Level.INFO,
+					Constant.LOG_MESSAGE_USER_TASKS_DISPLAYED);
 
-		boolean willContinue = true;
-		while (willContinue) {
-			String userInput = io.readCommand(list);
-			String result;
-			if (list.isNlpOn) {
-				result = list.executeNLP(userInput);
-			} else {
-				result = list.execute(userInput);
-			}
+			boolean willContinue = true;
+			while (willContinue) {
+				String userInput = UtilityMethod.readCommand();
+				String result;
+				if (list.isNlpOn) {
+					result = list.executeNLP(userInput);
+				} else {
+					result = list.execute(userInput);
+				}
 
-			if (result.equals(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY)) {
-				willContinue = false;
-				Constant.logger.log(Level.INFO,
-						Constant.LOG_MESSAGE_USER_LOG_OUT);
-				io.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY, list);
-			} else {
-				io.showToUser(result, list);
-				io.showToUser("\n\n\n", list);
+				if (result.equals(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY)) {
+					willContinue = false;
+					Constant.logger.log(Level.INFO,
+							Constant.LOG_MESSAGE_USER_LOG_OUT);
+					UtilityMethod
+							.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY);
+				} else {
+					UtilityMethod.showToUser(result);
+					UtilityMethod.showToUser("\n\n\n");
+				}
 			}
 		}
 	}
@@ -160,17 +139,11 @@ public class ListOfXiaoMing {
 	 * 
 	 * @return
 	 */
-	public static String executeUpperLevelCommand(String commandString, ListOfXiaoMingViewsController controller) {
+	public static String executeUpperLevelCommand(String commandString) {
 		Pair<COMMAND_TYPE, ArrayList<String>> commandPair = Parser
 				.parseCommandPair(commandString);
 		COMMAND_TYPE thisCommand = (COMMAND_TYPE) commandPair.head;
 		ArrayList<String> parameter = commandPair.tail;
-		IO io = null;
-		if (controller == null) {
-			io = new IO(Constant.UI_MODE.CLI);
-		} else {
-			io = new IO(Constant.UI_MODE.GUI);
-		}
 		if (commandString.equals("") || commandString.equalsIgnoreCase("clear")) {
 			for (int i = 0; i < 24; i++) {
 				System.out.println();
@@ -180,25 +153,25 @@ public class ListOfXiaoMing {
 
 		switch (thisCommand) {
 		case LOG_IN:
-			return User.userLogIn(parameter, controller);
+			return User.userLogIn(parameter);
 
 		case CREATE_ACCOUNT:
-			return User.createAccount(parameter, controller);
+			return User.createAccount(parameter);
 
 		case DELETE_ACCOUNT:
-			io.showToUser(User.deleteAccount(controller), controller);
+			UtilityMethod.showToUser(User.deleteAccount());
 			return null;
 
 		case HELP:
-			io.showToUser(User.showHelp(), controller);
+			UtilityMethod.showToUser(User.showHelp());
 			return null;
 
 		case EXIT:
 			System.setErr(err);
-			User.exit(controller);
+			User.exit();
 
 		default:
-			io.showToUser(Constant.PROMPT_MESSAGE_NOT_LOG_IN, controller);
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NOT_LOG_IN);
 			return null;
 		}
 	}
@@ -244,7 +217,7 @@ public class ListOfXiaoMing {
 
 			case EXIT:
 				System.setErr(err);
-				User.exit(this.GUIController);
+				User.exit();
 				break;
 
 			case NLP:
@@ -297,7 +270,7 @@ public class ListOfXiaoMing {
 
 		case EXIT:
 			System.setErr(err);
-			User.exit(this.GUIController);
+			User.exit();
 
 		case NLP:
 			return this.toggleNLP();
@@ -322,7 +295,7 @@ public class ListOfXiaoMing {
 	private String add(ArrayList<String> taskParameters) {
 		Task taskToAdd;
 		try {
-			taskToAdd = parser.getTaskFromParameterList(taskParameters, this.GUIController);
+			taskToAdd = parser.getTaskFromParameterList(taskParameters);
 			assert (taskToAdd != null);
 			return (this.user.add(taskToAdd)) ? Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY
 					: Constant.PROMPT_MESSAGE_ADD_TASK_FAILED;
@@ -374,7 +347,7 @@ public class ListOfXiaoMing {
 		int index = Integer.parseInt(taskParameters.get(0).trim());
 		try {
 			taskParameters.remove(0);
-			this.user.update(index - 1, parser.getTaskMap(taskParameters, this.GUIController));
+			this.user.update(index - 1, parser.getTaskMap(taskParameters));
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
 			return Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
@@ -408,13 +381,13 @@ public class ListOfXiaoMing {
 				String value = UtilityMethod.removeFirstWord(parameter);
 				if (key.equalsIgnoreCase("time")) {
 					timeInterval = parser.parseTimeInterval(value);
-					this.io.showToUser(String.format(
+					UtilityMethod.showToUser(String.format(
 							Constant.PROMPT_MESSAGE_SEARCH_TIME_INTERVAL,
-							timeInterval), this.GUIController);
+							timeInterval));
 				} else {
 					keyword = parameter;
-					this.io.showToUser(String.format(
-							Constant.PROMPT_MESSAGE_SEARCH_KEYWORD, keyword), this.GUIController);
+					UtilityMethod.showToUser(String.format(
+							Constant.PROMPT_MESSAGE_SEARCH_KEYWORD, keyword));
 				}
 			}
 
@@ -489,7 +462,7 @@ public class ListOfXiaoMing {
 			this.user.undo();
 			return Constant.PROMPT_MESSAGE_UNDO_SUCCESSFULLY;
 		} catch (CommandFailedException e) {
-			this.io.showToUser(e.toString(), this.GUIController);
+			UtilityMethod.showToUser(e.toString());
 			return Constant.PROMPT_MESSAGE_UNDO_FAILED;
 		}
 	}
@@ -499,7 +472,7 @@ public class ListOfXiaoMing {
 			this.user.redo();
 			return Constant.PROMPT_MESSAGE_REDO_SUCCESSFULLY;
 		} catch (CommandFailedException e) {
-			this.io.showToUser(e.toString(), this.GUIController);
+			UtilityMethod.showToUser(e.toString());
 			return Constant.PROMPT_MESSAGE_REDO_FAILED;
 		}
 	}

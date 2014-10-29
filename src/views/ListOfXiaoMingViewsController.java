@@ -63,7 +63,7 @@ public class ListOfXiaoMingViewsController extends GridPane {
 		fxmlLoader.setController(this);
 		fxmlLoader.load();
         
-		this.core = new ListOfXiaoMing("haha", this);
+		this.core = new ListOfXiaoMing("haha");
         updatePage();
 	}
 

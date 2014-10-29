@@ -1,7 +1,6 @@
 package dataStructure;
 
 import infrastructure.Constant;
-import infrastructure.IO;
 import infrastructure.UtilityMethod;
 
 import java.io.File;
@@ -9,12 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Stack;
-
 import com.rits.cloning.*;
 
 import dataStore.DataStore;
 import reference.*;
-import views.ListOfXiaoMingViewsController;
 
 public class User {
 	
@@ -374,17 +371,11 @@ public class User {
 	 * 
 	 * @return message
 	 */
-	public static String deleteAccount(ListOfXiaoMingViewsController controller) {
-		IO io = null;
-		if (controller == null) {
-			io = new IO(Constant.UI_MODE.CLI);
-		} else {
-			io = new IO(Constant.UI_MODE.GUI);
-		}
-		io.showToUser("Please enter the username of the account you want to delete: ", controller);
-		String username = io.readCommand(controller);
-		io.showToUser("Please enter the password to confirm: ", controller);
-		String password = io.readCommand(controller);
+	public static String deleteAccount() {
+		UtilityMethod.showToUser("Please enter the username of the account you want to delete: ");
+		String username = UtilityMethod.readCommand();
+		UtilityMethod.showToUser("Please enter the password to confirm: ");
+		String password = UtilityMethod.readCommand();
 		boolean isDeleteSuccessfully = DataStore.destroy(username, password);
 		return isDeleteSuccessfully ? "deleted!" : "deletion failed";
 	}
@@ -394,15 +385,9 @@ public class User {
 	 * @param parameters
 	 * @return
 	 */
-	public static String userLogIn(ArrayList<String> parameters, ListOfXiaoMingViewsController controller) {
+	public static String userLogIn(ArrayList<String> parameters) {
 		String username = null;
 		String password = null;
-		IO io = null;
-		if (controller == null) {
-			io = new IO(Constant.UI_MODE.CLI);
-		} else {
-			io = new IO(Constant.UI_MODE.GUI);
-		}
 		
 		if (parameters.size() >= 1) {
 			username = parameters.get(0);
@@ -412,11 +397,11 @@ public class User {
 		}
 		
 		while (username == null) {
-			io.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME, controller);
-			String inputUsername = io.readCommand(controller);
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME);
+			String inputUsername = UtilityMethod.readCommand();
 			if (!DataStore.isAccountExisting(inputUsername)) {
-				io.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_NOT_EXIST, controller);
-				 if (!io.readCommand(controller).equalsIgnoreCase("Y")) {
+				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_NOT_EXIST);
+				 if (!UtilityMethod.readCommand().equalsIgnoreCase("Y")) {
 					return Constant.RETURN_VALUE_LOG_IN_CANCELLED;
 				 }
 			} else {
@@ -425,8 +410,8 @@ public class User {
 		}
 			
 		while (password == null) {
-			io.showToUser(Constant.PROMPT_MESSAGE_NEED_PASSWORD, controller);
-			password = io.readCommand(controller);
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_PASSWORD);
+			password = UtilityMethod.readCommand();
 		}
 		
 		int incorrectPasswordCount = 0;
@@ -435,8 +420,8 @@ public class User {
 			if (incorrectPasswordCount >= 3) {
 				return Constant.RETURN_VALUE_AUTHENTICATION_FAILED;
 			}
-			io.showToUser(Constant.PROMPT_MESSAGE_PASSWORD_INCORRECT, controller);
-			password = io.readCommand(controller);
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_PASSWORD_INCORRECT);
+			password = UtilityMethod.readCommand();
 		}
 		
 		return username;
@@ -448,27 +433,21 @@ public class User {
 	 * @param parameters
 	 * @return
 	 */
-	public static String createAccount(ArrayList<String> parameters, ListOfXiaoMingViewsController controller) {
+	public static String createAccount(ArrayList<String> parameters) {
 		String username = null;
 		String passwordInput1 = null;
 		String passwordInput2 = null;
-		IO io = null;
-		if (controller == null) {
-			io = new IO(Constant.UI_MODE.CLI);
-		} else {
-			io = new IO(Constant.UI_MODE.GUI);
-		}
 		
 		if (parameters.size() >= 1) {
 			username = parameters.get(0);
 		}
 		
 		while (username == null) {
-			io.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME, controller);
-			String inputUsername = io.readCommand(controller);
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_USERNAME);
+			String inputUsername = UtilityMethod.readCommand();
 			if (DataStore.isAccountExisting(inputUsername)) {
-				io.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_EXIST, controller);
-				 if (!io.readCommand(controller).equalsIgnoreCase("Y")) {
+				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_ACCOUNT_EXIST);
+				 if (!UtilityMethod.readCommand().equalsIgnoreCase("Y")) {
 					return Constant.RETURN_VALUE_LOG_IN_CANCELLED;
 				 }
 			} else {
@@ -479,15 +458,15 @@ public class User {
 		while(!(passwordInput1 != null && passwordInput2 != null && passwordInput1.equals(passwordInput2))) {
 			passwordInput1 = null;
 			passwordInput2 = null;
-			io.showToUser(Constant.PROMPT_MESSAGE_NEED_PASSWORD, controller);
-			passwordInput1 = io.readCommand(controller);
-			io.showToUser(Constant.PROMPT_MESSAGE_NEED_ENTER_AGAIN, controller);
-			passwordInput2 = io.readCommand(controller);
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_PASSWORD);
+			passwordInput1 = UtilityMethod.readCommand();
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NEED_ENTER_AGAIN);
+			passwordInput2 = UtilityMethod.readCommand();
 		}
 		
 		boolean successCreated = DataStore.createAccount(username, passwordInput1);
-		io.showToUser(successCreated ?  Constant.PROMPT_MESSAGE_ACCOUNT_CREATED: 
-								 Constant.PROMPT_MESSAGE_ACCOUNT_NOT_CREATED, controller);
+		UtilityMethod.showToUser(successCreated ?  Constant.PROMPT_MESSAGE_ACCOUNT_CREATED: 
+								 Constant.PROMPT_MESSAGE_ACCOUNT_NOT_CREATED);
 		return successCreated ? username : null;
 	}
 	
@@ -504,15 +483,8 @@ public class User {
 	/**
 	 * exit exits the application
 	 */
-	public static void exit(ListOfXiaoMingViewsController controller) {
-		IO io = null;
-		if (controller == null) {
-			io = new IO(Constant.UI_MODE.CLI);
-		} else {
-			io = new IO(Constant.UI_MODE.GUI);
-		}
-		
-		io.showToUser(Constant.PROMPT_MESSAGE_SESSION_END, controller);
+	public static void exit() {  
+		UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_SESSION_END);
 		System.exit(0);
 	}
 }
