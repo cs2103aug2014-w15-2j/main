@@ -18,6 +18,22 @@ delete 	O
 9	INDEX
 .	O
 
+remove	O
+1	INDEX
+.	O
+
+remove	O
+2	INDEX
+.	O
+
+remove	O
+3	INDEX
+.	O
+
+remove	O
+4	INDEX
+.	O
+
 update	O
 12	INDEX
 moving	O
@@ -45,6 +61,11 @@ place	O
 change	O
 12	INDEX
 today	O
+.	O
+
+change	O
+12	INDEX
+tomorrow	O
 .	O
 
 update	O

@@ -40,16 +40,15 @@ public class ListOfXiaoMingTest {
 		System.out.println("all search tests are passed");
 	}
 	
-	@Test
-	public void testAdd() {
-		testOneCommand("TO-01-1 add a task", Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY, "add attend cs2103 lecture");
-		testOneCommand("", "1. attend cs2103 lecture\n\t priority: medium;\n\t no specific time requirements;", "display");
-		
-		testOneCommand("TO-01-2 add a task", Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY, "add attend cs2103 tutorial today, 3pm to 4pm");
-		testOneCommand("", "1. attend cs2103 lecture\n\t priority: medium;\n\t no specific time requirements;\n\n2. attend cs2103 tutorial\n\t priority: medium;\n\t from 29/October/2014 15:00 to 29/October/2014 16:00;", "display");
-
-		testOneCommand("TO-02-1 search with time interval", "1. attend cs2103 tutorial\n\t priority: medium;\n\t from 29/October/2014 15:00 to 29/October/2014 16:00;", "search this week");
-	}
+//	public void testAdd() {
+//		testOneCommand("TO-01-1 add a task", Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY, "add attend cs2103 lecture");
+//		testOneCommand("", "1. attend cs2103 lecture\n\t priority: medium;\n\t no specific time requirements;", "display");
+//		
+//		testOneCommand("TO-01-2 add a task", Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY, "add attend cs2103 tutorial today, 3pm to 4pm");
+//		testOneCommand("", "1. attend cs2103 lecture\n\t priority: medium;\n\t no specific time requirements;\n\n2. attend cs2103 tutorial\n\t priority: medium;\n\t from 29/October/2014 15:00 to 29/October/2014 16:00;", "display");
+//
+//		testOneCommand("TO-02-1 search with time interval", "1. attend cs2103 tutorial\n\t priority: medium;\n\t from 29/October/2014 15:00 to 29/October/2014 16:00;", "search this week");
+//	}
 	
 	private void testOneCommand(String description, String expected, String command) {
 		try {

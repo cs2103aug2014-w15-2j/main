@@ -2,6 +2,7 @@ tag	O
 with	O
 important	TAG
 .	O
+
 tag	O
 with	O
 nice	TAG
@@ -66,6 +67,40 @@ and	O
 me	TAG
 .	O
 
+
 tag	O
+done	TAG
+.	O
+
+tags	O
+are	O
+:	O
+2103	TAG
+,	O
+2101	TAG
+.	O
+
+3	O
+tags	O
+are	O
+:	O
+cs	TAG
+,	O
+ma	TAG
+,	O
+pc	TAG
+.	O
+
+tag	O
+as	O
+done	TAG
+.
+
+tag	O
+done	TAG
+.	O
+
+mark	O
+as	O
 done	TAG
 .	O

@@ -113,3 +113,37 @@ fooding	O
 Oct	O
 26	O
 .	O
+
+Create	O
+watch	O
+movie	O
+with	O
+roommate	O
+,	O
+priority	PRIORITY
+low	PRIORITY
+.	O
+
+create	O
+watch	O
+movie	O
+with	O
+roommate	O
+,	O
+priority	PRIORITY
+low	PRIORITY
+.	O
+
+update	O
+task	O
+1	O
+priority	PRIORITY
+high	PRIORITY
+.	O
+
+update	O
+1	O
+to	O
+priority	PRIORITY
+medium	PRIORITY
+.	O

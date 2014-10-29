@@ -12,8 +12,8 @@ public abstract class Constant {
 	 *training data path 
 	 */
 	//directory
-	public static final String FILE_PATH_ROOT 		= "List-Of-Xiao-Ming";
-	public static final String FILE_PATH_NLP_ROOT 	= "List-Of-Xiao-Ming/NLP-Data";
+	public static final String FILE_PATH_ROOT 		= "List-of-Xiao-Ming";
+	public static final String FILE_PATH_NLP_ROOT 	= "List-of-Xiao-Ming/NLP-Data";
 	public static final String FILE_PATH_NLP_SRC 	= "src/NLPTraining";
 	
 	//tsv files
@@ -210,4 +210,9 @@ public abstract class Constant {
 	public static final Date FLOATING_START_DATE = new Date(0);
 	public static final Date DEADLINE_START_DATE = new Date(0);
 	public static final Date FLOATING_END_DATE = new Date(9999);
+	
+	//user interface mode
+	public static enum UI_MODE {
+		GUI, CLI
+	}
 }

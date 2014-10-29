@@ -59,6 +59,21 @@ October	O
 30	O
 .	O
 
+create	COMMAND
+task	O
+meeting	O
+,	O
+done	O
+by	O
+Sunday	O
+.	O
+
+add	COMMAND
+create	O
+a	O
+new	O
+task	O
+.	O
 
 delete 	COMMAND
 1	O
@@ -76,16 +91,19 @@ remove 	COMMAND
 2	O
 .	O
 
+clear	COMMAND
+.	O
+
 update	COMMAND
 3	O
-swiming	O
+swimming	O
 this	O
 Friday	O
 .	O
 
 change	COMMAND
 3	O
-swiming	O
+swimming	O
 this	O
 Friday	O
 .	O
@@ -111,6 +129,84 @@ search	COMMAND
 search	COMMAND
 Oct	O
 31	O
+.	O
+
+search	COMMAND
+today	O
+2pm	O
+.	O
+
+search	COMMAND
+tmr	O
+14:00	O
+.	O
+
+search	COMMAND
+tomorrow	0
+2pm	O
+to	O
+3pm	O
+.	O
+
+search	COMMAND
+tomorrow	O
+2:00	O
+to	O
+3:00	O
+.	O
+
+search	COMMAND
+tmr	O
+2pm	O
+-	O
+3pm	O
+.	O
+
+search	COMMAND
+31	O
+October	O
+.	O
+
+search	COMMAND
+31/10/2014	O
+.	O
+
+search	COMMAND
+31/10	O
+.	O
+
+search	COMMAND
+trashed	O
+.	O
+
+search	COMMAND
+done	O
+.	O
+
+mark	COMMAND
+task	O
+3	O
+as	O
+done	O
+.	O
+
+mark	COMMAND
+task	O
+13	O
+as	O
+done	O
+.	O
+
+mark	COMMAND
+12	O
+as	O
+done	O
+.	O
+
+mark	COMMAND
+31	O
+as	O
+done	O
 .	O
 
 log	COMMAND
