@@ -7,11 +7,22 @@ public abstract class Constant {
 	
 	//logger
 	public static Logger logger = Logger.getLogger("ListOfXiaoMing");
+
+	//training data path
+	public static final String FILE_PATH_TIME_PICKER = "NLPTraining/time-picker-training-data.tsv";
+	public static final String FILE_PATH_DESCRIPTION_PICKER = "NLPTraining/description-picker-training-data.tsv";
+	public static final String FILE_PATH_TAG_PICKER = "NLPTraining/tag-picker-training-data.tsv";
+	public static final String FILE_PATH_PRIORITY_PICKER = "NLPTraining/priority-picker-training-data.tsv";
+	public static final String FILE_PATH_INDEX_PICKER = "NLPTraining/index-picker-training-data.tsv";
 	
 	//XML tags
+	public static final String XML_TAG_DEFAULT = "O";
 	public static final String XML_TAG_TIME = "DATE";
 	public static final String XML_TAG_DESCRIPTION = "DESCRIPTION";
 	public static final String XML_TAG_INDEX = "INDEX";
+	public static final String XML_TAG_TAG = "TAG";
+	public static final String XML_TAG_PRIORITY = "PRIORITY";
+	
 	
 	
 	//prompt messages that will be printed for users	

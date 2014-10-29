@@ -14,6 +14,10 @@ import edu.stanford.nlp.time.TimeExpression;
 import edu.stanford.nlp.util.CoreMap;
 import infrastructure.Constant.COMMAND_TYPE;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -254,17 +258,6 @@ public class NERParser {
 	
 	
 	
-	public String pickCategroy (String userInputString) {
-		
-		
-		return null;
-	}
-	
-	
-	
-	
-	
-	
 	
 	
 	/**
@@ -370,7 +363,182 @@ public class NERParser {
 	
 	
 	
+	public static boolean updateModal(String propFilePath) {
+		Runtime re = Runtime.getRuntime();
+		try {
+			re.exec("java -cp stanford-ner.jar edu.stanford.nlp.ie.crf.CRFClassifier -prop " + propFilePath);
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 	
+	/**
+	 * turn the xml to the required training format
+	 * @param xmlString
+	 * @return
+	 */
+	public static ArrayList<Pair<String, String>> interpretXML(String xmlString) {
+		xmlString = xmlString.replaceAll("<", " <");
+		xmlString = xmlString.replaceAll(">", "> ");
+		
+		String[] wordArray = xmlString.split(" ");
+		ArrayList<Pair<String, String>> wordPairs = new ArrayList<Pair<String, String>>();
+		
+		String currentKey = "O";
+		
+		for (String currentWord : wordArray) {
+			if (currentWord.contains("</") && 
+					currentWord.contains(">") && 
+					currentWord.indexOf(">") > currentWord.indexOf("</")) {
+				currentKey = Constant.XML_TAG_DEFAULT;
+				
+			} else if (currentWord.contains("<") && 
+					currentWord.contains(">") && 
+					currentWord.indexOf(">") > currentWord.indexOf("<")) {
+				if (!currentKey.equals(Constant.XML_TAG_DEFAULT)) {
+					System.err.println("interpretXML: currentKey != defaultKey ----- one word can only have a single tag");
+					return null;
+				}
+				currentKey = currentWord.substring(currentWord.indexOf("<") + 1, currentWord.indexOf(">")).trim();
+			} else {
+				wordPairs.add(new Pair<String, String>(currentWord.trim(), currentKey.trim()));
+			}
+		}
+		
+		return wordPairs;
+	}
+	
+	
+	/**
+	 * translate a mixed list to a map containing pure list
+	 * @param wordPairs
+	 * @return
+	 */
+	public static HashMap<String, ArrayList<Pair<String, String>>> demux (ArrayList<Pair<String, String>> wordPairs) {
+		HashMap<String, ArrayList<Pair<String, String>>> listMap = new HashMap<String, ArrayList<Pair<String, String>>>();
+		ArrayList<Pair<String, String>> timeList = new ArrayList<Pair<String, String>>();
+		ArrayList<Pair<String, String>> tagList = new ArrayList<Pair<String, String>>();
+		ArrayList<Pair<String, String>> descriptionList = new ArrayList<Pair<String, String>>();
+		ArrayList<Pair<String, String>> priorityList = new ArrayList<Pair<String, String>>();
+		ArrayList<Pair<String, String>> indexList = new ArrayList<Pair<String, String>>();
+		
+		for (Pair<String, String> p : wordPairs) {
+			switch (p.tail) {
+				case Constant.XML_TAG_TIME:
+					Pair<String, String> trivialPair1 = new Pair<String, String>(p.head, Constant.XML_TAG_DEFAULT);
+					timeList.add(p);
+					tagList.add(trivialPair1);
+					descriptionList.add(trivialPair1);
+					priorityList.add(trivialPair1);
+					indexList.add(trivialPair1);
+					break;
+					
+				case Constant.XML_TAG_TAG:
+					Pair<String, String> trivialPair2 = new Pair<String, String>(p.head, Constant.XML_TAG_DEFAULT);
+					tagList.add(p);
+					timeList.add(trivialPair2);
+					descriptionList.add(trivialPair2);
+					priorityList.add(trivialPair2);
+					indexList.add(trivialPair2);
+					break;
+					
+				case Constant.XML_TAG_DESCRIPTION:
+					Pair<String, String> trivialPair3 = new Pair<String, String>(p.head, Constant.XML_TAG_DEFAULT);
+					descriptionList.add(p);
+					tagList.add(trivialPair3);
+					timeList.add(trivialPair3);
+					priorityList.add(trivialPair3);
+					indexList.add(trivialPair3);
+					break;
+					
+				case Constant.XML_TAG_PRIORITY:
+					Pair<String, String> trivialPair4 = new Pair<String, String>(p.head, Constant.XML_TAG_DEFAULT);
+					priorityList.add(p);
+					tagList.add(trivialPair4);
+					descriptionList.add(trivialPair4);
+					timeList.add(trivialPair4);
+					indexList.add(trivialPair4);
+					break;
+				
+				case Constant.XML_TAG_INDEX:
+					Pair<String, String> trivialPair5 = new Pair<String, String>(p.head, Constant.XML_TAG_DEFAULT);
+					indexList.add(p);
+					tagList.add(trivialPair5);
+					descriptionList.add(trivialPair5);
+					priorityList.add(trivialPair5);
+					timeList.add(trivialPair5);
+					break;
+					
+				default:
+					
+			}
+		}
+		
+		listMap.put(Constant.XML_TAG_TIME, timeList);
+		listMap.put(Constant.XML_TAG_DESCRIPTION, descriptionList);
+		listMap.put(Constant.XML_TAG_PRIORITY, priorityList);
+		listMap.put(Constant.XML_TAG_INDEX, indexList);
+		listMap.put(Constant.XML_TAG_TAG, tagList);
+		return listMap;
+	}
+	
+	
+	/**
+	 * update the training model with the given xmlString
+	 * @param xmlString
+	 * @throws IOException
+	 */
+	public static void updateTsvFile(String xmlString) throws IOException {
+		HashMap<String, ArrayList<Pair<String, String>>> listMap = demux(interpretXML(xmlString));
+		ArrayList<Pair<String, String>> timeList = listMap.get(Constant.XML_TAG_TIME);
+		ArrayList<Pair<String, String>> descriptionList = listMap.get(Constant.XML_TAG_DESCRIPTION);
+		ArrayList<Pair<String, String>> tagList = listMap.get(Constant.XML_TAG_TAG);
+		ArrayList<Pair<String, String>> indexList = listMap.get(Constant.XML_TAG_INDEX);
+		ArrayList<Pair<String, String>> priorityList = listMap.get(Constant.XML_TAG_PRIORITY);
+		
+		if (timeList.size() != 0) {
+			updateTsvFile(timeList, Constant.FILE_PATH_TIME_PICKER);
+		}
+		
+		if (descriptionList.size() != 0) {
+			updateTsvFile(descriptionList, Constant.FILE_PATH_DESCRIPTION_PICKER);
+		}
+		
+		if (tagList.size() != 0) {
+			updateTsvFile(tagList, Constant.FILE_PATH_TAG_PICKER);
+		}
+		
+		if (indexList.size() != 0) {
+			updateTsvFile(indexList, Constant.FILE_PATH_INDEX_PICKER);
+		}
+		
+		if (indexList.size() != 0) {
+			updateTsvFile(priorityList, Constant.FILE_PATH_INDEX_PICKER);
+		}
+	}
+	
+	/**
+	 * update the specific file
+	 * @param list
+	 * @param filePath
+	 * @return
+	 * @throws IOException
+	 */
+	public static void updateTsvFile(ArrayList<Pair<String, String>> list, String filePath) throws IOException {
+		
+		FileWriter fw = new FileWriter(new File(filePath), true);
+		BufferedWriter bw = new BufferedWriter(fw);
+
+		for (Pair<String, String> p : list) {
+			String thisLine = p.head + "/t" + p.tail;
+			bw.newLine();
+			bw.write(thisLine);
+		}
+		
+		fw.close();
+	}
 	
 	
 	
