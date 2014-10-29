@@ -99,13 +99,13 @@ public class ListOfXiaoMing {
 			Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_INITIATE_LIST);
 			
 			UtilityMethod.showToUser(list.execute("display"));
+			UtilityMethod.showToUser("\n\n\n");
 			Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_USER_TASKS_DISPLAYED);
 			
 			
 			boolean willContinue = true;
 			while (willContinue) {
 				String userInput = UtilityMethod.readCommand();
-				
 				String result;
 				if (list.isNlpOn) {
 					result = list.executeNLP(userInput);
@@ -119,6 +119,7 @@ public class ListOfXiaoMing {
 					UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY);
 				} else {
 					UtilityMethod.showToUser(result);
+					UtilityMethod.showToUser("\n\n\n");
 				}
 			}
 		}
@@ -136,6 +137,12 @@ public class ListOfXiaoMing {
 		Pair<COMMAND_TYPE, ArrayList<String>> commandPair = Parser.parseCommandPair(commandString);
 		COMMAND_TYPE thisCommand = (COMMAND_TYPE) commandPair.head;
 		ArrayList<String> parameter = commandPair.tail;
+		if (commandString.equals("") || commandString.equalsIgnoreCase("clear")) {
+			for (int i = 0; i < 24; i ++) {
+				System.out.println();
+			}
+			return null;
+		}
 		
 		switch(thisCommand) {
 			case LOG_IN:
