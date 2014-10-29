@@ -89,6 +89,8 @@ public abstract class Constant {
 	public static final int REPEATED_PERIOD_WEEKLY = 3;
 	public static final int REPEATED_PERIOD_MONTHLY = 4;
 	
+	public static final int CALENDAR_WEEK_IN_SECOND = 37;
+	
 	//DataStore
 	public static final int ATTRIBUTE_END_POSITION = 1;
 	public static final int NO_TAG_ENDINDEX = 0;

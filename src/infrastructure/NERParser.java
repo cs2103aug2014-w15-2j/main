@@ -437,8 +437,22 @@ public class NERParser {
 		    for (CoreMap cm : timexAnnsAll) {
 		    	String interpretedTimeString = cm.get(TimeExpression.Annotation.class).getTemporal().toString();
 		    	Date d = parseStringToDate(interpretedTimeString);
-		   	  	if (d!= null) {
-		   	  		results.add(d);
+		    	Calendar c = UtilityMethod.dateToCalendar(d);
+		    	System.err.println("PARSED DATE - parseTimeToDate: " + c.get(Calendar.SECOND));
+		    	if (d!= null) {
+		    		if (c.get(Calendar.SECOND) == Constant.CALENDAR_WEEK_IN_SECOND) {
+			    		System.err.println("parsing weeks");
+			    		Date d1 = c.getTime();
+			    		c.add(Calendar.WEEK_OF_YEAR, 1);
+			    		c.add(Calendar.DATE, -1);
+			    		c.set(Calendar.HOUR_OF_DAY, 23);
+			    		c.set(Calendar.MINUTE, 59);
+			    		Date d2 = c.getTime();
+			    		results.add(d1);
+			    		results.add(d2);
+			    	} else {
+			    		results.add(d);
+			    	}
 		   		}
 		   	}
 	    }
@@ -472,6 +486,10 @@ public class NERParser {
 			} else if (timeString.length() == 11) {
 				timeString = timeString.replaceFirst("W", "");
 				date = new SimpleDateFormat("yyyy-MM-ww", Locale.ENGLISH).parse(timeString);
+				Calendar c = UtilityMethod.dateToCalendar(date);
+				c.set(Calendar.SECOND, Constant.CALENDAR_WEEK_IN_SECOND);
+				date = c.getTime();
+				System.err.println("Parsing week: " + date);
 			} else if (timeString.length() == 16) {
 				if (timeString.charAt(10) == 'T') {
 					timeString = timeString.replace("T", " ");
