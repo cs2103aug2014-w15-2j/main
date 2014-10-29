@@ -11,6 +11,8 @@
 	<classpathentry kind="lib" path="src/library/json-simple-1.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="src/library/cloning-1.8.5.jar"/>
 	<classpathentry kind="lib" path="src/library/objenesis-tck-2.1.jar"/>
+	<classpathentry kind="lib" path="src/library/jkeymaster.jar"/>
+	<classpathentry kind="lib" path="src/library/jna.jar"/>
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -8,6 +8,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
+import javax.swing.KeyStroke;
+
+import com.tulskiy.keymaster.common.HotKey;
+import com.tulskiy.keymaster.common.HotKeyListener;
+import com.tulskiy.keymaster.common.Provider;
+
 import userInterface.ListOfXiaoMing;
 import dataStore.TestingCache;
 import dataStructure.User;
@@ -46,7 +52,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
 
-public class ListOfXiaoMingViewsController extends GridPane {
+public class ListOfXiaoMingViewsController extends GridPane implements HotKeyListener{
 	@FXML
 	private TextField input;
 	
@@ -57,6 +63,34 @@ public class ListOfXiaoMingViewsController extends GridPane {
 	
 	private ListOfXiaoMing core = null;
 	
+	private Provider keyShortCuts = null;
+	
+	private static final String HOT_KEY_ADD_DESCRIPTION_TAG = "control D";
+	private static final String HOT_KEY_ADD_DATE_TAG = "control A";
+	private static final String HOT_KEY_ADD_TAG_TAG = "control T";
+	private static final String HOT_KEY_ADD_COMMAND_TAG = "control C";
+	private static final String HOT_KEY_ADD_INDEX_TAG = "control I";
+	private static final String HOT_KEY_ADD_PRIORITY_TAG = "control P";
+	
+	private String descriptionTag = "</DESCRIPTION>";
+	private String dateTag = "</DATE>";
+	private String tagTag = "</TAG>";
+	private String commandTag = "</COMMAND>";
+	private String indexTag = "</INDEX>";
+	private String priorityTag = "</PRIORITY>";
+	
+	
+	
+	private static final int KEY_VALUE_CTRL_A = 65;
+	private static final int KEY_VALUE_CTRL_C = 67;
+	private static final int KEY_VALUE_CTRL_D = 68;
+	private static final int KEY_VALUE_CTRL_I = 73;
+	private static final int KEY_VALUE_CTRL_P = 80;
+	private static final int KEY_VALUE_CTRL_T = 84;
+	
+	
+	
+	
 	public ListOfXiaoMingViewsController() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ListOfXiaoMingViews.fxml"));
 		fxmlLoader.setRoot(this);
@@ -64,6 +98,7 @@ public class ListOfXiaoMingViewsController extends GridPane {
 		fxmlLoader.load();
         
 		this.core = new ListOfXiaoMing("haha");
+		this.initializeShortCuts();
         updatePage();
 	}
 
@@ -89,5 +124,92 @@ public class ListOfXiaoMingViewsController extends GridPane {
 		content.getChildren().clear();
 		content.getChildren().add(text);
 		display.setContent(content);
+	}
+
+	
+	private void initializeShortCuts(){
+		final ListOfXiaoMingViewsController instance = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					if (keyShortCuts == null) {
+						keyShortCuts = Provider.getCurrentProvider(false);
+					}
+					keyShortCuts.reset();
+					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DESCRIPTION_TAG), instance);
+					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DATE_TAG), instance);
+					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_TAG_TAG), instance);
+					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_COMMAND_TAG), instance);
+					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_INDEX_TAG), instance);
+					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_PRIORITY_TAG), instance);
+				} catch (Exception e) {
+					keyShortCuts = null;
+				}
+			}
+		}).start();
+	}
+	
+	private void stopShortCuts() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					if (keyShortCuts != null) {
+						keyShortCuts.reset();
+						keyShortCuts.stop();
+					}
+				} catch (Exception e) {
+					keyShortCuts = null;
+				}
+			}
+		}).start();
+	}
+	
+	private String toggleTag(String tag) {
+		if (tag.contains("</")) {
+			return tag.replace("</", "<");
+		} else {
+			return tag.replace("<", "</");
+		}
+		
+	}
+	
+	
+	@Override
+	public void onHotKey(HotKey key) {
+		System.out.println("HOTKEY: " + key.keyStroke.getKeyCode());
+		switch (key.keyStroke.getKeyCode()) {
+			case KEY_VALUE_CTRL_D:
+				descriptionTag = toggleTag(descriptionTag);
+				this.input.setText(this.input.getText() + descriptionTag);
+				break;
+
+			case KEY_VALUE_CTRL_A:
+				dateTag = toggleTag(dateTag);
+				this.input.setText(this.input.getText() + dateTag);
+				break;
+				
+			case KEY_VALUE_CTRL_C:
+				commandTag = toggleTag(commandTag);
+				this.input.setText(this.input.getText() + commandTag);
+				break;
+				
+			case KEY_VALUE_CTRL_T:
+				tagTag = toggleTag(tagTag);
+				this.input.setText(this.input.getText() + tagTag);
+				break;
+				
+			case KEY_VALUE_CTRL_I:
+				indexTag = toggleTag(indexTag);
+				this.input.setText(this.input.getText() + indexTag);
+				break;
+				
+			case KEY_VALUE_CTRL_P:
+				priorityTag = toggleTag(priorityTag);
+				this.input.setText(this.input.getText() + priorityTag);
+				break;
+		}
+		
 	}
 }
