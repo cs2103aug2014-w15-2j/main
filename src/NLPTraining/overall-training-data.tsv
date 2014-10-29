@@ -202,6 +202,34 @@ Oct	DATE
 
 search	COMMAND
 done	TAG
+.	O
 
 display	COMMAND
 done	TAG
+.	O
+
+mark	COMMAND
+task	O
+3	INDEX
+as	O
+done	TAG
+.	O
+
+mark	COMMAND
+task	O
+13	INDEX
+as	O
+done	TAG
+.	O
+
+mark	COMMAND
+12	INDEX
+as	O
+done	TAG
+.	O
+
+mark	COMMAND
+31	INDEX
+as	O
+done	TAG
+.	O

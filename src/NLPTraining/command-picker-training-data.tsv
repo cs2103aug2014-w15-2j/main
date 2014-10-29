@@ -183,6 +183,32 @@ search	COMMAND
 done	O
 .	O
 
+mark	COMMAND
+task	O
+3	O
+as	O
+done	O
+.	O
+
+mark	COMMAND
+task	O
+13	O
+as	O
+done	O
+.	O
+
+mark	COMMAND
+12	O
+as	O
+done	O
+.	O
+
+mark	COMMAND
+31	O
+as	O
+done	O
+.	O
+
 log	COMMAND
 out	COMMAND
 .	O
