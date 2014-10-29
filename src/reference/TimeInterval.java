@@ -16,13 +16,16 @@ public class TimeInterval {
 	 * @throws Exception
 	 */
 	public TimeInterval(Date startDate, Date endDate) throws CommandFailedException {
-		if ((startDate == null) && (endDate == null)) {
-			this.startDate = Constant.FLOATING_START_DATE;
-			this.endDate = Constant.FLOATING_END_DATE;
-			
-		} else if (startDate == null) {
-			this.startDate = Constant.DEADLINE_START_DATE;
-		} else if (!isValid(startDate, endDate)) {
+		if (startDate == null) {
+			startDate = Constant.FLOATING_START_DATE;
+		}
+		
+		if (endDate == null) {
+			endDate = Constant.FLOATING_END_DATE;
+		}
+		
+		
+		if (!isValid(startDate, endDate)) {
 			throw new CommandFailedException("invalid time interval");
 		} else {
 			this.startDate = startDate;
