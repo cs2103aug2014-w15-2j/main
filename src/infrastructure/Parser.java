@@ -10,6 +10,7 @@ import java.util.HashMap;
 import reference.CommandFailedException;
 import reference.Pair;
 import reference.TimeInterval;
+import views.ListOfXiaoMingViewsController;
 import dataStructure.Task;
 
 
@@ -81,8 +82,14 @@ public class Parser {
 	}
 	
 	
-	public HashMap<String, Object> getTaskMap(ArrayList<String> parameterList) {
+	public HashMap<String, Object> getTaskMap(ArrayList<String> parameterList, ListOfXiaoMingViewsController controller) {
 		HashMap <String, Object> updateAttributes = new HashMap<String, Object> ();
+		IO io = null;
+		if (controller == null) {
+			io = new IO(Constant.UI_MODE.CLI);
+		} else {
+			io = new IO(Constant.UI_MODE.GUI);
+		}
 		
 		for (String parameter: parameterList) {
 			String key = UtilityMethod.getFirstWord(parameter);
@@ -106,7 +113,7 @@ public class Parser {
 					Integer p = Parser.parsePriority(value);
 					updateAttributes.put("priority", p);
 				} catch (Exception e) {
-					UtilityMethod.showToUser("invalid argument for priority");
+					io.showToUser("invalid argument for priority", controller);
 				}
 				
 				break;
@@ -116,7 +123,7 @@ public class Parser {
 					Integer r = Integer.parseInt(value);
 					updateAttributes.put("repeated_period", r);
 				} catch (Exception e) {
-					UtilityMethod.showToUser("invalid argument for repeated period");
+					io.showToUser("invalid argument for repeated period", controller);
 				}
 				break;
 				
@@ -135,7 +142,7 @@ public class Parser {
 		return updateAttributes;
 	}
 	
-	public Task getTaskFromParameterList(ArrayList<String> parameterList) throws CommandFailedException {
+	public Task getTaskFromParameterList(ArrayList<String> parameterList, ListOfXiaoMingViewsController controller) throws CommandFailedException {
 		TimeInterval timeInterval = new TimeInterval();
 		String category = null; 
 		int priority = Constant.PRIORITY_DEFAULT;
@@ -144,6 +151,12 @@ public class Parser {
 		String description = null;
 //		String description = parameterList.get(0);
 //		parameterList.remove(0);
+		IO io = null;
+		if (controller == null) {
+			io = new IO(Constant.UI_MODE.CLI);
+		} else {
+			io = new IO(Constant.UI_MODE.GUI);
+		}
 		
 		boolean hasTime = false;
 		boolean hasCategory = false;
@@ -157,24 +170,24 @@ public class Parser {
 				case Constant.KEY_TIME:
 					try {
 						if (hasTime) {
-							UtilityMethod.showToUser("You can only assign one time for a task");
+							io.showToUser("You can only assign one time for a task", controller);
 						} else {
 							TimeInterval parsedTimeInterval = parseTimeInterval(value);
 							if (parsedTimeInterval == null) {
-								UtilityMethod.showToUser("invalid time format: the correct format should be...");
+								io.showToUser("invalid time format: the correct format should be...", controller);
 							} else {
 								timeInterval = parsedTimeInterval;
 								hasTime = true;
 							}
 						}
 					} catch (Exception e) {
-						UtilityMethod.showToUser("start time should be earlier than end time");
+						io.showToUser("start time should be earlier than end time", controller);
 					}
 					break;
 				
 				case Constant.KEY_CATEGORY:
 					if (hasCategory) {
-						UtilityMethod.showToUser("You can only assign one category for a task");
+						io.showToUser("You can only assign one category for a task", controller);
 					} else {
 						category = value;
 					}
@@ -182,11 +195,11 @@ public class Parser {
 				
 				case Constant.KEY_PRIORITY:
 					if (hasPriority) {
-						UtilityMethod.showToUser("You can only assign one priority to a task");
+						io.showToUser("You can only assign one priority to a task", controller);
 					} else {
 						int tempPriority = parsePriority(value);
 						if (tempPriority == Constant.PRIORITY_INVALID) {
-							UtilityMethod.showToUser("invalid priority format: it should be 'priority none/high/medium/low'");
+							io.showToUser("invalid priority format: it should be 'priority none/high/medium/low'", controller);
 						} else {
 							priority = tempPriority;
 							hasPriority = true;
@@ -197,7 +210,7 @@ public class Parser {
 				
 				case Constant.KEY_REPEATED_PERIOD:
 					if (hasRepeatedPeriod) {
-						UtilityMethod.showToUser("You can only assign one repeated period to a task");
+						io.showToUser("You can only assign one repeated period to a task", controller);
 					} else {
 						int tempRepeatedPeriod = parseRepeatedPeriod(value);
 						if (tempRepeatedPeriod == Constant.REPEATED_PERIOD_INVALID) {

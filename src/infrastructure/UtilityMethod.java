@@ -9,7 +9,6 @@ import reference.CommandFailedException;
 import dataStructure.Task;
 
 public abstract class UtilityMethod {
-	private static Scanner scanner_ = new Scanner(System.in);
 	
 	public static int selectDifferentDate(Calendar c1, Calendar c2, Calendar c3) throws CommandFailedException {
 		Calendar today = Calendar.getInstance();
@@ -52,10 +51,6 @@ public abstract class UtilityMethod {
 	
 	public static Date selectLaterDate(Date d1, Date d2) {
 		return d1.before(d2) ? d2 : d1;
-	}
-	
-	public static String readCommand() {
-		return scanner_.nextLine();
 	}
 	
 	
@@ -110,14 +105,5 @@ public abstract class UtilityMethod {
 	 */
 	public static String removeFirstWord(String userCommand) {
 		return userCommand.replaceFirst(getFirstWord(userCommand), "").trim();
-	}
-	
-	
-	/**
-	 * print the string
-	 * @param contentsToBeShown
-	 */
-	public static void showToUser(String contentsToBeShown) {
-		System.out.println(contentsToBeShown);
 	}
 }

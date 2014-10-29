@@ -69,7 +69,7 @@ public class ListOfXiaoMingViewsController extends GridPane {
 	private void updatePage() {
 		String cached = TestingCache.getCachedAccount();
 		if (!((cached == "") || (cached == null))) {
-			this.core = new ListOfXiaoMing(cached);
+			this.core = new ListOfXiaoMing(cached, this);
 			Constant.logger.log(Level.INFO, String.format(
 					Constant.LOG_MESSAGE_READING_CACHE, cached));
 		} else {
@@ -80,7 +80,7 @@ public class ListOfXiaoMingViewsController extends GridPane {
 		this.setDisplay(Constant.PROMPT_MESSAGE_WELCOME + '\n' + Constant.PROMPT_MESSAGE_INSTRUCTION);
 	}
 	
-	private String getUserInput() {
+	public String getUserInput() {
 		return input.getText();
 	}
 	
@@ -90,13 +90,13 @@ public class ListOfXiaoMingViewsController extends GridPane {
 		
 		if (!command.equals("")) {			
 			if (core == null) {
-				String recordFilePath = ListOfXiaoMing.executeUpperLevelCommand(command);
+				String recordFilePath = ListOfXiaoMing.executeUpperLevelCommand(command, this);
 				if (recordFilePath != null
 						&& !recordFilePath
 								.equalsIgnoreCase(Constant.RETURN_VALUE_LOG_IN_CANCELLED)) {
 					// already find the record
 					this.setDisplay(recordFilePath);
-					core = new ListOfXiaoMing(recordFilePath);
+					core = new ListOfXiaoMing(recordFilePath, this);
 					TestingCache.cacheAccount(recordFilePath);
 					Constant.logger.log(Level.INFO, String.format(
 							Constant.LOG_MESSAGE_USER_CACHED, recordFilePath));
@@ -135,12 +135,11 @@ public class ListOfXiaoMingViewsController extends GridPane {
 		}
     }
 	
-	private void setDisplay(String displayedText) {
+	public void setDisplay(String displayedText) {
 		content = new VBox();
 		Label text = new Label(displayedText);
 		content.getChildren().clear();
 		content.getChildren().add(text);
 		display.setContent(content);
 	}
-
 }

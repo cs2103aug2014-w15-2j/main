@@ -121,4 +121,9 @@ public abstract class Constant {
 	public static final Date FLOATING_START_DATE = new Date(0);
 	public static final Date DEADLINE_START_DATE = new Date(0);
 	public static final Date FLOATING_END_DATE = new Date(9999);
+	
+	//user interface mode
+	public static enum UI_MODE {
+		GUI, CLI
+	}
 }

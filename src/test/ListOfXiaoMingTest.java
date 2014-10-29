@@ -12,7 +12,7 @@ public class ListOfXiaoMingTest {
 	
 	boolean bool1 = DataStore.destroy("test", "test");
 	boolean bool2 = DataStore.createAccount("test", "test");
-	ListOfXiaoMing xiaoming = new ListOfXiaoMing("test");
+	ListOfXiaoMing xiaoming = new ListOfXiaoMing("test", null);
 	
 	
 	@Test
