@@ -2,6 +2,7 @@ tag	O
 with	O
 important	TAG
 .	O
+
 tag	O
 with	O
 nice	TAG
@@ -65,3 +66,15 @@ you	TAG
 and	O
 me	TAG
 .	O
+
+tags	0
+are:	0
+2103,	TAG
+2101.	TAG
+
+3	0
+tags	0
+are:	0
+cs,	TAG
+ma,	TAG
+pc.	TAG
