@@ -7,7 +7,16 @@ add	ADD
 update	UPDATE
 .	O
 
+Update UPDATE
+.	O
+
+Change	UPDATE
+.	O
+
 change	UPDATE
+.	O
+
+Create	ADD
 .	O
 
 create	ADD
@@ -19,10 +28,34 @@ delete	DELETE
 remove	DELETE
 .	O
 
+Delete	DELETE
+.	O
+
+Remove	DELETE
+.	O
+
 display	DISPLAY
 .	O
 
 show	DISPLAY
+.	O
+
+list	DISPLAY
+.	O
+
+Display	DISPLAY
+.	O
+
+List	DISPLAY
+.	O
+
+Show	DISPLAY
+.	O
+
+Undo	UNDO
+.	O
+
+Redo	REDO
 .	O
 
 undo	UNDO
@@ -37,7 +70,19 @@ search	SEARCH
 find	SEARCH
 .	O
 
+Search	SEARCH
+.	O
+
+Find	SEARCH
+.	O
+
 clear	CLEAR
+.	O
+
+Clear 	CLEAR
+.	O
+
+Exit	EXIT
 .	O
 
 exit	EXIT
@@ -51,28 +96,28 @@ log	LOGIN
 in	LOGIN
 .	O
 
-log	LOGIN
+Log	LOGIN
 in	LOGIN
 .	O
 
-log	LOGIN
+Log	LOGIN
 in	LOGIN
 .	O
 
 log	LOGOUT
-log	LOGOUT
+out	LOGOUT
 .	O
 
 log	LOGOUT
-log	LOGOUT
+out	LOGOUT
 .	O
 
-log	LOGOUT
-log	LOGOUT
+Log	LOGOUT
+out	LOGOUT
 .	O
 
-log	LOGOUT
-log	LOGOUT
+Log	LOGOUT
+out	LOGOUT
 .	O
 
 NLP	NLP
