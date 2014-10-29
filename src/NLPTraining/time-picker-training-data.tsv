@@ -352,3 +352,37 @@ search O
 this	DATE
 week	DATE
 .	O
+
+update	O
+2	O
+tmr	DATE
+.	O
+
+update	O
+2	O
+tomorrow	DATE
+.	O
+
+search	O
+tmr	DATE
+,	O
+0:00	DATE
+to	O
+23:59	DATE
+.	O
+
+search	O
+tmr	DATE
+.	O
+
+search	O
+today	DATE
+.	O
+
+search	O
+tmr	DATE
+,	O
+12am	DATE
+to	O
+11pm	DATE
+.	O
