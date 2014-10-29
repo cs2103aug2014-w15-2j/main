@@ -67,21 +67,35 @@ and	O
 me	TAG
 .	O
 
-tags	0
-are:	0
-2103,	TAG
-2101.	TAG
+tags	O
+are	O
+:	O
+2103	TAG
+,	O
+2101	TAG
+.	O
 
-3	0
-tags	0
-are:	0
-cs,	TAG
-ma,	TAG
-pc.	TAG
+3	O
+tags	O
+are	O
+:	O
+cs	TAG
+,	O
+ma	TAG
+,	O
+pc	TAG
+.	O
 
-tag	0
-as	0
+tag	O
+as	O
 done	TAG
+.
 
-tag	0
+tag	O
 done	TAG
+.	O
+
+mark	O
+as	O
+done	TAG
+.	O
