@@ -259,3 +259,171 @@ add	O
 task2	DESCRIPTION
 today	O
 .	O
+
+add	O
+finish	DESCRIPTION
+v0.3	DESCRIPTION
+today	O
+.	O
+
+update 	O
+2	O
+finish	DESCRIPTION
+v0.3	DESCRIPTION
+today	O
+.	O
+
+add	O
+attend	DESCRIPTION
+LSM1302	DESCRIPTION
+lecture	DESCRIPTION
+tmr	O
+.	O
+
+update	O
+1	O
+attend	DESCRIPTION
+LSM1302	DESCRIPTION
+lecture	DESCRIPTION
+tmr	O
+.	O
+
+add	O
+group	DESCRIPTION
+meeting	DESCRIPTION
+for	DESCRIPTION
+OP2	DESCRIPTION
+this	O
+Friday	O
+.	O
+
+update	O
+2	O
+group	DESCRIPTION
+meeting	DESCRIPTION
+for	DESCRIPTION
+OP2	DESCRIPTION
+this	O
+Friday	O
+.	O
+
+add	O
+support	DESCRIPTION
+learning	DESCRIPTION
+in	DESCRIPTION
+next	DESCRIPTION
+milestone	DESCRIPTION
+next	O
+Wednesday	O
+.	O
+
+update O
+1	O
+support	DESCRIPTION
+learning	DESCRIPTION
+in	DESCRIPTION
+next	DESCRIPTION
+milestone	DESCRIPTION
+next	O
+Wednesday	O
+.	O
+
+update O
+8	O
+finish	DESCRIPTION
+v0.3	DESCRIPTION
+.	O
+
+update O
+8	O
+finish	DESCRIPTION
+v0.3	DESCRIPTION
+.	O
+
+update O
+8	O
+finish	DESCRIPTION
+v0.3	DESCRIPTION
+.	O
+
+update O
+8	O
+finish	DESCRIPTION
+v0.3	DESCRIPTION
+.	O
+
+update O
+8	O
+finish	DESCRIPTION
+v0.3	DESCRIPTION
+.	O
+
+update O
+8	O
+finish	DESCRIPTION
+v0.3	DESCRIPTION
+.	O
+
+update O
+8	O
+finish	DESCRIPTION
+v0.3	DESCRIPTION
+.	O
+
+update O
+8	O
+finish	DESCRIPTION
+v0.3	DESCRIPTION
+.	O
+
+update O
+8	O
+finish	DESCRIPTION
+v0.3	DESCRIPTION
+.	O
+
+update O
+8	O
+finish	DESCRIPTION
+v0.3	DESCRIPTION
+.	O
+
+add	O
+finish	DESCRIPTION
+v0.3	DESCRIPTION
+.	O
+
+add	O
+train	DESCRIPTION
+models	DESCRIPTION
+with	DESCRIPTION
+more	DESCRIPTION
+data	DESCRIPTION
+.	O
+
+update	O
+2	O
+train	DESCRIPTION
+models	DESCRIPTION
+with	DESCRIPTION
+more	DESCRIPTION
+data	DESCRIPTION
+.	O
+
+update	O
+2	O
+train	DESCRIPTION
+models	DESCRIPTION
+with	DESCRIPTION
+more	DESCRIPTION
+data	DESCRIPTION
+.	O
+
+update	O
+2	O
+train	DESCRIPTION
+models	DESCRIPTION
+with	DESCRIPTION
+more	DESCRIPTION
+data	DESCRIPTION
+.	O

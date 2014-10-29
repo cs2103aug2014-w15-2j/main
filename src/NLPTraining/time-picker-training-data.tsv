@@ -324,3 +324,31 @@ task	O
 tmr	DATE
 .	O
 
+add	O
+group	O
+meeting	O
+for	O
+OP	O
+2	O
+.	O
+
+update	O
+2	O
+group	O
+meeting	O
+for	O
+OP	O
+2	O
+.	O
+
+update	0
+3	0
+1	DATE
+Nov	DATE
+.	O
+
+
+search O
+this	DATE
+week	DATE
+.	O
