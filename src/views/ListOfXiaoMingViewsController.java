@@ -65,22 +65,22 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	private Provider keyShortCuts = null;
 	
-	private static final String HOT_KEY_ADD_DESCRIPTION_TAG = "control D";
-	private static final String HOT_KEY_ADD_DATE_TAG = "control A";
-	private static final String HOT_KEY_ADD_TAG_TAG = "control T";
-	private static final String HOT_KEY_ADD_COMMAND_TAG = "control C";
-	private static final String HOT_KEY_ADD_INDEX_TAG = "control I";
-	private static final String HOT_KEY_ADD_PRIORITY_TAG = "control P";
+	private static final String HOT_KEY_ADD_DESCRIPTION_TAG 	= "control D";
+	private static final String HOT_KEY_ADD_DATE_TAG 			= "control A";
+	private static final String HOT_KEY_ADD_TAG_TAG 			= "control T";
+	private static final String HOT_KEY_ADD_COMMAND_TAG 		= "control C";
+	private static final String HOT_KEY_ADD_INDEX_TAG 			= "control I";
+	private static final String HOT_KEY_ADD_PRIORITY_TAG 		= "control P";
+	private static final String HOT_KEY_PREVIEW 				= "shift ENTER";
 	
-	private String descriptionTag = "</DESCRIPTION>";
-	private String dateTag = "</DATE>";
-	private String tagTag = "</TAG>";
-	private String commandTag = "</COMMAND>";
-	private String indexTag = "</INDEX>";
-	private String priorityTag = "</PRIORITY>";
+	private String descriptionTag 	= "</DESCRIPTION>";
+	private String dateTag 			= "</DATE>";
+	private String tagTag 			= "</TAG>";
+	private String commandTag		= "</COMMAND>";
+	private String indexTag 		= "</INDEX>";
+	private String priorityTag 		= "</PRIORITY>";
 	
-	
-	
+	private static final int KEY_VALUE_SHIFT_ENTER = 10;
 	private static final int KEY_VALUE_CTRL_A = 65;
 	private static final int KEY_VALUE_CTRL_C = 67;
 	private static final int KEY_VALUE_CTRL_D = 68;
@@ -100,6 +100,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		this.core = new ListOfXiaoMing("haha");
 		this.initializeShortCuts();
         updatePage();
+        Stage stage = new Stage();
+        stage.setResizable(false);
 	}
 
 	private void updatePage() {
@@ -143,6 +145,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_COMMAND_TAG), instance);
 					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_INDEX_TAG), instance);
 					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_PRIORITY_TAG), instance);
+					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_PREVIEW), instance);
 				} catch (Exception e) {
 					keyShortCuts = null;
 				}
@@ -175,6 +178,9 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		
 	}
 	
+	private void loadPreview() {
+		
+	}
 	
 	@Override
 	public void onHotKey(HotKey key) {
@@ -210,6 +216,10 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			case KEY_VALUE_CTRL_P:
 				priorityTag = toggleTag(priorityTag);
 				tag = priorityTag;
+				break;
+			
+			case KEY_VALUE_SHIFT_ENTER:
+				this.loadPreview();
 				break;
 		}
 		
