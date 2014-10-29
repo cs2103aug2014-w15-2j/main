@@ -11,9 +11,9 @@ public class ListOfXiaoMingViews extends Application {
 
 	@Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("ListOfXiaoMingViews.fxml"));
+        ListOfXiaoMingViewsController control = new ListOfXiaoMingViewsController();
         
-        Scene scene = new Scene(root, 600, 800);
+        Scene scene = new Scene(control, 600, 800);
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(scene);
         stage.setTitle("List of Xiao Ming");
