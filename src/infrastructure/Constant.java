@@ -10,6 +10,9 @@ public abstract class Constant {
 	
 	
 	//prompt messages that will be printed for users
+	public static final String XML_TAG_TIME = "DATE";
+	public static final String XML_TAG_DESCRIPTION = "DESCRIPTION";
+	
 	public static final String PROMPT_MESSAGE_WELCOME = "\n\nWelcome to 小鸣的清单(List of Xiao Ming)";
 	public static final String PROMPT_MESSAGE_INSTRUCTION = "You can type in 'log in', 'create account', 'help' or 'exit'.";
 	public static final String PROMPT_MESSAGE_NOT_LOG_IN = "you have not logged in yet";

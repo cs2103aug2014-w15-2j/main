@@ -110,10 +110,21 @@ public class NERParser {
 	 */
 	public TimeInterval pickTimeInterval (String userInputString) throws CommandFailedException {
 		this.isTimeChanged = false;
+		
+		String directParseTime = NERParser.parseToList(userInputString, Constant.XML_TAG_TIME); 
+		if (directParseTime != null) {
+			this.isDescriptionChanged = true;
+			ArrayList<String> results = new ArrayList<String>();
+			results.add(directParseTime);
+			return parseTimeInterval(results);
+		}
+		
+		ArrayList<String> resultList = new ArrayList<String>();
 		String xmlStr = classifierTimePicker.classifyToString(userInputString, "inlineXML", false);
 		System.err.println("XML STRING - pickDate: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
-		ArrayList<String> resultList =  result.get("DATE");
+		resultList =  result.get("DATE");
+		
 		if (resultList == null) {
 			return new TimeInterval();
 		} else {
@@ -131,6 +142,13 @@ public class NERParser {
 	 */
 	public String pickDescription (String userInputString) throws CommandFailedException {
 		this.isDescriptionChanged = false;
+		
+		String directParseDescription = NERParser.parseToList(userInputString, Constant.XML_TAG_DESCRIPTION); 
+		if (directParseDescription != null) {
+			this.isDescriptionChanged = true;
+			return directParseDescription;
+		}
+		
 		String xmlStr = classifierDescriptionPicker.classifyToString(userInputString, "inlineXML", false);
 		System.err.println("XML STRING - pickDescription: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
@@ -224,6 +242,8 @@ public class NERParser {
 	
 	public Task getTask(String userInputString) throws CommandFailedException {
 		
+		
+		
 		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
 		ArrayList<String> tag = this.pickTag(userInputString);
 		String description = this.pickDescription(userInputString);
@@ -297,6 +317,21 @@ public class NERParser {
 	
 	
 	
+	public static String parseToList(String inputString, String type) {
+		String prefix = "<" + type + ">";
+		String postfix = "</" + type + ">";
+		int prefixIndex = inputString.indexOf(prefix);
+		int postfixIndex = inputString.indexOf(postfix);
+
+		System.err.println("INPUTSTRING: parseToList: " + inputString);
+		System.err.println("PREFIX: parseToList: " + prefix);
+		System.err.println("POSTFIX: parseToList: " + postfix);
+		if (prefixIndex == -1 || postfixIndex == -1) {
+			return null;
+		} else {
+			return inputString.substring(prefixIndex + prefix.length(), postfixIndex);
+		}
+	}
 	
 	
 	
