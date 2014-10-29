@@ -1,9 +1,13 @@
 package userInterface;
 import infrastructure.Constant;
+import infrastructure.NERParser;
 import infrastructure.Parser;
 import infrastructure.UtilityMethod;
 import infrastructure.Constant.COMMAND_TYPE;
 
+
+
+import java.io.IOException;
 //import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -14,6 +18,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 //import java.util.logging.LogManager;
 //import java.util.logging.SimpleFormatter;
+
+
 
 import reference.*;
 import dataStore.*;
@@ -178,6 +184,15 @@ public class ListOfXiaoMing {
 //User level commands
 	
 	public String executeNLP (String userInput) {
+		
+		if (!userInput.equals("")) {
+			try {
+				NERParser.updateTsvFile(userInput);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 		COMMAND_TYPE thisCommand;
 		try {
 			if (userInput.equals("")) {
@@ -215,7 +230,8 @@ public class ListOfXiaoMing {
 					return this.clear();
 					
 				case EXIT:
-					System.setErr(err);  
+					System.setErr(err); 
+					NERParser.updateModal();
 					User.exit();
 					break;
 					
@@ -482,6 +498,8 @@ public class ListOfXiaoMing {
 	}
 	
 	private String logOut() {
+		
+		NERParser.updateModal();
 		
 		if (TestingCache.clearCache()) {
 			return Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY;
