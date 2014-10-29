@@ -4,16 +4,16 @@ import infrastructure.Parser;
 import infrastructure.UtilityMethod;
 import infrastructure.Constant.COMMAND_TYPE;
 
-import java.io.IOException;
+//import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.text.SimpleDateFormat;
+//import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.logging.FileHandler;
+//import java.util.Calendar;
+//import java.util.logging.FileHandler;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.SimpleFormatter;
+//import java.util.logging.LogManager;
+//import java.util.logging.SimpleFormatter;
 
 import reference.*;
 import dataStore.*;
@@ -22,7 +22,7 @@ import dataStructure.User;
 
 public class ListOfXiaoMing {
 	
-	private final static boolean ERROR_PRINT_ON = true;
+	private final static boolean ERROR_PRINT_ON = false;
 	private boolean isNlpOn = true;
 	private Parser parser = new Parser();
 	private static PrintStream err = System.err;
