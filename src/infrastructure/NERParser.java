@@ -469,6 +469,9 @@ public class NERParser {
 				date = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).parse(timeString);
 			} else if (timeString.length() == 10) {
 				date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(timeString);
+			} else if (timeString.length() == 11) {
+				timeString = timeString.replaceFirst("W", "");
+				date = new SimpleDateFormat("yyyy-MM-ww", Locale.ENGLISH).parse(timeString);
 			} else if (timeString.length() == 16) {
 				if (timeString.charAt(10) == 'T') {
 					timeString = timeString.replace("T", " ");
