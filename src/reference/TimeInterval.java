@@ -24,6 +24,7 @@ public class TimeInterval {
 			endDate = Constant.FLOATING_END_DATE;
 		}
 		
+		System.err.println(startDate + " - " + endDate);
 		
 		if (!isValid(startDate, endDate)) {
 			throw new CommandFailedException("invalid time interval");
@@ -86,11 +87,11 @@ public class TimeInterval {
 	public String toString() {
 		String text = new String();
 		if (this.getEndDate().equals(Constant.FLOATING_END_DATE)) {
-			// floating task, do nothing
+			text = text + "\n\t no specific time requirements;";
 		} else if (this.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 			// deadline task
 			String deadline = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(this.getEndDate());
-			text = text + "\n\t deadline: " + deadline + ";\n";
+			text = text + "\n\t deadline: " + deadline + ";";
 		} else {
 			String start = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(this.getStartDate());
 			String end = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(this.getEndDate());
