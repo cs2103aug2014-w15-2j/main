@@ -113,7 +113,7 @@ public class NERParser {
 		
 		String directParseTime = NERParser.parseToList(userInputString, Constant.XML_TAG_TIME); 
 		if (directParseTime != null) {
-			this.isDescriptionChanged = true;
+			this.isTimeChanged = true;
 			ArrayList<String> results = new ArrayList<String>();
 			results.add(directParseTime);
 			return parseTimeInterval(results);
@@ -168,15 +168,34 @@ public class NERParser {
 	 * @throws CommandFailedException
 	 */
 	public int pickIndex (String userInputString) throws CommandFailedException {
-		String xmlStr = classifierIndexPicker.classifyToString(userInputString, "inlineXML", false);
-		System.err.println("XML STRING - pickIndex: " + xmlStr);
-		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
-		ArrayList<String> resultList =  result.get("INDEX");
-		if (resultList == null || resultList.size() == 0) {
-			throw new CommandFailedException("No index found!");
-		} else {
-			return Integer.parseInt(resultList.get(0));
-		}
+		
+		String directParseIndex = NERParser.parseToList(userInputString, Constant.XML_TAG_INDEX);
+		try {
+			if (directParseIndex != null) {
+				return Integer.parseInt(directParseIndex);
+			}
+			
+			String xmlStr = classifierIndexPicker.classifyToString(userInputString, "inlineXML", false);
+			System.err.println("XML STRING - pickIndex: " + xmlStr);
+			HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
+			ArrayList<String> resultList =  result.get("INDEX");
+			if (resultList == null || resultList.size() == 0) {
+				throw new CommandFailedException("No index found!");
+			} else {
+				return Integer.parseInt(resultList.get(0));
+			}
+			
+		} catch (Exception e) {
+			String xmlStr = classifierIndexPicker.classifyToString(userInputString, "inlineXML", false);
+			System.err.println("XML STRING - pickIndex: " + xmlStr);
+			HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
+			ArrayList<String> resultList =  result.get("INDEX");
+			if (resultList == null || resultList.size() == 0) {
+				throw new CommandFailedException("No index found!");
+			} else {
+				return Integer.parseInt(resultList.get(0));
+			}
+		}		
 	}
 	
 	/**
@@ -186,6 +205,15 @@ public class NERParser {
 	 */
 	public ArrayList<String> pickTag (String userInputString){
 		this.isTagChanged = false;
+		
+		String directParseTag = NERParser.parseToList(userInputString, Constant.XML_TAG_DESCRIPTION); 
+		if (directParseTag != null) {
+			this.isTagChanged = true;
+			ArrayList<String> results = new ArrayList<String>();
+			results.add(directParseTag);
+			return parseTag(results);
+		}
+		
 		String xmlStr = classifierTagPicker.classifyToString(userInputString, "inlineXML", false);
 		System.err.println("XML STRING - pickTag: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
@@ -205,6 +233,13 @@ public class NERParser {
 	 */
 	public int pickPriority (String userInputString) {
 		this.isPriorityChanged = false;
+		
+		String directParsePriority = NERParser.parseToList(userInputString, Constant.XML_TAG_DESCRIPTION); 
+		if (directParsePriority != null) {
+			this.isPriorityChanged = true;
+			return parsePriority(directParsePriority);
+		}
+		
 		String xmlStr = classifierPriorityPicker.classifyToString(userInputString, "inlineXML", false);
 		System.err.println("XML STRING - pickPriority: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NERParser.parseToMap(xmlStr);
