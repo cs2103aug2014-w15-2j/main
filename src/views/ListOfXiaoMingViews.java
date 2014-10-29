@@ -12,7 +12,7 @@ public class ListOfXiaoMingViews extends Application {
 	@Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("ListOfXiaoMingViews.fxml"));
-
+        
         Scene scene = new Scene(root, 600, 800);
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(scene);
