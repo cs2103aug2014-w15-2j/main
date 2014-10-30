@@ -99,6 +99,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
         updatePage();
         
         final ListOfXiaoMingViewsController instance = this;
+        
         this.input.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable,
@@ -136,6 +137,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 //		setPreview("\n\n\n\t\t  Hit CTRL+ENTER to load a preview");
 //		setPreview(this.executeNLP(command));
 		this.executeNLP(command);
+		this.executeNLP("display");
     }
 	
 	public void setDisplay(String displayedText) {
@@ -247,6 +249,10 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	   });
 	}
 	
+	
+	
+	
+	
 	private void insertTextToTextField(final int cursorPosition, final String text) {
 		//open a new thread to execute Java FX
 		final ListOfXiaoMingViewsController instance = this;
@@ -258,6 +264,9 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	   });
 	}
 	
+	/**
+	 * the delegation methods to respond 
+	 */
 	@Override
 	public void onHotKey(HotKey key) {
 		System.out.println("HOTKEY CODE: " + key.keyStroke.getKeyCode());
