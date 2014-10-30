@@ -11,13 +11,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.KeyStroke;
 
 import reference.CommandFailedException;
 import reference.Constraint;
 import reference.Pair;
-import reference.TimeInterval;
 
 import com.tulskiy.keymaster.common.HotKey;
 import com.tulskiy.keymaster.common.HotKeyListener;
@@ -31,6 +31,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -48,7 +49,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	public ScrollPane preview;
 	private VBox previewContent;
 	
-	private final static boolean ERROR_PRINT_ON = false;
+	private final static boolean ERROR_PRINT_ON = true;
 	private boolean isNlpOn = true;
 	private Parser parser = new Parser();
 	private static PrintStream err = System.err;
@@ -145,6 +146,21 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		Label text = new Label(displayedText);
 		content.getChildren().clear();
 		content.getChildren().add(text);
+		display.setContent(content);
+	}
+	
+	public void setDisplayGrid(ArrayList<Task> displayList) {
+		content = new VBox();
+		GridPane taskPane = new GridPane();
+		content.getChildren().clear();
+		int row = 0;
+		
+		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3));
+		for (Task task : displayList) {
+			taskPane.add(new Label(task.getDescription()), 0, row, 2, 1);
+		}
+		
+		content.getChildren().add(taskPane);
 		display.setContent(content);
 	}
 	
@@ -399,7 +415,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					break;
 				
 				case DISPLAY:
-					setDisplay(this.display());
+					setDisplayGrid(this.display());
 					break;
 					
 				case LOG_OUT:
@@ -438,52 +454,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		}
 	}
 
-	public String execute(String userInput) {
-		Pair<COMMAND_TYPE, ArrayList<String>> commandPair = Parser
-				.parseCommandPair(userInput);
-		COMMAND_TYPE thisCommand = commandPair.head;
-		ArrayList<String> parameterList = commandPair.tail;
-
-		switch (thisCommand) {
-		case ADD:
-			return this.add(parameterList);
-
-		case DELETE:
-			return this.delete(parameterList);
-
-		case UPDATE:
-			return this.update(parameterList);
-
-		case DISPLAY:
-			return this.display();
-
-		case SEARCH:
-			return this.search(parameterList);
-
-		case LOG_OUT:
-			return this.logOut();
-
-		case UNDO:
-			return this.undo();
-
-		case REDO:
-			return this.redo();
-
-		case CLEAR:
-			return this.clear();
-
-		case EXIT:
-			System.setErr(err);
-			User.exit();
-
-		case NLP:
-			return this.toggleNLP();
-
-		default:
-			return "";
-		}
-	}
-
 	
 	public String getPreview(String userInput) {
 		try {
@@ -509,18 +479,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 
 	// add
 
-	private String add(ArrayList<String> taskParameters) {
-		Task taskToAdd;
-		try {
-			taskToAdd = parser.getTaskFromParameterList(taskParameters);
-			assert (taskToAdd != null);
-			return (this.user.add(taskToAdd)) ? Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY
-					: Constant.PROMPT_MESSAGE_ADD_TASK_FAILED;
-		} catch (CommandFailedException e) {
-			return e.toString();
-		}
-	}
-
 	private String addNLP(String userInput) {
 		try {
 			Task taskToAdd = parser.nerParser.getTask(userInput);
@@ -534,20 +492,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 
 	// delete
 
-	private String delete(ArrayList<String> taskParameters) {
-		if (taskParameters.size() == 0) {
-			return "Please enter the task index you want to delete";
-		} else {
-			int index = Integer.parseInt(taskParameters.get(0));
-			try {
-				return (this.user.delete(index - 1)) ? Constant.PROMPT_MESSAGE_DELETE_TASK_SUCCESSFULLY
-						: Constant.PROMPT_MESSAGE_DELETE_TASK_FAILED;
-			} catch (CommandFailedException e) {
-				return e.toString();
-			}
-		}
-	}
-
 	private String deleteNLP(String userInput) {
 		try {
 			int index = parser.nerParser.pickIndex(userInput);
@@ -559,19 +503,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 
 	// update
-
-	private String update(ArrayList<String> taskParameters) {
-		int index = Integer.parseInt(taskParameters.get(0).trim());
-		try {
-			taskParameters.remove(0);
-			this.user.update(index - 1, parser.getTaskMap(taskParameters));
-		} catch (CommandFailedException e) {
-			e.printStackTrace();
-			return Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
-		}
-
-		return Constant.PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY;
-	}
 
 	private String updateNLP(String userInput) {
 		try {
@@ -588,41 +519,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 
 	// search
 
-	private String search(ArrayList<String> taskParameters) {
-
-		try {
-			TimeInterval timeInterval = new TimeInterval();
-			String keyword = "";
-			for (String parameter : taskParameters) {
-				String key = UtilityMethod.getFirstWord(parameter);
-				String value = UtilityMethod.removeFirstWord(parameter);
-				if (key.equalsIgnoreCase("time")) {
-					timeInterval = parser.parseTimeInterval(value);
-					UtilityMethod.showToUser(String.format(
-							Constant.PROMPT_MESSAGE_SEARCH_TIME_INTERVAL,
-							timeInterval));
-				} else {
-					keyword = parameter;
-					UtilityMethod.showToUser(String.format(
-							Constant.PROMPT_MESSAGE_SEARCH_KEYWORD, keyword));
-				}
-			}
-
-			Constraint thisConstraint = new Constraint(keyword, timeInterval);
-			ArrayList<Task> queryResult = this.user.find(thisConstraint);
-			String queryResultString = UtilityMethod
-					.taskListToString(queryResult);
-			if (queryResultString.equals("")) {
-				return Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED;
-			} else {
-				return queryResultString;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return e.toString();
-		}
-	}
-
 	private String searchNLP(String userInput) {
 		Constraint thisConstraint;
 		try {
@@ -638,7 +534,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		} catch (CommandFailedException e) {
 			return e.toString();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return e.toString();
 		}
@@ -647,20 +542,27 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 
 	// common methods for NLP and non-NLP
 
-	private String display() {
+	private ArrayList<Task> display() {
 		ArrayList<Task> queryResult;
 		try {
 			queryResult = this.user.getTaskList();
-			String resultString = UtilityMethod.taskListToString(queryResult);
-			if (resultString.equalsIgnoreCase("")) {
-				return Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK;
+//			String resultString = UtilityMethod.taskListToString(queryResult);
+//			if (resultString.equalsIgnoreCase("")) {
+//				return Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK;
+//			} else {
+//				return resultString;
+//			}
+			if (queryResult.isEmpty()) {
+				setPreview(Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK);
+				return null;
 			} else {
-				return resultString;
+				return queryResult;
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return Constant.PROMPT_MESSAGE_DISPLAY_ERROR;
+			setPreview(Constant.PROMPT_MESSAGE_DISPLAY_ERROR);
+			return null;
 		}
 	}
 

@@ -249,7 +249,6 @@ public class ListOfXiaoMing {
 			}
 			return "";
 		} catch (CommandFailedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return e.toString();
 		}
@@ -455,7 +454,6 @@ public class ListOfXiaoMing {
 		} catch (CommandFailedException e) {
 			return e.toString();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return e.toString();
 		}
@@ -475,7 +473,6 @@ public class ListOfXiaoMing {
 				return resultString;
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return Constant.PROMPT_MESSAGE_DISPLAY_ERROR;
 		}
