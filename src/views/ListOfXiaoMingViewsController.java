@@ -363,14 +363,14 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 
 	public void executeNLP (String userInput) {
 		
-//			if (!userInput.equals("")) {
-//				try {
-//					NERParser.updateTsvFile(userInput);
-//				} catch (IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//			}
+			if (!userInput.equals("")) {
+				try {
+					NERParser.updateTsvFile(userInput);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 
 		COMMAND_TYPE thisCommand;
 		try {
