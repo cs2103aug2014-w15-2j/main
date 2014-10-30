@@ -11,7 +11,7 @@
          "repeated-period":"none",
          "priority":"medium",
          "time-interval":{
-            "startDate":"-",
+            "startDate":"01-January-1970 07:00",
             "endDate":"30-October-2014 23:59"
          }
       },
@@ -477,6 +477,34 @@
          "time-interval":{
             "startDate":"01-January-1970 08:00",
             "endDate":"30-October-2014 23:59"
+         }
+      },
+      {
+         "task-id":"9547c432-1c2c-4abd-a7ff-53b86842df72",
+         "description":"watch movie",
+         "category":"default",
+         "tags":[
+            "trashed"
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"1dcddd8d-37d5-453c-ae9d-9c3394c7c2d2",
+         "description":"watch movie",
+         "category":"default",
+         "tags":[
+            "trashed"
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
          }
       }
    ]
