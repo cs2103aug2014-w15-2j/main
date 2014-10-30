@@ -1,11 +1,9 @@
-package dataStore;
+package infrastructure;
 
 import dataStructure.Task;
-import infrastructure.Constant;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -159,20 +157,24 @@ public class Converter {
 			timeInterval.put("startDate", "-");
 			timeInterval.put("endDate", "-");
 		} else if(task.getInterval().getStartDate() == Constant.DEADLINE_START_DATE) {
-			String endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).
-					format(task.getInterval().getEndDate());
+			String endDate = Converter.convertDateToString(task.getInterval().getEndDate());
 			timeInterval.put("startDate", "-");
 			timeInterval.put("endDate", endDate);
 		} else {
-			String startDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).
-					format(task.getInterval().getStartDate());
-			String endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).
-					format(task.getInterval().getEndDate());
+			String startDate = Converter.convertDateToString(task.getInterval().getStartDate());
+			String endDate = Converter.convertDateToString(task.getInterval().getEndDate());
 			timeInterval.put("startDate", startDate);
 			timeInterval.put("endDate", endDate);
 		}
 		
 		return timeInterval;
+	}
+	
+	public static String convertDateToString(Date date) {
+			String dateString = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).
+					format(date);
+		
+		return dateString;
 	}
 	
 }

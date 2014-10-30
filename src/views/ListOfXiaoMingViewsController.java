@@ -1,6 +1,7 @@
 package views;
 
 import infrastructure.Constant;
+import infrastructure.Converter;
 import infrastructure.NERParser;
 import infrastructure.Parser;
 import infrastructure.UtilityMethod;
@@ -151,10 +152,30 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		GridPane taskPane = new GridPane();
 		content.getChildren().clear();
 		int row = 0;
+		int index = 1;
 		
 		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3));
 		for (Task task : displayList) {
-			taskPane.add(new Label(task.getDescription()), 0, row, 2, 1);
+			taskPane.add(new Label(index + ". " + task.getDescription()), 0, row, 2, 1);
+			row ++;
+			if (task.isDeadline()) {
+				taskPane.add(new Label("Deadline:"), 0, row);
+				taskPane.add(new Label(Converter.convertDateToString(task.getInterval().getEndDate())), 1, row);
+				row ++;
+			} else if (task.isFloating()) {
+				
+			} else if (task.isTimed()) {
+				taskPane.add(new Label("Start date:"), 0, row);
+				taskPane.add(new Label(Converter.convertDateToString(task.getInterval().getStartDate())), 1, row);
+				row ++;
+				taskPane.add(new Label("End date:"), 0, row);
+				taskPane.add(new Label(Converter.convertDateToString(task.getInterval().getEndDate())), 1, row);
+				row ++;
+			}
+			taskPane.add(new Label("Tags:"), 0, row);
+			taskPane.add(new Label(task.tagToString()), 1, row);
+			row ++;
+			index ++;
 		}
 		
 		content.getChildren().add(taskPane);
