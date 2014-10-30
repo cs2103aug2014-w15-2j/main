@@ -4,6 +4,13 @@ Add	ADD
 add	ADD
 .	O
 
+help	HELP
+.	O
+
+help	HELP
+.	O
+
+
 update	UPDATE
 .	O
 
@@ -118,6 +125,18 @@ out	LOGOUT
 
 Log	LOGOUT
 out	LOGOUT
+.	O
+
+help	HELP
+.	O
+
+help	HELP
+.	O
+
+help	HELP
+.	O
+
+help	HELP
 .	O
 
 NLP	NLP

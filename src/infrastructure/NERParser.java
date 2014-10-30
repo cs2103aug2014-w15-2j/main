@@ -584,7 +584,14 @@ public class NERParser {
 			}
 		}
 
-		
+		Pair<String, String> trivialPair = new Pair<String, String>(
+				".", "O");
+		timeList.add(trivialPair);
+		descriptionList.add(trivialPair);
+		priorityList.add(trivialPair);
+		indexList.add(trivialPair);
+		tagList.add(trivialPair);
+		commandList.add(trivialPair);
 		
 		listMap.put(Constant.XML_TAG_TIME, timeList);
 		listMap.put(Constant.XML_TAG_DESCRIPTION, descriptionList);
