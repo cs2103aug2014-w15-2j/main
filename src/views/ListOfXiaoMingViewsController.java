@@ -138,7 +138,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 //		setPreview("\n\n\n\t\t  Hit CTRL+ENTER to load a preview");
 //		setPreview(this.executeNLP(command));
 		this.executeNLP(command);
-		this.executeNLP("display");
     }
 	
 	public void setDisplay(String displayedText) {
@@ -594,5 +593,9 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		} else {
 			return Constant.PROMPT_MESSAGE_CLEAR_CACHE_FAILED;
 		}
+	}
+	
+	private void reloadNLPModel() {
+		
 	}
 }
