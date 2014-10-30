@@ -222,7 +222,7 @@ public abstract class Constant {
 	
 	//TimeInterval
 	public static final Date FLOATING_START_DATE = new Date(0);
-	public static final Date DEADLINE_START_DATE = new Date(0);
+	public static final Date DEADLINE_START_DATE = new Date(1);
 	public static final Date FLOATING_END_DATE = new Date(9999);
 	
 	//user interface mode
