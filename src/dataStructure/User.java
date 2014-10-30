@@ -188,10 +188,16 @@ public class User {
 	 * clear all current tasks
 	 */
 	public void clear() {
+		ArrayList<Task> toBeCleared = new ArrayList<Task>();
+		
 		for (Task task : currentTasks){
 			if(task.isTrashed()){
-				currentTasks.remove(task);
+				toBeCleared.add(task);
 			}
+		}
+		
+		for (Task task : toBeCleared){
+			currentTasks.remove(task);
 		}
 	}
 	
