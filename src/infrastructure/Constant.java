@@ -97,6 +97,15 @@ public abstract class Constant {
 	public static final String XML_TAG_PRIORITY = "PRIORITY";
 	public static final String XML_TAG_COMMAND = "COMMAND";
 	
+
+	//GUI messages that will be shown to users
+	public static final String GUI_MESSAGE_WELCOME = "Welcome to 小鸣的清单(List of Xiao Ming)";
+	public static final String GUI_MESSAGE_SHORTCUT_INSTRUCTION = "ALT + A:\t insert <DATE> \t\tor </DATE>\n"
+																+ "ALT + C:\t insert <COMMAND> \tor </COMMAND>\n"
+																+ "ALT + D:\t insert <DESCRIPTION> \tor </DESCRIPTION>\n"
+																+ "ALT + I:\t insert <INDEX> \t\tor </INDEX>\n"
+																+ "ALT + P:\t insert <PRIORITY> \t\tor </PRIORITY>\n"
+																+ "ALT + T:\t insert <TAG> \t\t\tor </TAG>\n";
 	
 	//prompt messages that will be printed for users	
 	public static final String PROMPT_MESSAGE_WELCOME = "\n\nWelcome to 小鸣的清单(List of Xiao Ming)";

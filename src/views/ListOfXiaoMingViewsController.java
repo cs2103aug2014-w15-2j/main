@@ -1,13 +1,8 @@
 package views;
 
 import infrastructure.Constant;
-import infrastructure.UtilityMethod;
-
-import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
 
 import javax.swing.KeyStroke;
 
@@ -16,37 +11,14 @@ import com.tulskiy.keymaster.common.HotKeyListener;
 import com.tulskiy.keymaster.common.Provider;
 
 import userInterface.ListOfXiaoMing;
-import dataStore.TestingCache;
-import dataStructure.User;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.Pagination;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import java.awt.event.KeyEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import javafx.util.Duration;
 
 public class ListOfXiaoMingViewsController extends GridPane implements HotKeyListener{
 	@FXML
@@ -61,13 +33,22 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	private Provider keyShortCuts = null;
 	
-	private static final String HOT_KEY_ADD_DESCRIPTION_TAG 	= "control D";
-	private static final String HOT_KEY_ADD_DATE_TAG 			= "control A";
-	private static final String HOT_KEY_ADD_TAG_TAG 			= "control T";
-	private static final String HOT_KEY_ADD_COMMAND_TAG 		= "control C";
-	private static final String HOT_KEY_ADD_INDEX_TAG 			= "control I";
-	private static final String HOT_KEY_ADD_PRIORITY_TAG 		= "control P";
-	private static final String HOT_KEY_PREVIEW 				= "alt ENTER";
+	private static final String HOT_KEY_ADD_DESCRIPTION_TAG 	= "alt D";
+	private static final String HOT_KEY_ADD_DATE_TAG 			= "alt A";
+	private static final String HOT_KEY_ADD_TAG_TAG 			= "alt T";
+	private static final String HOT_KEY_ADD_COMMAND_TAG 		= "alt C";
+	private static final String HOT_KEY_ADD_INDEX_TAG 			= "alt I";
+	private static final String HOT_KEY_ADD_PRIORITY_TAG 		= "alt P";
+	
+	private static final String HOT_KEY_PREVIEW 				= "control ENTER";
+	private static final String HOT_KEY_CREATE 					= "control C";
+	private static final String HOT_KEY_READ 					= "control R";
+	private static final String HOT_KEY_UPDATE 					= "control U";
+	private static final String HOT_KEY_DELETE 					= "control D";
+	
+	
+	private static final int MODIFIER_ALT = 520;
+	private static final int MODIFIER_CTRL = 130;
 	
 	private String descriptionTag 	= "</DESCRIPTION>";
 	private String dateTag 			= "</DATE>";
@@ -75,14 +56,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	private String commandTag		= "</COMMAND>";
 	private String indexTag 		= "</INDEX>";
 	private String priorityTag 		= "</PRIORITY>";
-	
-	private static final int KEY_VALUE_CTRL_ENTER = 10;
-	private static final int KEY_VALUE_CTRL_A = 65;
-	private static final int KEY_VALUE_CTRL_C = 67;
-	private static final int KEY_VALUE_CTRL_D = 68;
-	private static final int KEY_VALUE_CTRL_I = 73;
-	private static final int KEY_VALUE_CTRL_P = 80;
-	private static final int KEY_VALUE_CTRL_T = 84;
 	
 	
 	
@@ -101,7 +74,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 
 	private void updatePage() {
-		this.setDisplay(Constant.PROMPT_MESSAGE_WELCOME + '\n' + Constant.PROMPT_MESSAGE_INSTRUCTION);
+		this.setDisplay(Constant.GUI_MESSAGE_WELCOME + "\n\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
 	}
 	
 	public String getUserInput() {
@@ -135,14 +108,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 						keyShortCuts = Provider.getCurrentProvider(false);
 					}
 					keyShortCuts.reset();
-					int i = KeyEvent.VK_C;
-					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DESCRIPTION_TAG), instance);
-					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DATE_TAG), instance);
-					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_TAG_TAG), instance);
-					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_COMMAND_TAG), instance);
-					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_INDEX_TAG), instance);
-					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_PRIORITY_TAG), instance);
-					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_PREVIEW), instance);
+					registerKeyShortCuts(instance);
+					
 				} catch (Exception e) {
 					keyShortCuts = null;
 				}
@@ -150,21 +117,38 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		}).start();
 	}
 	
-	private void stopShortCuts() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					if (keyShortCuts != null) {
-						keyShortCuts.reset();
-						keyShortCuts.stop();
-					}
-				} catch (Exception e) {
-					keyShortCuts = null;
-				}
-			}
-		}).start();
+	
+	private void registerKeyShortCuts(HotKeyListener instance) {
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DESCRIPTION_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DATE_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_TAG_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_COMMAND_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_INDEX_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_PRIORITY_TAG), instance);
+		
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_PREVIEW), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_CREATE), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_READ), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_UPDATE), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_DELETE), instance);
 	}
+	
+	
+//	private void stopShortCuts() {
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				try {
+//					if (keyShortCuts != null) {
+//						keyShortCuts.reset();
+//						keyShortCuts.stop();
+//					}
+//				} catch (Exception e) {
+//					keyShortCuts = null;
+//				}
+//			}
+//		}).start();
+//	}
 	
 	private String toggleTag(String tag) {
 		if (tag.contains("</")) {
@@ -181,45 +165,68 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	@Override
 	public void onHotKey(HotKey key) {
-		System.out.println("HOTKEY: " + key.keyStroke.getKeyCode());
+		System.out.println("HOTKEY CODE: " + key.keyStroke.getKeyCode());
+		System.out.println("HOTKEY CHAR: " + key.keyStroke.getModifiers());
 		String tag = "";
 		int cursorPosition = this.input.getCaretPosition();
-		switch (key.keyStroke.getKeyCode()) {
-			case KEY_VALUE_CTRL_D:
+		switch (key.keyStroke.getKeyCode() + key.keyStroke.getModifiers()) {
+			case KeyEvent.VK_D + MODIFIER_ALT:
 				descriptionTag = toggleTag(descriptionTag);
 				tag = descriptionTag;
+				this.input.insertText(cursorPosition, tag);	
 				break;
 
-			case KEY_VALUE_CTRL_A:
+			case KeyEvent.VK_A + MODIFIER_ALT:
 				dateTag = toggleTag(dateTag);
 				tag = dateTag;
+				this.input.insertText(cursorPosition, tag);	
 				break;
 				
-			case KEY_VALUE_CTRL_C:
+			case KeyEvent.VK_C + MODIFIER_ALT:
 				commandTag = toggleTag(commandTag);
 				tag = commandTag;
+				this.input.insertText(cursorPosition, tag);	
 				break;
 				
-			case KEY_VALUE_CTRL_T:
+			case KeyEvent.VK_T + MODIFIER_ALT:
 				tagTag = toggleTag(tagTag);
 				tag = tagTag;
+				this.input.insertText(cursorPosition, tag);	
 				break;
 				
-			case KEY_VALUE_CTRL_I:
+			case KeyEvent.VK_I + MODIFIER_ALT:
 				indexTag = toggleTag(indexTag);
 				tag = indexTag;
+				this.input.insertText(cursorPosition, tag);	
 				break;
 				
-			case KEY_VALUE_CTRL_P:
+			case KeyEvent.VK_P + MODIFIER_ALT:
 				priorityTag = toggleTag(priorityTag);
 				tag = priorityTag;
+				this.input.insertText(cursorPosition, tag);	
 				break;
 			
-			case KEY_VALUE_CTRL_ENTER:
-				this.loadPreview();
+			case KeyEvent.VK_ENTER + MODIFIER_CTRL:
+				this.loadPreview();	
+				break;
+				
+			case KeyEvent.VK_C + MODIFIER_CTRL:
+				this.input.insertText(cursorPosition, "add");	
+				break;
+				
+			case KeyEvent.VK_R + MODIFIER_CTRL:
+				this.input.insertText(cursorPosition, "display");	
+				break;
+				
+			case KeyEvent.VK_U + MODIFIER_CTRL:
+				this.input.insertText(cursorPosition, "update");
+				break;
+				
+			case KeyEvent.VK_D + MODIFIER_CTRL:
+				this.input.insertText(cursorPosition, "delete");
 				break;
 		}
 		
-		this.input.insertText(cursorPosition, tag);	
+		
 	}
 }
