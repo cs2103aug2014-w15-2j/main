@@ -32,6 +32,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -70,6 +71,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	private static final String HOT_KEY_DELETE 					= "control D";
 	private static final String HOT_KEY_SEARCH					= "control F";
 	
+	private static final double GRID_ROW_HEIGHT = 30.0;
 	
 	private static final int MODIFIER_ALT = 520;
 	private static final int MODIFIER_CTRL = 130;
@@ -156,32 +158,108 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		int row = 0;
 		int index = 1;
 		
-		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3));
+		taskPane.setStyle("-fx-padding: 0 10 0 10;");
+		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
+		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 21));
 		for (Task task : displayList) {
-			taskPane.add(new Label(index + ". " + task.getDescription()), 0, row, 2, 1);
+			String bannerColor = null;
+			String bodyColor = null;
+			switch (task.getPriority()) {
+				case Constant.PRIORITY_HIGH:
+					bannerColor = "rgba(255, 0, 0, 0.4)";
+					bodyColor = "rgba(255, 0, 0, 0.1)";
+					break;
+				case Constant.PRIORITY_MEDIUM:
+					bannerColor = "rgba(255, 220, 0, 0.4)";
+					bodyColor = "rgba(255, 220, 0, 0.1)";
+					break;
+					
+				case Constant.PRIORITY_LOW:
+					bannerColor = "rgba(0, 255, 0, 0.4)";
+					bodyColor = "rgba(0, 255, 0, 0.1)";
+					break;
+					
+				default:
+					
+					break;
+			}
+			
+			GridPane priorityPane = new GridPane();
+			priorityPane.setStyle("-fx-background-color: " + bannerColor);
+			priorityPane.setPrefWidth(getWidth());
+			Label priority = new Label("");
+			priority.setPrefWidth(getWidth());
+			priorityPane.add(priority, 0, 0);
+			taskPane.add(priorityPane, 0, row, 2, 1);
+			setDisplayRow(taskPane, GRID_ROW_HEIGHT);
 			row ++;
+			
+			
+			GridPane contentPane = new GridPane();
+			contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
+			contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 21));
+			int subRow = 0;
+			contentPane.setStyle("-fx-background-color: " + bodyColor);
+			contentPane.setPrefWidth(getWidth());
+			
+			Label description = new Label(index + "." + task.getDescription());
+			description.setStyle("-fx-font-size: 17");
+			description.setPrefWidth(getWidth());
+			
+			contentPane.add(description, 0, subRow, 2, 1);
+			setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+			subRow ++;
 			if (task.isDeadline()) {
-				taskPane.add(new Label("Deadline:"), 0, row);
-				taskPane.add(new Label(Converter.convertDateToString(task.getInterval().getEndDate())), 1, row);
-				row ++;
+				Label deadlineText = new Label("Deadline:");
+				Label deadline = new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
+				
+				contentPane.add(deadlineText, 0, subRow);
+				contentPane.add(deadline, 1, subRow);
+				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+				subRow ++;
 			} else if (task.isFloating()) {
 				
 			} else if (task.isTimed()) {
-				taskPane.add(new Label("Start date:"), 0, row);
-				taskPane.add(new Label(Converter.convertDateToString(task.getInterval().getStartDate())), 1, row);
-				row ++;
-				taskPane.add(new Label("End date:"), 0, row);
-				taskPane.add(new Label(Converter.convertDateToString(task.getInterval().getEndDate())), 1, row);
-				row ++;
+				Label startText = new Label("Start date:");
+				Label start = new Label(Converter.convertDateToString(task.getInterval().getStartDate()));
+				
+				contentPane.add(startText, 0, subRow);
+				contentPane.add(start, 1, subRow);
+				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+				subRow ++;
+				
+				Label endText = new Label("End date:");
+				Label end= new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
+				
+				contentPane.add(endText, 0, subRow);
+				contentPane.add(end, 1, subRow);
+				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+				subRow ++;
 			}
-			taskPane.add(new Label("Tags:"), 0, row);
-			taskPane.add(new Label(task.tagToString()), 1, row);
+			contentPane.add(new Label("Tags:"), 0, subRow);
+			contentPane.add(new Label(task.tagToString()), 1, subRow);
+			setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+			subRow ++;
+			
+			taskPane.add(contentPane, 0, row, 2, subRow);
+			setDisplayRow(taskPane, GRID_ROW_HEIGHT * subRow);
+			row ++;
+			
+			GridPane emptyPane = new GridPane();
+			emptyPane.setStyle("-fx-background-color: rgb(244, 244, 244)");
+			emptyPane.setPrefWidth(getWidth());
+			taskPane.add(emptyPane, 0, row, 2, 1);
+			setDisplayRow(taskPane, GRID_ROW_HEIGHT);
 			row ++;
 			index ++;
 		}
 		
 		content.getChildren().add(taskPane);
 		display.setContent(content);
+	}
+	
+	private void setDisplayRow(GridPane pane, double height) {
+		pane.getRowConstraints().add(new RowConstraints(height));
 	}
 	
 	public void setPreview(String displayedText) {
