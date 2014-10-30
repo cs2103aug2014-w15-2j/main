@@ -3,6 +3,7 @@ package views;
 import infrastructure.Constant;
 import infrastructure.UtilityMethod;
 
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,10 +31,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -44,8 +41,7 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
+import java.awt.event.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -71,7 +67,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	private static final String HOT_KEY_ADD_COMMAND_TAG 		= "control C";
 	private static final String HOT_KEY_ADD_INDEX_TAG 			= "control I";
 	private static final String HOT_KEY_ADD_PRIORITY_TAG 		= "control P";
-	private static final String HOT_KEY_PREVIEW 				= "shift ENTER";
+	private static final String HOT_KEY_PREVIEW 				= "alt ENTER";
 	
 	private String descriptionTag 	= "</DESCRIPTION>";
 	private String dateTag 			= "</DATE>";
@@ -80,7 +76,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	private String indexTag 		= "</INDEX>";
 	private String priorityTag 		= "</PRIORITY>";
 	
-	private static final int KEY_VALUE_SHIFT_ENTER = 10;
+	private static final int KEY_VALUE_CTRL_ENTER = 10;
 	private static final int KEY_VALUE_CTRL_A = 65;
 	private static final int KEY_VALUE_CTRL_C = 67;
 	private static final int KEY_VALUE_CTRL_D = 68;
@@ -139,6 +135,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 						keyShortCuts = Provider.getCurrentProvider(false);
 					}
 					keyShortCuts.reset();
+					int i = KeyEvent.VK_C;
 					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DESCRIPTION_TAG), instance);
 					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DATE_TAG), instance);
 					keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_TAG_TAG), instance);
@@ -218,7 +215,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				tag = priorityTag;
 				break;
 			
-			case KEY_VALUE_SHIFT_ENTER:
+			case KEY_VALUE_CTRL_ENTER:
 				this.loadPreview();
 				break;
 		}
