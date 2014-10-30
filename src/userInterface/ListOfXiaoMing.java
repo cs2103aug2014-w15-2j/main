@@ -43,7 +43,7 @@ public class ListOfXiaoMing {
 	 */
 	public ListOfXiaoMing(String recordFilePath) {
 		try {
-			user = new User(recordFilePath);
+			this.user = new User(recordFilePath);
 		} catch (Exception e) {
 			// impossible errors
 			e.printStackTrace();
@@ -195,14 +195,14 @@ public class ListOfXiaoMing {
 	
 	public String executeNLP (String userInput) {
 		
-		if (!userInput.equals("")) {
-			try {
-				NERParser.updateTsvFile(userInput);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
+//		if (!userInput.equals("")) {
+//			try {
+//				NERParser.updateTsvFile(userInput);
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		}
 
 		COMMAND_TYPE thisCommand;
 		try {
