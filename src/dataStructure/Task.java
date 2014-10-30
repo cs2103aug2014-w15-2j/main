@@ -463,9 +463,9 @@ public class Task {
 	 */
 	public boolean isTimed() {
 		if (!this.isDeadline() && !this.isFloating()) {
-			return false;
-		} else {
 			return true;
+		} else {
+			return false;
 		}
 	}
 
