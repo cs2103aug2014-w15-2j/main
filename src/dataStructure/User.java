@@ -188,7 +188,11 @@ public class User {
 	 * clear all current tasks
 	 */
 	public void clear() {
-		currentTasks.clear();
+		for (Task task : currentTasks){
+			if(task.isTrashed()){
+				currentTasks.remove(task);
+			}
+		}
 	}
 	
 	/**
