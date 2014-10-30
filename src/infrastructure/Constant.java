@@ -105,7 +105,12 @@ public abstract class Constant {
 																+ "ALT + D:\t insert <DESCRIPTION> \tor </DESCRIPTION>\n"
 																+ "ALT + I:\t insert <INDEX> \t\tor </INDEX>\n"
 																+ "ALT + P:\t insert <PRIORITY> \t\tor </PRIORITY>\n"
-																+ "ALT + T:\t insert <TAG> \t\t\tor </TAG>\n";
+																+ "ALT + T:\t insert <TAG> \t\t\tor </TAG>\n\n"
+																+ "CTRL + C:\t insert add\n"
+																+ "CTRL + R:\t insert display\n"
+																+ "CTRL + U:\t insert update\n"
+																+ "CTRL + D:\t insert display\n"
+																+ "CTRL + F:\t insert search\n";
 	
 	//prompt messages that will be printed for users	
 	public static final String PROMPT_MESSAGE_WELCOME = "\n\nWelcome to 小鸣的清单(List of Xiao Ming)";

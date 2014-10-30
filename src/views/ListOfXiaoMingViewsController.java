@@ -45,6 +45,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	private static final String HOT_KEY_READ 					= "control R";
 	private static final String HOT_KEY_UPDATE 					= "control U";
 	private static final String HOT_KEY_DELETE 					= "control D";
+	private static final String HOT_KEY_SEARCH					= "control F";
 	
 	
 	private static final int MODIFIER_ALT = 520;
@@ -131,6 +132,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_READ), instance);
 		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_UPDATE), instance);
 		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_DELETE), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_SEARCH), instance);
 	}
 	
 	
@@ -211,19 +213,23 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				break;
 				
 			case KeyEvent.VK_C + MODIFIER_CTRL:
-				this.input.insertText(cursorPosition, "add");	
+				this.input.insertText(cursorPosition, "add ");	
 				break;
 				
 			case KeyEvent.VK_R + MODIFIER_CTRL:
-				this.input.insertText(cursorPosition, "display");	
+				this.input.insertText(cursorPosition, "display ");	
 				break;
 				
 			case KeyEvent.VK_U + MODIFIER_CTRL:
-				this.input.insertText(cursorPosition, "update");
+				this.input.insertText(cursorPosition, "update ");
 				break;
 				
 			case KeyEvent.VK_D + MODIFIER_CTRL:
-				this.input.insertText(cursorPosition, "delete");
+				this.input.insertText(cursorPosition, "delete ");
+				break;
+				
+			case KeyEvent.VK_F + MODIFIER_CTRL:
+				this.input.insertText(cursorPosition, "search ");
 				break;
 		}
 		
