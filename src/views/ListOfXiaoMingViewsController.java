@@ -452,10 +452,16 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			switch(thisCommand) {
 				case ADD:
 					Task taskToAdd = parser.nerParser.getTask(userInput);
-					return "Command: create \n" + taskToAdd.toStringForDisplaying();
+					return "Command: create \n\n" + taskToAdd.toStringForDisplaying();
 					
 				case DELETE:
-					return "Command: delete";
+					try {
+						int index = parser.nerParser.pickIndex(userInput);
+						Task taskToDelete = this.user.retrieve(index - 1);
+						return "Command: delete \n\n" + taskToDelete.toStringForDisplaying();
+					} catch (CommandFailedException de) {
+						return "Command: delete \n\n" + "No Task Specified"; 
+					}
 					
 				case UPDATE:
 					return "Command: update";
