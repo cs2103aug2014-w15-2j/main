@@ -178,6 +178,8 @@ public abstract class Constant {
 	public static final String COMMAND_STRING_CLEAR = "clear";
 	public static final String COMMAND_STRING_DISPLAY = "display";
 	public static final String COMMAND_STRING_NLP = "nlp";
+	public static final String COMMAND_STRING_EMPTY_TRASH = "empty_trash";
+	
 	
 	public static final int PRIORITY_DEFAULT = 2;
 	public static final int PRIORITY_INVALID = 0;

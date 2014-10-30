@@ -75,6 +75,9 @@ public class Parser {
 			case Constant.COMMAND_STRING_NLP:
 				return COMMAND_TYPE.NLP;
 				
+			case Constant.COMMAND_STRING_EMPTY_TRASH:
+				return COMMAND_TYPE.EMPTY_TRASH;
+				
 			default:
 				return COMMAND_TYPE.HELP;
 		}
