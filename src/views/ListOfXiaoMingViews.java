@@ -13,11 +13,12 @@ public class ListOfXiaoMingViews extends Application {
     public void start(Stage stage) throws Exception {
         ListOfXiaoMingViewsController control = new ListOfXiaoMingViewsController();
         
-        Scene scene = new Scene(control, 600, 800);
+        Scene scene = new Scene(control, 400, 600);
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(scene);
         stage.setTitle("List of Xiao Ming");
         stage.show();
+        stage.setResizable(false);
 	}
 
 	public static void main(String[] args) {
