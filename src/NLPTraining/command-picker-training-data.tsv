@@ -245,3 +245,11 @@ exit	COMMAND
 
 NLP	COMMAND
 .	O
+
+empty	COMMAND
+trash	COMMAND
+.	O
+
+empty	COMMAND
+trashed	COMMAND
+.	O

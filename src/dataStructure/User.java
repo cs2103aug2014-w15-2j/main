@@ -188,10 +188,16 @@ public class User {
 	 * clear all current tasks
 	 */
 	public void clear() {
+		ArrayList<Task> toBeCleared = new ArrayList<Task>();
+		
 		for (Task task : currentTasks){
 			if(task.isTrashed()){
-				currentTasks.remove(task);
+				toBeCleared.add(task);
 			}
+		}
+		
+		for (Task task : toBeCleared){
+			currentTasks.remove(task);
 		}
 	}
 	
@@ -284,35 +290,18 @@ public class User {
 	 * @return
 	 * @throws CommandFailedException
 	 */
-	private String getTaskIdByIndex(int index) throws CommandFailedException {
-		if (!this.isValidIndex(index)) {
-			throw new CommandFailedException(String.format(
-					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
-		} else {
-			return this.currentTasks.get(index).getTaskId();
-		}
-	}
-
-	/**
-	 * retrieve gets the task with the index.
-	 * 
-	 * @param index
-	 * @return the Task, null if there is an error
-	 * @throws CommandFailedException
-	 */
 	public Task retrieve(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
-			Iterator<Task> taskIterator = this.currentTasks.iterator();
-			while (taskIterator.hasNext()) {
-				Task task = taskIterator.next();
-				if (task.getTaskId().equals(this.getTaskIdByIndex(index))) {
-					return task;
-				}
+			if (this.currentTasks.get(index).isTrashed()) {
+				throw new CommandFailedException(String.format(
+						Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+			} else {
+				return this.currentTasks.get(index);
 			}
-			return null;
+			
 		}
 	}
 

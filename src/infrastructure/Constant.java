@@ -111,6 +111,7 @@ public abstract class Constant {
 																+ "CTRL + U:\t insert update\n"
 																+ "CTRL + D:\t insert display\n"
 																+ "CTRL + F:\t insert search\n";
+	public static final String GUI_PREVIEW_MESSAGE_DELETE = "Command: delete \n\n" + "No Task Specified";
 	
 	//prompt messages that will be printed for users	
 	public static final String PROMPT_MESSAGE_WELCOME = "\n\nWelcome to 小鸣的清单(List of Xiao Ming)";
@@ -178,6 +179,8 @@ public abstract class Constant {
 	public static final String COMMAND_STRING_CLEAR = "clear";
 	public static final String COMMAND_STRING_DISPLAY = "display";
 	public static final String COMMAND_STRING_NLP = "nlp";
+	public static final String COMMAND_STRING_EMPTY_TRASH = "empty_trash";
+	
 	
 	public static final int PRIORITY_DEFAULT = 2;
 	public static final int PRIORITY_INVALID = 0;

@@ -140,7 +140,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 //		setPreview("\n\n\n\t\t  Hit CTRL+ENTER to load a preview");
 //		setPreview(this.executeNLP(command));
 		this.executeNLP(command);
-		this.executeNLP("display");
+		this.display();
     }
 	
 	public void setDisplay(String displayedText) {
@@ -481,10 +481,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					setDisplayGrid(this.display());
 					break;
 					
-				case LOG_OUT:
-					setPreview(this.logOut());
-					break;
-					
 				case UNDO:
 					setPreview(this.undo());
 					break;
@@ -524,8 +520,59 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 
 	public String getPreview(String userInput) {
 		try {
-			Task taskToAdd = parser.nerParser.getTask(userInput);
-			return taskToAdd.toStringForDisplaying();
+			if (userInput.equals("")) {
+				return "The expected result will be shown here";
+			}
+		
+			COMMAND_TYPE thisCommand = this.parser.nerParser.pickCommand(userInput);
+			System.err.println("CMD - getPreview: " + thisCommand);
+			
+			switch(thisCommand) {
+				case ADD:
+					Task taskToAdd = parser.nerParser.getTask(userInput);
+					return "Command: create \n\n" + taskToAdd.toStringForDisplaying();
+					
+				case DELETE:
+					try {
+						int index = parser.nerParser.pickIndex(userInput);
+						Task taskToDelete = this.user.retrieve(index - 1);
+						return "Command: delete \n\n" + taskToDelete.toStringForDisplaying();
+					} catch (CommandFailedException de) {
+						return "Command: delete \n\n" + "No Task Specified"; 
+					}
+					
+				case UPDATE:
+					return "Command: update";
+					
+				case SEARCH:
+					return "Command: search";
+				
+				case DISPLAY:
+					return "Command: display";
+	
+				case UNDO:
+					return "Command: undo";
+					
+				case REDO:
+					return "Command: redo";
+					
+				case CLEAR:
+					return "Command: clear";
+					
+				case EXIT:
+					return "Command: exit";
+					
+				case HELP:
+					return "Command: help";
+					
+				case EMPTY_TRASH:
+					return "Command: empty trash";
+					
+				default:
+					return "Command not recognized";
+	
+			}
+			
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
 			return "Failure in Parsing The Task";
@@ -662,15 +709,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			return Constant.PROMPT_MESSAGE_REDO_FAILED;
 		}
 	}
-
-	private String logOut() {		
+	
+	private void reloadNLPModel() {
 		
-		NERParser.updateModal();
-
-		if (TestingCache.clearCache()) {
-			return Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY;
-		} else {
-			return Constant.PROMPT_MESSAGE_CLEAR_CACHE_FAILED;
-		}
 	}
 }
