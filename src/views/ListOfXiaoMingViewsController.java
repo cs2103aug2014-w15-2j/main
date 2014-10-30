@@ -103,8 +103,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	@FXML
     private void onEnter() {
 		String command = getUserInput(true);
-		setPreview("\n\n\n\t\t  Hit CTRL+ENTER to load a preview");
-		setDisplay(this.core.executeNLP(command));
+//		setPreview("\n\n\n\t\t  Hit CTRL+ENTER to load a preview");
+		setPreview(this.core.executeNLP(command));
     }
 	
 	public void setDisplay(String displayedText) {
@@ -192,7 +192,11 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		Platform.runLater(new Runnable() {
 	        @Override
 	        public void run() {
-	        	setPreview(instance.core.getPreview(getUserInput(false)));
+	        	String userInput = getUserInput(false);
+	        	if (userInput.length() > 0) {
+	        		System.out.println(userInput);
+	        		setPreview(instance.core.getPreview(userInput));
+	        	}
 	        }
 	   });
 	}
