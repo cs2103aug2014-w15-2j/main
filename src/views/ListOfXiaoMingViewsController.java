@@ -408,6 +408,10 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					setDisplay(this.help());
 					break;
 					
+				case EMPTY_TRASH:
+					setPreview(this.emptyTrash());
+					break;
+					
 				default:
 					break;
 
@@ -418,9 +422,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		}
 	}
 	
-	private String help() {
-		return Constant.GUI_MESSAGE_WELCOME + "\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION;
-	}
 
 	public String getPreview(String userInput) {
 		try {
@@ -520,10 +521,22 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			return null;
 		}
 	}
+	
+	
+	private String emptyTrash() {
+		this.user.clear();
+		return "Trash emptyed";
+	}
+
+	private String help() {
+		return Constant.GUI_MESSAGE_WELCOME + "\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION;
+	}
+
+	
 
 	private String clear() {
 		try {
-			this.user.clear();
+			this.user.deleteAll();
 			return "All tasks trashed";
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
