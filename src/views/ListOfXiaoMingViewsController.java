@@ -428,6 +428,10 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					setPreview(this.toggleNLP());
 					break;
 					
+				case HELP:
+					setDisplay(this.help());
+					break;
+					
 				default:
 					break;
 
@@ -476,6 +480,9 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			System.setErr(err);
 			User.exit();
 
+		case HELP:
+			return this.help();
+			
 		case NLP:
 			return this.toggleNLP();
 
@@ -485,6 +492,10 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 
 	
+	private String help() {
+		return Constant.GUI_MESSAGE_WELCOME + "\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION;
+	}
+
 	public String getPreview(String userInput) {
 		try {
 			Task taskToAdd = parser.nerParser.getTask(userInput);

@@ -243,6 +243,9 @@ public class ListOfXiaoMing {
 				case NLP:
 					return this.toggleNLP();
 					
+				case HELP:
+					return Constant.GUI_MESSAGE_WELCOME + "\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION;
+					
 				default:
 					return "";
 
