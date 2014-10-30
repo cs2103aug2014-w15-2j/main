@@ -16,7 +16,6 @@ import javax.swing.KeyStroke;
 
 import reference.CommandFailedException;
 import reference.Constraint;
-import reference.Pair;
 
 import com.tulskiy.keymaster.common.HotKey;
 import com.tulskiy.keymaster.common.HotKeyListener;
@@ -328,48 +327,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		}
 		
 		
-	}
-	
-	/**
-	 * method to execute the system-level command like log in or log out
-	 * 
-	 * @return
-	 */
-	public static String executeUpperLevelCommand(String commandString) {
-		Pair<COMMAND_TYPE, ArrayList<String>> commandPair = Parser
-				.parseCommandPair(commandString);
-		COMMAND_TYPE thisCommand = (COMMAND_TYPE) commandPair.head;
-		ArrayList<String> parameter = commandPair.tail;
-		if (commandString.equals("") || commandString.equalsIgnoreCase("clear")) {
-			for (int i = 0; i < 24; i++) {
-				System.out.println();
-			}
-			return null;
-		}
-
-		switch (thisCommand) {
-		case LOG_IN:
-			return User.userLogIn(parameter);
-
-		case CREATE_ACCOUNT:
-			return User.createAccount(parameter);
-
-		case DELETE_ACCOUNT:
-			UtilityMethod.showToUser(User.deleteAccount());
-			return null;
-
-		case HELP:
-			UtilityMethod.showToUser(User.showHelp());
-			return null;
-
-		case EXIT:
-			System.setErr(err);
-			User.exit();
-
-		default:
-			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_NOT_LOG_IN);
-			return null;
-		}
 	}
 	
 	
