@@ -26,7 +26,6 @@ import com.tulskiy.keymaster.common.Provider;
 import dataStore.TestingCache;
 import dataStructure.Task;
 import dataStructure.User;
-import userInterface.ListOfXiaoMing;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -137,8 +136,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
     private void onEnter() {
 		String command = getUserInput(true);
 //		setPreview("\n\n\n\t\t  Hit CTRL+ENTER to load a preview");
-		
-		setPreview(this.executeNLP(command));
+//		setPreview(this.executeNLP(command));
+		this.executeNLP(command);
     }
 	
 	public void setDisplay(String displayedText) {
@@ -362,7 +361,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 //User level commands
 
-	public String executeNLP (String userInput) {
+	public void executeNLP (String userInput) {
 		
 //			if (!userInput.equals("")) {
 //				try {
@@ -376,7 +375,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		COMMAND_TYPE thisCommand;
 		try {
 			if (userInput.equals("")) {
-				return "";
+				return ;
 			}
 
 			thisCommand = this.parser.nerParser.pickCommand(userInput);
@@ -384,31 +383,40 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 
 			switch(thisCommand) {
 				case ADD:
-					return this.addNLP(userInput);
+					setPreview(this.addNLP(userInput));
+					break;
 					
 				case DELETE:
-					return this.deleteNLP(userInput);
+					setPreview(this.deleteNLP(userInput));
+					break;
 					
 				case UPDATE:
-					return this.updateNLP(userInput);
+					setPreview(this.updateNLP(userInput));
+					break;
 					
 				case SEARCH:
-					return this.searchNLP(userInput);
+					setDisplay(this.searchNLP(userInput));
+					break;
 				
 				case DISPLAY:
-					return this.display();
+					setDisplay(this.display());
+					break;
 					
 				case LOG_OUT:
-					return this.logOut();
+					setPreview(this.logOut());
+					break;
 					
 				case UNDO:
-					return this.undo();
+					setPreview(this.undo());
+					break;
 					
 				case REDO:
-					return this.redo();
+					setPreview(this.redo());
+					break;
 					
 				case CLEAR:
-					return this.clear();
+					setPreview(this.clear());
+					break;
 					
 				case EXIT:
 					System.setErr(err); 
@@ -417,17 +425,16 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					break;
 					
 				case NLP:
-					return this.toggleNLP();
+					setPreview(this.toggleNLP());
+					break;
 					
 				default:
-					return "";
+					break;
 
 			}
-			return "";
 		} catch (CommandFailedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return e.toString();
 		}
 	}
 
