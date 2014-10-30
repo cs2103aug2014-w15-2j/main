@@ -8,6 +8,7 @@ import infrastructure.Constant.COMMAND_TYPE;
 
 
 
+
 import java.io.IOException;
 //import java.io.IOException;
 import java.io.OutputStream;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 //import java.util.logging.LogManager;
 //import java.util.logging.SimpleFormatter;
+
 
 
 
@@ -306,6 +308,19 @@ public class ListOfXiaoMing {
 		}
 	}
 
+	
+	public String getPreview(String userInput) {
+		try {
+			Task taskToAdd = parser.nerParser.getTask(userInput);
+			return taskToAdd.toStringForDisplaying();
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+			return "Failure in Parsing The Task";
+		}
+	}
+	
+	
+	
 	/**
 	 * toggle between NLP mode and non-NLP mode
 	 * 

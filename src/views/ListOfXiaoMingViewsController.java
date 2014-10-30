@@ -1,6 +1,7 @@
 package views;
 
 import infrastructure.Constant;
+
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
@@ -11,6 +12,7 @@ import com.tulskiy.keymaster.common.HotKeyListener;
 import com.tulskiy.keymaster.common.Provider;
 
 import userInterface.ListOfXiaoMing;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.GridPane;
@@ -26,8 +28,10 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	@FXML
 	private ScrollPane display;
-	
 	private VBox content;
+	
+	public ScrollPane preview;
+	private VBox previewContent;
 	
 	private ListOfXiaoMing core = null;
 	
@@ -75,18 +79,22 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 
 	private void updatePage() {
+		this.setPreview("\n\n\n\t\tHit CTRL+ENTER to load a preview");
 		this.setDisplay(Constant.GUI_MESSAGE_WELCOME + "\n\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
 	}
 	
-	public String getUserInput() {
+	public String getUserInput(boolean willClear) {
 		String text = input.getText();
-		input.clear();
+		if (willClear) {
+			input.clear();
+		}
 		return text;
 	}
 	
 	@FXML
     private void onEnter() {
-		String command = getUserInput();
+		String command = getUserInput(true);
+		setPreview("\n\n\n\t\t  Hit CTRL+ENTER to load a preview");
 		setDisplay(this.core.executeNLP(command));
     }
 	
@@ -96,6 +104,14 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		content.getChildren().clear();
 		content.getChildren().add(text);
 		display.setContent(content);
+	}
+	
+	public void setPreview(String displayedText) {
+		previewContent = new VBox();
+		Label text = new Label(displayedText);
+		previewContent.getChildren().clear();
+		previewContent.getChildren().add(text);
+		preview.setContent(previewContent);
 	}
 
 	
@@ -162,7 +178,25 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 	
 	private void loadPreview() {
-		
+		//open a new thread to execute Java FX
+		final ListOfXiaoMingViewsController instance = this;
+		Platform.runLater(new Runnable() {
+	        @Override
+	        public void run() {
+	        	setPreview(instance.core.getPreview(getUserInput(false)));
+	        }
+	   });
+	}
+	
+	private void insertTextToTextField(final int cursorPosition, final String text) {
+		//open a new thread to execute Java FX
+		final ListOfXiaoMingViewsController instance = this;
+		Platform.runLater(new Runnable() {
+	        @Override
+	        public void run() {
+	        	instance.input.insertText(cursorPosition, text);
+	        }
+	   });
 	}
 	
 	@Override
@@ -175,37 +209,37 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			case KeyEvent.VK_D + MODIFIER_ALT:
 				descriptionTag = toggleTag(descriptionTag);
 				tag = descriptionTag;
-				this.input.insertText(cursorPosition, tag);	
+				insertTextToTextField(cursorPosition, tag);	
 				break;
 
 			case KeyEvent.VK_A + MODIFIER_ALT:
 				dateTag = toggleTag(dateTag);
 				tag = dateTag;
-				this.input.insertText(cursorPosition, tag);	
+				insertTextToTextField(cursorPosition, tag);	
 				break;
 				
 			case KeyEvent.VK_C + MODIFIER_ALT:
 				commandTag = toggleTag(commandTag);
 				tag = commandTag;
-				this.input.insertText(cursorPosition, tag);	
+				insertTextToTextField(cursorPosition, tag);	
 				break;
 				
 			case KeyEvent.VK_T + MODIFIER_ALT:
 				tagTag = toggleTag(tagTag);
 				tag = tagTag;
-				this.input.insertText(cursorPosition, tag);	
+				insertTextToTextField(cursorPosition, tag);	
 				break;
 				
 			case KeyEvent.VK_I + MODIFIER_ALT:
 				indexTag = toggleTag(indexTag);
 				tag = indexTag;
-				this.input.insertText(cursorPosition, tag);	
+				insertTextToTextField(cursorPosition, tag);	
 				break;
 				
 			case KeyEvent.VK_P + MODIFIER_ALT:
 				priorityTag = toggleTag(priorityTag);
 				tag = priorityTag;
-				this.input.insertText(cursorPosition, tag);	
+				insertTextToTextField(cursorPosition, tag);	
 				break;
 			
 			case KeyEvent.VK_ENTER + MODIFIER_CTRL:
@@ -213,23 +247,23 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				break;
 				
 			case KeyEvent.VK_C + MODIFIER_CTRL:
-				this.input.insertText(cursorPosition, "add ");	
+				insertTextToTextField(cursorPosition, "add ");	
 				break;
 				
 			case KeyEvent.VK_R + MODIFIER_CTRL:
-				this.input.insertText(cursorPosition, "display ");	
+				insertTextToTextField(cursorPosition, "display ");	
 				break;
 				
 			case KeyEvent.VK_U + MODIFIER_CTRL:
-				this.input.insertText(cursorPosition, "update ");
+				insertTextToTextField(cursorPosition, "update ");	
 				break;
 				
 			case KeyEvent.VK_D + MODIFIER_CTRL:
-				this.input.insertText(cursorPosition, "delete ");
+				insertTextToTextField(cursorPosition, "delete ");	
 				break;
 				
 			case KeyEvent.VK_F + MODIFIER_CTRL:
-				this.input.insertText(cursorPosition, "search ");
+				insertTextToTextField(cursorPosition, "search ");	
 				break;
 		}
 		

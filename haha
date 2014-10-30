@@ -2,11 +2,138 @@
    "password":"1",
    "tasks":[
       {
-         "task-id":"4ab121e8-bc40-4777-9c3b-6862bb308a37",
+         "task-id":"6202c65f-4c0c-4763-85d7-9042f4e7f105",
          "description":"task",
          "category":"default",
          "tags":[
             
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"3845bb15-dd17-454b-ab5d-beaff007a2df",
+         "description":"task",
+         "category":"default",
+         "tags":[
+            
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"38ac90c7-e267-4c2b-a8af-a6c56ddbf733",
+         "description":"atask",
+         "category":"default",
+         "tags":[
+            
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"9f578945-d79b-4ba1-86ff-3a16dc9a068a",
+         "description":"",
+         "category":"default",
+         "tags":[
+            
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"0adb4c1e-70c5-42cd-8ee6-77eeae10dcc9",
+         "description":"tadf",
+         "category":"default",
+         "tags":[
+            
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"71dbf39c-ae64-434e-8e47-d866acee272d",
+         "description":"atads",
+         "category":"default",
+         "tags":[
+            
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"f08d3f22-d3c8-48c5-bee6-81549aa61eec",
+         "description":"task 1",
+         "category":"default",
+         "tags":[
+            "1"
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"f6ba6b6c-347d-41e4-b12e-7bdb851583e2",
+         "description":"task 1",
+         "category":"default",
+         "tags":[
+            "1",
+            "trashed"
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"ffba9111-9672-4b0c-8f59-045aa4e573f6",
+         "description":"task",
+         "category":"default",
+         "tags":[
+            "trashed"
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"4ab121e8-bc40-4777-9c3b-6862bb308a37",
+         "description":"task",
+         "category":"default",
+         "tags":[
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -20,7 +147,7 @@
          "description":"task",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -34,7 +161,7 @@
          "description":"task",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -48,7 +175,7 @@
          "description":"task",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -62,7 +189,7 @@
          "description":"task",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -76,7 +203,7 @@
          "description":"task",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -90,7 +217,7 @@
          "description":"task",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -104,7 +231,7 @@
          "description":"task",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -118,7 +245,7 @@
          "description":"task",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -132,7 +259,7 @@
          "description":"task",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -146,7 +273,7 @@
          "description":"task",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -160,7 +287,7 @@
          "description":"task",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -174,7 +301,7 @@
          "description":"task",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
