@@ -569,6 +569,7 @@ public class NERParser {
 				descriptionList.add(trivialPair6);
 				priorityList.add(trivialPair6);
 				timeList.add(trivialPair6);
+				isCommandModelUpdate = true;
 				break;
 			
 			default:
@@ -580,10 +581,11 @@ public class NERParser {
 				descriptionList.add(trivialPair);
 				priorityList.add(trivialPair);
 				timeList.add(trivialPair);
-				isCommandModelUpdate = true;
 			}
 		}
 
+		
+		
 		listMap.put(Constant.XML_TAG_TIME, timeList);
 		listMap.put(Constant.XML_TAG_DESCRIPTION, descriptionList);
 		listMap.put(Constant.XML_TAG_PRIORITY, priorityList);

@@ -9,17 +9,10 @@ import infrastructure.Constant.COMMAND_TYPE;
 
 
 
-import java.io.IOException;
-//import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-//import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-//import java.util.Calendar;
-//import java.util.logging.FileHandler;
 import java.util.logging.Level;
-//import java.util.logging.LogManager;
-//import java.util.logging.SimpleFormatter;
 
 
 
@@ -43,7 +36,7 @@ public class ListOfXiaoMing {
 	 */
 	public ListOfXiaoMing(String recordFilePath) {
 		try {
-			user = new User(recordFilePath);
+			this.user = new User(recordFilePath);
 		} catch (Exception e) {
 			// impossible errors
 			e.printStackTrace();
@@ -195,14 +188,14 @@ public class ListOfXiaoMing {
 	
 	public String executeNLP (String userInput) {
 		
-		if (!userInput.equals("")) {
-			try {
-				NERParser.updateTsvFile(userInput);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
+//		if (!userInput.equals("")) {
+//			try {
+//				NERParser.updateTsvFile(userInput);
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		}
 
 		COMMAND_TYPE thisCommand;
 		try {
