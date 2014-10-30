@@ -13,6 +13,8 @@ import com.tulskiy.keymaster.common.Provider;
 
 import userInterface.ListOfXiaoMing;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.GridPane;
@@ -74,8 +76,16 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		this.core = new ListOfXiaoMing("haha");
 		this.initializeShortCuts();
         updatePage();
-        Stage stage = new Stage();
-        stage.setResizable(false);
+        
+        final ListOfXiaoMingViewsController instance = this;
+        this.input.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+            	instance.loadPreview();	
+            }
+        });
+        
 	}
 
 	private void updatePage() {

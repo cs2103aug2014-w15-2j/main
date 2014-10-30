@@ -2,11 +2,39 @@
    "password":"1",
    "tasks":[
       {
+         "task-id":"95c2ea36-9df7-4705-b164-945e259a10e2",
+         "description":"task2",
+         "category":"default",
+         "tags":[
+            
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"30-October-2014 23:59"
+         }
+      },
+      {
+         "task-id":"94ca0329-3c41-4777-8192-d9318b5566ef",
+         "description":"task",
+         "category":"default",
+         "tags":[
+            "trashed"
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
          "task-id":"6202c65f-4c0c-4763-85d7-9042f4e7f105",
          "description":"task",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -20,7 +48,7 @@
          "description":"task",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -34,7 +62,7 @@
          "description":"atask",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -48,7 +76,7 @@
          "description":"",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -62,7 +90,7 @@
          "description":"tadf",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -76,7 +104,7 @@
          "description":"atads",
          "category":"default",
          "tags":[
-            
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
@@ -90,7 +118,8 @@
          "description":"task 1",
          "category":"default",
          "tags":[
-            "1"
+            "1",
+            "trashed"
          ],
          "repeated-period":"none",
          "priority":"medium",
