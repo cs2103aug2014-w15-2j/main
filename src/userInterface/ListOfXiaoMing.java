@@ -486,7 +486,7 @@ public class ListOfXiaoMing {
 
 	private String clear() {
 		try {
-			this.user.clear();
+			this.user.deleteAll();
 			return "All tasks trashed";
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
