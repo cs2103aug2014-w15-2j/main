@@ -88,3 +88,10 @@ Exit	EXIT
 exit	EXIT
 .	O
 
+empty	EMPTY_TRASH
+trash	EMPTY_TRASH
+.	O
+
+empty	EMPTY_TRASH
+trashed	EMPTY_TRASH
+.	O
