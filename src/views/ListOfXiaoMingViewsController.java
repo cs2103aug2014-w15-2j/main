@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.swing.KeyStroke;
 
@@ -50,7 +49,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	private VBox previewContent;
 	
 	private final static boolean ERROR_PRINT_ON = true;
-	private boolean isNlpOn = true;
 	private Parser parser = new Parser();
 	private static PrintStream err = System.err;
 	// a property to store the current user
@@ -440,10 +438,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					User.exit();
 					break;
 					
-				case NLP:
-					setPreview(this.toggleNLP());
-					break;
-					
 				case HELP:
 					setDisplay(this.help());
 					break;
@@ -457,8 +451,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			e.printStackTrace();
 		}
 	}
-
-
 	
 	private String help() {
 		return Constant.GUI_MESSAGE_WELCOME + "\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION;
@@ -472,18 +464,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			e.printStackTrace();
 			return "Failure in Parsing The Task";
 		}
-	}
-	
-	
-	
-	/**
-	 * toggle between NLP mode and non-NLP mode
-	 * 
-	 * @return
-	 */
-	private String toggleNLP() {
-		this.isNlpOn = !this.isNlpOn;
-		return (this.isNlpOn) ? "NLP ON" : "NLP OFF";
 	}
 
 	// add
