@@ -159,14 +159,14 @@ public class Converter {
 			timeInterval.put("startDate", "-");
 			timeInterval.put("endDate", "-");
 		} else if(task.getInterval().getStartDate() == Constant.DEADLINE_START_DATE) {
-			String endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm").
+			String endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).
 					format(task.getInterval().getEndDate());
 			timeInterval.put("startDate", "-");
 			timeInterval.put("endDate", endDate);
 		} else {
-			String startDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm").
+			String startDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).
 					format(task.getInterval().getStartDate());
-			String endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm").
+			String endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).
 					format(task.getInterval().getEndDate());
 			timeInterval.put("startDate", startDate);
 			timeInterval.put("endDate", endDate);
