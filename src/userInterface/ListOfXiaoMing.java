@@ -292,6 +292,9 @@ public class ListOfXiaoMing {
 		case EXIT:
 			System.setErr(err);
 			User.exit();
+			
+		case HELP:
+			return Constant.GUI_MESSAGE_WELCOME + "\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION;
 
 		case NLP:
 			return this.toggleNLP();
