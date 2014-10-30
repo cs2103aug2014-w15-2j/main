@@ -95,3 +95,13 @@ task	O
 13	INDEX
 today	O
 .	O
+
+delete	O
+task	O
+1	INDEX
+.	O
+
+delete	O
+task	O
+11	INDEX
+.	O
