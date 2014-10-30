@@ -140,7 +140,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 //		setPreview("\n\n\n\t\t  Hit CTRL+ENTER to load a preview");
 //		setPreview(this.executeNLP(command));
 		this.executeNLP(command);
-		this.display();
+		setDisplayGrid(this.display());
     }
 	
 	public void setDisplay(String displayedText) {
@@ -158,7 +158,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		int row = 0;
 		int index = 1;
 		
-		taskPane.setStyle("-fx-padding: 0 10 0 10;");
+		taskPane.setStyle("-fx-padding: 10 10 10 10;");
 		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
 		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 21));
 		for (Task task : displayList) {
@@ -166,17 +166,17 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			String bodyColor = null;
 			switch (task.getPriority()) {
 				case Constant.PRIORITY_HIGH:
-					bannerColor = "rgba(255, 0, 0, 0.4)";
-					bodyColor = "rgba(255, 0, 0, 0.1)";
+					bannerColor = "rgba(240, 115, 136, 1)";
+					bodyColor = "rgba(240, 115, 136, 0.1)";
 					break;
 				case Constant.PRIORITY_MEDIUM:
-					bannerColor = "rgba(255, 220, 0, 0.4)";
-					bodyColor = "rgba(255, 220, 0, 0.1)";
+					bannerColor = "rgba(251, 235, 178, 1)";
+					bodyColor = "rgba(251, 235, 178, 0.2)";
 					break;
 					
 				case Constant.PRIORITY_LOW:
-					bannerColor = "rgba(0, 255, 0, 0.4)";
-					bodyColor = "rgba(0, 255, 0, 0.1)";
+					bannerColor = "rgba(222, 236, 147, 1)";
+					bodyColor = "rgba(222, 236, 147, 0.2)";
 					break;
 					
 				default:
@@ -220,7 +220,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			} else if (task.isFloating()) {
 				
 			} else if (task.isTimed()) {
-				Label startText = new Label("Start date:");
+				Label startText = new Label("Start time:");
 				Label start = new Label(Converter.convertDateToString(task.getInterval().getStartDate()));
 				
 				contentPane.add(startText, 0, subRow);
@@ -228,7 +228,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
 				subRow ++;
 				
-				Label endText = new Label("End date:");
+				Label endText = new Label("End time:");
 				Label end= new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
 				
 				contentPane.add(endText, 0, subRow);
