@@ -529,8 +529,12 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			
 			switch(thisCommand) {
 				case ADD:
-					Task taskToAdd = parser.nerParser.getTask(userInput);
-					return "Command: create \n\n" + taskToAdd.toStringForDisplaying();
+					try {
+						Task taskToAdd = parser.nerParser.getTask(userInput);
+						return "Command: create \n\n" + taskToAdd.toStringForDisplaying();
+					} catch (CommandFailedException ae) {
+						return "Command: create \n\n" + "Fail to Parse The Task";
+					}
 					
 				case DELETE:
 					try {
@@ -542,7 +546,14 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					}
 					
 				case UPDATE:
-					return "Command: update";
+					try {
+						int index = parser.nerParser.pickIndex(userInput);
+						Task taskToUpdate = this.user.getUpdatePreview(index - 1, parser.nerParser.getUpdatedTaskMap(userInput));
+						return "Command: update \n\n" + taskToUpdate.toStringForDisplaying();
+					} catch (CommandFailedException e) {
+						e.printStackTrace();
+						return "Command: update \n\n" + Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
+					}
 					
 				case SEARCH:
 					return "Command: search";
