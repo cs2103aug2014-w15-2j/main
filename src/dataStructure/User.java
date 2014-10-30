@@ -169,11 +169,11 @@ public class User {
 	
 	
 	/**
-	 * clear current tasks
+	 * delete all current tasks
 	 * @throws CommandFailedException 
 	 * 
 	 */
-	public void clear() throws CommandFailedException {
+	public void deleteAll() throws CommandFailedException {
 		for (Task task : currentTasks){
 			if(task.isTrashed()){
 				
@@ -182,6 +182,17 @@ public class User {
 			}
 		}
 		DataStore.save(this.username, this.currentTasks);
+	}
+	
+	/**
+	 * clear all current tasks
+	 */
+	public void clear() {
+		for (Task task : currentTasks){
+			if(task.isTrashed()){
+				currentTasks.remove(task);
+			}
+		}
 	}
 	
 	/**
