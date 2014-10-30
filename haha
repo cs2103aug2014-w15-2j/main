@@ -2,8 +2,8 @@
    "password":"1",
    "tasks":[
       {
-         "task-id":"66a55cca-ede8-4c08-b5cb-8c372db9c2bb",
-         "description":"hasdas",
+         "task-id":"0025c3d1-9fad-42d6-b6a7-9b47e8c99b7a",
+         "description":"",
          "category":"default",
          "tags":[
             
@@ -11,9 +11,64 @@
          "repeated-period":"none",
          "priority":"medium",
          "time-interval":{
-
-            "startDate":"01-January-1970 07:00",
-            "endDate":"30-October-2014 23:59"
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"43d2465a-11e0-43a8-843c-f8694063b713",
+         "description":"",
+         "category":"default",
+         "tags":[
+            
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"e1046ba6-9e74-4924-8a89-41db4309aae9",
+         "description":"",
+         "category":"default",
+         "tags":[
+            
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"e33a32aa-a07f-464f-b9ff-802332bd6446",
+         "description":"",
+         "category":"default",
+         "tags":[
+            
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"fd569c26-6e17-451b-9f3b-bbec71e0cced",
+         "description":"lab",
+         "category":"default",
+         "tags":[
+            
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"31-October-2014 08:00",
+            "endDate":"31-October-2014 10:00"
          }
       },
       {
@@ -140,6 +195,34 @@
          "time-interval":{
             "startDate":"-",
             "endDate":"-"
+         }
+      },
+      {
+         "task-id":"7ee4faa2-21c1-49cc-847f-722e2ef76075",
+         "description":"",
+         "category":"default",
+         "tags":[
+            "trashed"
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"-",
+            "endDate":"-"
+         }
+      },
+      {
+         "task-id":"66a55cca-ede8-4c08-b5cb-8c372db9c2bb",
+         "description":"hasdas",
+         "category":"default",
+         "tags":[
+            "trashed"
+         ],
+         "repeated-period":"none",
+         "priority":"medium",
+         "time-interval":{
+            "startDate":"01-January-1970 07:00",
+            "endDate":"30-October-2014 23:59"
          }
       }
    ]

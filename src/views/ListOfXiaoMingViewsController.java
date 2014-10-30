@@ -48,7 +48,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	public ScrollPane preview;
 	private VBox previewContent;
 	
-	private final static boolean ERROR_PRINT_ON = false;
+	private final static boolean ERROR_PRINT_ON = true;
 	private boolean isNlpOn = true;
 	private Parser parser = new Parser();
 	private static PrintStream err = System.err;
