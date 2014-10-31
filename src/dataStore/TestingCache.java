@@ -47,7 +47,8 @@ public class TestingCache {
 			if (!cached.exists()) {
 				cached.createNewFile();
 			}
-			BufferedReader reader = new BufferedReader(new FileReader("_cache"));
+			BufferedReader reader = new BufferedReader
+									(new FileReader("_cache"));
 			String cachedName = reader.readLine();
 
 			reader.close();
