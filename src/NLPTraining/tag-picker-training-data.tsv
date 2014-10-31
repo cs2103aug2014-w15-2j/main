@@ -123,3 +123,7 @@ mark	TAG
 as	TAG
 done	TAG
 .	O
+
+search	O
+trashed	TAG
+.	O

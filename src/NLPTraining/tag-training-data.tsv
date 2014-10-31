@@ -106,8 +106,11 @@ done	TAG
 mark	O
 as	O
 done	TAG
-<<<<<<< HEAD
 .	O
-=======
+
+search	O
+trashed	TAG
 .	O
->>>>>>> FETCH_HEAD
+
+trashed	TAG
+.	O
