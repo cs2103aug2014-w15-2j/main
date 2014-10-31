@@ -61,7 +61,8 @@ public abstract class DataStore {
 	 * @param passwordInput
 	 * @return true if succeed, false otherwise
 	 */
-	public static boolean createAccount(String username, String passwordInput) {
+	public static boolean createAccount(String username,
+										String passwordInput) {
 		if (isAccountExisting(username)) {
 			return false;
 		}
@@ -118,7 +119,8 @@ public abstract class DataStore {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
-	public static ArrayList<Task> getCurrentTasks(File userFile) throws Exception {
+	public static ArrayList<Task> getCurrentTasks(File userFile)
+													throws Exception {
 		FileReader user = new FileReader(userFile);
 		ArrayList<Task> currentTasks = new ArrayList<Task>();
 		JSONParser parser = new JSONParser();
@@ -148,7 +150,8 @@ public abstract class DataStore {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	private static boolean saveFile(String username, String password, ArrayList<Task> tasks) {
+	private static boolean saveFile(String username, String password,
+									ArrayList<Task> tasks) {
 		if (!isAccountExisting(username)) {
 			return false;
 		}
@@ -173,7 +176,8 @@ public abstract class DataStore {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static LinkedHashMap getContent(String password, ArrayList<Task> tasks) {
+	private static LinkedHashMap getContent(String password,
+											ArrayList<Task> tasks) {
 		LinkedHashMap account = new LinkedHashMap();
 		
 		//write password
@@ -201,7 +205,8 @@ public abstract class DataStore {
 	 * @throws ParseException 
 	 */
 	@SuppressWarnings("rawtypes")
-	private static String getPassword(String username) throws IOException, ParseException {
+	private static String getPassword(String username)
+										throws IOException, ParseException {
 		JSONParser parser = new JSONParser();
 		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
 		FileReader userFile = new FileReader(username);

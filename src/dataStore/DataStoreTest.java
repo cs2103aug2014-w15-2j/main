@@ -21,8 +21,10 @@ public class DataStoreTest {
 	@Test
 	public void testCreateAccount() {
 		initialize("testFileCA");
-		assertTrue(DataStore.createAccount("testFileCA", "thisIsJustATestFile"));
-		assertFalse(DataStore.createAccount("testFileCA", "thisIsJustATestFile"));
+		assertTrue(DataStore.createAccount("testFileCA",
+											"thisIsJustATestFile"));
+		assertFalse(DataStore.createAccount("testFileCA",
+											"thisIsJustATestFile"));
 		File testFile = new File("testFileCA");
 		testFile.delete();
 	}
@@ -43,7 +45,8 @@ public class DataStoreTest {
 		DataStore.createAccount("testFileA", "thisIsJustATestFile");
 		assertTrue(DataStore.authenticate("testFileA", "thisIsJustATestFile"));
 		assertFalse(DataStore.authenticate("testFileA", "wrongPassword"));
-		assertFalse(DataStore.authenticate("notTestFile", "thisIsJustATestFile"));
+		assertFalse(DataStore.authenticate("notTestFile",
+											"thisIsJustATestFile"));
 		File testFile = new File("testFileA");
 		testFile.delete();
 	}
