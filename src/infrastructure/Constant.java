@@ -109,7 +109,7 @@ public abstract class Constant {
 																+ "CTRL + C:\t insert add\n"
 																+ "CTRL + R:\t insert display\n"
 																+ "CTRL + U:\t insert update\n"
-																+ "CTRL + D:\t insert display\n"
+																+ "CTRL + D:\t insert delete\n"
 																+ "CTRL + F:\t insert search\n";
 	public static final String GUI_PREVIEW_MESSAGE_DELETE = "Command: delete \n\n" + "No Task Specified";
 	
