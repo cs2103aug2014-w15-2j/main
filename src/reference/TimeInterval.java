@@ -17,7 +17,11 @@ public class TimeInterval {
 	 */
 	public TimeInterval(Date startDate, Date endDate) throws CommandFailedException {
 		if (startDate == null) {
-			startDate = Constant.FLOATING_START_DATE;
+			if (endDate != null) {
+				startDate = Constant.DEADLINE_START_DATE;
+			} else {
+				startDate = Constant.FLOATING_START_DATE;
+			}
 		}
 		
 		if (endDate == null) {
