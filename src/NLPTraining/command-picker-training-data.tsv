@@ -1,4 +1,4 @@
-Add	COMMAND
+﻿Add	COMMAND
 I’m	O
 going	O
 to	O
@@ -102,6 +102,13 @@ Friday	O
 .	O
 
 change	COMMAND
+3	O
+swimming	O
+this	O
+Friday	O
+.	O
+
+edit	COMMAND
 3	O
 swimming	O
 this	O
