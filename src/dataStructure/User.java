@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Stack;
+
 import com.rits.cloning.*;
 
 import dataStore.DataStore;
@@ -127,6 +128,44 @@ public class User {
 		}
 	}
 
+	
+	@SuppressWarnings("unchecked")
+	public Task getUpdatePreview (int index, HashMap<String, Object> toBeUpdated) throws CommandFailedException {
+		if (!this.isValidIndex(index)) {
+			throw new CommandFailedException(String.format(
+					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+		} else {
+			Task task = cloner.deepClone(this.currentTasks.get(index));
+			if (task.isTrashed()) {
+				throw new CommandFailedException("Task is trashed");
+			}
+			Iterator<String> attributes = toBeUpdated.keySet().iterator();
+			while (attributes.hasNext()) {
+				String currentAttribute = attributes.next();
+				Object currentObject = toBeUpdated.get(currentAttribute);
+				
+				if (currentAttribute.equals("description")) {
+					task.setDescription((String) currentObject);
+				} else if (currentAttribute.equals("category") && validCategory.contains((String) currentObject)) {
+					task.setCategory((String) currentObject);
+				} else if (currentAttribute.equals("priority")) {
+					task.setPriority((int) currentObject);
+				} else if (currentAttribute.equals("repeated_period")) {
+					task.setRepeatedPeriod((int) currentObject);
+				} else if (currentAttribute.equals("tag")) {
+					task.setTag((ArrayList<String>) currentObject);
+				} else if (currentAttribute.equals("time_interval")) {
+					System.err.println("USER UPDATE INTERVAL: " + (TimeInterval)currentObject);
+					task.setInterval((TimeInterval) currentObject);
+				} else {
+					throw new CommandFailedException(Constant.INVALID_UPDATE_MESSAGE);
+				}
+			}
+			return task;
+		}
+	}
+	
+	
 	/**
 	 * update updates the task with the index according to the key-value pairs in toBeUpdated.
 	 * 

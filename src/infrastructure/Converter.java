@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-
 import reference.CommandFailedException;
 import reference.TimeInterval;
 
@@ -50,7 +48,7 @@ public class Converter {
 		int priority = convertPriorityStringToInt(task);
 		int repeated_period = convertRepeatedPeriodStringToInt(task);
 		
-		LinkedList tags = (LinkedList) task.get("tags");
+		ArrayList tags = (ArrayList) task.get("tags");
 		ArrayList<String> tag = new ArrayList<String>();
 		for(int i = 0; i < tags.size(); i++) { 
 			tag.add((String)tags.get(i));

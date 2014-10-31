@@ -9,7 +9,6 @@ import java.io.Writer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -127,7 +126,7 @@ public abstract class DataStore {
 		LinkedHashMap account = (LinkedHashMap) parser.parse
 								(user, orderedKeyFactory);
 		
-		LinkedList allTasks = (LinkedList) account.get("tasks");
+		ArrayList allTasks = (ArrayList) account.get("tasks");
 		LinkedHashMap task;
 		if(allTasks != null) {
 			for(int i=0; i<allTasks.size(); i++) {
@@ -222,7 +221,7 @@ public abstract class DataStore {
 		{
 			@Override
 		    public List creatArrayContainer() {
-		      return new LinkedList();
+		      return new ArrayList();
 		    }
 
 			@Override
