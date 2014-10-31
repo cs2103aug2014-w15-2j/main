@@ -35,6 +35,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
@@ -140,7 +142,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 //		setPreview("\n\n\n\t\t  Hit CTRL+ENTER to load a preview");
 //		setPreview(this.executeNLP(command));
 		this.executeNLP(command);
-		setDisplayGrid(this.display());
+//		setDisplayGrid(this.display());
     }
 	
 	public void setDisplay(String displayedText) {
@@ -149,6 +151,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		content.getChildren().clear();
 		content.getChildren().add(text);
 		display.setContent(content);
+		display.getStyleClass().add("mylistview");
+		display.setHbarPolicy(ScrollBarPolicy.NEVER);
 	}
 	
 	public void setDisplayGrid(ArrayList<Task> displayList) {
@@ -157,7 +161,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		content.getChildren().clear();
 		int row = 0;
 		int index = 1;
-		
 		taskPane.setStyle("-fx-padding: 10 10 10 10;");
 		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
 		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 21));

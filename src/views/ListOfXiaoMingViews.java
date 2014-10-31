@@ -12,6 +12,7 @@ public class ListOfXiaoMingViews extends Application {
         ListOfXiaoMingViewsController control = new ListOfXiaoMingViewsController();
         
         Scene scene = new Scene(control, 400, 600);
+        scene.getStylesheets().add("views/style.css");
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(scene);
         stage.setTitle("List of Xiao Ming");
