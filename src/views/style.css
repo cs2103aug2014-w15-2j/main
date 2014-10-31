@@ -5,12 +5,12 @@
 
 /* The main scrollbar CSS class of ListView */
 .mylistview  .scroll-bar:vertical{
-    -fx-background-color:derive(white, 50%);
+    -fx-background-color:rgb(244, 244, 244);
 }
 
 /* The increment and decrement button CSS class of scrollbar */
 .mylistview .increment-button ,.mylistview .decrement-button {
-    -fx-background-color:derive(white, 50%);
+    -fx-background-color:rgb(244, 244, 244);
     -fx-border-color:derive(grey,80%);
 }
 
@@ -29,24 +29,24 @@
 
 .mylistview .scroll-bar:vertical:hover .track,
 .mylistview .scroll-bar:vertical:pressed .track{
-     -fx-background-color: derive(white, 50%);
+     -fx-background-color: rgb(244, 244, 244);
      -fx-opacity: 0.2;
      -fx-background-radius: 2em;
 }
 /* The main scrollbar **thumb** CSS class on event of "hover" and "pressed" */
 .mylistview .scroll-bar .thumb:hover,
 .mylistview .scroll-bar .thumb:pressed{
-    -fx-background-color: derive(white, 50%);
+    -fx-background-color: rgb(244, 244, 244);
 }
 .mylistview .increment-button:hover ,.mylistview .decrement-button:hover {
-    -fx-background-color:derive(white, 50%);
+    -fx-background-color:rgb(244, 244, 244);
     -fx-border-color:derive(gray,80%); 
     -fx-padding:10px;
 }
 
 /* The main scrollbar **track** CSS class  */
 .mylistview .scroll-bar:vertical .track{
-    -fx-background-color:derive(white, 50%);
+    -fx-background-color:rgb(244, 244, 244);
     -fx-border-color:transparent;
     -fx-background-radius: 0em;
     -fx-border-radius:2em;
@@ -54,7 +54,7 @@
 /* The increment and decrement button CSS class of scrollbar */
 .mylistview .scroll-bar:vertical .increment-button ,
 .mylistview .scroll-bar:vertical .decrement-button {
-    -fx-background-color:derive(white, 50%);
+    -fx-background-color:rgb(244, 244, 244);
     -fx-background-radius: 0em;
     -fx-padding:0 10 0 0;
 }
