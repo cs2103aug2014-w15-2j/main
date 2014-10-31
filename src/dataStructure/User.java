@@ -33,6 +33,9 @@ public class User {
 	public User(String recordFilePath) throws Exception {
 		String userFilePath = recordFilePath;
 		File userFile = new File(userFilePath);
+		if (!userFile.exists()) {
+			DataStore.createAccount(userFilePath, "");
+		}
 		undoable = new Stack<ArrayList<Task>>();
 		redoable = new Stack<ArrayList<Task>>();
 		currentTasks = DataStore.getCurrentTasks(userFile);
