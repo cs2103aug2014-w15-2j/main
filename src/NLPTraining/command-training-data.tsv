@@ -4,7 +4,10 @@ Add	ADD
 add	ADD
 .	O
 
-help	HELP
+Create	ADD
+.	O
+
+create	ADD
 .	O
 
 update	UPDATE
@@ -16,19 +19,19 @@ Change	UPDATE
 change	UPDATE
 .	O
 
-Create	ADD
+Edit	UPDATE
 .	O
 
-create	ADD
+edit	UPDATE
+.	O
+
+Delete	DELETE
 .	O
 
 delete	DELETE
 .	O
 
 remove	DELETE
-.	O
-
-Delete	DELETE
 .	O
 
 Remove	DELETE
@@ -55,10 +58,10 @@ Show	DISPLAY
 Undo	UNDO
 .	O
 
-Redo	REDO
+undo	UNDO
 .	O
 
-undo	UNDO
+Redo	REDO
 .	O
 
 redo	REDO
@@ -82,16 +85,19 @@ clear	CLEAR
 Clear 	CLEAR
 .	O
 
-Exit	EXIT
-.	O
-
-exit	EXIT
-.	O
-
 empty	EMPTY_TRASH
 trash	EMPTY_TRASH
 .	O
 
 empty	EMPTY_TRASH
 trashed	EMPTY_TRASH
+.	O
+
+Exit	EXIT
+.	O
+
+exit	EXIT
+.	O
+
+help	HELP
 .	O

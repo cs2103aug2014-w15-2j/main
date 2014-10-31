@@ -34,28 +34,9 @@ remove	O
 4	INDEX
 .	O
 
-update	O
+edit	O
 12	INDEX
-moving	O
-to	O
-next	O
-place	O
-.	O
-
-update	O
-12	INDEX
-moving	O
-to	O
-next	O
-place	O
-.	O
-
-update	O
-12	INDEX
-moving	O
-to	O
-next	O
-place	O
+tomorrow	O
 .	O
 
 change	O
@@ -66,6 +47,30 @@ today	O
 change	O
 12	INDEX
 tomorrow	O
+.	O
+
+update	O
+12	INDEX
+moving	O
+to	O
+next	O
+place	O
+.	O
+
+update	O
+12	INDEX
+moving	O
+to	O
+next	O
+place	O
+.	O
+
+update	O
+12	INDEX
+moving	O
+to	O
+next	O
+place	O
 .	O
 
 update	O
