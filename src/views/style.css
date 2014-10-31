@@ -8,12 +8,6 @@
     -fx-background-color:rgb(244, 244, 244);
 }
 
-/* The increment and decrement button CSS class of scrollbar */
-.mylistview .increment-button ,.mylistview .decrement-button {
-    -fx-background-color:rgb(244, 244, 244);
-    -fx-border-color:derive(grey,80%);
-}
-
 .mylistview .scroll-bar:horizontal .increment-arrow,
 .mylistview .scroll-bar:horizontal .decrement-arrow,
 .mylistview .scroll-bar:horizontal .increment-button,
