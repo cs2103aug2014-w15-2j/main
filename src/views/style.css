@@ -1,6 +1,7 @@
 /** CSS **/
 .mylistview{
     -fx-border-color:rgb(244, 244, 244);
+    -fx-padding:10 0 0 10;
 }
 
 /* The main scrollbar CSS class of ListView */

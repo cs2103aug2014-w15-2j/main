@@ -162,7 +162,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		content.getChildren().clear();
 		int row = 0;
 		int index = 1;
-		taskPane.setStyle("-fx-padding: 10 10 10 10;");
 		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
 		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 21));
 		for (Task task : displayList) {
