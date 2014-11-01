@@ -92,4 +92,19 @@ public class Constraint {
 		return isIntervalMatched && isKeywordMatched && !(isSearchingTrashed ^ isTrashedTask);
 	}
 	
+	@Override
+	public String toString() {
+		String result = "";
+		
+		if (this.interval != null && !this.interval.toString().equals(Constant.TIME_MESSAGE_FLOATING)) {
+			result += "Time: " + this.interval.toString() + "\n";
+		}
+		
+		if (this.keyword != null && !this.keyword.equals("")){
+			result += "Keyword: \n\t" + this.keyword;
+		}
+		
+		return result.equals("") ? "[No Specific Constraint]" : result;
+	}
+	
 }

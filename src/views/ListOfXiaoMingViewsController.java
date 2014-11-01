@@ -22,13 +22,11 @@ import com.tulskiy.keymaster.common.HotKey;
 import com.tulskiy.keymaster.common.HotKeyListener;
 import com.tulskiy.keymaster.common.Provider;
 
-import dataStore.TestingCache;
 import dataStructure.Task;
 import dataStructure.User;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.ColumnConstraints;
@@ -36,7 +34,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -565,7 +562,12 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					}
 					
 				case SEARCH:
-					return "Command: search";
+					try {
+						Constraint thisConstraint = parser.nerParser.getConstraint(userInput);
+						return "Command: search \n\n" + thisConstraint.toString();
+					} catch (CommandFailedException e) {
+						return "Command: search \n\n" + "Not Understand Search Constraint";
+					}
 				
 				case DISPLAY:
 					return "Command: display";
@@ -731,6 +733,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 	
 	private void reloadNLPModel() {
-		
+		NERParser.updateModal();
+		this.parser = new Parser();
 	}
 }

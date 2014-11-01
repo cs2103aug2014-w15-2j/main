@@ -104,13 +104,13 @@ public abstract class Constant {
 																+ "ALT + C:\t insert <COMMAND> \tor </COMMAND>\n"
 																+ "ALT + D:\t insert <DESCRIPTION> \tor </DESCRIPTION>\n"
 																+ "ALT + I:\t insert <INDEX> \t\tor </INDEX>\n"
-																+ "ALT + P:\t insert <PRIORITY> \t\tor </PRIORITY>\n"
+																+ "ALT + P:\t insert <PRIORITY> \tor </PRIORITY>\n"
 																+ "ALT + T:\t insert <TAG> \t\t\tor </TAG>\n\n"
-																+ "CTRL + C:\t insert add\n"
-																+ "CTRL + R:\t insert display\n"
-																+ "CTRL + U:\t insert update\n"
+																+ "CTRL + C:\t\t insert add\n"
+																+ "CTRL + R:\t\t insert display\n"
+																+ "CTRL + U:\t\t insert update\n"
 																+ "CTRL + D:\t insert delete\n"
-																+ "CTRL + F:\t insert search\n";
+																+ "CTRL + F:\t\t insert search\n";
 	public static final String GUI_PREVIEW_MESSAGE_DELETE = "Command: delete \n\n" + "No Task Specified";
 	
 	//prompt messages that will be printed for users	
@@ -227,6 +227,7 @@ public abstract class Constant {
 	public static final Date FLOATING_START_DATE = new Date(0);
 	public static final Date DEADLINE_START_DATE = new Date(1);
 	public static final Date FLOATING_END_DATE = new Date(9999);
+	public static String TIME_MESSAGE_FLOATING = "\n\tno specific time requirements";
 	
 	//user interface mode
 	public static enum UI_MODE {
