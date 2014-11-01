@@ -152,14 +152,13 @@ public abstract class DataStore {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	private static boolean saveFile(String username, String password,
-									ArrayList<Task> tasks) {
+	private static boolean saveFile(String username, ArrayList<Task> tasks) {
 		if (!isAccountExisting(username)) {
 			return false;
 		}
 		try {
 			FileWriter fw = new FileWriter(username);
-			ArrayList tasksList = getContent(password, tasks);
+			ArrayList tasksList = getContent(tasks);
 			Writer writer = new JSonWriter();
 			JSONArray.writeJSONString(tasksList, writer);
 			fw.write(writer.toString());
@@ -178,7 +177,7 @@ public abstract class DataStore {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static ArrayList getContent(String password,
+	private static ArrayList getContent(
 											ArrayList<Task> tasks) {
 		//list all tasks
 		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
