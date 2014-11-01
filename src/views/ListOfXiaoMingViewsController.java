@@ -140,7 +140,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		String command = getUserInput(true);
 //		setPreview("\n\n\n\t\t  Hit CTRL+ENTER to load a preview");
 //		setPreview(this.executeNLP(command));
-		this.executeNLP(command);
+		this.execute(command);
 //		setDisplayGrid(this.display());
     }
 	
@@ -275,6 +275,10 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 
 	
+	
+	/**
+	 * initialize the short cut settigns
+	 */
 	private void initializeShortCuts(){
 		final ListOfXiaoMingViewsController instance = this;
 		new Thread(new Runnable() {
@@ -294,7 +298,10 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		}).start();
 	}
 	
-	
+	/**
+	 * regester the shortcuts to the system
+	 * @param instance
+	 */
 	private void registerKeyShortCuts(HotKeyListener instance) {
 		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DESCRIPTION_TAG), instance);
 		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DATE_TAG), instance);
@@ -313,22 +320,11 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 	
 	
-//	private void stopShortCuts() {
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				try {
-//					if (keyShortCuts != null) {
-//						keyShortCuts.reset();
-//						keyShortCuts.stop();
-//					}
-//				} catch (Exception e) {
-//					keyShortCuts = null;
-//				}
-//			}
-//		}).start();
-//	}
-	
+	/**
+	 * toggle between e.g. <DATE> & </DATE>
+	 * @param tag
+	 * @return
+	 */
 	private String toggleTag(String tag) {
 		if (tag.contains("</")) {
 			return tag.replace("</", "<");
@@ -337,6 +333,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		}
 		
 	}
+	
 	
 	private void loadPreview() {
 		//open a new thread to execute Java FX
@@ -354,9 +351,11 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 	
 	
-	
-	
-	
+	/**
+	 * insert the given text to the given position in the textField
+	 * @param cursorPosition
+	 * @param text
+	 */
 	private void insertTextToTextField(final int cursorPosition, final String text) {
 		//open a new thread to execute Java FX
 		final ListOfXiaoMingViewsController instance = this;
@@ -369,7 +368,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 	
 	/**
-	 * the delegation methods to respond 
+	 * the delegation methods to respond to shortcuts
 	 */
 	@Override
 	public void onHotKey(HotKey key) {
@@ -445,9 +444,11 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 	
 	
-//User level commands
-
-	public void executeNLP (String userInput) {
+	/**
+	 * the important method to execute CRUD operations, etc.
+	 * @param userInput
+	 */
+	public void execute (String userInput) {
 		
 			if (!userInput.equals("")) {
 				try {
@@ -531,7 +532,12 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		}
 	}
 	
-
+	
+	/**
+	 * get the expected result of a user input
+	 * @param userInput
+	 * @return
+	 */
 	public String getPreview(String userInput) {
 		try {
 			if (userInput.equals("")) {
@@ -612,8 +618,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		}
 	}
 
-	// add
-
+	
 	private String add(String userInput) {
 		try {
 			Task taskToAdd = parser.nerParser.getTask(userInput);
@@ -625,8 +630,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		}
 	}
 
-	// delete
-
+	
 	private String delete(String userInput) {
 		try {
 			int index = parser.nerParser.pickIndex(userInput);
@@ -637,7 +641,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		}
 	}
 
-	// update
 
 	private String update(String userInput) {
 		try {
@@ -652,7 +655,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		return Constant.PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY;
 	}
 
-	// search
 
 	private String search(String userInput) {
 		Constraint thisConstraint;
@@ -675,7 +677,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 
 	}
 
-	// common methods for NLP and non-NLP
 
 	private ArrayList<Task> display() {
 		ArrayList<Task> queryResult;
@@ -710,8 +711,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	private String help() {
 		return Constant.GUI_MESSAGE_WELCOME + "\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION;
 	}
-
-	
 
 	private String clear() {
 		try {
