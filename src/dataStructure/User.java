@@ -33,12 +33,9 @@ public class User {
 	public User(String recordFilePath) throws Exception {
 		String userFilePath = recordFilePath;
 		File userFile = new File(userFilePath);
-		if (!userFile.exists()) {
-			DataStore.createAccount(userFilePath, "");
-		}
+		currentTasks = DataStore.loadFileData();
 		undoable = new Stack<ArrayList<Task>>();
 		redoable = new Stack<ArrayList<Task>>();
-		currentTasks = DataStore.getCurrentTasks(userFile);
 		validCategory = getValidCategory();
 		username = recordFilePath;
 	}
@@ -107,7 +104,7 @@ public class User {
 			moveAddedTask(taskEndIndex);
 		}
 		taskEndIndex++;
-		boolean isSuccessful = DataStore.save(this.username, this.currentTasks);
+		boolean isSuccessful = DataStore.save(this.currentTasks);
 		return isSuccessful;
 	}
 
@@ -126,7 +123,7 @@ public class User {
 			boolean isSuccessful = this.currentTasks.get(index).addTag(Constant.TRASHED_TAG);
 			moveTrashedTask(index);
 			taskEndIndex--;
-			DataStore.save(this.username, this.currentTasks);
+			DataStore.save(this.currentTasks);
 			return isSuccessful;
 		}
 	}
@@ -206,7 +203,7 @@ public class User {
 				}
 			}
 		}
-		DataStore.save(this.username, this.currentTasks);
+		DataStore.save(this.currentTasks);
 	}
 	
 	
@@ -223,7 +220,7 @@ public class User {
 				task.addTag(Constant.TRASHED_TAG);
 			}
 		}
-		DataStore.save(this.username, this.currentTasks);
+		DataStore.save(this.currentTasks);
 	}
 	
 	/**
@@ -413,6 +410,7 @@ public class User {
 	 * 
 	 * @return message
 	 */
+	/*
 	public static String deleteAccount() {
 		UtilityMethod.showToUser("Please enter the username of the account you want to delete: ");
 		String username = UtilityMethod.readCommand();
@@ -421,12 +419,14 @@ public class User {
 		boolean isDeleteSuccessfully = DataStore.destroy(username, password);
 		return isDeleteSuccessfully ? "deleted!" : "deletion failed";
 	}
+	*/
 	
 	/**
 	 * userLogIn uses the user name and password in parameters to log in.
 	 * @param parameters
 	 * @return
 	 */
+	/*
 	public static String userLogIn(ArrayList<String> parameters) {
 		String username = null;
 		String password = null;
@@ -468,6 +468,7 @@ public class User {
 		
 		return username;
 	}
+	*/
 	
 	/**
 	 * createAccount creates account for a user.
@@ -475,6 +476,7 @@ public class User {
 	 * @param parameters
 	 * @return
 	 */
+	/*
 	public static String createAccount(ArrayList<String> parameters) {
 		String username = null;
 		String passwordInput1 = null;
@@ -511,6 +513,7 @@ public class User {
 								 Constant.PROMPT_MESSAGE_ACCOUNT_NOT_CREATED);
 		return successCreated ? username : null;
 	}
+	*/
 	
 	/**
 	 * showHelp shows the application manual.

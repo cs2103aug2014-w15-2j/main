@@ -154,6 +154,7 @@ public class ListOfXiaoMing {
 		}
 
 		switch (thisCommand) {
+		/*
 		case LOG_IN:
 			return User.userLogIn(parameter);
 
@@ -163,6 +164,7 @@ public class ListOfXiaoMing {
 		case DELETE_ACCOUNT:
 			UtilityMethod.showToUser(User.deleteAccount());
 			return null;
+		*/
 
 		case HELP:
 			UtilityMethod.showToUser(User.showHelp());
