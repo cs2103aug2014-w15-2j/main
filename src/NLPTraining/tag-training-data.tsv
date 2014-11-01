@@ -23,6 +23,9 @@ Tag	O
 with	O
 ongoing	TAG
 ,	O
+
+asdfds	TAG
+.	O
 urgent	TAG
 ,	O
 compulsory	TAG
@@ -67,14 +70,10 @@ and	O
 me	TAG
 .	O
 
-<<<<<<< HEAD
-
 tag	O
 done	TAG
 .	O
 
-=======
->>>>>>> FETCH_HEAD
 tags	O
 are	O
 :	O
@@ -97,7 +96,7 @@ pc	TAG
 tag	O
 as	O
 done	TAG
-.
+.	O
 
 tag	O
 done	TAG
@@ -107,9 +106,37 @@ as	O
 done	TAG
 .	O
 
-search	O
 trashed	TAG
 .	O
 
 trashed	TAG
 .	O
+
+important	TAG
+.	O
+
+important	TAG
+,	O
+urgent	TAG
+and	O
+good	TAG
+.	O
+
+white	TAG
+.	O
+
+yellow	TAG
+.	O
+
+good	TAG
+.	O
+
+a	TAG
+.	O
+
+g	TAG
+.	O
+
+z	TAG
+.	O
+
