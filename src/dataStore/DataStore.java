@@ -33,18 +33,6 @@ public abstract class DataStore {
 	}
 
 	/**
-	 * check whether the task-list exists
-	 * @return true if exists, no otherwise
-	 */
-	public static boolean isFileExisting() {
-		File fileData = new File(DATA_FILE_NAME);
-		if (fileData.exists()) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * create a new data file
 	 * @return true if succeed, false otherwise
 	 */
@@ -61,46 +49,42 @@ public abstract class DataStore {
 			return false;
 		}
 	}
-
-	/**
-	 * delete an account (can not be undone)
-	 * 
-	 * @param username
-	 * @param password
-	 * @return true if succeed, false otherwise
-	 */
-	/*
-	public static boolean destroy(String username, String password) {
-		// check whether it is a valid account
-		if (!authenticate(username, password)) {
-			return false;
-		}
-		File account = new File(username);
-		account.delete();
-		TestingCache.clearCache();
-		return true;
-	}
-	*/
 	
 	/**
 	 * save the changes, write all tasks into the account data
 	 * 
-	 * @param username
-	 * @param tasks
 	 * @return true if succeed, false otherwise
 	 */
-	/*
+	@SuppressWarnings("rawtypes")
 	public static boolean save(ArrayList<Task> tasks) {
-		/*
-		String password;
-		try {
-			password = getPassword(username);
-		} catch (IOException | ParseException e) {
+		if (!isFileExisting()) {
 			return false;
 		}
-		return saveFile(tasks);
+		try {
+			FileWriter fw = new FileWriter(DATA_FILE_NAME);
+			ArrayList tasksList = getContent(tasks);
+			Writer writer = new JSonWriter();
+			JSONArray.writeJSONString(tasksList, writer);
+			fw.write(writer.toString());
+			writer.close();
+			fw.close();
+			return true;
+		} catch (IOException e) {
+			return false;
+		}				
 	}
-	*/
+	
+	/**
+	 * check whether the task-list exists
+	 * @return true if exists, no otherwise
+	 */
+	private static boolean isFileExisting() {
+		File fileData = new File(DATA_FILE_NAME);
+		if (fileData.exists()) {
+			return true;
+		}
+		return false;
+	}
 	
 	/**
 	 * read file and get user current tasks
@@ -110,7 +94,7 @@ public abstract class DataStore {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
-	public static ArrayList<Task> getCurrentTasks(File userFile)
+	private static ArrayList<Task> getCurrentTasks(File userFile)
 													throws Exception {
 		FileReader user = new FileReader(userFile);
 		ArrayList<Task> currentTasks = new ArrayList<Task>();
@@ -133,40 +117,13 @@ public abstract class DataStore {
 	}
 	
 	/**
-	 * write to file
-	 * @param username
-	 * @param password
-	 * @param tasks
-	 * @return
-	 */
-	@SuppressWarnings({ "rawtypes" })
-	public static boolean save(ArrayList<Task> tasks) {
-		if (!isFileExisting()) {
-			return false;
-		}
-		try {
-			FileWriter fw = new FileWriter(DATA_FILE_NAME);
-			ArrayList tasksList = getContent(tasks);
-			Writer writer = new JSonWriter();
-			JSONArray.writeJSONString(tasksList, writer);
-			fw.write(writer.toString());
-			writer.close();
-			fw.close();
-			return true;
-		} catch (IOException e) {
-			return false;
-		}				
-	}
-	
-	/**
 	 * return the content of the file to be written(password and list of tasks)
 	 * @param password
 	 * @param tasks
 	 * @return
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static ArrayList getContent(
-											ArrayList<Task> tasks) {
+	@SuppressWarnings({ "rawtypes" })
+	private static ArrayList getContent(ArrayList<Task> tasks) {
 		//list all tasks
 		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
 		if( tasks != null) {
@@ -178,22 +135,6 @@ public abstract class DataStore {
 		
 		return tasksList;
 	}
-
-	/**
-	 * Read the password of the account and return it
-	 * 
-	 * @param username
-	 * @return password
-	 * @throws IOException
-	 * @throws ParseException 
-	 */
-	/*
-	@SuppressWarnings("rawtypes")
-	private static String getPassword(String username)
-										throws IOException, ParseException {
-		return "";
-	}
-	*/
 	
 	/**
 	 * return an ordered key factory (maintain the ordering from the file)
