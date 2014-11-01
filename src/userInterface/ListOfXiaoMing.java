@@ -83,27 +83,15 @@ public class ListOfXiaoMing {
 			Constant.logger.log(Level.INFO,
 					Constant.LOG_MESSAGE_USER_TASKS_DISPLAYED);
 
-			boolean willContinue = true;
-			while (willContinue) {
-				String userInput = UtilityMethod.readCommand();
-				String result;
-				if (list.isNlpOn) {
-					result = list.executeNLP(userInput);
-				} else {
-					result = list.execute(userInput);
-				}
-
-				if (result.equals(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY)) {
-					willContinue = false;
-					Constant.logger.log(Level.INFO,
-							Constant.LOG_MESSAGE_USER_LOG_OUT);
-					UtilityMethod
-							.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY);
-				} else {
-					UtilityMethod.showToUser(result);
-					UtilityMethod.showToUser("\n\n\n");
-				}
+			String userInput = UtilityMethod.readCommand();
+			String result;
+			if (list.isNlpOn) {
+				result = list.executeNLP(userInput);
+			} else {
+				result = list.execute(userInput);
 			}
+			UtilityMethod.showToUser(result);
+			UtilityMethod.showToUser("\n\n\n");
 		}
 	}
 
