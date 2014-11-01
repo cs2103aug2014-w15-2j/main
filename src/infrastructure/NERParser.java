@@ -134,6 +134,8 @@ public class NERParser {
 	 */
 	public COMMAND_TYPE pickCommand(String userInputString) throws CommandFailedException {
 		
+		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_COMMAND);
+		
 		String directParseCommand = NERParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_COMMAND);
 		
@@ -168,6 +170,7 @@ public class NERParser {
 	public TimeInterval pickTimeInterval(String userInputString)
 			throws CommandFailedException {
 		this.isTimeChanged = false;
+		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_TIME);
 
 		String directParseTime = NERParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_TIME);
@@ -204,7 +207,8 @@ public class NERParser {
 	public String pickDescription(String userInputString)
 			throws CommandFailedException {
 		this.isDescriptionChanged = false;
-
+		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_DESCRIPTION);
+		
 		String directParseDescription = NERParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_DESCRIPTION);
 		if (directParseDescription != null) {
@@ -235,6 +239,7 @@ public class NERParser {
 	 */
 	public int pickIndex(String userInputString) throws CommandFailedException {
 
+		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_INDEX);
 		String directParseIndex = NERParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_INDEX);
 		try {
@@ -277,7 +282,7 @@ public class NERParser {
 	 */
 	public ArrayList<String> pickTag(String userInputString) {
 		this.isTagChanged = false;
-
+		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_TAG);
 		String directParseTag = NERParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_TAG);
 		if (directParseTag != null) {
@@ -314,7 +319,7 @@ public class NERParser {
 	 */
 	public int pickPriority(String userInputString) {
 		this.isPriorityChanged = false;
-
+		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_PRIORITY);
 		String directParsePriority = NERParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_PRIORITY);
 		if (directParsePriority != null) {
@@ -336,6 +341,13 @@ public class NERParser {
 		}
 	}
 	
+	
+	/**
+	 * pick out the String segment that is tagged
+	 * @param inputString
+	 * @param type
+	 * @return
+	 */
 	public static String pickTheTagged(String inputString, String type) {
 		String prefix = "<" + type + ">";
 		String postfix = "</" + type + ">";
@@ -351,6 +363,30 @@ public class NERParser {
 			return inputString.substring(prefixIndex + prefix.length(),
 					postfixIndex);
 		}
+	}
+
+	/**
+	 * remove string segments with tag except the given type t
+	 * @param inputString, t
+	 * @return
+	 */
+	public static String removeTheTagged (String inputString, String t) {
+		String[] types = {Constant.XML_TAG_DESCRIPTION, Constant.XML_TAG_TIME, Constant.XML_TAG_TAG,
+		                  Constant.XML_TAG_PRIORITY, Constant.XML_TAG_INDEX, Constant.XML_TAG_COMMAND};
+		for (String type : types) {
+			if (!type.equals(t)) {
+				System.err.println(inputString);
+				String prefix = "<" + type + ">";
+				String postfix = "</" + type + ">";
+				int prefixIndex = inputString.indexOf(prefix);
+				int postfixIndex = inputString.indexOf(postfix);
+				if (prefixIndex != -1 && postfixIndex != -1) {
+					inputString = inputString.substring(0, prefixIndex).trim() + " " + inputString.substring(postfixIndex + postfix.length()).trim();
+				}
+			}
+		}
+		
+		return inputString.trim();
 	}
 	
 
