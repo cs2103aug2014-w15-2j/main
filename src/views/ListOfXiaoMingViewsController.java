@@ -271,6 +271,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		Label text = new Label(displayedText);
 		previewContent.getChildren().clear();
 		previewContent.getChildren().add(text);
+		preview.setStyle("-fx-padding:5 0 0 7");
 		preview.setContent(previewContent);
 	}
 
