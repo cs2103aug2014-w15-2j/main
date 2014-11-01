@@ -91,7 +91,7 @@ public class TimeInterval {
 	public String toString() {
 		String text = new String();
 		if (this.getEndDate().equals(Constant.FLOATING_END_DATE)) {
-			text = text + "\n\t no specific time requirements;";
+			text = text + Constant.TIME_MESSAGE_FLOATING;
 		} else if (this.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 			// deadline task
 			String deadline = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(this.getEndDate());

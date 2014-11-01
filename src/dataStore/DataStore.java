@@ -111,7 +111,7 @@ public abstract class DataStore {
 			return false;
 		}
 		*/
-		return saveFile(username, tasks);
+		return saveFile(username, null, tasks);
 	}
 	
 	/**
