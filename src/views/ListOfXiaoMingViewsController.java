@@ -165,97 +165,99 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		taskPane.setStyle("-fx-padding: 10 10 10 10;");
 		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
 		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 21));
-		for (Task task : displayList) {
-			String bannerColor = null;
-			String bodyColor = null;
-			switch (task.getPriority()) {
-				case Constant.PRIORITY_HIGH:
-					bannerColor = "rgba(240, 115, 136, 1)";
-					bodyColor = "rgba(240, 115, 136, 0.1)";
-					break;
-				case Constant.PRIORITY_MEDIUM:
-					bannerColor = "rgba(251, 235, 178, 1)";
-					bodyColor = "rgba(251, 235, 178, 0.2)";
-					break;
+		if (displayList != null) {
+			for (Task task : displayList) {
+				String bannerColor = null;
+				String bodyColor = null;
+				switch (task.getPriority()) {
+					case Constant.PRIORITY_HIGH:
+						bannerColor = "rgba(240, 115, 136, 1)";
+						bodyColor = "rgba(240, 115, 136, 0.1)";
+						break;
+					case Constant.PRIORITY_MEDIUM:
+						bannerColor = "rgba(251, 235, 178, 1)";
+						bodyColor = "rgba(251, 235, 178, 0.2)";
+						break;
+						
+					case Constant.PRIORITY_LOW:
+						bannerColor = "rgba(222, 236, 147, 1)";
+						bodyColor = "rgba(222, 236, 147, 0.2)";
+						break;
+						
+					default:
+						
+						break;
+				}
+				
+				GridPane priorityPane = new GridPane();
+				priorityPane.setStyle("-fx-background-color: " + bannerColor);
+				priorityPane.setPrefWidth(getWidth());
+				Label priority = new Label("");
+				priority.setPrefWidth(getWidth());
+				priorityPane.add(priority, 0, 0);
+				taskPane.add(priorityPane, 0, row, 2, 1);
+				setDisplayRow(taskPane, GRID_ROW_HEIGHT);
+				row ++;
+				
+				
+				GridPane contentPane = new GridPane();
+				contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
+				contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 21));
+				int subRow = 0;
+				contentPane.setStyle("-fx-padding: 0 0 0 10; -fx-background-color: " + bodyColor);
+				contentPane.setPrefWidth(getWidth());
+				
+				Label description = new Label(index + "." + task.getDescription());
+				description.setStyle("-fx-font-size: 17");
+				description.setPrefWidth(getWidth());
+				
+				contentPane.add(description, 0, subRow, 2, 1);
+				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+				subRow ++;
+				if (task.isDeadline()) {
+					Label deadlineText = new Label("Deadline:");
+					Label deadline = new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
 					
-				case Constant.PRIORITY_LOW:
-					bannerColor = "rgba(222, 236, 147, 1)";
-					bodyColor = "rgba(222, 236, 147, 0.2)";
-					break;
+					contentPane.add(deadlineText, 0, subRow);
+					contentPane.add(deadline, 1, subRow);
+					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+					subRow ++;
+				} else if (task.isFloating()) {
 					
-				default:
+				} else if (task.isTimed()) {
+					Label startText = new Label("Start time:");
+					Label start = new Label(Converter.convertDateToString(task.getInterval().getStartDate()));
 					
-					break;
+					contentPane.add(startText, 0, subRow);
+					contentPane.add(start, 1, subRow);
+					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+					subRow ++;
+					
+					Label endText = new Label("End time:");
+					Label end= new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
+					
+					contentPane.add(endText, 0, subRow);
+					contentPane.add(end, 1, subRow);
+					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+					subRow ++;
+				}
+				contentPane.add(new Label("Tags:"), 0, subRow);
+				contentPane.add(new Label(task.tagToString()), 1, subRow);
+				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+				subRow ++;
+				
+				taskPane.add(contentPane, 0, row, 2, subRow);
+				setDisplayRow(taskPane, GRID_ROW_HEIGHT * subRow);
+				row ++;
+				
+				GridPane emptyPane = new GridPane();
+				emptyPane.setStyle("-fx-background-color: rgb(244, 244, 244)");
+				emptyPane.setPrefWidth(getWidth());
+				taskPane.add(emptyPane, 0, row, 2, 1);
+				setDisplayRow(taskPane, GRID_ROW_HEIGHT);
+				row ++;
+				index ++;
 			}
-			
-			GridPane priorityPane = new GridPane();
-			priorityPane.setStyle("-fx-background-color: " + bannerColor);
-			priorityPane.setPrefWidth(getWidth());
-			Label priority = new Label("");
-			priority.setPrefWidth(getWidth());
-			priorityPane.add(priority, 0, 0);
-			taskPane.add(priorityPane, 0, row, 2, 1);
-			setDisplayRow(taskPane, GRID_ROW_HEIGHT);
-			row ++;
-			
-			
-			GridPane contentPane = new GridPane();
-			contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
-			contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 21));
-			int subRow = 0;
-			contentPane.setStyle("-fx-padding: 0 0 0 10; -fx-background-color: " + bodyColor);
-			contentPane.setPrefWidth(getWidth());
-			
-			Label description = new Label(index + "." + task.getDescription());
-			description.setStyle("-fx-font-size: 17");
-			description.setPrefWidth(getWidth());
-			
-			contentPane.add(description, 0, subRow, 2, 1);
-			setDisplayRow(contentPane, GRID_ROW_HEIGHT);
-			subRow ++;
-			if (task.isDeadline()) {
-				Label deadlineText = new Label("Deadline:");
-				Label deadline = new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
-				
-				contentPane.add(deadlineText, 0, subRow);
-				contentPane.add(deadline, 1, subRow);
-				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
-				subRow ++;
-			} else if (task.isFloating()) {
-				
-			} else if (task.isTimed()) {
-				Label startText = new Label("Start time:");
-				Label start = new Label(Converter.convertDateToString(task.getInterval().getStartDate()));
-				
-				contentPane.add(startText, 0, subRow);
-				contentPane.add(start, 1, subRow);
-				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
-				subRow ++;
-				
-				Label endText = new Label("End time:");
-				Label end= new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
-				
-				contentPane.add(endText, 0, subRow);
-				contentPane.add(end, 1, subRow);
-				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
-				subRow ++;
-			}
-			contentPane.add(new Label("Tags:"), 0, subRow);
-			contentPane.add(new Label(task.tagToString()), 1, subRow);
-			setDisplayRow(contentPane, GRID_ROW_HEIGHT);
-			subRow ++;
-			
-			taskPane.add(contentPane, 0, row, 2, subRow);
-			setDisplayRow(taskPane, GRID_ROW_HEIGHT * subRow);
-			row ++;
-			
-			GridPane emptyPane = new GridPane();
-			emptyPane.setStyle("-fx-background-color: rgb(244, 244, 244)");
-			emptyPane.setPrefWidth(getWidth());
-			taskPane.add(emptyPane, 0, row, 2, 1);
-			setDisplayRow(taskPane, GRID_ROW_HEIGHT);
-			row ++;
-			index ++;
 		}
 		
 		content.getChildren().add(taskPane);
@@ -482,7 +484,10 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					break;
 				
 				case DISPLAY:
-					setDisplayGrid(this.display());
+					ArrayList<Task> displayList = this.display();
+					if (displayList != null) {
+						setDisplayGrid(this.display());
+					}
 					break;
 					
 				case UNDO:
