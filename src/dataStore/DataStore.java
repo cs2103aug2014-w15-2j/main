@@ -22,7 +22,7 @@ import dataStructure.Task;
 
 public abstract class DataStore {
 	
-	private static final String DATA_FILE_NAME = "task-list.xiaoming";
+	private static final String DATA_FILE_NAME = "List-of-Xiao-Ming/task-list.xiaoming";
 	
 	public static ArrayList<Task> loadFileData() throws Exception {
 		if(!isFileExisting()) {
