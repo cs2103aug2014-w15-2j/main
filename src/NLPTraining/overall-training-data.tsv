@@ -389,3 +389,29 @@ search	COMMAND
 search	COMMAND
 trashed	TAG
 .	O
+
+mark	COMMAND
+task	INDEX
+2	INDEX
+as	TAG
+done	TAG
+.	O
+
+mark	COMMAND
+2	INDEX
+as	TAG
+done	TAG
+.	O
+
+update	COMMAND
+task	INDEX
+2	INDEX
+as	TAG
+done	TAG
+.	O
+
+update	COMMAND
+2	INDEX
+as	TAG
+done	TAG
+.	O

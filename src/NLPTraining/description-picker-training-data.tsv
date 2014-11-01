@@ -529,3 +529,17 @@ buy	DESCRIPTION
 a	DESCRIPTION
 book	DESCRIPTION
 .	O
+
+mark	O
+task	O
+1	O
+as	O
+done	O
+.	O
+
+update	O
+task	O
+1	O
+as	O
+done	O
+.	O

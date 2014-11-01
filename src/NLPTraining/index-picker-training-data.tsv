@@ -110,3 +110,10 @@ delete	O
 task	O
 11	INDEX
 .	O
+
+mark	O
+task	O
+2	INDEX
+as	O
+done	O
+.	O

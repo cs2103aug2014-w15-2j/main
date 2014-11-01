@@ -162,7 +162,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		content.getChildren().clear();
 		int row = 0;
 		int index = 1;
-		taskPane.setStyle("-fx-padding: 10 10 10 10;");
 		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
 		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 21));
 		if (displayList != null) {
@@ -273,6 +272,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		Label text = new Label(displayedText);
 		previewContent.getChildren().clear();
 		previewContent.getChildren().add(text);
+		preview.setStyle("-fx-padding:5 0 0 7; -fx-background-color: rgb(244, 244, 244)");
 		preview.setContent(previewContent);
 	}
 

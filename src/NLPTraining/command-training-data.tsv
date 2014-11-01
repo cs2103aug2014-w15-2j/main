@@ -93,6 +93,12 @@ empty	EMPTY_TRASH
 trashed	EMPTY_TRASH
 .	O
 
+mark	UPDATE
+.	O
+
+Mark	UPDATE
+.	O
+
 Exit	EXIT
 .	O
 
@@ -100,4 +106,40 @@ exit	EXIT
 .	O
 
 help	HELP
+.	O
+
+insert	ADD
+.	O
+
+plus	ADD
+.	O
+
+trash	DELETE
+.	O
+
+modify	UPDATE
+.	O
+
+edit	UPDATE
+.	O
+
++	ADD
+.	O
+
+c	ADD
+.	O
+
+r	DISPLAY
+.	O
+
+u	UPDATE
+.	O
+
+d	DELETE
+.	O
+
+f	SEARCH
+.	O
+
+s	SEARCH
 .	O
