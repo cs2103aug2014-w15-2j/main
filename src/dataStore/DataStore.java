@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -177,7 +176,7 @@ public abstract class DataStore {
 	 * @param tasks
 	 * @return
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes"})
 	private static ArrayList getContent(String password,
 											ArrayList<Task> tasks) {
 		//list all tasks
@@ -200,7 +199,6 @@ public abstract class DataStore {
 	 * @throws IOException
 	 * @throws ParseException 
 	 */
-	@SuppressWarnings("rawtypes")
 	private static String getPassword(String username)
 										throws IOException, ParseException {
 		return "";

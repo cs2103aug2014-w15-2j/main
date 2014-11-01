@@ -371,8 +371,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	 */
 	@Override
 	public void onHotKey(HotKey key) {
-		System.out.println("HOTKEY CODE: " + key.keyStroke.getKeyCode());
-		System.out.println("HOTKEY CHAR: " + key.keyStroke.getModifiers());
 		String tag = "";
 		int cursorPosition = this.input.getCaretPosition();
 		switch (key.keyStroke.getKeyCode() + key.keyStroke.getModifiers()) {

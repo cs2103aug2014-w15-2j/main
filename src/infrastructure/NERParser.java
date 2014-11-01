@@ -126,24 +126,34 @@ public class NERParser {
 	}
 
 	/**
-	 * pick out the cmd fragments and tranlsate to the enum
+	 * pick out the cmd fragments and translate to the enum
 	 * 
 	 * @param userInputString
 	 * @return
 	 * @throws CommandFailedException
 	 */
-	public COMMAND_TYPE pickCommand(String userInputString)
-			throws CommandFailedException {
-		String xmlStr = classifierCommandPicker.classifyToString(
-				userInputString, "inlineXML", false);
-		System.err.println("XML STRING - pickCommand: " + xmlStr);
-		HashMap<String, ArrayList<String>> result = NERParser
-				.parseToMap(xmlStr);
-		ArrayList<String> resultList = result.get("COMMAND");
-		if (resultList == null || resultList.size() == 0) {
+	public COMMAND_TYPE pickCommand(String userInputString) throws CommandFailedException {
+		
+		String directParseCommand = NERParser.pickTheTagged(userInputString,
+				Constant.XML_TAG_COMMAND);
+		
+		ArrayList<String> commandList = new ArrayList<String>();
+		if (directParseCommand != null) {
+			commandList.add(directParseCommand);
+		} else {
+			String xmlStr = classifierCommandPicker.classifyToString(
+					userInputString, "inlineXML", false);
+			System.err.println("XML STRING - pickCommand: " + xmlStr);
+			HashMap<String, ArrayList<String>> result = NERParser
+					.parseToMap(xmlStr);
+			commandList = result.get("COMMAND");
+		}
+		
+		
+		if (commandList == null || commandList.size() == 0) {
 			return COMMAND_TYPE.ADD;
 		} else {
-			return this.parseCommand(resultList);
+			return this.parseCommand(commandList);
 		}
 	}
 
@@ -159,7 +169,7 @@ public class NERParser {
 			throws CommandFailedException {
 		this.isTimeChanged = false;
 
-		String directParseTime = NERParser.parseToList(userInputString,
+		String directParseTime = NERParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_TIME);
 		if (directParseTime != null) {
 			this.isTimeChanged = true;
@@ -195,7 +205,7 @@ public class NERParser {
 			throws CommandFailedException {
 		this.isDescriptionChanged = false;
 
-		String directParseDescription = NERParser.parseToList(userInputString,
+		String directParseDescription = NERParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_DESCRIPTION);
 		if (directParseDescription != null) {
 			this.isDescriptionChanged = true;
@@ -225,7 +235,7 @@ public class NERParser {
 	 */
 	public int pickIndex(String userInputString) throws CommandFailedException {
 
-		String directParseIndex = NERParser.parseToList(userInputString,
+		String directParseIndex = NERParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_INDEX);
 		try {
 			if (directParseIndex != null) {
@@ -268,12 +278,17 @@ public class NERParser {
 	public ArrayList<String> pickTag(String userInputString) {
 		this.isTagChanged = false;
 
-		String directParseTag = NERParser.parseToList(userInputString,
-				Constant.XML_TAG_DESCRIPTION);
+		String directParseTag = NERParser.pickTheTagged(userInputString,
+				Constant.XML_TAG_TAG);
 		if (directParseTag != null) {
 			this.isTagChanged = true;
 			ArrayList<String> results = new ArrayList<String>();
-			results.add(directParseTag);
+			
+			String[] stringArrayNoSpace = directParseTag.split(" ");
+			for (String s : stringArrayNoSpace) {
+				results.add(s.trim());
+			}
+			
 			return parseTag(results);
 		}
 
@@ -300,8 +315,8 @@ public class NERParser {
 	public int pickPriority(String userInputString) {
 		this.isPriorityChanged = false;
 
-		String directParsePriority = NERParser.parseToList(userInputString,
-				Constant.XML_TAG_DESCRIPTION);
+		String directParsePriority = NERParser.pickTheTagged(userInputString,
+				Constant.XML_TAG_PRIORITY);
 		if (directParsePriority != null) {
 			this.isPriorityChanged = true;
 			return parsePriority(directParsePriority);
@@ -320,6 +335,24 @@ public class NERParser {
 			return parsePriority(resultList.get(0));
 		}
 	}
+	
+	public static String pickTheTagged(String inputString, String type) {
+		String prefix = "<" + type + ">";
+		String postfix = "</" + type + ">";
+		int prefixIndex = inputString.indexOf(prefix);
+		int postfixIndex = inputString.indexOf(postfix);
+
+		System.err.println("INPUTSTRING: pickTheTagged: " + inputString);
+		System.err.println("PREFIX: pickTheTagged: " + prefix);
+		System.err.println("POSTFIX: pickTheTagged: " + postfix);
+		if (prefixIndex == -1 || postfixIndex == -1) {
+			return null;
+		} else {
+			return inputString.substring(prefixIndex + prefix.length(),
+					postfixIndex);
+		}
+	}
+	
 
 	/**
 	 * parse a task from the given string used when adding an task
@@ -343,6 +376,7 @@ public class NERParser {
 				timeInterval);
 	}
 
+	
 	/**
 	 * parse a search constraint used when searching for tasks
 	 * 
@@ -404,22 +438,7 @@ public class NERParser {
 		return updateAttributes;
 	}
 
-	public static String parseToList(String inputString, String type) {
-		String prefix = "<" + type + ">";
-		String postfix = "</" + type + ">";
-		int prefixIndex = inputString.indexOf(prefix);
-		int postfixIndex = inputString.indexOf(postfix);
-
-		System.err.println("INPUTSTRING: parseToList: " + inputString);
-		System.err.println("PREFIX: parseToList: " + prefix);
-		System.err.println("POSTFIX: parseToList: " + postfix);
-		if (prefixIndex == -1 || postfixIndex == -1) {
-			return null;
-		} else {
-			return inputString.substring(prefixIndex + prefix.length(),
-					postfixIndex);
-		}
-	}
+	
 
 	public static boolean updateModal(String propFilePath) {
 		
@@ -935,13 +954,17 @@ public class NERParser {
 		ArrayList<String> results = new ArrayList<String>();
 
 		for (String tagMine : tagMines) {
-			String parsedTagString = classifierTag.classifyToString(tagMine,
-					"inlineXML", false);
-			HashMap<String, ArrayList<String>> tagMap = parseToMap(parsedTagString);
-			ArrayList<String> tagList = tagMap.get("TAG");
-			if (tagList != null) {
-				for (String tag : tagList) {
-					results.add(tag);
+			if (tagMine.indexOf(" ") == -1) {
+				results.add(tagMine);
+			} else {
+				String parsedTagString = classifierTag.classifyToString(tagMine,
+						"inlineXML", false);
+				HashMap<String, ArrayList<String>> tagMap = parseToMap(parsedTagString);
+				ArrayList<String> tagList = tagMap.get("TAG");
+				if (tagList != null) {
+					for (String tag : tagList) {
+						results.add(tag);
+					}
 				}
 			}
 		}
@@ -957,9 +980,9 @@ public class NERParser {
 	 */
 	private int parsePriority(String priorityMines) {
 
-		String parsedTagString = classifierPriority.classifyToString(
+		String parsedPriorityString = classifierPriority.classifyToString(
 				priorityMines, "inlineXML", false);
-		HashMap<String, ArrayList<String>> cmdMap = parseToMap(parsedTagString);
+		HashMap<String, ArrayList<String>> cmdMap = parseToMap(parsedPriorityString);
 		int result = Constant.PRIORITY_INVALID;
 		for (String command : cmdMap.keySet()) {
 			if (!command.equals("COMMAND")) {
