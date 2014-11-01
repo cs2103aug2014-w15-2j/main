@@ -13,22 +13,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import dataStructure.Task;
 
 public abstract class DataStore {
 	
-	private static final String DATA_FILE_NAME = "List-of-Xiao-Ming/task-list.xiaoming";
+	private static final String DATA_FILEPATH = "List-of-Xiao-Ming/task-list.xiaoming";
 	
 	public static ArrayList<Task> loadFileData() throws Exception {
 		if(!isFileExisting()) {
 			createTaskFile();
 		}
-		File fileData = new File(DATA_FILE_NAME);
+		File fileData = new File(DATA_FILEPATH);
 		return getCurrentTasks(fileData);
 	}
 
@@ -41,7 +38,7 @@ public abstract class DataStore {
 			return false;
 		}
 		try {
-			File fileData = new File(DATA_FILE_NAME);
+			File fileData = new File(DATA_FILEPATH);
 			fileData.createNewFile();
 			save(null);
 			return true;
@@ -61,7 +58,7 @@ public abstract class DataStore {
 			return false;
 		}
 		try {
-			FileWriter fw = new FileWriter(DATA_FILE_NAME);
+			FileWriter fw = new FileWriter(DATA_FILEPATH);
 			ArrayList tasksList = getContent(tasks);
 			Writer writer = new JSonWriter();
 			JSONArray.writeJSONString(tasksList, writer);
@@ -79,7 +76,7 @@ public abstract class DataStore {
 	 * @return true if exists, no otherwise
 	 */
 	private static boolean isFileExisting() {
-		File fileData = new File(DATA_FILE_NAME);
+		File fileData = new File(DATA_FILEPATH);
 		if (fileData.exists()) {
 			return true;
 		}
