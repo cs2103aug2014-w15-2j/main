@@ -21,56 +21,41 @@ import org.json.simple.parser.ParseException;
 import dataStructure.Task;
 
 public abstract class DataStore {
+	
+	private static final String DATA_FILE_NAME = "task-list.xiaoming";
+	
+	public static ArrayList<Task> loadFileData() throws Exception {
+		if(!isFileExisting()) {
+			createTaskFile();
+		}
+		File fileData = new File(DATA_FILE_NAME);
+		return getCurrentTasks(fileData);
+	}
 
 	/**
-	 * check whether an account exists
-	 * 
-	 * @param username
+	 * check whether the task-list exists
 	 * @return true if exists, no otherwise
 	 */
-	public static boolean isAccountExisting(String username) {
-		File account = new File(username);
-		if (account.exists()) {
+	public static boolean isFileExisting() {
+		File fileData = new File(DATA_FILE_NAME);
+		if (fileData.exists()) {
 			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * check if it is a valid account (valid username and correct password)
-	 * 
-	 * @param username
-	 * @param password
-	 * @return true if valid, false if account not exists or wrong password
-	 */
-	public static boolean authenticate(String username, String password) {
-		if (!isAccountExisting(username)) {
-			return false;
-		}
-		try {
-			String realPassword = getPassword(username);
-			return password.equals(realPassword);
-		} catch (IOException | ParseException e) {
-			return false;
-		}
-	}
-
-	/**
-	 * create a new account (can not create an existing account)
-	 * 
-	 * @param username
-	 * @param passwordInput
+	 * create a new data file
 	 * @return true if succeed, false otherwise
 	 */
-	public static boolean createAccount(String username,
-										String passwordInput) {
-		if (isAccountExisting(username)) {
+	public static boolean createTaskFile() {
+		if (isFileExisting()) {
 			return false;
 		}
 		try {
-			File account = new File(username);
-			account.createNewFile();
-			save(username, null);
+			File fileData = new File(DATA_FILE_NAME);
+			fileData.createNewFile();
+			save(null);
 			return true;
 		} catch (IOException e) {
 			return false;
@@ -84,6 +69,7 @@ public abstract class DataStore {
 	 * @param password
 	 * @return true if succeed, false otherwise
 	 */
+	/*
 	public static boolean destroy(String username, String password) {
 		// check whether it is a valid account
 		if (!authenticate(username, password)) {
@@ -94,6 +80,7 @@ public abstract class DataStore {
 		TestingCache.clearCache();
 		return true;
 	}
+	*/
 	
 	/**
 	 * save the changes, write all tasks into the account data
@@ -102,7 +89,8 @@ public abstract class DataStore {
 	 * @param tasks
 	 * @return true if succeed, false otherwise
 	 */
-	public static boolean save(String username, ArrayList<Task> tasks) {
+	/*
+	public static boolean save(ArrayList<Task> tasks) {
 		/*
 		String password;
 		try {
@@ -110,9 +98,9 @@ public abstract class DataStore {
 		} catch (IOException | ParseException e) {
 			return false;
 		}
-		*/
-		return saveFile(username, tasks);
+		return saveFile(tasks);
 	}
+	*/
 	
 	/**
 	 * read file and get user current tasks
@@ -152,12 +140,12 @@ public abstract class DataStore {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	private static boolean saveFile(String username, ArrayList<Task> tasks) {
-		if (!isAccountExisting(username)) {
+	public static boolean save(ArrayList<Task> tasks) {
+		if (!isFileExisting()) {
 			return false;
 		}
 		try {
-			FileWriter fw = new FileWriter(username);
+			FileWriter fw = new FileWriter(DATA_FILE_NAME);
 			ArrayList tasksList = getContent(tasks);
 			Writer writer = new JSonWriter();
 			JSONArray.writeJSONString(tasksList, writer);
@@ -199,11 +187,13 @@ public abstract class DataStore {
 	 * @throws IOException
 	 * @throws ParseException 
 	 */
+	/*
 	@SuppressWarnings("rawtypes")
 	private static String getPassword(String username)
 										throws IOException, ParseException {
 		return "";
 	}
+	*/
 	
 	/**
 	 * return an ordered key factory (maintain the ordering from the file)
