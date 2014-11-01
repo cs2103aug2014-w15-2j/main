@@ -148,10 +148,6 @@ public abstract class Constant {
 	public static final String RETURN_VALUE_LOG_IN_CANCELLED =  "user cancelled logging in";
 	public static final String RETURN_VALUE_AUTHENTICATION_FAILED =  "authentication failed.";
 	
-	public static final String LOG_MESSAGE_READING_CACHE = "reading from cache: %1$s";
-	public static final String LOG_MESSAGE_NO_CACHE_FOUND = "no cache found";
-	public static final String LOG_MESSAGE_USER_CACHED = "user: %1$s -- has been cached";
-	public static final String LOG_MESSAGE_USER_LOG_OUT = "user logs out";
 	public static final String LOG_MESSAGE_INITIATE_LIST = "List initiated successfully";
 	public static final String LOG_MESSAGE_USER_TASKS_DISPLAYED = "User tasks displayed";
 	
