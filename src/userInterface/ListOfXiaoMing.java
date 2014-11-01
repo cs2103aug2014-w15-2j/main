@@ -9,6 +9,7 @@ import infrastructure.Constant.COMMAND_TYPE;
 
 
 
+
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -17,8 +18,8 @@ import java.util.logging.Level;
 
 
 
+
 import reference.*;
-import dataStore.*;
 import dataStructure.Task;
 import dataStructure.User;
 
@@ -34,11 +35,11 @@ public class ListOfXiaoMing {
 	/**
 	 * Constructor
 	 */
-	public ListOfXiaoMing(String recordFilePath) {
+	public ListOfXiaoMing() {
 		try {
-			this.user = new User(recordFilePath);
+			this.user = new User();
 		} catch (Exception e) {
-			// impossible errors
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -70,37 +71,9 @@ public class ListOfXiaoMing {
 		// }
 
 		while (true) {
-			ListOfXiaoMing list = null;
-			String cached = TestingCache.getCachedAccount();
-			if (!((cached == "") || (cached == null))) {
-				System.out.println(cached);
-				list = new ListOfXiaoMing(cached);
-				Constant.logger.log(Level.INFO, String.format(
-						Constant.LOG_MESSAGE_READING_CACHE, cached));
-			} else {
-				Constant.logger.log(Level.INFO,
-						Constant.LOG_MESSAGE_NO_CACHE_FOUND);
-			}
-
-			while (list == null) {
-				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_WELCOME);
-				UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_INSTRUCTION);
-				String userInput = UtilityMethod.readCommand();
-				String recordFilePath = ListOfXiaoMing
-						.executeUpperLevelCommand(userInput);
-				if (recordFilePath != null
-						&& !recordFilePath
-								.equalsIgnoreCase(Constant.RETURN_VALUE_LOG_IN_CANCELLED)) {
-					// already find the record
-					System.out.println(recordFilePath);
-					list = new ListOfXiaoMing(recordFilePath);
-					TestingCache.cacheAccount(recordFilePath);
-					Constant.logger.log(Level.INFO, String.format(
-							Constant.LOG_MESSAGE_USER_CACHED, recordFilePath));
-				} else {
-
-				}
-			}
+			
+			UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_WELCOME);
+			ListOfXiaoMing list = new ListOfXiaoMing();
 
 			assert (list != null);
 			Constant.logger.log(Level.INFO, Constant.LOG_MESSAGE_INITIATE_LIST);
@@ -110,27 +83,15 @@ public class ListOfXiaoMing {
 			Constant.logger.log(Level.INFO,
 					Constant.LOG_MESSAGE_USER_TASKS_DISPLAYED);
 
-			boolean willContinue = true;
-			while (willContinue) {
-				String userInput = UtilityMethod.readCommand();
-				String result;
-				if (list.isNlpOn) {
-					result = list.executeNLP(userInput);
-				} else {
-					result = list.execute(userInput);
-				}
-
-				if (result.equals(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY)) {
-					willContinue = false;
-					Constant.logger.log(Level.INFO,
-							Constant.LOG_MESSAGE_USER_LOG_OUT);
-					UtilityMethod
-							.showToUser(Constant.PROMPT_MESSAGE_LOG_OUT_SUCCESSFULLY);
-				} else {
-					UtilityMethod.showToUser(result);
-					UtilityMethod.showToUser("\n\n\n");
-				}
+			String userInput = UtilityMethod.readCommand();
+			String result;
+			if (list.isNlpOn) {
+				result = list.executeNLP(userInput);
+			} else {
+				result = list.execute(userInput);
 			}
+			UtilityMethod.showToUser(result);
+			UtilityMethod.showToUser("\n\n\n");
 		}
 	}
 
@@ -141,6 +102,7 @@ public class ListOfXiaoMing {
 	 * 
 	 * @return
 	 */
+	/*
 	public static String executeUpperLevelCommand(String commandString) {
 		Pair<COMMAND_TYPE, ArrayList<String>> commandPair = Parser
 				.parseCommandPair(commandString);
@@ -164,7 +126,6 @@ public class ListOfXiaoMing {
 		case DELETE_ACCOUNT:
 			UtilityMethod.showToUser(User.deleteAccount());
 			return null;
-		*/
 
 		case HELP:
 			UtilityMethod.showToUser(User.showHelp());
@@ -179,7 +140,7 @@ public class ListOfXiaoMing {
 			return null;
 		}
 	}
-	
+	*/
 
 	
 	
@@ -224,8 +185,10 @@ public class ListOfXiaoMing {
 				case DISPLAY:
 					return this.display();
 					
+				/*
 				case LOG_OUT:
 					return this.logOut();
+				*/
 					
 				case UNDO:
 					return this.undo();
@@ -280,9 +243,11 @@ public class ListOfXiaoMing {
 
 		case SEARCH:
 			return this.search(parameterList);
-
+		
+		/*
 		case LOG_OUT:
 			return this.logOut();
+		*/
 
 		case UNDO:
 			return this.undo();
@@ -516,6 +481,7 @@ public class ListOfXiaoMing {
 		}
 	}
 
+	/*
 	private String logOut() {		
 		
 		NERParser.updateModal();
@@ -526,5 +492,6 @@ public class ListOfXiaoMing {
 			return Constant.PROMPT_MESSAGE_CLEAR_CACHE_FAILED;
 		}
 	}
+	*/
 
 }

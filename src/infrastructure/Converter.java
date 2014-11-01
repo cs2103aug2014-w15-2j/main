@@ -131,17 +131,18 @@ public class Converter {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static TimeInterval convertStringToTimeInterval(LinkedHashMap intervalObj)
-			throws ParseException, CommandFailedException {
+	public static TimeInterval convertStringToTimeInterval
+								(LinkedHashMap intervalObj) 
+								throws ParseException, CommandFailedException {
 		Date startDate = null;
 		if(!intervalObj.get("startDate").equals("-")) {
-			startDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).
-					parse((String) intervalObj.get("startDate"));
+			startDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
+				Locale.ENGLISH).parse((String) intervalObj.get("startDate"));
 		}
 		Date endDate = null;
 		if(!intervalObj.get("endDate").equals("-")) {
-			endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).
-					parse((String) intervalObj.get("endDate"));
+			endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
+				Locale.ENGLISH).parse((String) intervalObj.get("endDate"));
 		}
 		return new TimeInterval(startDate, endDate);
 	}
@@ -151,16 +152,19 @@ public class Converter {
 		LinkedHashMap timeInterval = new LinkedHashMap();
 		
 		if(task.getInterval().getStartDate() == Constant.FLOATING_START_DATE &&
-				task.getInterval().getEndDate() == Constant.FLOATING_END_DATE) {
+			task.getInterval().getEndDate() == Constant.FLOATING_END_DATE) {
 			timeInterval.put("startDate", "-");
 			timeInterval.put("endDate", "-");
 		} else if(task.getInterval().getStartDate() == Constant.DEADLINE_START_DATE) {
-			String endDate = Converter.convertDateToString(task.getInterval().getEndDate());
+			String endDate = Converter.convertDateToString
+							(task.getInterval().getEndDate());
 			timeInterval.put("startDate", "-");
 			timeInterval.put("endDate", endDate);
 		} else {
-			String startDate = Converter.convertDateToString(task.getInterval().getStartDate());
-			String endDate = Converter.convertDateToString(task.getInterval().getEndDate());
+			String startDate = Converter.convertDateToString(task.getInterval()
+								.getStartDate());
+			String endDate = Converter.convertDateToString(task.getInterval()
+								.getEndDate());
 			timeInterval.put("startDate", startDate);
 			timeInterval.put("endDate", endDate);
 		}
@@ -169,8 +173,8 @@ public class Converter {
 	}
 	
 	public static String convertDateToString(Date date) {
-			String dateString = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.ENGLISH).
-					format(date);
+			String dateString = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
+					Locale.ENGLISH).format(date);
 		
 		return dateString;
 	}

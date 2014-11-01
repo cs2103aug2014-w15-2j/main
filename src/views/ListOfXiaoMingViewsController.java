@@ -93,7 +93,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		fxmlLoader.load();
         
 		try {
-			this.user = new User("List-of-Xiao-Ming/task-list.json");
+			this.user = new User();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
