@@ -110,7 +110,8 @@ public abstract class Constant {
 																+ "CTRL + R:\t\t insert display\n"
 																+ "CTRL + U:\t\t insert update\n"
 																+ "CTRL + D:\t insert delete\n"
-																+ "CTRL + F:\t\t insert search\n";
+																+ "CTRL + F:\t\t insert search\n"
+																+ "CTRL + M:\t\t insert reload model\n";
 	public static final String GUI_PREVIEW_MESSAGE_DELETE = "Command: delete \n\n" + "No Task Specified";
 	
 	//prompt messages that will be printed for users	
@@ -176,6 +177,7 @@ public abstract class Constant {
 	public static final String COMMAND_STRING_DISPLAY = "display";
 	public static final String COMMAND_STRING_NLP = "nlp";
 	public static final String COMMAND_STRING_EMPTY_TRASH = "empty_trash";
+	public static final String COMMAND_STRING_RELOAD = "reload";
 	
 	
 	public static final int PRIORITY_DEFAULT = 2;
@@ -213,7 +215,7 @@ public abstract class Constant {
 	
 	//command type
 	public static enum COMMAND_TYPE {
-		LOG_IN, LOG_OUT, CREATE_ACCOUNT, DELETE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR, NLP, EMPTY_TRASH
+		LOG_IN, LOG_OUT, CREATE_ACCOUNT, DELETE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR, NLP, EMPTY_TRASH, RELOAD
 	}
 	
 	//category

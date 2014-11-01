@@ -70,6 +70,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	private static final String HOT_KEY_UPDATE 					= "control U";
 	private static final String HOT_KEY_DELETE 					= "control D";
 	private static final String HOT_KEY_SEARCH					= "control F";
+	private static final String HOT_KEY_RELOAD					= "control M";	
 	
 	private static final double GRID_ROW_HEIGHT = 30.0;
 	
@@ -308,6 +309,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_UPDATE), instance);
 		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_DELETE), instance);
 		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_SEARCH), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_RELOAD), instance);
 	}
 	
 	
@@ -433,6 +435,10 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			case KeyEvent.VK_F + MODIFIER_CTRL:
 				insertTextToTextField(cursorPosition, "search ");	
 				break;
+				
+			case KeyEvent.VK_M + MODIFIER_CTRL:
+				insertTextToTextField(cursorPosition, "reload model ");	
+				break;
 		}
 		
 		
@@ -463,19 +469,19 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 
 			switch(thisCommand) {
 				case ADD:
-					setPreview(this.addNLP(userInput));
+					setPreview(this.add(userInput));
 					break;
 					
 				case DELETE:
-					setPreview(this.deleteNLP(userInput));
+					setPreview(this.delete(userInput));
 					break;
 					
 				case UPDATE:
-					setPreview(this.updateNLP(userInput));
+					setPreview(this.update(userInput));
 					break;
 					
 				case SEARCH:
-					setDisplay(this.searchNLP(userInput));
+					setDisplay(this.search(userInput));
 					break;
 				
 				case DISPLAY:
@@ -509,6 +515,10 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					
 				case EMPTY_TRASH:
 					setPreview(this.emptyTrash());
+					break;
+					
+				case RELOAD:
+					this.reloadNLPModel();
 					break;
 					
 				default:
@@ -588,6 +598,9 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				case EMPTY_TRASH:
 					return "Command: empty trash";
 					
+				case RELOAD:
+					return "Command: reload model";
+					
 				default:
 					return "Command not recognized";
 	
@@ -601,7 +614,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 
 	// add
 
-	private String addNLP(String userInput) {
+	private String add(String userInput) {
 		try {
 			Task taskToAdd = parser.nerParser.getTask(userInput);
 			assert (taskToAdd != null);
@@ -614,7 +627,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 
 	// delete
 
-	private String deleteNLP(String userInput) {
+	private String delete(String userInput) {
 		try {
 			int index = parser.nerParser.pickIndex(userInput);
 			return (this.user.delete(index - 1)) ? Constant.PROMPT_MESSAGE_DELETE_TASK_SUCCESSFULLY
@@ -626,7 +639,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 
 	// update
 
-	private String updateNLP(String userInput) {
+	private String update(String userInput) {
 		try {
 			int index = parser.nerParser.pickIndex(userInput);
 			this.user.update(index - 1,
@@ -641,7 +654,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 
 	// search
 
-	private String searchNLP(String userInput) {
+	private String search(String userInput) {
 		Constraint thisConstraint;
 		try {
 			thisConstraint = parser.nerParser.getConstraint(userInput);

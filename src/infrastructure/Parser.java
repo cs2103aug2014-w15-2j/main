@@ -78,6 +78,9 @@ public class Parser {
 			case Constant.COMMAND_STRING_EMPTY_TRASH:
 				return COMMAND_TYPE.EMPTY_TRASH;
 				
+			case Constant.COMMAND_STRING_RELOAD:
+				return COMMAND_TYPE.RELOAD;
+				
 			default:
 				return COMMAND_TYPE.HELP;
 		}

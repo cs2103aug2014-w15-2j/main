@@ -250,7 +250,8 @@ clear	COMMAND
 exit	COMMAND
 .	O
 
-NLP	COMMAND
+reload	COMMAND
+model	COMMAND
 .	O
 
 empty	COMMAND
