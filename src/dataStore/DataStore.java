@@ -28,28 +28,9 @@ public abstract class DataStore {
 		File fileData = new File(DATA_FILEPATH);
 		return getCurrentTasks(fileData);
 	}
-
-	/**
-	 * create a new data file
-	 * @return true if succeed, false otherwise
-	 */
-	public static boolean createTaskFile() {
-		if (isFileExisting()) {
-			return false;
-		}
-		try {
-			File fileData = new File(DATA_FILEPATH);
-			fileData.createNewFile();
-			save(null);
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
-	}
 	
 	/**
-	 * save the changes, write all tasks into the account data
-	 * 
+	 * save the changes, write all tasks into the account data 
 	 * @return true if succeed, false otherwise
 	 */
 	@SuppressWarnings("rawtypes")
@@ -70,6 +51,25 @@ public abstract class DataStore {
 			return false;
 		}				
 	}
+	
+	/**
+	 * create a new data file
+	 * @return true if succeed, false otherwise
+	 */
+	private static boolean createTaskFile() {
+		if (isFileExisting()) {
+			return false;
+		}
+		try {
+			File fileData = new File(DATA_FILEPATH);
+			fileData.createNewFile();
+			save(null);
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
+	}
+
 	
 	/**
 	 * check whether the task-list exists
