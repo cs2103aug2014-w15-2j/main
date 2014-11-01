@@ -482,13 +482,16 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					break;
 					
 				case SEARCH:
-					setDisplay(this.search(userInput));
+					ArrayList<Task> queryList = this.search(userInput);
+					if (queryList != null) {
+						setDisplayGrid(queryList);
+					}
 					break;
 				
 				case DISPLAY:
 					ArrayList<Task> displayList = this.display();
 					if (displayList != null) {
-						setDisplayGrid(this.display());
+						setDisplayGrid(displayList);
 					}
 					break;
 					
@@ -679,23 +682,32 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 
 
-	private String search(String userInput) {
+	private ArrayList<Task> search(String userInput) {
 		Constraint thisConstraint;
 		try {
 			thisConstraint = parser.nerParser.getConstraint(userInput);
 			ArrayList<Task> queryResult = this.user.find(thisConstraint);
-			String queryResultString = UtilityMethod
-					.taskListToString(queryResult);
-			if (queryResultString.equals("")) {
-				return Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED;
+//			String queryResultString = UtilityMethod
+//					.taskListToString(queryResult);
+//			if (queryResultString.equals("")) {
+//				return Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED;
+//			} else {
+//				return queryResultString;
+//			}
+			if (queryResult.isEmpty()) {
+				setPreview(Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED);
+				return null;
 			} else {
-				return queryResultString;
+				return queryResult;
 			}
 		} catch (CommandFailedException e) {
-			return e.toString();
-		} catch (Exception e) {
+			setPreview("SEARCH ERROR");
 			e.printStackTrace();
-			return e.toString();
+			return null;
+		} catch (Exception e) {
+			setPreview("SEARCH ERROR");
+			e.printStackTrace();
+			return null;
 		}
 
 	}
