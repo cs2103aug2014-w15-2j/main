@@ -3,7 +3,6 @@ package dataStructure;
 import infrastructure.Constant;
 import infrastructure.UtilityMethod;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,7 +19,6 @@ public class User {
 	private ArrayList<String> validCategory;
 	private Stack<ArrayList<Task>> undoable;
 	private Stack<ArrayList<Task>> redoable;
-	private String username;
 	private int taskEndIndex = -1;
 	private Cloner cloner = new Cloner();
 
@@ -30,14 +28,11 @@ public class User {
 	 * @param recordFilePath
 	 * @throws Exception
 	 */
-	public User(String recordFilePath) throws Exception {
-		String userFilePath = recordFilePath;
-		File userFile = new File(userFilePath);
+	public User() throws Exception {
 		currentTasks = DataStore.loadFileData();
 		undoable = new Stack<ArrayList<Task>>();
 		redoable = new Stack<ArrayList<Task>>();
 		validCategory = getValidCategory();
-		username = recordFilePath;
 	}
 
 	/**
