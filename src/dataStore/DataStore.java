@@ -19,7 +19,8 @@ import dataStructure.Task;
 
 public abstract class DataStore {
 	
-	private static final String DATA_FILEPATH = "List-of-Xiao-Ming/task-list.xiaoming";
+	private static final String DATA_FILEPATH = 
+								"List-of-Xiao-Ming/task-list.xiaoming";
 	
 	public static ArrayList<Task> loadFileData() throws Exception {
 		if(!isFileExisting()) {
