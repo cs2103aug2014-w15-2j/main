@@ -111,7 +111,7 @@ public abstract class Constant {
 																+ "CTRL + U:\t\t insert update\n"
 																+ "CTRL + D:\t insert delete\n"
 																+ "CTRL + F:\t\t insert search\n"
-																+ "CTRL + M:\t\t insert reload model\n";
+																+ "CTRL + M:\t insert reload model\n";
 	public static final String GUI_PREVIEW_MESSAGE_DELETE = "Command: delete \n\n" + "No Task Specified";
 	
 	//prompt messages that will be printed for users	

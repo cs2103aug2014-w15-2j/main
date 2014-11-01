@@ -1,23 +1,23 @@
-//package dataStore;
-//
+package dataStore;
+
 //import static org.junit.Assert.*;
-//
+
 //import org.junit.Test;
-//
-//import java.io.File;
-//
-//public class DataStoreTest {
-//
-//	public boolean initialize(String testFile) {
-//		File oldTestFile = new File(testFile);
-//		if(oldTestFile.exists()) {
-//			oldTestFile.delete();
-//			System.out.println("here " + oldTestFile.getAbsolutePath());
-//			return false;
-//		}
-//		return true;
-//	}
-//	
+
+import java.io.File;
+
+public class DataStoreTest {
+
+	public boolean initialize(String testFile) {
+		File oldTestFile = new File(testFile);
+		if(oldTestFile.exists()) {
+			oldTestFile.delete();
+			System.out.println("here " + oldTestFile.getAbsolutePath());
+			return false;
+		}
+		return true;
+	}
+	
 //	@Test
 //	public void testGetCurrentTasks() {
 //		initialize("testFileGCT");
@@ -31,5 +31,5 @@
 //		File testFile = new File("testFileGCT");
 //		testFile.delete();
 //	}
-//	
-//}
+	
+}

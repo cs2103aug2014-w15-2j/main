@@ -35,6 +35,7 @@ public class NERParser {
 	private AbstractSequenceClassifier<CoreLabel> classifierCommand;
 	private AbstractSequenceClassifier<CoreLabel> classifierTime;
 	private AbstractSequenceClassifier<CoreLabel> classifierPriority;
+	private AbstractSequenceClassifier<CoreLabel> classifierIndex;
 
 	private AbstractSequenceClassifier<CoreLabel> classifierTimePicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierCommandPicker;
@@ -70,14 +71,15 @@ public class NERParser {
 		
 		// NER parsers
 		classifierTag = CRFClassifier
-				.getClassifierNoExceptions("NLPTraining/tag-ner-model.ser.gz");
+				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + "/tag-ner-model.ser.gz");
 		classifierCommand = CRFClassifier
-				.getClassifierNoExceptions("NLPTraining/command-ner-model.ser.gz");
+				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + "/command-ner-model.ser.gz");
 		classifierTime = CRFClassifier
-				.getClassifierNoExceptions("NLPTraining/time-ner-model.ser.gz");
+				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + "/time-ner-model.ser.gz");
 		classifierPriority = CRFClassifier
-				.getClassifierNoExceptions("NLPTraining/priority-ner-model.ser.gz");
-
+				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + "/priority-ner-model.ser.gz");
+		classifierIndex = CRFClassifier
+				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + "/index-ner-model.ser.gz");
 		
 		// NER pickers
 		try {
@@ -237,14 +239,16 @@ public class NERParser {
 	 * @return
 	 * @throws CommandFailedException
 	 */
-	public int pickIndex(String userInputString) throws CommandFailedException {
+	public ArrayList<Integer> pickIndex(String userInputString) throws CommandFailedException {
 
 		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_INDEX);
 		String directParseIndex = NERParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_INDEX);
 		try {
 			if (directParseIndex != null) {
-				return Integer.parseInt(directParseIndex);
+				ArrayList<String> results = new ArrayList<String>();
+				results.add(directParseIndex);
+				return parseIndex(results);
 			}
 
 			String xmlStr = classifierIndexPicker.classifyToString(
@@ -256,7 +260,7 @@ public class NERParser {
 			if (resultList == null || resultList.size() == 0) {
 				throw new CommandFailedException("No index found!");
 			} else {
-				return Integer.parseInt(resultList.get(0));
+				return parseIndex(resultList);
 			}
 
 		} catch (Exception e) {
@@ -269,7 +273,7 @@ public class NERParser {
 			if (resultList == null || resultList.size() == 0) {
 				throw new CommandFailedException("No index found!");
 			} else {
-				return Integer.parseInt(resultList.get(0));
+				return parseIndex(resultList);
 			}
 		}
 	}
@@ -1066,6 +1070,27 @@ public class NERParser {
 		}
 	}
 
+	private ArrayList<Integer> parseIndex (ArrayList<String> indexMines) throws CommandFailedException {
+		try {
+			ArrayList<Integer> results = new ArrayList<Integer>();
+			for (String indexMine : indexMines) {
+				String parsedIndexString = classifierIndex.classifyToString(indexMine,
+						"inlineXML", false);
+				HashMap<String, ArrayList<String>> indexMap = parseToMap(parsedIndexString);
+				ArrayList<String> indexList = indexMap.get("INDEX");
+				if (indexList != null) {
+					for (String indexString : indexList) {
+						results.add(Integer.parseInt(indexString));
+					}
+				}
+			}
+
+			return results;
+		} catch (Exception e) {
+			throw new CommandFailedException("Unparsable Integer");
+		}
+	}
+	
 	private static void copyUserNlpFiles() throws IOException {
 		System.err.println("initializeUserTrainingModel");
 		File rootDirectory = new File(Constant.FILE_PATH_ROOT);

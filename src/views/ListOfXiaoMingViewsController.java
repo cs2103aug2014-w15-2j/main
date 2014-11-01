@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.KeyStroke;
 
@@ -123,8 +124,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 
 	private void updatePage() {
-		this.setPreview("\n\n\n\t\tHit CTRL+ENTER to load a preview");
-		this.setDisplay(Constant.GUI_MESSAGE_WELCOME + "\n\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
+		setPreview("\n\n\n\t\t  Welcome to List of Xiao Ming （小鸣的清单）");
+		this.setDisplay("HELP:" + "\n\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
 	}
 	
 	public String getUserInput(boolean willClear) {
@@ -138,8 +139,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	@FXML
     private void onEnter() {
 		String command = getUserInput(true);
-//		setPreview("\n\n\n\t\t  Hit CTRL+ENTER to load a preview");
-//		setPreview(this.executeNLP(command));
+		setPreview("\n\n\n\t\t  Welcome to List of Xiao Ming （小鸣的清单）");
 		this.execute(command);
 //		setDisplayGrid(this.display());
     }
@@ -558,16 +558,21 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					
 				case DELETE:
 					try {
-						int index = parser.nerParser.pickIndex(userInput);
-						Task taskToDelete = this.user.retrieve(index - 1);
-						return "Command: delete \n\n" + taskToDelete.toStringForDisplaying();
+						ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
+						String returnValue = "Command: delete \n\n";
+						
+						for (int index : indices) {
+							Task taskToDelete = this.user.retrieve(index - 1);
+							returnValue += (index + ": " + taskToDelete.getDescription() + "\n");
+						}
+						return returnValue;
 					} catch (CommandFailedException de) {
 						return "Command: delete \n\n" + "No Task Specified"; 
 					}
 					
 				case UPDATE:
 					try {
-						int index = parser.nerParser.pickIndex(userInput);
+						int index = parser.nerParser.pickIndex(userInput).get(0);
 						Task taskToUpdate = this.user.getUpdatePreview(index - 1, parser.nerParser.getUpdatedTaskMap(userInput));
 						return "Command: update \n\n" + taskToUpdate.toStringForDisplaying();
 					} catch (CommandFailedException e) {
@@ -633,9 +638,27 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	private String delete(String userInput) {
 		try {
-			int index = parser.nerParser.pickIndex(userInput);
-			return (this.user.delete(index - 1)) ? Constant.PROMPT_MESSAGE_DELETE_TASK_SUCCESSFULLY
-					: Constant.PROMPT_MESSAGE_DELETE_TASK_FAILED;
+			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
+			Collections.sort(indices);
+			int offset = 0;
+			boolean isAllSucceeded = true;
+			String returnValue = "";
+			for (int index : indices) {
+				try {
+					boolean isThisSucceeded = this.user.delete(index - offset - 1);
+					if (!isThisSucceeded) {
+						returnValue += (Constant.PROMPT_MESSAGE_DELETE_TASK_FAILED + " for task " + index);
+					}
+					isAllSucceeded &= isThisSucceeded;
+					offset ++;
+				} catch (CommandFailedException cfe) {
+					return cfe.toString();
+				}
+				
+			}
+			
+			return isAllSucceeded ? Constant.PROMPT_MESSAGE_DELETE_TASK_SUCCESSFULLY
+					:returnValue ;
 		} catch (CommandFailedException e) {
 			return e.toString();
 		}
@@ -644,7 +667,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 
 	private String update(String userInput) {
 		try {
-			int index = parser.nerParser.pickIndex(userInput);
+			int index = parser.nerParser.pickIndex(userInput).get(0);
 			this.user.update(index - 1,
 					parser.nerParser.getUpdatedTaskMap(userInput));
 		} catch (CommandFailedException e) {
