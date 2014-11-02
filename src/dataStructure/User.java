@@ -14,7 +14,7 @@ import dataStore.DataStore;
 import reference.*;
 
 public class User {
-	
+
 	private ArrayList<Task> currentTasks;
 	private ArrayList<String> validCategory;
 	private Stack<ArrayList<Task>> undoable;
@@ -85,6 +85,12 @@ public class User {
 		}
 	}
 
+	private void displayForTesting() {
+		int i = 1;
+		for (Task task : currentTasks) {
+			System.out.println(i++ + " " + task.getDescription());
+		}
+	}
 	/**
 	 * add adds a task into the task list.
 	 * 
@@ -92,13 +98,14 @@ public class User {
 	 */
 	public boolean add(Task task) {
 		this.updateUndoable();
-		if (taskEndIndex == -1 || taskEndIndex == currentTasks.size() - 1){
+		if (taskEndIndex == -1 || taskEndIndex == currentTasks.size() - 1) {
 			this.currentTasks.add(task);
 		} else {
 			this.currentTasks.add(task);
 			moveAddedTask(taskEndIndex);
 		}
 		taskEndIndex++;
+		displayForTesting();
 		boolean isSuccessful = DataStore.save(this.currentTasks);
 		return isSuccessful;
 	}
@@ -115,7 +122,8 @@ public class User {
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			this.updateUndoable();
-			boolean isSuccessful = this.currentTasks.get(index).addTag(Constant.TRASHED_TAG);
+			boolean isSuccessful = this.currentTasks.get(index).addTag(
+					Constant.TRASHED_TAG);
 			moveTrashedTask(index);
 			taskEndIndex--;
 			DataStore.save(this.currentTasks);
@@ -123,9 +131,9 @@ public class User {
 		}
 	}
 
-	
 	@SuppressWarnings("unchecked")
-	public Task getUpdatePreview (int index, HashMap<String, Object> toBeUpdated) throws CommandFailedException {
+	public Task getUpdatePreview(int index, HashMap<String, Object> toBeUpdated)
+			throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
@@ -138,10 +146,11 @@ public class User {
 			while (attributes.hasNext()) {
 				String currentAttribute = attributes.next();
 				Object currentObject = toBeUpdated.get(currentAttribute);
-				
+
 				if (currentAttribute.equals("description")) {
 					task.setDescription((String) currentObject);
-				} else if (currentAttribute.equals("category") && validCategory.contains((String) currentObject)) {
+				} else if (currentAttribute.equals("category")
+						&& validCategory.contains((String) currentObject)) {
 					task.setCategory((String) currentObject);
 				} else if (currentAttribute.equals("priority")) {
 					task.setPriority((int) currentObject);
@@ -150,26 +159,30 @@ public class User {
 				} else if (currentAttribute.equals("tag")) {
 					task.setTag((ArrayList<String>) currentObject);
 				} else if (currentAttribute.equals("time_interval")) {
-					System.err.println("USER UPDATE INTERVAL: " + (TimeInterval)currentObject);
+					System.err.println("USER UPDATE INTERVAL: "
+							+ (TimeInterval) currentObject);
 					task.setInterval((TimeInterval) currentObject);
 				} else {
-					throw new CommandFailedException(Constant.INVALID_UPDATE_MESSAGE);
+					throw new CommandFailedException(
+							Constant.INVALID_UPDATE_MESSAGE);
 				}
 			}
 			return task;
 		}
 	}
-	
-	
+
 	/**
-	 * update updates the task with the index according to the key-value pairs in toBeUpdated.
+	 * update updates the task with the index according to the key-value pairs
+	 * in toBeUpdated.
 	 * 
 	 * @param index
-	 * @param toBeUpdated attributes to be updated
-	 * @throws CommandFailedException 
+	 * @param toBeUpdated
+	 *            attributes to be updated
+	 * @throws CommandFailedException
 	 */
 	@SuppressWarnings("unchecked")
-	public void update(int index, HashMap<String, Object> toBeUpdated) throws CommandFailedException {
+	public void update(int index, HashMap<String, Object> toBeUpdated)
+			throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
@@ -179,10 +192,11 @@ public class User {
 			while (attributes.hasNext()) {
 				String currentAttribute = attributes.next();
 				Object currentObject = toBeUpdated.get(currentAttribute);
-				
+
 				if (currentAttribute.equals("description")) {
 					task.setDescription((String) currentObject);
-				} else if (currentAttribute.equals("category") && validCategory.contains((String) currentObject)) {
+				} else if (currentAttribute.equals("category")
+						&& validCategory.contains((String) currentObject)) {
 					task.setCategory((String) currentObject);
 				} else if (currentAttribute.equals("priority")) {
 					task.setPriority((int) currentObject);
@@ -190,66 +204,75 @@ public class User {
 					task.setRepeatedPeriod((int) currentObject);
 				} else if (currentAttribute.equals("tag")) {
 					task.setTag((ArrayList<String>) currentObject);
+					ArrayList<String> tagList = (ArrayList<String>) currentObject;
+					String tag = tagList.get(0);
+					if (tag.equals("done")) {
+						delete(index);
+					}
 				} else if (currentAttribute.equals("time_interval")) {
-					System.err.println("USER UPDATE INTERVAL: " + (TimeInterval)currentObject);
+					System.err.println("USER UPDATE INTERVAL: "
+							+ (TimeInterval) currentObject);
 					task.setInterval((TimeInterval) currentObject);
 				} else {
-					throw new CommandFailedException(Constant.INVALID_UPDATE_MESSAGE);
+					throw new CommandFailedException(
+							Constant.INVALID_UPDATE_MESSAGE);
 				}
 			}
 		}
 		DataStore.save(this.currentTasks);
 	}
-	
-	
+
 	/**
 	 * delete all current tasks
-	 * @throws CommandFailedException 
+	 * 
+	 * @throws CommandFailedException
 	 * 
 	 */
 	public void deleteAll() throws CommandFailedException {
-		for (Task task : currentTasks){
-			if(task.isTrashed()){
-				
+		for (Task task : currentTasks) {
+			if (task.isTrashed()) {
+
 			} else {
 				task.addTag(Constant.TRASHED_TAG);
 			}
 		}
 		DataStore.save(this.currentTasks);
 	}
-	
+
 	/**
 	 * clear all current tasks
 	 */
 	public void clear() {
 		ArrayList<Task> toBeCleared = new ArrayList<Task>();
-		
-		for (Task task : currentTasks){
-			if(task.isTrashed()){
+
+		for (Task task : currentTasks) {
+			if (task.isTrashed()) {
 				toBeCleared.add(task);
 			}
 		}
-		
-		for (Task task : toBeCleared){
+
+		for (Task task : toBeCleared) {
 			currentTasks.remove(task);
 		}
 		DataStore.save(this.currentTasks);
 	}
-	
+
 	/**
 	 * move new added task to correct position
+	 * 
 	 * @param index
 	 */
 	private void moveAddedTask(int index) {
 		Task newAddedTask = currentTasks.get(currentTasks.size() - 1);
-		for (int i = currentTasks.size() - 1; i > index + 1; i--){
+		for (int i = currentTasks.size() - 1; i > index + 1; i--) {
 			currentTasks.set(i, currentTasks.get(i - 1));
 		}
 		currentTasks.set(index + 1, newAddedTask);
 	}
-	
+
 	/**
 	 * move new trashed task to the end of currentTasks
+	 * 
 	 * @param index
 	 */
 	private void moveTrashedTask(int index) {
@@ -261,7 +284,7 @@ public class User {
 		}
 		currentTasks.remove(lastTaskIndex);
 	}
-	
+
 	/**
 	 * get valid categories from current tasks' categories
 	 * 
@@ -269,17 +292,19 @@ public class User {
 	 */
 	private ArrayList<String> getValidCategory() {
 		ArrayList<String> validCategory = new ArrayList<String>();
-		if(currentTasks.equals(null) || currentTasks.isEmpty()){
-			
+		if (currentTasks.equals(null) || currentTasks.isEmpty()) {
+
 		} else {
-			for(Task task : currentTasks){
+			for (Task task : currentTasks) {
 				validCategory.add(task.getCategory());
 			}
 		}
 		return validCategory;
 	}
+
 	/**
 	 * create a new category
+	 * 
 	 * @param category
 	 * @throws CommandFailedException
 	 */
@@ -290,10 +315,10 @@ public class User {
 			validCategory.add(category);
 		}
 	}
-	
+
 	/**
 	 * delete a category
-	 *  
+	 * 
 	 * @param category
 	 * @throws CommandFailedException
 	 */
@@ -301,24 +326,25 @@ public class User {
 		if (!validCategory.contains(category)) {
 			throw new CommandFailedException("no such category");
 		} else {
-			for(Task task : currentTasks){
-				if(task.getCategory().equals(category)){
+			for (Task task : currentTasks) {
+				if (task.getCategory().equals(category)) {
 					task.setCategory(Constant.DEFAULT_CATEGORY);
 				}
 			}
 			validCategory.remove(category);
 		}
 	}
-	
+
 	/**
 	 * show a joke to user
 	 */
-	public void showJoke(){
-		System.out.println("How can you expect a Todo-List software to provide you a joke!");
+	public void showJoke() {
+		System.out
+				.println("How can you expect a Todo-List software to provide you a joke!");
 		System.out.println("This function is actually the joke.");
 		System.out.println("If you really want some, go to jokes.cc.com ");
 	}
-	
+
 	/**
 	 * getTaskIdByIndex
 	 * 
@@ -337,7 +363,7 @@ public class User {
 			} else {
 				return this.currentTasks.get(index);
 			}
-			
+
 		}
 	}
 
@@ -361,7 +387,7 @@ public class User {
 	}
 
 	/**
-	 * isValidIndex 
+	 * isValidIndex
 	 * 
 	 * @param index
 	 * @return
@@ -373,7 +399,7 @@ public class User {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * getTaskList gets the list of every non-trashed tasks of the user.
 	 * 
@@ -381,40 +407,39 @@ public class User {
 	 */
 	public ArrayList<Task> getTaskList() {
 		ArrayList<Task> nonTrashedTasks = new ArrayList<Task>();
-		for (Task task: this.currentTasks) {
+		for (Task task : this.currentTasks) {
 			Iterator<String> tagIterator = task.getTag().iterator();
 			boolean isTrashed = false;
 			while (tagIterator.hasNext()) {
-				if (tagIterator.next().toLowerCase().contains(Constant.TRASHED_TAG)) {
+				if (tagIterator.next().toLowerCase()
+						.contains(Constant.TRASHED_TAG)) {
 					isTrashed = true;
 				}
 			}
-			
+
 			if (!isTrashed) {
 				nonTrashedTasks.add(task);
 			}
 		}
 		return nonTrashedTasks;
 	}
-	
-	
-	
-	//system level static methods
-	
+
+	// system level static methods
+
 	/**
 	 * showHelp shows the application manual.
 	 * 
 	 * @return
 	 */
-	public static String showHelp(){
-		
+	public static String showHelp() {
+
 		return "'Help' has not been implemented yet";
 	}
-	
+
 	/**
 	 * exit exits the application
 	 */
-	public static void exit() {  
+	public static void exit() {
 		UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_SESSION_END);
 		System.exit(0);
 	}
