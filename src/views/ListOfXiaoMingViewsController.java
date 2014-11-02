@@ -205,8 +205,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				
 				
 				GridPane contentPane = new GridPane();
-				contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
-				contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 21));
+				contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 31));
+				contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 31));
 				int subRow = 0;
 				contentPane.setStyle("-fx-padding: 2 8 0 8; -fx-background-color: " + bodyColor);
 				contentPane.setPrefWidth(getWidth());
