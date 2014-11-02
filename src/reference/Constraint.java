@@ -1,6 +1,7 @@
 package reference;
 
 import infrastructure.Constant;
+import infrastructure.UtilityMethod;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -44,11 +45,17 @@ public class Constraint {
 		boolean isIntervalMatched = false;
 		boolean isPriorityMatched = false;
 		boolean isSearchingTrashed = false;
+		boolean isSearchingDeadline = false;
 		boolean isSearchingFloating = false;
 		boolean isTrashedTask = false;
 		
 		if (this.keyword.contains("trash")) {
 			isSearchingTrashed = true;
+		}
+		
+		// if constraint's time interval is a deadline
+		if (this.interval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
+			isSearchingDeadline = true;
 		}
 		
 		if (this.interval.getStartDate().equals(Constant.FLOATING_START_DATE)) {
@@ -60,8 +67,8 @@ public class Constraint {
 			isKeywordMatched = true;
 		}
 		
-		// test category
-		if (task.priorityToString().contains(this.keyword)) {
+		// test priority
+		if (UtilityMethod.priorityToString(task.getPriority()).contains(this.keyword)) {
 			isPriorityMatched = true;
 		}		
 		
@@ -74,22 +81,26 @@ public class Constraint {
 		}
 		
 		// test trashed
-		Iterator<String> anotherTagIterator = task.getTag().iterator();
-		while (anotherTagIterator.hasNext()) {
-			if (anotherTagIterator.next().toLowerCase().contains(Constant.TRASHED_TAG)) {
-				isTrashedTask = true;
-			}
+		if (task.isTrashed()) {
+			isTrashedTask = true;
 		}
 		
 		// test interval
-		if (!isSearchingFloating) {
+		if (isSearchingDeadline) {
+			if (this.interval.getEndDate().after(task.getInterval().getEndDate())) {
+				isIntervalMatched = true;
+			}
+		} else if (!isSearchingFloating){
 			if ((!task.isFloating()) && (TimeInterval.isOverlapped(this.interval, task.getInterval()))) {
 				isIntervalMatched = true;
 			}
 		} else {
-			isIntervalMatched = true;
+			
 		}
-		return isIntervalMatched || isKeywordMatched || isPriorityMatched && !(isSearchingTrashed ^ isTrashedTask);
+		
+		boolean result = ((isIntervalMatched || isKeywordMatched || isPriorityMatched) && !isTrashedTask) || (isSearchingTrashed && isTrashedTask);
+		System.out.println(task.getDescription() + " shoule be return: " + result);
+		return result;
 	}
 	
 	@Override
