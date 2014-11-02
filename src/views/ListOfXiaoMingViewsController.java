@@ -448,7 +448,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	 * the important method to execute CRUD operations, etc.
 	 * @param userInput
 	 */
-	public void execute (String userInput) {
+	public void execute(String userInput) {
 		
 			if (!userInput.equals("")) {
 				try {
@@ -471,14 +471,17 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			switch(thisCommand) {
 				case ADD:
 					setPreview(this.add(userInput));
+					this.execute("display");
 					break;
 					
 				case DELETE:
 					setPreview(this.delete(userInput));
+					this.execute("display");
 					break;
 					
 				case UPDATE:
 					setPreview(this.update(userInput));
+					this.execute("display");
 					break;
 					
 				case SEARCH:
@@ -497,14 +500,17 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					
 				case UNDO:
 					setPreview(this.undo());
+					this.execute("display");
 					break;
 					
 				case REDO:
 					setPreview(this.redo());
+					this.execute("display");
 					break;
 					
 				case CLEAR:
 					setPreview(this.clear());
+					this.execute("display");
 					break;
 					
 				case EXIT:
@@ -519,10 +525,12 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					
 				case EMPTY_TRASH:
 					setPreview(this.emptyTrash());
+					this.execute("display");
 					break;
 					
 				case RELOAD:
 					this.reloadNLPModel();
+					this.execute("display");
 					break;
 					
 				default:
@@ -687,13 +695,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		try {
 			thisConstraint = parser.nerParser.getConstraint(userInput);
 			ArrayList<Task> queryResult = this.user.find(thisConstraint);
-//			String queryResultString = UtilityMethod
-//					.taskListToString(queryResult);
-//			if (queryResultString.equals("")) {
-//				return Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED;
-//			} else {
-//				return queryResultString;
-//			}
 			if (queryResult.isEmpty()) {
 				setPreview(Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED);
 				return null;
@@ -717,14 +718,9 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		ArrayList<Task> queryResult;
 		try {
 			queryResult = this.user.getTaskList();
-//			String resultString = UtilityMethod.taskListToString(queryResult);
-//			if (resultString.equalsIgnoreCase("")) {
-//				return Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK;
-//			} else {
-//				return resultString;
-//			}
 			if (queryResult.isEmpty()) {
-				setPreview(Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK);
+				setDisplay(Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK);
+				// TODO: create a box for empty list
 				return null;
 			} else {
 				return queryResult;
