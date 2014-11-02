@@ -14,6 +14,9 @@ cd directory
 java -cp stanford-ner.jar edu.stanford.nlp.ie.crf.CRFClassifier -prop propery_file_name.prop
 ```
 
+Screenshot
+-------------
+![Alt text](http://oi62.tinypic.com/2vi0135.jpg "Screenshot")
 
 User Guide
 -------------
