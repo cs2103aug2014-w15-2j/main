@@ -18,6 +18,7 @@ import javax.swing.KeyStroke;
 
 import reference.CommandFailedException;
 import reference.Constraint;
+import reference.TimeInterval;
 
 import com.tulskiy.keymaster.common.HotKey;
 import com.tulskiy.keymaster.common.HotKeyListener;
@@ -597,7 +598,9 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 						Constraint thisConstraint = parser.nerParser.getConstraint(userInput);
 						return "Command: search \n\n" + thisConstraint.toString();
 					} catch (CommandFailedException e) {
-						return "Command: search \n\n" + "Not Understand Search Constraint";
+						System.err.println(e);
+						Constraint thisConstraint = new Constraint(UtilityMethod.removeFirstWord(userInput), new TimeInterval());
+						return "Command: search \n\n" + thisConstraint.toString();
 					}
 				
 				case DISPLAY:

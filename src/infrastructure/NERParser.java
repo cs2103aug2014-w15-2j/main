@@ -447,6 +447,7 @@ public class NERParser {
 			throws CommandFailedException {
 		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
 		String keyword = "";
+		System.err.println("timeInterval - getConstraint: " + timeInterval.toString());
 		if (timeInterval.equals(new TimeInterval())) {
 			keyword = UtilityMethod.removeFirstWord(userInputString);
 		}
