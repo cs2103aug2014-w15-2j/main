@@ -618,14 +618,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					}
 					
 				case SEARCH:
-					try {
-						Constraint thisConstraint = parser.nerParser.getConstraint(userInput);
-						return "Command: search \n\n" + thisConstraint.toString();
-					} catch (CommandFailedException e) {
-						System.err.println(e);
-						Constraint thisConstraint = new Constraint(UtilityMethod.removeFirstWord(userInput), new TimeInterval());
-						return "Command: search \n\n" + thisConstraint.toString();
-					}
+					Constraint thisConstraint = parser.nerParser.getConstraint(userInput);
+					return "Command: search \n\n" + thisConstraint.toString();
 				
 				case DONE:
 					try {
