@@ -234,6 +234,4 @@ public abstract class Constant {
 	public static enum UI_MODE {
 		GUI, CLI
 	}
-
-	private String descriptionTag 	= "</DESCRIPTION>";
 }
