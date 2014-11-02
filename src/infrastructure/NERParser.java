@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -178,9 +179,13 @@ public class NERParser {
 				Constant.XML_TAG_TIME);
 		if (directParseTime != null) {
 			this.isTimeChanged = true;
-			ArrayList<String> results = new ArrayList<String>();
-			results.add(directParseTime);
-			return parseTimeInterval(results);
+			ArrayList<String> results = new ArrayList<String>(Arrays.asList(directParseTime.split(",")));
+			TimeInterval returningInterval = parseTimeInterval(results);
+			if (isDeadlineTask(userInputString)) {
+				return new TimeInterval(Constant.DEADLINE_START_DATE, returningInterval.getEndDate());
+			} else {
+				return returningInterval;
+			}
 		}
 
 		ArrayList<String> resultList = new ArrayList<String>();
@@ -195,10 +200,24 @@ public class NERParser {
 			return new TimeInterval();
 		} else {
 			this.isTimeChanged = true;
-			return parseTimeInterval(resultList);
+			TimeInterval returningInterval = parseTimeInterval(resultList);
+			if (isDeadlineTask(userInputString)) {
+				return new TimeInterval(Constant.DEADLINE_START_DATE, returningInterval.getEndDate());
+			} else {
+				return returningInterval;
+			}
 		}
 	}
 
+	
+	private boolean isDeadlineTask(String userInputString) {
+		userInputString = userInputString.toLowerCase();
+		return userInputString.contains("by") 
+				|| userInputString.contains("until") 
+				|| userInputString.contains("till") 
+				|| userInputString.contains("before");
+	}
+	
 	/**
 	 * pick out the description segments
 	 * 
@@ -798,13 +817,13 @@ public class NERParser {
 		TimeInterval interval = new TimeInterval();
 
 		if (dates.size() == 1) {
-			// Calendar c1 = UtilityMethod.dateToCalendar(dates.get(0));
+			Calendar c1 = UtilityMethod.dateToCalendar(dates.get(0));
 			Calendar c2 = UtilityMethod.dateToCalendar(dates.get(0));
-			// c1.set(Calendar.HOUR_OF_DAY, 0);
-			// c1.set(Calendar.MINUTE, 1);
+			c1.set(Calendar.HOUR_OF_DAY, 0);
+			c1.set(Calendar.MINUTE, 1);
 			c2.set(Calendar.HOUR_OF_DAY, 23);
 			c2.set(Calendar.MINUTE, 59);
-			interval = new TimeInterval(Constant.DEADLINE_START_DATE,
+			interval = new TimeInterval(c1.getTime(),
 					c2.getTime());
 		} else if (dates.size() == 2) {
 			Date d0 = dates.get(0);

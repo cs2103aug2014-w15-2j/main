@@ -1,4 +1,4 @@
-Add	O
+﻿Add	O
 I’m	DESCRIPTION
 going	DESCRIPTION
 to	DESCRIPTION
@@ -543,3 +543,36 @@ task	O
 as	O
 done	O
 .	O
+
+
+add	O
+task	DESCRIPTION
+until	O
+today	O
+.	O
+
+add	O
+task	DESCRIPTION
+before	O
+Oct	O
+18	O
+.	O
+
+add	O
+task	DESCRIPTION
+till	O
+tmr	O
+.	O
+
+add	O
+task	DESCRIPTION
+by	O
+this	O
+week	O
+.	O
+
+add	O
+reading	DESCRIPTION
+books	DESCRIPTION
+until	O
+tomorrow	O
