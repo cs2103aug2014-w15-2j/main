@@ -92,7 +92,7 @@ public class User {
 	 */
 	public boolean add(Task task) {
 		this.updateUndoable();
-		if (taskEndIndex == currentTasks.size() - 1){
+		if (taskEndIndex == -1 || taskEndIndex == currentTasks.size() - 1){
 			this.currentTasks.add(task);
 		} else {
 			this.currentTasks.add(task);
@@ -233,6 +233,7 @@ public class User {
 		for (Task task : toBeCleared){
 			currentTasks.remove(task);
 		}
+		DataStore.save(this.currentTasks);
 	}
 	
 	/**
@@ -260,6 +261,7 @@ public class User {
 		}
 		currentTasks.remove(lastTaskIndex);
 	}
+	
 	/**
 	 * get valid categories from current tasks' categories
 	 * 
