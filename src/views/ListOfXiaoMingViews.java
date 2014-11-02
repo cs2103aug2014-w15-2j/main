@@ -11,7 +11,13 @@ public class ListOfXiaoMingViews extends Application {
     public void start(Stage stage) throws Exception {
         ListOfXiaoMingViewsController control = new ListOfXiaoMingViewsController();
         
-        Scene scene = new Scene(control, 390, 590);
+        Scene scene;
+        System.out.println(System.getProperty("os.name"));
+        if (System.getProperty("os.name").equals("Mac OS X")) {
+        	scene = new Scene(control, 400, 600);
+        } else {
+        	scene = new Scene(control, 390, 590);
+        }
         scene.getStylesheets().add("views/style.css");
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(scene);
