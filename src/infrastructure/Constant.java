@@ -228,7 +228,7 @@ public abstract class Constant {
 	public static final Date DEADLINE_START_DATE = new Date(1);
 	public static final Date FLOATING_END_DATE = new Date(9999);
 
-	public static String TIME_MESSAGE_FLOATING = "\n\tno specific time requirements";
+	public static String TIME_MESSAGE_FLOATING = "";
 	
 	//user interface mode
 	public static enum UI_MODE {
