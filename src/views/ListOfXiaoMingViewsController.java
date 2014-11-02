@@ -550,7 +550,12 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					break;
 					
 				case RELOAD:
-					this.reloadNLPModel();
+					setPreview(this.reloadNLPModel());
+					this.execute("display");
+					break;
+					
+				case DONE:
+					setPreview(this.done(userInput));
 					this.execute("display");
 					break;
 					
@@ -622,6 +627,20 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 						return "Command: search \n\n" + thisConstraint.toString();
 					}
 				
+				case DONE:
+					try {
+						ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
+						String returnValue = "Command: done \n\n";
+						
+						for (int index : indices) {
+							Task taskToFinish = this.user.retrieve(index - 1);
+							returnValue += (index + ": " + taskToFinish.getDescription() + "\n");
+						}
+						return returnValue;
+					} catch (CommandFailedException de) {
+						return "Command: done \n\n" + "No Task Specified"; 
+					}
+					
 				case DISPLAY:
 					return "Command: display";
 	
@@ -796,8 +815,37 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		}
 	}
 	
-	private void reloadNLPModel() {
+	private String reloadNLPModel() {
 		NERParser.updateModal();
 		this.parser = new Parser();
+		return "Model reloaded!";
+	}
+	
+	private String done(String userInput) {
+		try {
+			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
+			Collections.sort(indices);
+			int offset = 0;
+			boolean isAllSucceeded = true;
+			String returnValue = "";
+			for (int index : indices) {
+				try {
+					boolean isThisSucceeded = this.user.done(index - offset - 1);
+					if (!isThisSucceeded) {
+						returnValue += (Constant.PROMPT_MESSAGE_DONE_TASK_FAILED + " for task " + index);
+					}
+					isAllSucceeded &= isThisSucceeded;
+//					offset ++;
+				} catch (CommandFailedException cfe) {
+					return cfe.toString();
+				}
+				
+			}
+			
+			return isAllSucceeded ? Constant.PROMPT_MESSAGE_DONE_TASK_SUCCESSFULLY
+					:returnValue ;
+		} catch (CommandFailedException e) {
+			return e.toString();
+		}
 	}
 }

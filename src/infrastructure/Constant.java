@@ -144,6 +144,8 @@ public abstract class Constant {
 	public static final String PROMPT_MESSAGE_SEARCH_TIME_INTERVAL = "Searching for tasks within time Interval: %1$s";
 	public static final String PROMPT_MESSAGE_SEARCH_KEYWORD = "Searching for tasks containing keywords: %1$s";
 	public static final String PROMPT_MESSAGE_NO_TASK_FOUNDED = "--- no task found ---";
+	public static final String PROMPT_MESSAGE_DONE_TASK_SUCCESSFULLY = "Tasks are marked done";
+	public static final String PROMPT_MESSAGE_DONE_TASK_FAILED = "Task is failed to finished";
 	
 	
 	public static final String RETURN_VALUE_LOG_IN_CANCELLED =  "user cancelled logging in";
@@ -178,7 +180,7 @@ public abstract class Constant {
 	public static final String COMMAND_STRING_NLP = "nlp";
 	public static final String COMMAND_STRING_EMPTY_TRASH = "empty_trash";
 	public static final String COMMAND_STRING_RELOAD = "reload";
-	
+	public static final String COMMAND_STRING_DONE = "done";	
 	
 	public static final int PRIORITY_DEFAULT = 2;
 	public static final int PRIORITY_INVALID = 0;
@@ -215,7 +217,7 @@ public abstract class Constant {
 	
 	//command type
 	public static enum COMMAND_TYPE {
-		LOG_IN, LOG_OUT, CREATE_ACCOUNT, DELETE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR, NLP, EMPTY_TRASH, RELOAD
+		LOG_IN, LOG_OUT, CREATE_ACCOUNT, DELETE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR, NLP, EMPTY_TRASH, RELOAD, DONE
 	}
 	
 	//category
@@ -225,6 +227,7 @@ public abstract class Constant {
 	public static final Date FLOATING_START_DATE = new Date(0);
 	public static final Date DEADLINE_START_DATE = new Date(1);
 	public static final Date FLOATING_END_DATE = new Date(9999);
+
 	public static String TIME_MESSAGE_FLOATING = "\n\tno specific time requirements";
 	
 	//user interface mode
