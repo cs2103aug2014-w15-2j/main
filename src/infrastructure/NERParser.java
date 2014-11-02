@@ -447,16 +447,21 @@ public class NERParser {
 	 * @return
 	 * @throws CommandFailedException
 	 */
-	public Constraint getConstraint(String userInputString)
-			throws CommandFailedException {
-		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
-		String keyword = "";
-		System.err.println("timeInterval - getConstraint: " + timeInterval.toString());
-		if (timeInterval.equals(new TimeInterval())) {
-			keyword = UtilityMethod.removeFirstWord(userInputString);
+	public Constraint getConstraint(String userInputString) {
+		TimeInterval timeInterval;
+		try {
+			timeInterval = this.pickTimeInterval(userInputString);
+			String keyword = "";
+			System.err.println("timeInterval - getConstraint: " + timeInterval.toString());
+			if (timeInterval.equals(new TimeInterval())) {
+				keyword = UtilityMethod.removeFirstWord(userInputString);
+			}
+
+			return new Constraint(keyword, timeInterval);
+		} catch (CommandFailedException e) {
+			return new Constraint(UtilityMethod.removeFirstWord(userInputString), new TimeInterval());
 		}
 
-		return new Constraint(keyword, timeInterval);
 	}
 
 	/**

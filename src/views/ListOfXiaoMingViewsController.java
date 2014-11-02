@@ -52,7 +52,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	public ScrollPane preview;
 	private VBox previewContent;
 	
-	private final static boolean ERROR_PRINT_ON = false;
+	private final static boolean ERROR_PRINT_ON = true;
 	private Parser parser = new Parser();
 	private static PrintStream err = System.err;
 	// a property to store the current user
@@ -144,7 +144,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		String command = getUserInput(true);
 		setPreview("\n\n\n\t\t  Welcome to List of Xiao Ming");
 		this.execute(command);
-		setDisplayGrid(this.display());
+//		setDisplayGrid(this.display());
     }
 	
 	public void setDisplay(String displayedText) {
@@ -744,10 +744,12 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				return queryResult;
 			}
 		} catch (CommandFailedException e) {
+			e.printStackTrace();
 			setPreview("SEARCH ERROR");
 			e.printStackTrace();
 			return null;
 		} catch (Exception e) {
+			e.printStackTrace();
 			setPreview("SEARCH ERROR");
 			e.printStackTrace();
 			return null;
