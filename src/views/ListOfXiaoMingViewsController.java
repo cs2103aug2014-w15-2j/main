@@ -18,7 +18,6 @@ import javax.swing.KeyStroke;
 
 import reference.CommandFailedException;
 import reference.Constraint;
-import reference.TimeInterval;
 
 import com.tulskiy.keymaster.common.HotKey;
 import com.tulskiy.keymaster.common.HotKeyListener;
@@ -40,11 +39,14 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 
 public class ListOfXiaoMingViewsController extends GridPane implements HotKeyListener{
 	@FXML
 	private TextField input;
+	
+	@FXML
+	private GridPane dragNode;
 	
 	@FXML
 	private ScrollPane display;
@@ -84,6 +86,9 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 												"rgba(233, 87, 63, 0.7)", 
 												"rgba(218, 68, 84, 0.7)"};
 	
+	private static final String HOT_KEY_LAST_COMMAND			= "UP";
+	private static final String HOT_KEY_NEXT_COMMAND			= "DOWN";
+	
 	private static final double GRID_ROW_HEIGHT = 30.0;
 	
 	private static final int MODIFIER_ALT = 520;
@@ -96,10 +101,12 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	private String indexTag 		= "</INDEX>";
 	private String priorityTag 		= "</PRIORITY>";
 	
+	private ArrayList<String> commandHistory = new ArrayList<String>();
+	private int currentCommandIndex = 0;
 	
 	
 	
-	public ListOfXiaoMingViewsController() throws IOException {
+	public ListOfXiaoMingViewsController(Stage stage) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ListOfXiaoMingViews.fxml"));
 		Font.loadFont(getClass().getResource("Akagi-SB.ttf").toExternalForm(), 10);
 		fxmlLoader.setRoot(this);
@@ -124,6 +131,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
             	instance.loadPreview();	
             }
         });
+        
+        UtilityMethod.makeDraggable(stage, dragNode);
         
         if (!ERROR_PRINT_ON) {
 			// now make all writes to the System.err stream silent
@@ -155,6 +164,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			setDisplayGrid(this.display());			
 		} else {
 //			setPreview("\n\n\n\t\t  Welcome to List of Xiao Ming");
+			this.commandHistory.add(command);
+			this.currentCommandIndex = this.commandHistory.size();
 			this.execute(command);
 		}
     }
@@ -215,8 +226,15 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				
 				
 				GridPane contentPane = new GridPane();
-				contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 29));
-				contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 29));
+				
+				if (System.getProperty("os.name").equals("Mac OS X")) {
+					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 31));
+					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 31));
+		        } else {
+		        	contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 29));
+					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 29));
+		        }
+
 				int subRow = 0;
 				contentPane.setStyle("-fx-padding: 0 8 0 8; -fx-background-color: " + bodyColor);
 				contentPane.setPrefWidth(getWidth());
@@ -364,6 +382,9 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_DELETE), instance);
 		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_SEARCH), instance);
 		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_RELOAD), instance);
+		
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_LAST_COMMAND), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_NEXT_COMMAND), instance);
 	}
 	
 	
@@ -410,6 +431,17 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	        @Override
 	        public void run() {
 	        	instance.input.insertText(cursorPosition, text);
+	        }
+	   });
+	}
+	
+	private void updateTextField(final String text) {
+		final ListOfXiaoMingViewsController instance = this;
+		Platform.runLater(new Runnable() {
+	        @Override
+	        public void run() {
+	        	instance.input.setText(text);
+	        	instance.input.positionCaret(text.length());
 	        }
 	   });
 	}
@@ -492,6 +524,27 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				break;
 		}
 		
+		switch (key.keyStroke.getKeyCode()) {
+			case KeyEvent.VK_UP:
+				this.currentCommandIndex --;
+				try {
+					updateTextField(this.commandHistory.get(this.currentCommandIndex));
+				} catch (ArrayIndexOutOfBoundsException e) {
+					// TODO log
+					this.currentCommandIndex ++;
+				}
+				break;
+				
+			case KeyEvent.VK_DOWN:
+				try {
+					this.currentCommandIndex ++;
+					updateTextField(this.commandHistory.get(this.currentCommandIndex));
+				} catch (ArrayIndexOutOfBoundsException e) {
+					// TODO log
+					this.currentCommandIndex --;
+				}
+				break;
+		}
 		
 	}
 	

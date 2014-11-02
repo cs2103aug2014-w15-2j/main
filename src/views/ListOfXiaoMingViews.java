@@ -9,7 +9,7 @@ public class ListOfXiaoMingViews extends Application {
 
 	@Override
     public void start(Stage stage) throws Exception {
-        ListOfXiaoMingViewsController control = new ListOfXiaoMingViewsController();
+        ListOfXiaoMingViewsController control = new ListOfXiaoMingViewsController(stage);
         Scene scene;
         if (System.getProperty("os.name").equals("Mac OS X")) {
         	scene = new Scene(control, 400, 600);
