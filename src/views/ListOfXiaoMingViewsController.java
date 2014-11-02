@@ -40,10 +40,14 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class ListOfXiaoMingViewsController extends GridPane implements HotKeyListener{
 	@FXML
 	private TextField input;
+	
+	@FXML
+	private GridPane dragNode;
 	
 	@FXML
 	private ScrollPane display;
@@ -90,7 +94,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	
 	
-	public ListOfXiaoMingViewsController() throws IOException {
+	public ListOfXiaoMingViewsController(Stage stage) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ListOfXiaoMingViews.fxml"));
 		Font.loadFont(getClass().getResource("Akagi-SB.ttf").toExternalForm(), 10);
 		fxmlLoader.setRoot(this);
@@ -115,6 +119,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
             	instance.loadPreview();	
             }
         });
+        
+        UtilityMethod.makeDraggable(stage, dragNode);
         
         if (!ERROR_PRINT_ON) {
 			// now make all writes to the System.err stream silent
