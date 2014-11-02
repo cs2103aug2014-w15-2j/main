@@ -52,7 +52,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	public ScrollPane preview;
 	private VBox previewContent;
 	
-	private final static boolean ERROR_PRINT_ON = false;
+	private final static boolean ERROR_PRINT_ON = true;
 	private Parser parser = new Parser();
 	private static PrintStream err = System.err;
 	// a property to store the current user
@@ -618,14 +618,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					}
 					
 				case SEARCH:
-					try {
-						Constraint thisConstraint = parser.nerParser.getConstraint(userInput);
-						return "Command: search \n\n" + thisConstraint.toString();
-					} catch (CommandFailedException e) {
-						System.err.println(e);
-						Constraint thisConstraint = new Constraint(UtilityMethod.removeFirstWord(userInput), new TimeInterval());
-						return "Command: search \n\n" + thisConstraint.toString();
-					}
+					Constraint thisConstraint = parser.nerParser.getConstraint(userInput);
+					return "Command: search \n\n" + thisConstraint.toString();
 				
 				case DONE:
 					try {
@@ -744,10 +738,12 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				return queryResult;
 			}
 		} catch (CommandFailedException e) {
+			e.printStackTrace();
 			setPreview("SEARCH ERROR");
 			e.printStackTrace();
 			return null;
 		} catch (Exception e) {
+			e.printStackTrace();
 			setPreview("SEARCH ERROR");
 			e.printStackTrace();
 			return null;
