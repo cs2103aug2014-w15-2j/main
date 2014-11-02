@@ -42,6 +42,7 @@ public class Constraint {
 	public boolean isMeeted(Task task) throws Exception {
 		boolean isKeywordMatched = false;
 		boolean isIntervalMatched = false;
+		boolean isPriorityMatched = false;
 		boolean isSearchingTrashed = false;
 		boolean isSearchingFloating = false;
 		boolean isTrashedTask = false;
@@ -60,10 +61,9 @@ public class Constraint {
 		}
 		
 		// test category
-		if (task.getCategory().toLowerCase().contains(this.keyword)) {
-			isKeywordMatched = true;
-		}
-		
+		if (task.priorityToString().contains(this.keyword)) {
+			isPriorityMatched = true;
+		}		
 		
 		// test tag
 		Iterator<String> tagIterator = task.getTag().iterator();
@@ -89,7 +89,7 @@ public class Constraint {
 		} else {
 			isIntervalMatched = true;
 		}
-		return isIntervalMatched && isKeywordMatched && !(isSearchingTrashed ^ isTrashedTask);
+		return isIntervalMatched || isKeywordMatched || isPriorityMatched && !(isSearchingTrashed ^ isTrashedTask);
 	}
 	
 	@Override

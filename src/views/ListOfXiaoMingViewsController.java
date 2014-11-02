@@ -124,7 +124,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 
 	private void updatePage() {
-		setPreview("\n\n\n\t\t  Welcome to List of Xiao Ming £¨Ð¡ÃùµÄÇåµ¥£©");
+		setPreview("\n\n\n\t\t  Welcome to List of Xiao Ming ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½åµ¥ï¿½ï¿½");
 		this.setDisplay("HELP:" + "\n\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
 	}
 	
@@ -139,9 +139,9 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	@FXML
     private void onEnter() {
 		String command = getUserInput(true);
-		setPreview("\n\n\n\t\t  Welcome to List of Xiao Ming £¨Ð¡ÃùµÄÇåµ¥£©");
+		setPreview("\n\n\n\t\t  Welcome to List of Xiao Ming ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½åµ¥ï¿½ï¿½");
 		this.execute(command);
-//		setDisplayGrid(this.display());
+		setDisplayGrid(this.display());
     }
 	
 	public void setDisplay(String displayedText) {

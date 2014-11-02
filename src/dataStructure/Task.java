@@ -210,6 +210,19 @@ public class Task {
 		return this.priority;
 	}
 
+	public String priorityToString() {
+		String priority;
+		if (this.getPriority() == Constant.PRIORITY_HIGH){
+			priority = "high";
+		} else if (this.getPriority() == Constant.PRIORITY_MEDIUM){
+			priority = "medium";
+		} else if (this.getPriority() == Constant.PRIORITY_LOW){
+			priority = "low";
+		} else {
+			priority = "invalid";
+		}		
+		return priority;
+	}
 	/**
 	 * setPriority setter of the priority attribute
 	 * 

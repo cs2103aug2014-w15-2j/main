@@ -11,7 +11,7 @@ public class ListOfXiaoMingViews extends Application {
     public void start(Stage stage) throws Exception {
         ListOfXiaoMingViewsController control = new ListOfXiaoMingViewsController();
         
-        Scene scene = new Scene(control, 390, 590);
+        Scene scene = new Scene(control, 400, 600);
         scene.getStylesheets().add("views/style.css");
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(scene);
