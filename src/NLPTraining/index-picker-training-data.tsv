@@ -117,3 +117,33 @@ task	O
 as	O
 done	O
 .	O
+
+mark	O
+task	O
+1	INDEX
+done	O
+.	O
+
+
+mark	O
+task	O
+1	INDEX
+as	O
+done	O
+.	O
+
+
+mark	O
+task	O
+1	INDEX
+as	O
+done	O
+.	O
+
+
+mark	O
+task	INDEX
+1	INDEX
+as	O
+done	O
+.	O

@@ -204,12 +204,10 @@ as	O
 done	O
 .	O
 
-done	DONE
+mark	COMMAND
 12	O
-.	O
-
-finish	DONE
-1	O
+as	O
+done	O
 .	O
 
 mark	COMMAND
@@ -252,8 +250,7 @@ clear	COMMAND
 exit	COMMAND
 .	O
 
-reload	COMMAND
-model	COMMAND
+NLP	COMMAND
 .	O
 
 empty	COMMAND
@@ -263,3 +260,72 @@ trash	COMMAND
 empty	COMMAND
 trashed	COMMAND
 .	O
+
+mark	COMMAND
+task	O
+1	O
+done	O
+.	O
+
+
+mark	COMMAND
+task	O
+1	O
+as	O
+done	O
+.	O
+
+
+mark	COMMAND
+task	O
+1	O
+as	O
+done	O
+.	O
+
+
+mark	COMMAND
+task	O
+1	O
+as	O
+done	O
+.	O
+
+
+search	COMMAND
+high	O
+
+
+search	COMMAND
+high	O
+
+
+search	COMMAND
+cs	O
+
+
+search	COMMAND
+high	O
+
+
+add	COMMAND
+test	O
+2	O
+,	O
+priority	O
+high	O
+
+
+add	COMMAND
+test	O
+1	O
+,	O
+priority	O
+high	O
+
+
+add	COMMAND
+test	O
+2	O
+priority	O
+low	O

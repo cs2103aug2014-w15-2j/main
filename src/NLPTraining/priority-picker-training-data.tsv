@@ -147,3 +147,26 @@ to	O
 priority	PRIORITY
 medium	PRIORITY
 .	O
+
+
+add	O
+test	O
+2	O
+,	O
+priority	PRIORITY
+high	PRIORITY
+
+
+add	O
+test	O
+1	O
+,	O
+priority	PRIORITY
+high	PRIORITY
+
+
+add	O
+test	O
+2	O
+priority	PRIORITY
+low	PRIORITY

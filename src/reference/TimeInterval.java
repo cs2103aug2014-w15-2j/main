@@ -82,6 +82,13 @@ public class TimeInterval {
 		}
 	}
 	
+	public static boolean isOverlapped(TimeInterval interval, Date deadline) {
+		if (interval.startDate.before(deadline) && (interval.endDate.after(deadline) || interval.endDate.equals(deadline))) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	/**
 	 * @override
 	 * toString

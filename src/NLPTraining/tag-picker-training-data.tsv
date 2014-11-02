@@ -134,3 +134,37 @@ task	O
 as	TAG
 done	TAG
 .	O
+
+mark	O
+task	O
+1	O
+done	TAG
+.	O
+
+
+mark	O
+task	O
+1	O
+as	TAG
+done	TAG
+.	O
+
+
+mark	O
+task	O
+1	O
+as	O
+done	TAG
+.	O
+
+
+mark	O
+task	O
+1	O
+as	TAG
+done	TAG
+.	O
+
+
+search	O
+trashed	TAG

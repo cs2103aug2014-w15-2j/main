@@ -144,7 +144,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		String command = getUserInput(true);
 		setPreview("\n\n\n\t\t  Welcome to List of Xiao Ming");
 		this.execute(command);
-		setDisplayGrid(this.display());
+//		setDisplayGrid(this.display());
     }
 	
 	public void setDisplay(String displayedText) {

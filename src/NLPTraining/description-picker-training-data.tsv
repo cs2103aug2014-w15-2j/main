@@ -1,4 +1,4 @@
-﻿Add	O
+Add	O
 I’m	DESCRIPTION
 going	DESCRIPTION
 to	DESCRIPTION
@@ -544,35 +544,36 @@ as	O
 done	O
 .	O
 
+search	O
+high	DESCRIPTION
+
+
+search	O
+cs	DESCRIPTION
+
+
+search	O
+high	DESCRIPTION
+
 
 add	O
-task	DESCRIPTION
-until	O
-today	O
-.	O
+test	DESCRIPTION
+2	DESCRIPTION
+,	O
+priority	O
+high	O
+
 
 add	O
-task	DESCRIPTION
-before	O
-Oct	O
-18	O
-.	O
+test	DESCRIPTION
+1	DESCRIPTION
+,	O
+priority	O
+high	O
+
 
 add	O
-task	DESCRIPTION
-till	O
-tmr	O
-.	O
-
-add	O
-task	DESCRIPTION
-by	O
-this	O
-week	O
-.	O
-
-add	O
-reading	DESCRIPTION
-books	DESCRIPTION
-until	O
-tomorrow	O
+test	DESCRIPTION
+2	DESCRIPTION
+priority	O
+low	O
