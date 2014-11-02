@@ -12,7 +12,6 @@ public class ListOfXiaoMingViews extends Application {
         ListOfXiaoMingViewsController control = new ListOfXiaoMingViewsController();
         
         Scene scene;
-        System.out.println(System.getProperty("os.name"));
         if (System.getProperty("os.name").equals("Mac OS X")) {
         	scene = new Scene(control, 400, 600);
         } else {
