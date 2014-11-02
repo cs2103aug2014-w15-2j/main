@@ -440,6 +440,11 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			case KeyEvent.VK_M + MODIFIER_CTRL:
 				insertTextToTextField(cursorPosition, "reload model ");	
 				break;
+				
+			case KeyEvent.VK_BACK_SPACE + MODIFIER_CTRL:
+				String inputString = (String) input.getCharacters();
+				insertTextToTextField(cursorPosition, inputString.substring(0, inputString.lastIndexOf(" ")));
+				break;
 		}
 		
 		
