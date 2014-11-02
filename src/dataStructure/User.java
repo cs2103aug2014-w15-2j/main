@@ -105,7 +105,6 @@ public class User {
 			moveAddedTask(taskEndIndex);
 		}
 		taskEndIndex++;
-		displayForTesting();
 		boolean isSuccessful = DataStore.save(this.currentTasks);
 		return isSuccessful;
 	}
