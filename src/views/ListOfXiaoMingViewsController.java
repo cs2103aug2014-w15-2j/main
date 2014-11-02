@@ -407,6 +407,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	        @Override
 	        public void run() {
 	        	instance.input.setText(text);
+	        	instance.input.positionCaret(text.length());
 	        }
 	   });
 	}
