@@ -127,7 +127,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 
 	private void updatePage() {
-		setPreview("\n\n\n\t\t  Welcome to List of Xiao Ming");
+		setPreview("\n\n\n\t\t\t  Welcome to List of Xiao Ming");
 		this.setDisplay("HELP:" + "\n\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
 	}
 	
@@ -142,9 +142,12 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	@FXML
     private void onEnter() {
 		String command = getUserInput(true);
-		setPreview("\n\n\n\t\t  Welcome to List of Xiao Ming");
-		this.execute(command);
-//		setDisplayGrid(this.display());
+		if (command.equals("")) {
+			setDisplayGrid(this.display());			
+		} else {
+//			setPreview("\n\n\n\t\t  Welcome to List of Xiao Ming");
+			this.execute(command);
+		}
     }
 	
 	public void setDisplay(String displayedText) {
@@ -492,17 +495,17 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			switch(thisCommand) {
 				case ADD:
 					setPreview(this.add(userInput));
-					this.execute("display");
+					setDisplayGrid(this.display());
 					break;
 					
 				case DELETE:
 					setPreview(this.delete(userInput));
-					this.execute("display");
+					setDisplayGrid(this.display());
 					break;
 					
 				case UPDATE:
 					setPreview(this.update(userInput));
-					this.execute("display");
+					setDisplayGrid(this.display());
 					break;
 					
 				case SEARCH:
@@ -521,17 +524,17 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					
 				case UNDO:
 					setPreview(this.undo());
-					this.execute("display");
+					setDisplayGrid(this.display());
 					break;
 					
 				case REDO:
 					setPreview(this.redo());
-					this.execute("display");
+					setDisplayGrid(this.display());
 					break;
 					
 				case CLEAR:
 					setPreview(this.clear());
-					this.execute("display");
+					setDisplayGrid(this.display());
 					break;
 					
 				case EXIT:
@@ -546,17 +549,17 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					
 				case EMPTY_TRASH:
 					setPreview(this.emptyTrash());
-					this.execute("display");
+					setDisplayGrid(this.display());
 					break;
 					
 				case RELOAD:
 					setPreview(this.reloadNLPModel());
-					this.execute("display");
+					setDisplayGrid(this.display());
 					break;
 					
 				case DONE:
 					setPreview(this.done(userInput));
-					this.execute("display");
+					setDisplayGrid(this.display());
 					break;
 					
 				default:
