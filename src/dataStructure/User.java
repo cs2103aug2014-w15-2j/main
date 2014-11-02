@@ -416,4 +416,9 @@ public class User {
 		UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_SESSION_END);
 		System.exit(0);
 	}
+
+	public boolean done(int index) throws CommandFailedException {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

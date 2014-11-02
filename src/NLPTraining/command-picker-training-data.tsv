@@ -204,10 +204,12 @@ as	O
 done	O
 .	O
 
-mark	COMMAND
+done	DONE
 12	O
-as	O
-done	O
+.	O
+
+finish	DONE
+1	O
 .	O
 
 mark	COMMAND

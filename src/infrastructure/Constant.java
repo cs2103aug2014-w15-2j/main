@@ -100,18 +100,18 @@ public abstract class Constant {
 
 	//GUI messages that will be shown to users
 	public static final String GUI_MESSAGE_WELCOME = "Welcome to 小鸣的清单(List of Xiao Ming)";
-	public static final String GUI_MESSAGE_SHORTCUT_INSTRUCTION = "ALT + A:\t insert <DATE> \t\tor </DATE>\n"
-																+ "ALT + C:\t insert <COMMAND> \tor </COMMAND>\n"
-																+ "ALT + D:\t insert <DESCRIPTION> \tor </DESCRIPTION>\n"
-																+ "ALT + I:\t insert <INDEX> \t\tor </INDEX>\n"
-																+ "ALT + P:\t insert <PRIORITY> \tor </PRIORITY>\n"
-																+ "ALT + T:\t insert <TAG> \t\t\tor </TAG>\n\n"
-																+ "CTRL + C:\t\t insert add\n"
-																+ "CTRL + R:\t\t insert display\n"
-																+ "CTRL + U:\t\t insert update\n"
-																+ "CTRL + D:\t insert delete\n"
-																+ "CTRL + F:\t\t insert search\n"
-																+ "CTRL + M:\t insert reload model\n";
+	public static final String GUI_MESSAGE_SHORTCUT_INSTRUCTION = "ALT + A:\t <DATE> \t </DATE>\n"
+																+ "ALT + C:\t <COMMAND> \t </COMMAND>\n"
+																+ "ALT + D:\t <DESCRIPTION> \t </DESCRIPTION>\n"
+																+ "ALT + I:\t <INDEX> \t </INDEX>\n"
+																+ "ALT + P:\t <PRIORITY> \t </PRIORITY>\n"
+																+ "ALT + T:\t <TAG> \t\t </TAG>\n\n"
+																+ "CTRL + C:\t add\n"
+																+ "CTRL + R:\t display\n"
+																+ "CTRL + U:\t update\n"
+																+ "CTRL + D:\t delete\n"
+																+ "CTRL + F:\t search\n"
+																+ "CTRL + M:\t reload model\n";
 	public static final String GUI_PREVIEW_MESSAGE_DELETE = "Command: delete \n\n" + "No Task Specified";
 	
 	//prompt messages that will be printed for users	
@@ -144,6 +144,8 @@ public abstract class Constant {
 	public static final String PROMPT_MESSAGE_SEARCH_TIME_INTERVAL = "Searching for tasks within time Interval: %1$s";
 	public static final String PROMPT_MESSAGE_SEARCH_KEYWORD = "Searching for tasks containing keywords: %1$s";
 	public static final String PROMPT_MESSAGE_NO_TASK_FOUNDED = "--- no task found ---";
+	public static final String PROMPT_MESSAGE_DONE_TASK_SUCCESSFULLY = "Tasks are marked done";
+	public static final String PROMPT_MESSAGE_DONE_TASK_FAILED = "Task is failed to finished";
 	
 	
 	public static final String RETURN_VALUE_LOG_IN_CANCELLED =  "user cancelled logging in";
@@ -178,7 +180,7 @@ public abstract class Constant {
 	public static final String COMMAND_STRING_NLP = "nlp";
 	public static final String COMMAND_STRING_EMPTY_TRASH = "empty_trash";
 	public static final String COMMAND_STRING_RELOAD = "reload";
-	
+	public static final String COMMAND_STRING_DONE = "done";	
 	
 	public static final int PRIORITY_DEFAULT = 2;
 	public static final int PRIORITY_INVALID = 0;
@@ -215,7 +217,7 @@ public abstract class Constant {
 	
 	//command type
 	public static enum COMMAND_TYPE {
-		LOG_IN, LOG_OUT, CREATE_ACCOUNT, DELETE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR, NLP, EMPTY_TRASH, RELOAD
+		LOG_IN, LOG_OUT, CREATE_ACCOUNT, DELETE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR, NLP, EMPTY_TRASH, RELOAD, DONE
 	}
 	
 	//category
@@ -225,6 +227,7 @@ public abstract class Constant {
 	public static final Date FLOATING_START_DATE = new Date(0);
 	public static final Date DEADLINE_START_DATE = new Date(1);
 	public static final Date FLOATING_END_DATE = new Date(9999);
+
 	public static String TIME_MESSAGE_FLOATING = "\n\tno specific time requirements";
 	
 	//user interface mode
