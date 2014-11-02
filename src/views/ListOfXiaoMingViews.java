@@ -17,7 +17,7 @@ public class ListOfXiaoMingViews extends Application {
         	scene = new Scene(control, 390, 590);
         }
         scene.getStylesheets().add("views/style.css");
-        stage.initStyle(StageStyle.DECORATED);
+        stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
         stage.setTitle("List of Xiao Ming");
         stage.show();
