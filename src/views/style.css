@@ -1,7 +1,8 @@
 /** CSS **/
 .mylistview{
     -fx-border-color:rgb(244, 244, 244);
-    -fx-padding:10 0 0 10;
+    -fx-background-color:rgb(244, 244, 244);
+    -fx-padding:10 0 10 10;
     -fx-font: 12px "Courier New";
 }
 

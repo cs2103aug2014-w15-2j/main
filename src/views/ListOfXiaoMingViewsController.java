@@ -40,6 +40,7 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 
 public class ListOfXiaoMingViewsController extends GridPane implements HotKeyListener{
 	@FXML
@@ -73,7 +74,15 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	private static final String HOT_KEY_UPDATE 					= "control U";
 	private static final String HOT_KEY_DELETE 					= "control D";
 	private static final String HOT_KEY_SEARCH					= "control F";
-	private static final String HOT_KEY_RELOAD					= "control M";	
+	private static final String HOT_KEY_RELOAD					= "control M";
+	
+	private static final String[] CSS_COLORS = {"rgba(74, 137, 220, 0.7)", 
+												"rgba(59, 175, 218, 0.7)", 
+												"rgba(55, 188, 155, 0.7)",  
+												"rgba(246, 187, 66, 0.7)", 
+												"rgba(140, 193, 82, 0.7)",
+												"rgba(233, 87, 63, 0.7)", 
+												"rgba(218, 68, 84, 0.7)"};
 	
 	private static final double GRID_ROW_HEIGHT = 30.0;
 	
@@ -194,9 +203,10 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				}
 				
 				GridPane priorityPane = new GridPane();
-				priorityPane.setStyle("-fx-background-color: " + bannerColor);
+				priorityPane.setStyle("-fx-padding: 8 8 0 8; -fx-background-color: " + bannerColor);
 				priorityPane.setPrefWidth(getWidth());
-				Label priority = new Label("");
+				Label priority = new Label("\t\t\t\t\t\t\t\t " + index);
+				priority.setStyle("-fx-font: 19px \"Akagi\";");
 				priority.setPrefWidth(getWidth());
 				priorityPane.add(priority, 0, 0);
 				taskPane.add(priorityPane, 0, row, 2, 1);
@@ -205,25 +215,25 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				
 				
 				GridPane contentPane = new GridPane();
-				contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
-				contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 21));
+				contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 29));
+				contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 29));
 				int subRow = 0;
-				contentPane.setStyle("-fx-padding: 2 8 0 8; -fx-background-color: " + bodyColor);
+				contentPane.setStyle("-fx-padding: 0 8 0 8; -fx-background-color: " + bodyColor);
 				contentPane.setPrefWidth(getWidth());
 				
-				Label description = new Label(index + "." + task.getDescription());
+				Label description = new Label(task.getDescription());
 				description.setStyle("-fx-font: 17px \"Akagi\";");
 				description.setPrefWidth(getWidth());
 				
 				contentPane.add(description, 0, subRow, 2, 1);
 				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
 				subRow ++;
+				
 				if (task.isDeadline()) {
 					Label deadlineText = new Label("Deadline:");
 					Label deadline = new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
 					deadlineText.setStyle("-fx-font: 12px \"Akagi\";");
 					deadline.setStyle("-fx-font: 12px \"Akagi\";");
-					
 					contentPane.add(deadlineText, 0, subRow);
 					contentPane.add(deadline, 1, subRow);
 					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
@@ -251,18 +261,36 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
 					subRow ++;
 				}
-				Label tagText = new Label("Tags:");
-				Label tag = new Label(task.tagToString());
-				tagText.setStyle("-fx-font: 12px \"Akagi\";");
-				tag.setStyle("-fx-font: 12px \"Akagi\";");
 				
-				contentPane.add(tagText, 0, subRow);
-				contentPane.add(tag, 1, subRow);
+				GridPane tagPane = new GridPane();
+				tagPane.setStyle("-fx-padding: 5 0 0 0;");
+				tagPane.setHgap(10);
+				ArrayList<String> tags = task.getTag();
+				int columnIndex = 0;
+				for (String tag : tags) {
+					Label tagLabel = new Label(tag);
+					
+					int colorOffset = 0;
+					for (char c : tag.toCharArray()) {
+						colorOffset += c;
+					}
+					
+					colorOffset = colorOffset%CSS_COLORS.length;
+					tagLabel.setStyle("-fx-font: 10px \"Akagi\";"
+							+ "-fx-padding: 5 10 5 10;"
+							+ "-fx-background-color:" + CSS_COLORS[colorOffset]+ ";"
+							+ "-fx-background-radius: 5px;"
+							+ "-fx-text-fill: white;"
+							+ "-fx-margin: 0 5 0 5;");
+					tagPane.add(tagLabel, columnIndex, 0);
+					columnIndex ++;
+				}
+				contentPane.add(tagPane, 0, subRow, 2, 1);
 				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
 				subRow ++;
 				
-				taskPane.add(contentPane, 0, row, 2, subRow);
-				setDisplayRow(taskPane, GRID_ROW_HEIGHT * subRow);
+				taskPane.add(contentPane, 0, row, 1, subRow);
+				setDisplayRow(taskPane, GRID_ROW_HEIGHT * subRow + 3);
 				row ++;
 				
 				GridPane emptyPane = new GridPane();
