@@ -181,8 +181,15 @@ public class NERParser {
 			this.isTimeChanged = true;
 			ArrayList<String> results = new ArrayList<String>(Arrays.asList(directParseTime.split(",")));
 			TimeInterval returningInterval = parseTimeInterval(results);
-			if (isDeadlineTask(userInputString)) {
-				return new TimeInterval(Constant.DEADLINE_START_DATE, returningInterval.getEndDate());
+			if (isDeadlineTask(userInputString) || returningInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
+				Calendar c = UtilityMethod.dateToCalendar(returningInterval.getEndDate());
+				if (c.get(Calendar.HOUR_OF_DAY) == 0 && c.get(Calendar.MINUTE) == 0) {
+					c.set(Calendar.HOUR_OF_DAY, 23);
+					c.set(Calendar.MINUTE, 59);
+					return new TimeInterval(Constant.DEADLINE_START_DATE, c.getTime());
+				} else {
+					return new TimeInterval(Constant.DEADLINE_START_DATE, returningInterval.getEndDate());	
+				}
 			} else {
 				return returningInterval;
 			}
@@ -201,8 +208,15 @@ public class NERParser {
 		} else {
 			this.isTimeChanged = true;
 			TimeInterval returningInterval = parseTimeInterval(resultList);
-			if (isDeadlineTask(userInputString)) {
-				return new TimeInterval(Constant.DEADLINE_START_DATE, returningInterval.getEndDate());
+			if (isDeadlineTask(userInputString) || returningInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
+				Calendar c = UtilityMethod.dateToCalendar(returningInterval.getEndDate());
+				if (c.get(Calendar.HOUR_OF_DAY) == 0 && c.get(Calendar.MINUTE) == 0) {
+					c.set(Calendar.HOUR_OF_DAY, 23);
+					c.set(Calendar.MINUTE, 59);
+					return new TimeInterval(Constant.DEADLINE_START_DATE, c.getTime());
+				} else {
+					return new TimeInterval(Constant.DEADLINE_START_DATE, returningInterval.getEndDate());
+				}
 			} else {
 				return returningInterval;
 			}
@@ -827,14 +841,16 @@ public class NERParser {
 		TimeInterval interval = new TimeInterval();
 
 		if (dates.size() == 1) {
-			Calendar c1 = UtilityMethod.dateToCalendar(dates.get(0));
-			Calendar c2 = UtilityMethod.dateToCalendar(dates.get(0));
-			c1.set(Calendar.HOUR_OF_DAY, 0);
-			c1.set(Calendar.MINUTE, 1);
-			c2.set(Calendar.HOUR_OF_DAY, 23);
-			c2.set(Calendar.MINUTE, 59);
-			interval = new TimeInterval(c1.getTime(),
-					c2.getTime());
+			Calendar c = UtilityMethod.dateToCalendar(dates.get(0));
+			if (c.get(Calendar.HOUR_OF_DAY) != 0 || c.get(Calendar.MINUTE) != 0) {
+				interval = new TimeInterval(Constant.DEADLINE_START_DATE, c.getTime());
+			} else {
+				Calendar cEnd = UtilityMethod.dateToCalendar(dates.get(0));
+				cEnd.set(Calendar.HOUR_OF_DAY, 23);
+				cEnd.set(Calendar.MINUTE, 59);
+				interval = new TimeInterval(c.getTime(), cEnd.getTime());
+			}
+			
 		} else if (dates.size() == 2) {
 			Date d0 = dates.get(0);
 			Date d1 = dates.get(1);

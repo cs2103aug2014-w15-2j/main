@@ -90,6 +90,7 @@ public class TimeInterval {
 			return false;
 		}
 	}
+	
 	/**
 	 * @override
 	 * toString
