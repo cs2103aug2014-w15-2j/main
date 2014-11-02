@@ -277,7 +277,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	
 	/**
-	 * initialize the short cut settigns
+	 * initialize the short cut settings
 	 */
 	private void initializeShortCuts(){
 		final ListOfXiaoMingViewsController instance = this;
@@ -299,7 +299,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 	
 	/**
-	 * regester the shortcuts to the system
+	 * register the shortcuts to the system
 	 * @param instance
 	 */
 	private void registerKeyShortCuts(HotKeyListener instance) {
