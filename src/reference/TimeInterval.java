@@ -4,6 +4,7 @@ import infrastructure.Constant;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class TimeInterval {
 	private Date startDate;
@@ -101,12 +102,12 @@ public class TimeInterval {
 			text = text + Constant.TIME_MESSAGE_FLOATING;
 		} else if (this.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 			// deadline task
-			String deadline = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(this.getEndDate());
-			text = text + "\n\t deadline: " + deadline + ";";
+			String deadline = new SimpleDateFormat("dd/MMMM/yyyy E HH:mm", Locale.ENGLISH).format(this.getEndDate());
+			text = text + "\ndeadline: \t\t" + deadline;
 		} else {
-			String start = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(this.getStartDate());
-			String end = new SimpleDateFormat("dd/MMMM/yyyy HH:mm").format(this.getEndDate());
-			text = text + "\n\t from " + start + " to " + end + ";";
+			String start = new SimpleDateFormat("dd/MMMM/yyyy E\tHH:mm", Locale.ENGLISH).format(this.getStartDate());
+			String end = new SimpleDateFormat("dd/MMMM/yyyy E\tHH:mm", Locale.ENGLISH).format(this.getEndDate());
+			text = text + "\ntime: \t\tfrom \t" + start + "\n\t\t\tto \t\t" + end;
 		}
 		
 		return text;

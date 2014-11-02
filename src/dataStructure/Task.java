@@ -138,16 +138,14 @@ public class Task {
 	 * @return 
 	 */
 	public String toStringForDisplaying() {
-		String task = new String();
+		String task = "description:\t";
 
 		task = task + getDescription();
-//		task = task + "\n\t category: " + getCategory() + ';';
 		if (!this.tag.isEmpty()) {
-			task = task + "\n\t tags: " + tagToString() + ';';
+			task = task + "\ntags: \t\t" + tagToString();
 		}
-		
-//		task = task + Integer.toString(getRepeatedPeriod()) + '`'; 
-		task = task + "\n\t priority: " + UtilityMethod.priorityToString(getPriority()) + ';';
+	
+		task = task + "\npriority: \t\t" + UtilityMethod.priorityToString(getPriority());
 		task = task + this.getInterval().toString();
 
 		return task;
