@@ -2,11 +2,12 @@
 .mylistview{
     -fx-border-color:rgb(244, 244, 244);
     -fx-padding:10 0 0 10;
+    -fx-font: 12px "Courier New";
 }
 
 /* The main scrollbar CSS class of ListView */
 .mylistview  .scroll-bar:vertical{
-    -fx-background-color:rgb(244, 244, 244);
+	
 }
 
 /* ------------------------------------------------------------------------------------- */

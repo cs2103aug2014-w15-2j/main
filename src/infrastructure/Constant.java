@@ -100,18 +100,18 @@ public abstract class Constant {
 
 	//GUI messages that will be shown to users
 	public static final String GUI_MESSAGE_WELCOME = "Welcome to 小鸣的清单(List of Xiao Ming)";
-	public static final String GUI_MESSAGE_SHORTCUT_INSTRUCTION = "ALT + A:\t insert <DATE> \t\tor </DATE>\n"
-																+ "ALT + C:\t insert <COMMAND> \tor </COMMAND>\n"
-																+ "ALT + D:\t insert <DESCRIPTION> \tor </DESCRIPTION>\n"
-																+ "ALT + I:\t insert <INDEX> \t\tor </INDEX>\n"
-																+ "ALT + P:\t insert <PRIORITY> \tor </PRIORITY>\n"
-																+ "ALT + T:\t insert <TAG> \t\t\tor </TAG>\n\n"
-																+ "CTRL + C:\t\t insert add\n"
-																+ "CTRL + R:\t\t insert display\n"
-																+ "CTRL + U:\t\t insert update\n"
-																+ "CTRL + D:\t insert delete\n"
-																+ "CTRL + F:\t\t insert search\n"
-																+ "CTRL + M:\t insert reload model\n";
+	public static final String GUI_MESSAGE_SHORTCUT_INSTRUCTION = "ALT + A:\t <DATE> \t </DATE>\n"
+																+ "ALT + C:\t <COMMAND> \t </COMMAND>\n"
+																+ "ALT + D:\t <DESCRIPTION> \t </DESCRIPTION>\n"
+																+ "ALT + I:\t <INDEX> \t </INDEX>\n"
+																+ "ALT + P:\t <PRIORITY> \t </PRIORITY>\n"
+																+ "ALT + T:\t <TAG> \t\t </TAG>\n\n"
+																+ "CTRL + C:\t add\n"
+																+ "CTRL + R:\t display\n"
+																+ "CTRL + U:\t update\n"
+																+ "CTRL + D:\t delete\n"
+																+ "CTRL + F:\t search\n"
+																+ "CTRL + M:\t reload model\n";
 	public static final String GUI_PREVIEW_MESSAGE_DELETE = "Command: delete \n\n" + "No Task Specified";
 	
 	//prompt messages that will be printed for users	
