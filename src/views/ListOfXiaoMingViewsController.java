@@ -152,6 +152,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		display.setContent(content);
 		display.getStyleClass().add("mylistview");
 		display.setHbarPolicy(ScrollBarPolicy.NEVER);
+		display.setFocusTraversable(true);
 	}
 	
 	public void setDisplayGrid(ArrayList<Task> displayList) {
@@ -272,6 +273,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		previewContent.getChildren().add(text);
 		preview.setStyle("-fx-padding:5 0 0 7; -fx-background-color: rgb(244, 244, 244)");
 		preview.setContent(previewContent);
+		preview.setFocusTraversable(true);
 	}
 
 	
