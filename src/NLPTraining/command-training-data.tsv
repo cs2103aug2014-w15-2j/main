@@ -147,3 +147,9 @@ s	SEARCH
 reload	RELOAD
 model	RELOAD
 .	O
+
+done	DONE
+.	O
+
+finish	DONE
+.	O
