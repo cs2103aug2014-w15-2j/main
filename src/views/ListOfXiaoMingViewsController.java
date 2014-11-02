@@ -39,6 +39,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class ListOfXiaoMingViewsController extends GridPane implements HotKeyListener{
 	@FXML
@@ -91,6 +92,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	public ListOfXiaoMingViewsController() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ListOfXiaoMingViews.fxml"));
+		Font.loadFont(getClass().getResource("Akagi-SB.ttf").toExternalForm(), 10);
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
 		fxmlLoader.load();
@@ -203,11 +205,11 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
 				contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 21));
 				int subRow = 0;
-				contentPane.setStyle("-fx-padding: 0 0 0 0; -fx-background-color: " + bodyColor);
+				contentPane.setStyle("-fx-padding: 2 8 0 8; -fx-background-color: " + bodyColor);
 				contentPane.setPrefWidth(getWidth());
 				
 				Label description = new Label(index + "." + task.getDescription());
-				description.setStyle("-fx-font-size: 17");
+				description.setStyle("-fx-font: 17px \"Akagi\";");
 				description.setPrefWidth(getWidth());
 				
 				contentPane.add(description, 0, subRow, 2, 1);
@@ -216,6 +218,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				if (task.isDeadline()) {
 					Label deadlineText = new Label("Deadline:");
 					Label deadline = new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
+					deadlineText.setStyle("-fx-font: 12px \"Akagi\";");
+					deadline.setStyle("-fx-font: 12px \"Akagi\";");
 					
 					contentPane.add(deadlineText, 0, subRow);
 					contentPane.add(deadline, 1, subRow);
@@ -226,6 +230,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				} else if (task.isTimed()) {
 					Label startText = new Label("Start time:");
 					Label start = new Label(Converter.convertDateToString(task.getInterval().getStartDate()));
+					startText.setStyle("-fx-font: 12px \"Akagi\";");
+					start.setStyle("-fx-font: 12px \"Akagi\";");
 					
 					contentPane.add(startText, 0, subRow);
 					contentPane.add(start, 1, subRow);
@@ -234,14 +240,21 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					
 					Label endText = new Label("End time:");
 					Label end= new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
+					endText.setStyle("-fx-font: 12px \"Akagi\";");
+					end.setStyle("-fx-font: 12px \"Akagi\";");
 					
 					contentPane.add(endText, 0, subRow);
 					contentPane.add(end, 1, subRow);
 					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
 					subRow ++;
 				}
-				contentPane.add(new Label("Tags:"), 0, subRow);
-				contentPane.add(new Label(task.tagToString()), 1, subRow);
+				Label tagText = new Label("Tags:");
+				Label tag = new Label(task.tagToString());
+				tagText.setStyle("-fx-font: 12px \"Akagi\";");
+				tag.setStyle("-fx-font: 12px \"Akagi\";");
+				
+				contentPane.add(tagText, 0, subRow);
+				contentPane.add(tag, 1, subRow);
 				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
 				subRow ++;
 				
@@ -271,6 +284,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		previewContent = new VBox();
 		Label text = new Label(displayedText);
 		previewContent.getChildren().clear();
+		previewContent.setStyle("-fx-font: 12px \"Akagi\";");
 		previewContent.getChildren().add(text);
 		preview.setStyle("-fx-padding:5 0 0 7; -fx-background-color: rgb(244, 244, 244)");
 		preview.setContent(previewContent);
