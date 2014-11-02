@@ -14,10 +14,10 @@ public class ListOfXiaoMingViews extends Application {
         if (System.getProperty("os.name").equals("Mac OS X")) {
         	scene = new Scene(control, 400, 600);
         } else {
-        	scene = new Scene(control, 390, 590);
+        	scene = new Scene(control, 400, 600);
         }
         scene.getStylesheets().add("views/style.css");
-        stage.initStyle(StageStyle.DECORATED);
+        stage.initStyle(StageStyle.UTILITY);
         stage.setScene(scene);
         stage.setTitle("List of Xiao Ming");
         stage.show();
