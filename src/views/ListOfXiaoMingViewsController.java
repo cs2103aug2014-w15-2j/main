@@ -1,7 +1,6 @@
 package views;
 
 import infrastructure.Constant;
-import infrastructure.Converter;
 import infrastructure.NERParser;
 import infrastructure.Parser;
 import infrastructure.UtilityMethod;
@@ -13,12 +12,9 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
-
-import javax.swing.Box;
 import javax.swing.KeyStroke;
 
 import reference.CommandFailedException;
@@ -31,22 +27,13 @@ import com.tulskiy.keymaster.common.Provider;
 
 import dataStructure.Task;
 import dataStructure.User;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -57,10 +44,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class ListOfXiaoMingViewsController extends GridPane implements HotKeyListener{
 	@FXML
@@ -401,7 +386,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		Label dateLabel = new Label(new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(date));
 		dateLabel.setStyle("-fx-text-fill: white;");
 		
-		Label weekdayLabel = new Label(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date));
+		Label weekdayLabel = new Label(new SimpleDateFormat("EE", Locale.ENGLISH).format(date));
 		weekdayLabel.setStyle("-fx-text-fill: white;"
 							+ "-fx-font: 17px \"Akagi\";"
 							+ "-fx-padding: 2 0 0 0");
