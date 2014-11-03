@@ -359,14 +359,14 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	private HBox getTimePaneForTask(Task task) {
 		TimeInterval timeInterval = task.getInterval();
 		HBox overallBox = new HBox();
-		overallBox.setAlignment(Pos.CENTER_LEFT);
-		overallBox.setStyle("-fx-padding: 5 5 5 0;");
+		overallBox.setAlignment(Pos.CENTER);
+		overallBox.setStyle("-fx-padding: 5 0 5 0;");
 		if (timeInterval.getStartDate().equals(Constant.FLOATING_START_DATE)) {
 			return null;
 		} else if (timeInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 			
 			HBox deadlineBox = getDeadlineBox(timeInterval.getEndDate());
-			
+			deadlineBox.setPrefWidth(400);
 			overallBox.getChildren().addAll(deadlineBox);
 			
 			return overallBox;
@@ -374,6 +374,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			HBox startDateBox = getTimeBox(timeInterval.getStartDate());
 			HBox endDateBox = getTimeBox(timeInterval.getEndDate());
 			Label arrow = new Label("  to  ");
+			
 			arrow.setStyle("-fx-font: 18px \"Akagi\";");
 			
 			overallBox.getChildren().addAll(startDateBox, arrow , endDateBox);
@@ -387,7 +388,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		
 		HBox timeBox = new HBox();
 		VBox dateBox = new VBox();
-		
+		timeBox.setPrefWidth(153);
 		timeBox.setAlignment(Pos.CENTER);
 		timeBox.setStyle("-fx-font: 12px \"Akagi\";"
 				+ "-fx-background-color: rgba(0, 0, 0, 0.5);"
@@ -430,7 +431,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				+ "");
 		
 		dateBox.setAlignment(Pos.CENTER);
-		Label deadlineLabel = new Label("DEADLINE: ");
+		Label deadlineLabel = new Label("DEADLINE:    ");
 		deadlineLabel.setStyle("-fx-font: 38px \"Ticking Timebomb BB\";"
 				+ "-fx-padding:5 0 0 5;"
 				+ "-fx-text-fill: white;");
