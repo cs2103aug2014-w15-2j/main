@@ -329,3 +329,10 @@ test	O
 2	O
 priority	O
 low	O
+
+
+add	COMMAND
+ppp	COMMAND
+,	O
+priority	O
+low	O

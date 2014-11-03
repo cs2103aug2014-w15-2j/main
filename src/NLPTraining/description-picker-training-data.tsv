@@ -577,3 +577,21 @@ test	DESCRIPTION
 2	DESCRIPTION
 priority	O
 low	O
+
+
++	O
+sleeping	DESCRIPTION
+,	O
+priority	O
+low	O
+
+
+add	O
+mua	DESCRIPTION
+,	O
+priority	O
+low	O
+,	O
+tag	O
+with	O
+water	O

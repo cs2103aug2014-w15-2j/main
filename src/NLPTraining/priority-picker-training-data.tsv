@@ -170,3 +170,47 @@ test	O
 2	O
 priority	PRIORITY
 low	PRIORITY
+
+
+add	O
+ppp	O
+,	O
+priority	PRIORITY
+low	PRIORITY
+
+
+add	O
+collect	O
+parcel,	O
+priority	O
+low	PRIORITY
+
+
+add	O
+lunch	O
+priority	O
+low	PRIORITY
+
+
++	O
+sleeping,	O
+priority	PRIORITY
+low	PRIORITY
+
+
++	O
+sleeping	O
+,	O
+priority	PRIORITY
+low	PRIORITY
+
+
+add	O
+mua	O
+,	O
+priority	PRIORITY
+low	PRIORITY
+,	O
+tag	O
+with	O
+water	O
