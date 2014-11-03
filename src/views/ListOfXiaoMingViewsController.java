@@ -25,7 +25,14 @@ import com.tulskiy.keymaster.common.Provider;
 
 import dataStructure.Task;
 import dataStructure.User;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -41,8 +48,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class ListOfXiaoMingViewsController extends GridPane implements HotKeyListener{
 	@FXML
@@ -196,7 +205,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			public void handle(ScrollEvent event) {
 				display.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 			}
-	    });
+		});
+		
 		display.setFocusTraversable(true);
 	}
 	
@@ -247,8 +257,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				GridPane contentPane = new GridPane();
 				
 				if (System.getProperty("os.name").equals("Mac OS X")) {
-					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 31));
-					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 31));
+					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 29));
+					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 29));
 		        } else {
 		        	contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 29));
 					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 29));
