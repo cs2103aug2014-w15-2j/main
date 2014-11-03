@@ -228,8 +228,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				GridPane contentPane = new GridPane();
 				
 				if (System.getProperty("os.name").equals("Mac OS X")) {
-					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 31));
-					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 31));
+					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 29));
+					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 29));
 		        } else {
 		        	contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 29));
 					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 29));
