@@ -431,7 +431,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				+ "");
 		
 		dateBox.setAlignment(Pos.CENTER);
-		Label deadlineLabel = new Label("DEADLINE:    ");
+		Label deadlineLabel = new Label("DEADLINE:     ");
 		deadlineLabel.setStyle("-fx-font: 38px \"Ticking Timebomb BB\";"
 				+ "-fx-padding:5 0 0 5;"
 				+ "-fx-text-fill: white;");
