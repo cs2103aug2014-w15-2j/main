@@ -28,8 +28,11 @@ import dataStructure.User;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -93,6 +96,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	private static final int MODIFIER_ALT = 520;
 	private static final int MODIFIER_CTRL = 130;
+	private static final long TIME_OUT = 10;
 	
 	private String descriptionTag 	= "</DESCRIPTION>";
 	private String dateTag 			= "</DATE>";
@@ -178,6 +182,21 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		display.setContent(content);
 		display.getStyleClass().add("mylistview");
 		display.setHbarPolicy(ScrollBarPolicy.NEVER);
+		display.setVbarPolicy(ScrollBarPolicy.NEVER);
+		display.setOnScrollFinished(new EventHandler<ScrollEvent>() {
+			@Override
+			public void handle(ScrollEvent event) {
+				// TODO Auto-generated method stub
+				display.setVbarPolicy(ScrollBarPolicy.NEVER);
+				
+			}
+	    });
+		display.setOnScrollStarted(new EventHandler<ScrollEvent>() {
+			@Override
+			public void handle(ScrollEvent event) {
+				display.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+			}
+	    });
 		display.setFocusTraversable(true);
 	}
 	
