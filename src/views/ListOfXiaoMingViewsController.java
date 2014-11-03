@@ -11,13 +11,19 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.Locale;
 
+import javax.swing.Box;
 import javax.swing.KeyStroke;
 
 import reference.CommandFailedException;
 import reference.Constraint;
+import reference.TimeInterval;
 
 import com.tulskiy.keymaster.common.HotKey;
 import com.tulskiy.keymaster.common.HotKeyListener;
@@ -39,9 +45,12 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -105,7 +114,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	private static final int MODIFIER_ALT = 520;
 	private static final int MODIFIER_CTRL = 130;
-	private static final long TIME_OUT = 10;
 	
 	private String descriptionTag 	= "</DESCRIPTION>";
 	private String dateTag 			= "</DATE>";
@@ -122,6 +130,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	public ListOfXiaoMingViewsController(Stage stage) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ListOfXiaoMingViews.fxml"));
 		Font.loadFont(getClass().getResource("Akagi-SB.ttf").toExternalForm(), 10);
+		Font.loadFont(getClass().getResource("TickingTimebombBB.ttf").toExternalForm(), 10);
+		
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
 		fxmlLoader.load();
@@ -248,7 +258,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				priorityPane.setStyle("-fx-padding: 8 8 0 8; -fx-background-color: " + bannerColor);
 				priorityPane.setPrefWidth(getWidth());
 				Label priority = new Label("\t\t\t\t\t\t\t\t " + index);
-				priority.setStyle("-fx-font: 19px \"Akagi\";");
+				priority.setStyle("-fx-font: 19px \"Akagi\";"
+						+ "-fx-text-fill: white;");
 				priority.setPrefWidth(getWidth());
 				priorityPane.add(priority, 0, 0);
 				taskPane.add(priorityPane, 0, row, 2, 1);
@@ -257,6 +268,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				
 				
 				GridPane contentPane = new GridPane();
+				contentPane.setGridLinesVisible(false);
 				
 				if (System.getProperty("os.name").equals("Mac OS X")) {
 					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 29));
@@ -267,79 +279,65 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		        }
 
 				int subRow = 0;
-				contentPane.setStyle("-fx-padding: 0 8 0 8; -fx-background-color: " + bodyColor);
+				contentPane.setStyle("-fx-padding: 8 8 8 8;"
+						+ "-fx-background-color: " + bodyColor);
 				contentPane.setPrefWidth(getWidth());
 				
 				Label description = new Label(task.getDescription());
-				description.setStyle("-fx-font: 17px \"Akagi\";");
+				description.setStyle("-fx-font: 17px \"Akagi\";"
+						+ "-fx-padding:0 0 5 0");
 				description.setPrefWidth(getWidth());
 				
 				contentPane.add(description, 0, subRow, 2, 1);
 				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
 				subRow ++;
 				
-				if (task.isDeadline()) {
-					Label deadlineText = new Label("Deadline:");
-					Label deadline = new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
-					deadlineText.setStyle("-fx-font: 12px \"Akagi\";");
-					deadline.setStyle("-fx-font: 12px \"Akagi\";");
-					contentPane.add(deadlineText, 0, subRow);
-					contentPane.add(deadline, 1, subRow);
-					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
-					subRow ++;
-				} else if (task.isFloating()) {
-					
-				} else if (task.isTimed()) {
-					Label startText = new Label("Start time:");
-					Label start = new Label(Converter.convertDateToString(task.getInterval().getStartDate()));
-					startText.setStyle("-fx-font: 12px \"Akagi\";");
-					start.setStyle("-fx-font: 12px \"Akagi\";");
-					
-					contentPane.add(startText, 0, subRow);
-					contentPane.add(start, 1, subRow);
-					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
-					subRow ++;
-					
-					Label endText = new Label("End time:");
-					Label end= new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
-					endText.setStyle("-fx-font: 12px \"Akagi\";");
-					end.setStyle("-fx-font: 12px \"Akagi\";");
-					
-					contentPane.add(endText, 0, subRow);
-					contentPane.add(end, 1, subRow);
-					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
-					subRow ++;
+//				if (task.isDeadline()) {
+//					Label deadlineText = new Label("Deadline:");
+//					Label deadline = new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
+//					deadlineText.setStyle("-fx-font: 12px \"Akagi\";");
+//					deadline.setStyle("-fx-font: 12px \"Akagi\";");
+//					contentPane.add(deadlineText, 0, subRow);
+//					contentPane.add(deadline, 1, subRow);
+//					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+//					subRow ++;
+//				} else if (task.isFloating()) {
+//					
+//				} else if (task.isTimed()) {
+//					Label startText = new Label("Start time:");
+//					Label start = new Label(Converter.convertDateToString(task.getInterval().getStartDate()));
+//					startText.setStyle("-fx-font: 12px \"Akagi\";");
+//					start.setStyle("-fx-font: 12px \"Akagi\";");
+//					
+//					contentPane.add(startText, 0, subRow);
+//					contentPane.add(start, 1, subRow);
+//					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+//					subRow ++;
+//					
+//					Label endText = new Label("End time:");
+//					Label end= new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
+//					endText.setStyle("-fx-font: 12px \"Akagi\";");
+//					end.setStyle("-fx-font: 12px \"Akagi\";");
+//					
+//					contentPane.add(endText, 0, subRow);
+//					contentPane.add(end, 1, subRow);
+//					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+//					subRow ++;
+//				}
+				
+				HBox timeBox = getTimePaneForTask(task);
+				if (timeBox != null) {
+					contentPane.add(timeBox, 0, subRow, 2, 2);
+					subRow += 2;
 				}
 				
-				GridPane tagPane = new GridPane();
-				tagPane.setStyle("-fx-padding: 5 0 0 0;");
-				tagPane.setHgap(10);
-				ArrayList<String> tags = task.getTag();
-				int columnIndex = 0;
-				for (String tag : tags) {
-					Label tagLabel = new Label(tag);
-					
-					int colorOffset = 0;
-					for (char c : tag.toCharArray()) {
-						colorOffset += c;
-					}
-					
-					colorOffset = colorOffset%CSS_COLORS.length;
-					tagLabel.setStyle("-fx-font: 10px \"Akagi\";"
-							+ "-fx-padding: 5 10 5 10;"
-							+ "-fx-background-color:" + CSS_COLORS[colorOffset]+ ";"
-							+ "-fx-background-radius: 5px;"
-							+ "-fx-text-fill: white;"
-							+ "-fx-margin: 0 5 0 5;");
-					tagPane.add(tagLabel, columnIndex, 0);
-					columnIndex ++;
-				}
+				GridPane tagPane = getTagPaneForTask(task);
 				contentPane.add(tagPane, 0, subRow, 2, 1);
 				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
 				subRow ++;
 				
 				taskPane.add(contentPane, 0, row, 1, subRow);
-				setDisplayRow(taskPane, GRID_ROW_HEIGHT * subRow + 3);
+				setDisplayRow(taskPane, GRID_ROW_HEIGHT * subRow + 11);
 				row ++;
 				
 				GridPane emptyPane = new GridPane();
@@ -355,6 +353,135 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		content.getChildren().add(taskPane);
 		display.setContent(content);
 	}
+	
+	
+	
+	private HBox getTimePaneForTask(Task task) {
+		TimeInterval timeInterval = task.getInterval();
+		HBox overallBox = new HBox();
+		overallBox.setAlignment(Pos.CENTER_LEFT);
+		overallBox.setStyle("-fx-padding: 5 5 5 0;");
+		if (timeInterval.getStartDate().equals(Constant.FLOATING_START_DATE)) {
+			return null;
+		} else if (timeInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
+			
+			HBox deadlineBox = getDeadlineBox(timeInterval.getEndDate());
+			
+			overallBox.getChildren().addAll(deadlineBox);
+			
+			return overallBox;
+		} else {
+			HBox startDateBox = getTimeBox(timeInterval.getStartDate());
+			HBox endDateBox = getTimeBox(timeInterval.getEndDate());
+			Label arrow = new Label("  to  ");
+			arrow.setStyle("-fx-font: 18px \"Akagi\";");
+			
+			overallBox.getChildren().addAll(startDateBox, arrow , endDateBox);
+			return overallBox;
+		}
+	}
+	
+	
+	
+	private HBox getTimeBox(Date date) {
+		
+		HBox timeBox = new HBox();
+		VBox dateBox = new VBox();
+		
+		timeBox.setAlignment(Pos.CENTER);
+		timeBox.setStyle("-fx-font: 12px \"Akagi\";"
+				+ "-fx-background-color: rgba(0, 0, 0, 0.5);"
+				+ "-fx-padding: 5 5 0 5;"
+				+ "-fx-background-radius: 5px;"
+				+ "-fx-text-fill: white;"
+				+ "");
+		
+		dateBox.setAlignment(Pos.CENTER);		
+		Label dateLabel = new Label(new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(date));
+		dateLabel.setStyle("-fx-text-fill: white;");
+		
+		Label weekdayLabel = new Label(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date));
+		weekdayLabel.setStyle("-fx-text-fill: white;"
+							+ "-fx-font: 17px \"Akagi\";"
+							+ "-fx-padding: 2 0 0 0");
+		
+		Label timeLabel = new Label(new SimpleDateFormat("HH:mm", Locale.ENGLISH).format(date));
+		timeLabel.setStyle("-fx-text-fill: white;"
+						 + "-fx-font: 38px \"Ticking Timebomb BB\";"
+						 + "-fx-padding: 5 0 0 5");
+		
+		dateBox.getChildren().addAll(dateLabel, weekdayLabel);
+		timeBox.getChildren().addAll(dateBox, timeLabel);
+
+		return timeBox;
+	}
+	
+	
+	private HBox getDeadlineBox(Date date) {
+		HBox timeBox = new HBox();
+		VBox dateBox = new VBox();
+		
+		timeBox.setAlignment(Pos.CENTER);
+		timeBox.setStyle("-fx-font: 12px \"Akagi\";"
+				+ "-fx-background-color: rgba(0, 0, 0, 0.5);"
+				+ "-fx-padding: 5 5 0 5;"
+				+ "-fx-background-radius: 5px;"
+				+ "-fx-text-fill: white;"
+				+ "");
+		
+		dateBox.setAlignment(Pos.CENTER);
+		Label deadlineLabel = new Label("DEADLINE: ");
+		deadlineLabel.setStyle("-fx-font: 38px \"Ticking Timebomb BB\";"
+				+ "-fx-padding:5 0 0 5;"
+				+ "-fx-text-fill: white;");
+		
+		Label dateLabel = new Label(new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(date));
+		dateLabel.setStyle("-fx-text-fill: white;");
+		
+		Label weekdayLabel = new Label(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date));
+		weekdayLabel.setStyle("-fx-text-fill: white;"
+							+ "-fx-font: 17px \"Akagi\";"
+							+ "-fx-padding: 2 0 0 0");
+		
+		Label timeLabel = new Label(new SimpleDateFormat("HH:mm", Locale.ENGLISH).format(date));
+		timeLabel.setStyle("-fx-text-fill: white;"
+						 + "-fx-font: 38px \"Ticking Timebomb BB\";"
+						 + "-fx-padding: 5 5 0 5");
+		
+		dateBox.getChildren().addAll(dateLabel, weekdayLabel);
+		timeBox.getChildren().addAll(deadlineLabel, dateBox, timeLabel);
+
+		return timeBox;
+	}
+	
+	
+	private GridPane getTagPaneForTask(Task task) {
+		GridPane tagPane = new GridPane();
+		tagPane.setStyle("-fx-padding: 5 0 0 0;");
+		tagPane.setHgap(10);
+		ArrayList<String> tags = task.getTag();
+		int columnIndex = 0;
+		for (String tag : tags) {
+			Label tagLabel = new Label(tag);
+			
+			int colorOffset = 0;
+			for (char c : tag.toCharArray()) {
+				colorOffset += c;
+			}
+			
+			colorOffset = colorOffset%CSS_COLORS.length;
+			tagLabel.setStyle("-fx-font: 10px \"Akagi\";"
+					+ "-fx-padding: 5 10 5 10;"
+					+ "-fx-background-color:" + CSS_COLORS[colorOffset]+ ";"
+					+ "-fx-background-radius: 5px;"
+					+ "-fx-text-fill: white;"
+					+ "-fx-margin: 0 5 0 5;");
+			tagPane.add(tagLabel, columnIndex, 0);
+			columnIndex ++;
+		}
+		return tagPane;
+	}
+	
 	
 	private void setDisplayRow(GridPane pane, double height) {
 		pane.getRowConstraints().add(new RowConstraints(height));
