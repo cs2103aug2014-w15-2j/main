@@ -210,6 +210,9 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		display.setFocusTraversable(true);
 	}
 	
+	/**
+	 * @param displayList
+	 */
 	public void setDisplayGrid(ArrayList<Task> displayList) {
 		content = new VBox();
 		GridPane taskPane = new GridPane();
@@ -241,7 +244,6 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 						
 						break;
 				}
-				
 				GridPane priorityPane = new GridPane();
 				priorityPane.setStyle("-fx-padding: 8 8 0 8; -fx-background-color: " + bannerColor);
 				priorityPane.setPrefWidth(getWidth());
