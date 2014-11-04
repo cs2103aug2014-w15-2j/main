@@ -67,6 +67,13 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	private int currentCommandIndex = 0;
 	
 	
+/**
+ * =========================================================================================
+ * Constructor
+ * =========================================================================================
+ */
+	
+	
 	
 	public MainViewController(Stage stage) {
 		try {
@@ -91,7 +98,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	
 /**
  * ========================================================================================
- *  Methods which might be called during initialization
+ *  Methods which might be called during initialization (in constructor)
  * ========================================================================================
  */
 	
@@ -147,8 +154,8 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	}
 	
 	private void updatePage() {
-		setPreview("\n\n\n\t\t\t  Welcome to List of Xiao Ming");
-		this.setDisplay("HELP:" + "\n\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
+		setPreviewText("\n\n\n\t\t\t  Welcome to List of Xiao Ming");
+		this.setDisplayText("HELP:" + "\n\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
 	}
 	
 	private void addTextFieldListener() {
@@ -170,14 +177,15 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}));
 	}
 
-
 	
 	
 	
 	
-
-
-
+/**
+ * ===========================================================================================================
+ *  I/O & hot key responding methods
+ * ===========================================================================================================
+ */
 	
 	public String getUserInput(boolean willClear) {
 		String text = input.getText();
@@ -187,20 +195,17 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		return text;
 	}
 	
-	@FXML
-    private void onEnter() {
-		String command = getUserInput(true);
-		if (command.equals("")) {
-			displayTaskList(this.display());			
-		} else {
-//			setPreview("\n\n\n\t\t  Welcome to List of Xiao Ming");
-			this.commandHistory.add(command);
-			this.currentCommandIndex = this.commandHistory.size();
-			this.execute(command);
-		}
-    }
+	public void setPreviewText(String textToDisplay) {
+		VBox previewContentBox = new VBox();
+		Label text = new Label(textToDisplay);
+		previewContentBox.getChildren().clear();
+		previewContentBox.setStyle(Constant.CSS_STYLE_PRIVIEW_CONTENT_BOX);
+		previewContentBox.getChildren().add(text);
+		previewScrollPane.setStyle(Constant.CSS_STYLE_PREVIEW_SCROLL_PANE);
+		previewScrollPane.setContent(previewContentBox);
+	}
 	
-	public void setDisplay(String textToDisplay) {
+	public void setDisplayText(String textToDisplay) {
 		VBox displayContent = new VBox();
 		Label textLabel = new Label(textToDisplay);
 		displayContent.getChildren().clear();
@@ -229,10 +234,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		displayScrollPane.setFocusTraversable(true);
 	}
 	
-	/**
-	 * @param taskList
-	 */
-	public void displayTaskList(ArrayList<Task> taskList) {
+	public void setDisplayPane(ArrayList<Task> taskList) {
 		VBox displayContent = new VBox();
 		displayContent.setAlignment(Pos.CENTER);
 		displayContent.getChildren().clear();
@@ -241,67 +243,12 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		displayScrollPane.setContent(displayContent);
 	}
 	
-	public void setPreview(String textToDisplay) {
-		VBox previewContentBox = new VBox();
-		Label text = new Label(textToDisplay);
-		previewContentBox.getChildren().clear();
-		previewContentBox.setStyle(Constant.CSS_STYLE_PRIVIEW_CONTENT_BOX);
-		previewContentBox.getChildren().add(text);
-		previewScrollPane.setStyle(Constant.CSS_STYLE_PREVIEW_SCROLL_PANE);
-		previewScrollPane.setContent(previewContentBox);
-	}
-
-	
-	
-	/**
-	 * initialize the short cut settings
-	 */
-
-	
-	/**
-	 * register the shortcuts to the system
-	 * @param instance
-	 */
-
-	
-	
-	/**
-	 * toggle between e.g. <DATE> & </DATE>
-	 * @param tag
-	 * @return
-	 */
-	private String toggleTag(String tag) {
-		if (tag.contains("</")) {
-			return tag.replace("</", "<");
-		} else {
-			return tag.replace("<", "</");
-		}
-		
-	}
-	
-	
-	private void loadPreview() {
-		//open a new thread to execute Java FX
-		final MainViewController instance = this;
-		Platform.runLater(new Runnable() {
-	        @Override
-	        public void run() {
-	        	String userInput = getUserInput(false);
-	        	if (userInput.length() > 0) {
-	        		System.out.println(userInput);
-	        		setPreview(instance.getPreview(userInput));
-	        	}
-	        }
-	   });
-	}
-	
-	
 	/**
 	 * insert the given text to the given position in the textField
 	 * @param cursorPosition
 	 * @param text
 	 */
-	private void insertTextToTextField(final int cursorPosition, final String text) {
+	private void insertTextIntoTextField(final int cursorPosition, final String text) {
 		//open a new thread to execute Java FX
 		final MainViewController instance = this;
 		Platform.runLater(new Runnable() {
@@ -324,112 +271,55 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	}
 	
 	/**
-	 * the delegation methods to respond to shortcuts
+	 * toggle between e.g. <DATE> & </DATE>
+	 * @param tag
+	 * @return
 	 */
-	@Override
-	public void onHotKey(HotKey key) {
-		String tag = "";
-		int cursorPosition = this.input.getCaretPosition();
-		switch (key.keyStroke.getKeyCode() + key.keyStroke.getModifiers()) {
-			case KeyEvent.VK_D + Constant.MODIFIER_ALT:
-				descriptionTag = toggleTag(descriptionTag);
-				tag = descriptionTag;
-				insertTextToTextField(cursorPosition, tag);	
-				break;
-
-			case KeyEvent.VK_A + Constant.MODIFIER_ALT:
-				dateTag = toggleTag(dateTag);
-				tag = dateTag;
-				insertTextToTextField(cursorPosition, tag);	
-				break;
-				
-			case KeyEvent.VK_C + Constant.MODIFIER_ALT:
-				commandTag = toggleTag(commandTag);
-				tag = commandTag;
-				insertTextToTextField(cursorPosition, tag);	
-				break;
-				
-			case KeyEvent.VK_T + Constant.MODIFIER_ALT:
-				tagTag = toggleTag(tagTag);
-				tag = tagTag;
-				insertTextToTextField(cursorPosition, tag);	
-				break;
-				
-			case KeyEvent.VK_I + Constant.MODIFIER_ALT:
-				indexTag = toggleTag(indexTag);
-				tag = indexTag;
-				insertTextToTextField(cursorPosition, tag);	
-				break;
-				
-			case KeyEvent.VK_P + Constant.MODIFIER_ALT:
-				priorityTag = toggleTag(priorityTag);
-				tag = priorityTag;
-				insertTextToTextField(cursorPosition, tag);	
-				break;
-			
-			case KeyEvent.VK_ENTER + Constant.MODIFIER_CTRL:
-				this.loadPreview();	
-				break;
-				
-			case KeyEvent.VK_C + Constant.MODIFIER_CTRL:
-				insertTextToTextField(cursorPosition, "add ");	
-				break;
-				
-			case KeyEvent.VK_R + Constant.MODIFIER_CTRL:
-				insertTextToTextField(cursorPosition, "display ");	
-				break;
-				
-			case KeyEvent.VK_U + Constant.MODIFIER_CTRL:
-				insertTextToTextField(cursorPosition, "update ");	
-				break;
-				
-			case KeyEvent.VK_D + Constant.MODIFIER_CTRL:
-				insertTextToTextField(cursorPosition, "delete ");	
-				break;
-				
-			case KeyEvent.VK_F + Constant.MODIFIER_CTRL:
-				insertTextToTextField(cursorPosition, "search ");	
-				break;
-				
-			case KeyEvent.VK_M + Constant.MODIFIER_CTRL:
-				insertTextToTextField(cursorPosition, "reload model ");	
-				break;
-				
-			case KeyEvent.VK_BACK_SPACE + Constant.MODIFIER_CTRL:
-				String inputString = (String) input.getCharacters();
-				insertTextToTextField(cursorPosition, inputString.substring(0, inputString.lastIndexOf(" ")));
-				break;
-		}
-		
-		switch (key.keyStroke.getKeyCode()) {
-			case KeyEvent.VK_UP:
-				this.currentCommandIndex --;
-				try {
-					updateTextField(this.commandHistory.get(this.currentCommandIndex));
-				} catch (ArrayIndexOutOfBoundsException e) {
-					// TODO log
-					this.currentCommandIndex ++;
-				}
-				break;
-				
-			case KeyEvent.VK_DOWN:
-				try {
-					this.currentCommandIndex ++;
-					updateTextField(this.commandHistory.get(this.currentCommandIndex));
-				} catch (ArrayIndexOutOfBoundsException e) {
-					// TODO log
-					this.currentCommandIndex --;
-				}
-				break;
+	private String toggleTag(String tag) {
+		if (tag.contains("</")) {
+			return tag.replace("</", "<");
+		} else {
+			return tag.replace("<", "</");
 		}
 		
 	}
 	
+	private void loadPreview() {
+		//open a new thread to execute Java FX
+		final MainViewController instance = this;
+		Platform.runLater(new Runnable() {
+	        @Override
+	        public void run() {
+	        	String userInput = getUserInput(false);
+	        	if (userInput.length() > 0) {
+	        		System.out.println(userInput);
+	        		setPreviewText(instance.getPreview(userInput));
+	        	}
+	        }
+	   });
+	}
 	
-	/**
-	 * the important method to execute CRUD operations, etc.
-	 * @param userInput
-	 */
+	@FXML
+    private void onEnter() {
+		String command = getUserInput(true);
+		if (command.equals("")) {
+			setDisplayPane(this.display());			
+		} else {
+			this.commandHistory.add(command);
+			this.currentCommandIndex = this.commandHistory.size();
+			this.execute(command);
+		}
+    }
+
+	
+	
+	
+
+/**
+ * ==================================================================================================
+ * Demux methods
+ * ==================================================================================================
+ */
 	public void execute(String userInput) {
 		
 			if (!userInput.equals("")) {
@@ -452,47 +342,47 @@ public class MainViewController extends GridPane implements HotKeyListener{
 
 			switch(thisCommand) {
 				case ADD:
-					setPreview(this.add(userInput));
-					displayTaskList(this.display());
+					setPreviewText(this.add(userInput));
+					setDisplayPane(this.display());
 					break;
 					
 				case DELETE:
-					setPreview(this.delete(userInput));
-					displayTaskList(this.display());
+					setPreviewText(this.delete(userInput));
+					setDisplayPane(this.display());
 					break;
 					
 				case UPDATE:
-					setPreview(this.update(userInput));
-					displayTaskList(this.display());
+					setPreviewText(this.update(userInput));
+					setDisplayPane(this.display());
 					break;
 					
 				case SEARCH:
 					ArrayList<Task> queryList = this.search(userInput);
 					if (queryList != null) {
-						displayTaskList(queryList);
+						setDisplayPane(queryList);
 					}
 					break;
 				
 				case DISPLAY:
-					ArrayList<Task> displayList = this.display();
-					if (displayList != null) {
-						displayTaskList(displayList);
+					ArrayList<Task> listToDisplay = this.display();
+					if (listToDisplay != null) {
+						setDisplayPane(listToDisplay);
 					}
 					break;
 					
 				case UNDO:
-					setPreview(this.undo());
-					displayTaskList(this.display());
+					setPreviewText(this.undo());
+					setDisplayPane(this.display());
 					break;
 					
 				case REDO:
-					setPreview(this.redo());
-					displayTaskList(this.display());
+					setPreviewText(this.redo());
+					setDisplayPane(this.display());
 					break;
 					
 				case CLEAR:
-					setPreview(this.clear());
-					displayTaskList(this.display());
+					setPreviewText(this.clear());
+					setDisplayPane(this.display());
 					break;
 					
 				case EXIT:
@@ -502,22 +392,22 @@ public class MainViewController extends GridPane implements HotKeyListener{
 					break;
 					
 				case HELP:
-					setDisplay(this.help());
+					setDisplayText(this.help());
 					break;
 					
 				case EMPTY_TRASH:
-					setPreview(this.emptyTrash());
-					displayTaskList(this.display());
+					setPreviewText(this.emptyTrash());
+					setDisplayPane(this.display());
 					break;
 					
 				case RELOAD:
-					setPreview(this.reloadNLPModel());
-					displayTaskList(this.display());
+					setPreviewText(this.reloadNLPModel());
+					setDisplayPane(this.display());
 					break;
 					
 				case DONE:
-					setPreview(this.done(userInput));
-					displayTaskList(this.display());
+					setPreviewText(this.done(userInput));
+					setDisplayPane(this.display());
 					break;
 					
 				default:
@@ -530,12 +420,6 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 	
-	
-	/**
-	 * get the expected result of a user input
-	 * @param userInput
-	 * @return
-	 */
 	public String getPreview(String userInput) {
 		try {
 			if (userInput.equals("")) {
@@ -547,81 +431,46 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			
 			switch(thisCommand) {
 				case ADD:
-					try {
-						Task taskToAdd = parser.nerParser.getTask(userInput);
-						return "Command: create \n\n" + taskToAdd.toStringForDisplaying();
-					} catch (CommandFailedException ae) {
-						return "Command: create \n\n" + "Fail to Parse The Task";
-					}
+					return getAddPreview(userInput);
 					
 				case DELETE:
-					try {
-						ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
-						String returnValue = "Command: delete \n\n";
-						
-						for (int index : indices) {
-							Task taskToDelete = this.user.retrieve(index - 1);
-							returnValue += (index + ": " + taskToDelete.getDescription() + "\n");
-						}
-						return returnValue;
-					} catch (CommandFailedException de) {
-						return "Command: delete \n\n" + "No Task Specified"; 
-					}
+					return getDeletePreview(userInput);
 					
 				case UPDATE:
-					try {
-						int index = parser.nerParser.pickIndex(userInput).get(0);
-						Task taskToUpdate = this.user.getUpdatePreview(index - 1, parser.nerParser.getUpdatedTaskMap(userInput));
-						return "Command: update \n\n" + taskToUpdate.toStringForDisplaying();
-					} catch (CommandFailedException e) {
-						e.printStackTrace();
-						return "Command: update \n\n" + Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
-					}
+					return getUpdatePreview(userInput);
 					
 				case SEARCH:
-					Constraint thisConstraint = parser.nerParser.getConstraint(userInput);
-					return "Command: search \n\n" + thisConstraint.toString();
+					return getSearchPreview(userInput);
 				
 				case DONE:
-					try {
-						ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
-						String returnValue = "Command: done \n\n";
-						
-						for (int index : indices) {
-							Task taskToFinish = this.user.retrieve(index - 1);
-							returnValue += (index + ": " + taskToFinish.getDescription() + "\n");
-						}
-						return returnValue;
-					} catch (CommandFailedException de) {
-						return "Command: done \n\n" + "No Task Specified"; 
-					}
+					return getDonePreview(userInput);
 					
 				case DISPLAY:
-					return "Command: display";
+					return getDisplayPreview();
 	
 				case UNDO:
-					return "Command: undo";
+					return getUndoPreview();
 					
 				case REDO:
-					return "Command: redo";
+					return getRedoPreview();
 					
 				case CLEAR:
-					return "Command: clear";
-					
-				case EXIT:
-					return "Command: exit";
-					
-				case HELP:
-					return "Command: help";
+					return getClearPreview();
 					
 				case EMPTY_TRASH:
-					return "Command: empty trash";
+					return getEmptyTrashPreview();
 					
 				case RELOAD:
-					return "Command: reload model";
+					return getReloadPreview();
+					
+				case HELP:
+					return getHelpPreview();
+					
+				case EXIT:
+					return getExitPreview();
 					
 				default:
-					return "Command not recognized";
+					return getDefaultPreview();
 	
 			}
 			
@@ -630,7 +479,116 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			return "Failure in Parsing The Task";
 		}
 	}
+	
+	
+	
 
+		
+/**
+ * 	=======================================================================================================
+ *  Specific methods to get previews
+ *  =======================================================================================================
+ */
+	private String getDefaultPreview() {
+		return "Command not recognized";
+	}
+
+	private String getReloadPreview() {
+		return "Command: reload model";
+	}
+
+	private String getEmptyTrashPreview() {
+		return "Command: empty trash";
+	}
+
+	private String getHelpPreview() {
+		return "Command: help";
+	}
+
+	private String getExitPreview() {
+		return "Command: exit";
+	}
+
+	private String getClearPreview() {
+		return "Command: clear";
+	}
+
+	private String getRedoPreview() {
+		return "Command: redo";
+	}
+
+	private String getUndoPreview() {
+		return "Command: undo";
+	}
+
+	private String getDisplayPreview() {
+		return "Command: display";
+	}
+
+	private String getDonePreview(String userInput) {
+		try {
+			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
+			String returnValue = "Command: done \n\n";
+			
+			for (int index : indices) {
+				Task taskToFinish = this.user.retrieve(index - 1);
+				returnValue += (index + ": " + taskToFinish.getDescription() + "\n");
+			}
+			return returnValue;
+		} catch (CommandFailedException de) {
+			return "Command: done \n\n" + "No Task Specified"; 
+		}
+	}
+
+	private String getSearchPreview(String userInput) {
+		Constraint thisConstraint = parser.nerParser.getConstraint(userInput);
+		return "Command: search \n\n" + thisConstraint.toString();
+	}
+
+	private String getUpdatePreview(String userInput) {
+		try {
+			int index = parser.nerParser.pickIndex(userInput).get(0);
+			Task taskToUpdate = this.user.getUpdatePreview(index - 1, parser.nerParser.getUpdatedTaskMap(userInput));
+			return "Command: update \n\n" + taskToUpdate.toStringForDisplaying();
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+			return "Command: update \n\n" + Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
+		}
+	}
+
+	private String getDeletePreview(String userInput) {
+		try {
+			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
+			String returnValue = "Command: delete \n\n";
+			
+			for (int index : indices) {
+				Task taskToDelete = this.user.retrieve(index - 1);
+				returnValue += (index + ": " + taskToDelete.getDescription() + "\n");
+			}
+			return returnValue;
+		} catch (CommandFailedException de) {
+			return "Command: delete \n\n" + "No Task Specified"; 
+		}
+	}
+
+	private String getAddPreview(String userInput) {
+		try {
+			Task taskToAdd = parser.nerParser.getTask(userInput);
+			return "Command: create \n\n" + taskToAdd.toStringForDisplaying();
+		} catch (CommandFailedException ae) {
+			return "Command: create \n\n" + "Fail to Parse The Task";
+		}
+	}
+
+
+
+
+
+/**
+ * ============================================================================================================
+ * Methods to execute the specific operations
+ * ============================================================================================================
+ */
 	
 	private String add(String userInput) {
 		try {
@@ -643,7 +601,6 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 
-	
 	private String delete(String userInput) {
 		try {
 			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
@@ -672,7 +629,6 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 
-
 	private String update(String userInput) {
 		try {
 			int index = parser.nerParser.pickIndex(userInput).get(0);
@@ -686,39 +642,37 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		return Constant.PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY;
 	}
 
-
 	private ArrayList<Task> search(String userInput) {
 		Constraint thisConstraint;
 		try {
 			thisConstraint = parser.nerParser.getConstraint(userInput);
 			ArrayList<Task> queryResult = this.user.find(thisConstraint);
 			if (queryResult.isEmpty()) {
-				setPreview(Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED);
+				setPreviewText(Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED);
 				return null;
 			} else {
 				return queryResult;
 			}
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
-			setPreview("SEARCH ERROR");
+			setPreviewText("SEARCH ERROR");
 			e.printStackTrace();
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
-			setPreview("SEARCH ERROR");
+			setPreviewText("SEARCH ERROR");
 			e.printStackTrace();
 			return null;
 		}
 
 	}
 
-
 	private ArrayList<Task> display() {
 		ArrayList<Task> queryResult;
 		try {
 			queryResult = this.user.getTaskList();
 			if (queryResult.isEmpty()) {
-				setDisplay(Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK);
+				setDisplayText(Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK);
 				// TODO: create a box for empty list
 				return null;
 			} else {
@@ -727,11 +681,10 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			setPreview(Constant.PROMPT_MESSAGE_DISPLAY_ERROR);
+			setPreviewText(Constant.PROMPT_MESSAGE_DISPLAY_ERROR);
 			return null;
 		}
 	}
-	
 	
 	private String emptyTrash() {
 		this.user.clear();
@@ -804,5 +757,113 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		} catch (CommandFailedException e) {
 			return e.toString();
 		}
+	}
+
+
+
+
+
+/**
+ * ==========================================================================
+ * the delegation methods to respond to shortcuts
+ * ==========================================================================
+ */
+	@Override
+	public void onHotKey(HotKey key) {
+		String tag = "";
+		int cursorPosition = this.input.getCaretPosition();
+		switch (key.keyStroke.getKeyCode() + key.keyStroke.getModifiers()) {
+			case KeyEvent.VK_D + Constant.MODIFIER_ALT:
+				descriptionTag = toggleTag(descriptionTag);
+				tag = descriptionTag;
+				insertTextIntoTextField(cursorPosition, tag);	
+				break;
+
+			case KeyEvent.VK_A + Constant.MODIFIER_ALT:
+				dateTag = toggleTag(dateTag);
+				tag = dateTag;
+				insertTextIntoTextField(cursorPosition, tag);	
+				break;
+				
+			case KeyEvent.VK_C + Constant.MODIFIER_ALT:
+				commandTag = toggleTag(commandTag);
+				tag = commandTag;
+				insertTextIntoTextField(cursorPosition, tag);	
+				break;
+				
+			case KeyEvent.VK_T + Constant.MODIFIER_ALT:
+				tagTag = toggleTag(tagTag);
+				tag = tagTag;
+				insertTextIntoTextField(cursorPosition, tag);	
+				break;
+				
+			case KeyEvent.VK_I + Constant.MODIFIER_ALT:
+				indexTag = toggleTag(indexTag);
+				tag = indexTag;
+				insertTextIntoTextField(cursorPosition, tag);	
+				break;
+				
+			case KeyEvent.VK_P + Constant.MODIFIER_ALT:
+				priorityTag = toggleTag(priorityTag);
+				tag = priorityTag;
+				insertTextIntoTextField(cursorPosition, tag);	
+				break;
+			
+			case KeyEvent.VK_ENTER + Constant.MODIFIER_CTRL:
+				this.loadPreview();	
+				break;
+				
+			case KeyEvent.VK_C + Constant.MODIFIER_CTRL:
+				insertTextIntoTextField(cursorPosition, "add ");	
+				break;
+				
+			case KeyEvent.VK_R + Constant.MODIFIER_CTRL:
+				insertTextIntoTextField(cursorPosition, "display ");	
+				break;
+				
+			case KeyEvent.VK_U + Constant.MODIFIER_CTRL:
+				insertTextIntoTextField(cursorPosition, "update ");	
+				break;
+				
+			case KeyEvent.VK_D + Constant.MODIFIER_CTRL:
+				insertTextIntoTextField(cursorPosition, "delete ");	
+				break;
+				
+			case KeyEvent.VK_F + Constant.MODIFIER_CTRL:
+				insertTextIntoTextField(cursorPosition, "search ");	
+				break;
+				
+			case KeyEvent.VK_M + Constant.MODIFIER_CTRL:
+				insertTextIntoTextField(cursorPosition, "reload model ");	
+				break;
+				
+			case KeyEvent.VK_BACK_SPACE + Constant.MODIFIER_CTRL:
+				String inputString = (String) input.getCharacters();
+				insertTextIntoTextField(cursorPosition, inputString.substring(0, inputString.lastIndexOf(" ")));
+				break;
+		}
+		
+		switch (key.keyStroke.getKeyCode()) {
+			case KeyEvent.VK_UP:
+				this.currentCommandIndex --;
+				try {
+					updateTextField(this.commandHistory.get(this.currentCommandIndex));
+				} catch (ArrayIndexOutOfBoundsException e) {
+					// TODO log
+					this.currentCommandIndex ++;
+				}
+				break;
+				
+			case KeyEvent.VK_DOWN:
+				try {
+					this.currentCommandIndex ++;
+					updateTextField(this.commandHistory.get(this.currentCommandIndex));
+				} catch (ArrayIndexOutOfBoundsException e) {
+					// TODO log
+					this.currentCommandIndex --;
+				}
+				break;
+		}
+		
 	}
 }
