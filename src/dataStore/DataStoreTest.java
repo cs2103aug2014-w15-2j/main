@@ -1,35 +1,55 @@
 package dataStore;
 
-//import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 
-//import org.junit.Test;
+import org.junit.Test;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class DataStoreTest {
-
-	public boolean initialize(String testFile) {
-		File oldTestFile = new File(testFile);
-		if(oldTestFile.exists()) {
-			oldTestFile.delete();
-			System.out.println("here " + oldTestFile.getAbsolutePath());
-			return false;
+	
+	private static final String DATA_FILEPATH = 
+								"List-of-Xiao-Ming/task-list.xiaoming";
+	private static final String DATA_FILEPATH_TEMP= 
+								"List-of-Xiao-Ming/task-list-temp.xiaoming";
+	
+	static File fileData = new File(DATA_FILEPATH);
+	static File fileTemp = new File(DATA_FILEPATH_TEMP);
+	
+	private static void setTestEnvironment() { 
+		if(fileData.exists()) {
+			fileData.renameTo(fileTemp);
 		}
-		return true;
+		
+		try {
+			fileData.createNewFile();
+		} catch (IOException e) {
+			System.out.println("failed to create a test-file");
+		}
 	}
 	
-//	@Test
-//	public void testGetCurrentTasks() {
-//		initialize("testFileGCT");
-//		DataStore.createAccount("testFileGCT", "thisIsJustATestFile");
-//		File user = new File("testFileGCT");
-//		try {
-//			assertEquals(0, DataStore.getCurrentTasks(user).size());
-//		} catch (Exception e) {
-//			System.out.println("Failed.");
-//		}
-//		File testFile = new File("testFileGCT");
-//		testFile.delete();
-//	}
+	@Test
+	public void testSaveNull() {
+		if(fileData.exists()) {
+			fileData.delete();
+		}
+		assertFalse(DataStore.save(null));
+		
+		try {
+			fileData.createNewFile();
+			assertTrue(DataStore.save(null));
+			BufferedReader br = new BufferedReader(new FileReader(fileData));
+			assertEquals("[", br.readLine().trim());
+			br.readLine();
+			assertEquals("]", br.readLine().trim());
+			br.close();
+		} catch (IOException e) {
+			System.out.println("failed in generating the test-file");
+		}
+		
+	}
 	
 }
