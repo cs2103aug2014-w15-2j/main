@@ -2,6 +2,8 @@ package dataStore;
 
 import static org.junit.Assert.*;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -19,7 +21,8 @@ public class DataStoreTest {
 	static File fileData = new File(DATA_FILEPATH);
 	static File fileTemp = new File(DATA_FILEPATH_TEMP);
 	
-	private static void setTestEnvironment() { 
+	@Before
+	public void setTestEnvironment() { 
 		if(fileData.exists()) {
 			fileData.renameTo(fileTemp);
 		}
@@ -29,6 +32,12 @@ public class DataStoreTest {
 		} catch (IOException e) {
 			System.out.println("failed to create a test-file");
 		}
+	}
+	
+	@After
+	public void setBackOriginalData() {
+		fileData.delete();
+		fileTemp.renameTo(fileData);
 	}
 	
 	@Test
