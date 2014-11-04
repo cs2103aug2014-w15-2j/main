@@ -316,8 +316,8 @@ public abstract class Constant {
 			"rgba(233, 87, 63, 0.7)", "rgba(218, 68, 84, 0.7)" };
 
 	// fonts
-	public static final String FONT_FILE_BASE = "Akagi-SB.ttf";
-	public static final String FONT_FILE_TIME = "TickingTimebombBB.ttf";
+	public static final String FONT_FILE_BASE = "/resource/Akagi-SB.ttf";
+	public static final String FONT_FILE_TIME = "/resource/TickingTimebombBB.ttf";
 
 	// shortcuts
 	public static final String HOT_KEY_ADD_DESCRIPTION_TAG = "alt D";

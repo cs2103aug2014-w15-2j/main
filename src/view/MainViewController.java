@@ -184,7 +184,6 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	
 	private static GridPane getTaskPane(ArrayList<Task> taskList, double width) {
 		GridPane taskPane = new GridPane();
-		taskPane.setStyle("-fx-padding: 10 10 10 10");
 		int row = 0;
 		int index = 1;
 		taskPane.getColumnConstraints().add(new ColumnConstraints(width * 0.3 - 21));

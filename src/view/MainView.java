@@ -16,7 +16,7 @@ public class MainView extends Application {
         } else {
         	scene = new Scene(control, 400, 600);
         }
-        scene.getStylesheets().add("views/style.css");
+        scene.getStylesheets().add("resource/style.css");
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(scene);
         stage.setTitle("List of Xiao Ming");
