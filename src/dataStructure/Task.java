@@ -29,6 +29,8 @@ public class Task {
 	 * @param task_id
 	 * @param repeated_period
 	 * @param tag
+	 * 
+	 * @author linfanshi
 	 */
 	public Task(String description, String category, int priority,
 			int repeated_period, ArrayList<String> tag, TimeInterval interval) {
@@ -53,6 +55,8 @@ public class Task {
 	 * @param tag
 	 * @param startDate
 	 * @param endDate
+	 * 
+	 * @author linfanshi
 	 */
 	public Task(String task_id, String description, String category,
 			int priority, int repeated_period, ArrayList<String> tag,
@@ -94,6 +98,7 @@ public class Task {
 	 * toString convert the task information to a string for storage.
 	 * 
 	 * @return a task string
+	 * @author linfanshi
 	 */
 	public String toString() {
 		String task = new String();
@@ -116,6 +121,7 @@ public class Task {
 	 * tagToString convert the tag list to a string.
 	 * 
 	 * @return tags string
+	 * @author linfanshi
 	 */
 	public String tagToString() {
 		String tags = new String();
@@ -157,6 +163,7 @@ public class Task {
 	 * getPriority gets the task description
 	 * 
 	 * @return
+	 * @author linfanshi
 	 */
 	public String getDescription() {
 		return this.description;
@@ -166,6 +173,7 @@ public class Task {
 	 * setDescription sets the task description to given newDescription.
 	 * 
 	 * @param newDescription
+	 * @author linfanshi
 	 */
 	public void setDescription(String newDescription) {
 		try {
@@ -180,6 +188,7 @@ public class Task {
 	 * getDescription getter of the category attribute
 	 * 
 	 * @return
+	 * @author linfanshi
 	 */
 	public String getCategory() {
 		return this.category;
@@ -189,6 +198,7 @@ public class Task {
 	 * setDescription setter of the category attribute
 	 * 
 	 * @param newCategory
+	 * @author linfanshi
 	 */
 	public void setCategory(String newCategory) {
 		try {
@@ -203,6 +213,7 @@ public class Task {
 	 * getPriority getter of the priority attribute
 	 * 
 	 * @return
+	 * @author linfanshi
 	 */
 	public int getPriority() {
 		return this.priority;
@@ -212,6 +223,7 @@ public class Task {
 	 * setPriority setter of the priority attribute
 	 * 
 	 * @param newPriority
+	 * @author linfanshi
 	 */
 	public void setPriority(int newPriority) {
 		try {
@@ -229,6 +241,7 @@ public class Task {
 	 * getTaskId getter of the task_id attribute
 	 * 
 	 * @return
+	 * @author linfanshi
 	 */
 	public String getTaskId() {
 		return this.task_id;
@@ -238,6 +251,7 @@ public class Task {
 	 * getRepeatedPeriod getter of the repeated_period attribute
 	 * 
 	 * @return
+	 * @author linfanshi
 	 */
 	public int getRepeatedPeriod() {
 		return this.repeated_period;
@@ -247,6 +261,7 @@ public class Task {
 	 * setRepeatedPeriod setter of the repeated_period attribute
 	 * 
 	 * @param newRepeatedPeriod
+	 * @author linfanshi
 	 */
 	public void setRepeatedPeriod(int newRepeatedPeriod) {
 		try {
@@ -264,6 +279,7 @@ public class Task {
 	 * getTag getter of the tag attribute
 	 * 
 	 * @return
+	 * @author linfanshi
 	 */
 	public ArrayList<String> getTag() {
 		return this.tag;
@@ -273,6 +289,7 @@ public class Task {
 	 * setTag setter of the tag attribute
 	 * 
 	 * @param newTag
+	 * @author linfanshi
 	 */
 	public void setTag(ArrayList<String> newTag) {
 		try {
@@ -289,6 +306,7 @@ public class Task {
 	/**
 	 * @override getInterval
 	 * @return interval
+	 * @author linfanshi
 	 */
 	public TimeInterval getInterval() {
 		return this.interval;
@@ -298,6 +316,7 @@ public class Task {
 	 * setInterval setter of the interval attribute
 	 * 
 	 * @param newInterval
+	 * @author linfanshi
 	 */
 	public void setInterval(TimeInterval newInterval) {
 		try {
@@ -319,6 +338,7 @@ public class Task {
 	 * 
 	 * @param description
 	 * @return
+	 * @author linfanshi
 	 */
 	private boolean isValidDescription(String description){
 		if (description.equals(null) || description.equals("")) {
@@ -333,6 +353,7 @@ public class Task {
 	 * 
 	 * @param category
 	 * @return
+	 * @author linfanshi
 	 */
 	private boolean isValidCategory(String category){
 		if (description.equals(null) || description.equals("")) {
@@ -347,6 +368,7 @@ public class Task {
 	 * 
 	 * @param priority
 	 * @return
+	 * @author linfanshi
 	 */
 	private boolean isValidPriority(int priority){
 		if (priority < 1 || priority > 3) {
@@ -361,6 +383,7 @@ public class Task {
 	 * 
 	 * @param repeatedPeriod
 	 * @return
+	 * @author linfanshi
 	 */
 	private boolean isValidRepeatedPeriod(int repeatedPeriod){
 		if (repeatedPeriod < 1 || repeatedPeriod > 4) {
@@ -375,6 +398,7 @@ public class Task {
 	 * 
 	 * @param tag
 	 * @return
+	 * @author linfanshi
 	 */
 	private boolean isValidTag(ArrayList<String> tag){
 		if (tag.equals(null) || tag.contains(null) || tag.contains("")) {
@@ -391,6 +415,7 @@ public class Task {
 	 * 
 	 * @param tags
 	 * @return
+	 * @author linfanshi
 	 */
 	private boolean isValidOneTag(ArrayList<String> tags){
 		for(String tag : tags){
@@ -406,6 +431,7 @@ public class Task {
 	 * 
 	 * @param interval
 	 * @return
+	 * @author linfanshi
 	 */
 	private boolean isValidInterval(TimeInterval interval){
 		if (interval == null) {
@@ -418,6 +444,7 @@ public class Task {
 	/**
 	 * check whether a task is trashed
 	 * @return
+	 * @author linfanshi
 	 */
 	public boolean isTrashed() {
 		if (tag.contains(Constant.TRASHED_TAG)) {
