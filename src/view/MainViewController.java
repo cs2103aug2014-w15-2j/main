@@ -44,6 +44,46 @@ import javafx.stage.Stage;
 
 public class MainViewController extends GridPane implements HotKeyListener{
 	
+	private static final String CSS_STYLE_TAG_LABEL = "-fx-font: 10px \"Akagi\";"
+			+ "-fx-padding: 5 10 5 10;"
+			+ "-fx-background-color: %s;"
+			+ "-fx-background-radius: 5px;"
+			+ "-fx-text-fill: white;"
+			+ "-fx-margin: 0 5 0 5;";
+	private static final String CSS_STYLE_TAG_PANE = "-fx-padding: 5 0 0 0;";
+	private static final String CSS_STYLE_PRIORITY_PANE = "-fx-padding: 8 8 0 8; "
+            + "-fx-background-color: %s";
+	private static final String CSS_STYLE_CONTENT_PANE = "-fx-padding: 8 8 8 8;"
+			   + "-fx-background-color: %s";
+	private static final String CSS_STYLE_PRIVIEW_CONTENT_BOX = "-fx-font: 12px \"Akagi\";";
+	private static final String CSS_STYLE_PREVIEW_SCROLL_PANE = "-fx-padding:5 0 0 7;"
+			+ "-fx-background-color: rgb(244, 244, 244)";
+	private static final String CSS_STYLE_DEADLINE_LABEL = "-fx-font: 38px \"Ticking Timebomb BB\";"
+			+ "-fx-padding:5 0 0 0;"
+			+ "-fx-text-fill: white;";
+	private static final String CSS_STYLE_TIME_LABEL = "-fx-text-fill: white;"
+					 + "-fx-font: 38px \"Ticking Timebomb BB\";"
+					 + "-fx-padding: 5 0 0 5";
+	private static final String CSS_STYLE_WEEKDAY_LABEL = "-fx-text-fill: white;"
+						+ "-fx-font: 17px \"Akagi\";"
+						+ "-fx-padding: 2 0 0 0";
+	private static final String CSS_STYLE_TO_LABEL = "-fx-font: 18px \"Akagi\";";
+	private static final String CSS_STYLE_OVERALL_TIME_BOX = "-fx-padding: 5 0 5 0;";
+	private static final String CSS_STYLE_DESCRIPTION_LABEL = "-fx-font: 17px \"Akagi\";"
+			             + "-fx-padding:0 0 5 0";
+	private static final String CSS_STYLE_TIME_BOX = 
+			  CSS_STYLE_PRIVIEW_CONTENT_BOX
+			+ "-fx-background-color: rgba(0, 0, 0, 0.5);"
+			+ "-fx-padding: 5 5 0 5;"
+			+ "-fx-background-radius: 5px;"
+			+ "-fx-text-fill: white;";
+	private static final String CSS_STYLE_PRIORITY_LABEL = 
+			  "-fx-font: 19px \"Akagi\";"
+			+ "-fx-text-fill: white;";
+	private static final String CSS_STYLE_EMPTY_PANE = 
+			  "-fx-background-color: rgb(244, 244, 244);";
+	
+	
 	
 	private static final String COLOR_BANNER_DEFAULT = "rgba(222, 222, 222, 1)";
 	private static final String COLOR_BANNER_PRIORITY_LOW = "rgba(222, 236, 147, 1)";
@@ -262,7 +302,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	
 	private GridPane getEmptyPane() {
 		GridPane emptyPane = new GridPane();
-		emptyPane.setStyle("-fx-background-color: rgb(244, 244, 244)");
+		emptyPane.setStyle(CSS_STYLE_EMPTY_PANE);
 		emptyPane.setPrefWidth(getWidth());
 		return emptyPane;
 	}
@@ -340,23 +380,20 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	
 	private GridPane getPriorityPane(String bannerColor, int index) {
 		GridPane priorityPane = new GridPane();
-		priorityPane.setStyle("-fx-padding: 8 8 0 8; "
-				            + "-fx-background-color: " + bannerColor);
+		priorityPane.setStyle(String.format(CSS_STYLE_PRIORITY_PANE, bannerColor));
 		priorityPane.setPrefWidth(getWidth());
-		Label priority = new Label("\t\t\t\t\t\t\t\t " + index);
-		priority.setStyle("-fx-font: 19px \"Akagi\";"
-				+ "-fx-text-fill: white;");
-		priority.setPrefWidth(getWidth());
-		priorityPane.add(priority, 0, 0);
+		Label priorityLabel = new Label("\t\t\t\t\t\t\t\t " + index);
+		priorityLabel.setStyle(CSS_STYLE_PRIORITY_LABEL);
+		priorityLabel.setPrefWidth(getWidth());
+		priorityPane.add(priorityLabel, 0, 0);
 		return priorityPane;
 	}
 	
 	private Label getDescriptionLabel(Task task) {
-		Label description = new Label(task.getDescription());
-		description.setStyle("-fx-font: 17px \"Akagi\";"
-				             + "-fx-padding:0 0 5 0");
-		description.setPrefWidth(getWidth());
-		return description;
+		Label descriptionLabel = new Label(task.getDescription());
+		descriptionLabel.setStyle(CSS_STYLE_DESCRIPTION_LABEL);
+		descriptionLabel.setPrefWidth(getWidth());
+		return descriptionLabel;
 	}
 	
 	
@@ -365,8 +402,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		contentPane.setGridLinesVisible(false);
         contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 29));
 		contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 29));
-		contentPane.setStyle("-fx-padding: 8 8 8 8;"
-						   + "-fx-background-color: " + bodyColor);
+		contentPane.setStyle(String.format(CSS_STYLE_CONTENT_PANE, bodyColor));
 		contentPane.setPrefWidth(getWidth());
 		return contentPane;
 	}
@@ -374,27 +410,27 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	
 	private HBox getTimePaneForTask(Task task) {
 		TimeInterval timeInterval = task.getInterval();
-		HBox overallBox = new HBox();
-		overallBox.setAlignment(Pos.CENTER);
-		overallBox.setStyle("-fx-padding: 5 0 5 0;");
+		HBox overallTimeBox = new HBox();
+		overallTimeBox.setAlignment(Pos.CENTER);
+		overallTimeBox.setStyle(CSS_STYLE_OVERALL_TIME_BOX);
 		if (timeInterval.getStartDate().equals(Constant.FLOATING_START_DATE)) {
 			return null;
 		} else if (timeInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 			
 			HBox deadlineBox = getDeadlineBox(timeInterval.getEndDate());
 			deadlineBox.setPrefWidth(400);
-			overallBox.getChildren().addAll(deadlineBox);
+			overallTimeBox.getChildren().addAll(deadlineBox);
 			
-			return overallBox;
+			return overallTimeBox;
 		} else {
 			HBox startDateBox = getTimeBox(timeInterval.getStartDate());
 			HBox endDateBox = getTimeBox(timeInterval.getEndDate());
-			Label arrow = new Label("  to  ");
+			Label toLabel = new Label("  to  ");
 			
-			arrow.setStyle("-fx-font: 18px \"Akagi\";");
+			toLabel.setStyle(CSS_STYLE_TO_LABEL);
 			
-			overallBox.getChildren().addAll(startDateBox, arrow , endDateBox);
-			return overallBox;
+			overallTimeBox.getChildren().addAll(startDateBox, toLabel , endDateBox);
+			return overallTimeBox;
 		}
 	}
 	
@@ -406,11 +442,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		VBox dateBox = new VBox();
 		timeBox.setPrefWidth(153);
 		timeBox.setAlignment(Pos.CENTER);
-		timeBox.setStyle("-fx-font: 12px \"Akagi\";"
-				+ "-fx-background-color: rgba(0, 0, 0, 0.5);"
-				+ "-fx-padding: 5 5 0 5;"
-				+ "-fx-background-radius: 5px;"
-				+ "-fx-text-fill: white;"
+		timeBox.setStyle(CSS_STYLE_TIME_BOX
 				+ "");
 		
 		dateBox.setAlignment(Pos.CENTER);		
@@ -418,14 +450,10 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		dateLabel.setStyle("-fx-text-fill: white;");
 		
 		Label weekdayLabel = new Label(new SimpleDateFormat("EE", Locale.ENGLISH).format(date));
-		weekdayLabel.setStyle("-fx-text-fill: white;"
-							+ "-fx-font: 17px \"Akagi\";"
-							+ "-fx-padding: 2 0 0 0");
+		weekdayLabel.setStyle(CSS_STYLE_WEEKDAY_LABEL);
 		
 		Label timeLabel = new Label(new SimpleDateFormat("HH:mm", Locale.ENGLISH).format(date));
-		timeLabel.setStyle("-fx-text-fill: white;"
-						 + "-fx-font: 38px \"Ticking Timebomb BB\";"
-						 + "-fx-padding: 5 0 0 5");
+		timeLabel.setStyle(CSS_STYLE_TIME_LABEL);
 		
 		dateBox.getChildren().addAll(dateLabel, weekdayLabel);
 		timeBox.getChildren().addAll(dateBox, timeLabel);
@@ -439,31 +467,20 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		VBox dateBox = new VBox();
 		
 		timeBox.setAlignment(Pos.CENTER);
-		timeBox.setStyle("-fx-font: 12px \"Akagi\";"
-				+ "-fx-background-color: rgba(0, 0, 0, 0.5);"
-				+ "-fx-padding: 5 5 0 5;"
-				+ "-fx-background-radius: 5px;"
-				+ "-fx-text-fill: white;"
-				+ "");
+		timeBox.setStyle(CSS_STYLE_TIME_BOX);
 		
 		dateBox.setAlignment(Pos.CENTER);
 		Label deadlineLabel = new Label("DEADLINE:     ");
-		deadlineLabel.setStyle("-fx-font: 38px \"Ticking Timebomb BB\";"
-				+ "-fx-padding:5 0 0 5;"
-				+ "-fx-text-fill: white;");
+		deadlineLabel.setStyle(CSS_STYLE_DEADLINE_LABEL);
 		
 		Label dateLabel = new Label(new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(date));
 		dateLabel.setStyle("-fx-text-fill: white;");
 		
 		Label weekdayLabel = new Label(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date));
-		weekdayLabel.setStyle("-fx-text-fill: white;"
-							+ "-fx-font: 17px \"Akagi\";"
-							+ "-fx-padding: 2 0 0 0");
+		weekdayLabel.setStyle(CSS_STYLE_WEEKDAY_LABEL);
 		
 		Label timeLabel = new Label(new SimpleDateFormat("HH:mm", Locale.ENGLISH).format(date));
-		timeLabel.setStyle("-fx-text-fill: white;"
-						 + "-fx-font: 38px \"Ticking Timebomb BB\";"
-						 + "-fx-padding: 5 5 0 5");
+		timeLabel.setStyle(CSS_STYLE_TIME_LABEL);
 		
 		dateBox.getChildren().addAll(dateLabel, weekdayLabel);
 		timeBox.getChildren().addAll(deadlineLabel, dateBox, timeLabel);
@@ -474,7 +491,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	
 	private GridPane getTagPaneForTask(Task task) {
 		GridPane tagPane = new GridPane();
-		tagPane.setStyle("-fx-padding: 5 0 0 0;");
+		tagPane.setStyle(CSS_STYLE_TAG_PANE);
 		tagPane.setHgap(10);
 		ArrayList<String> tags = task.getTag();
 		int columnIndex = 0;
@@ -487,12 +504,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			}
 			
 			colorOffset = colorOffset%COLORS_TAG.length;
-			tagLabel.setStyle("-fx-font: 10px \"Akagi\";"
-					+ "-fx-padding: 5 10 5 10;"
-					+ "-fx-background-color:" + COLORS_TAG[colorOffset]+ ";"
-					+ "-fx-background-radius: 5px;"
-					+ "-fx-text-fill: white;"
-					+ "-fx-margin: 0 5 0 5;");
+			tagLabel.setStyle(String.format(CSS_STYLE_TAG_LABEL, COLORS_TAG[colorOffset]));
 			tagPane.add(tagLabel, columnIndex, 0);
 			columnIndex ++;
 		}
@@ -504,14 +516,14 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		pane.getRowConstraints().add(new RowConstraints(height));
 	}
 	
-	public void setPreview(String displayedText) {
-		VBox previewContent = new VBox();
-		Label text = new Label(displayedText);
-		previewContent.getChildren().clear();
-		previewContent.setStyle("-fx-font: 12px \"Akagi\";");
-		previewContent.getChildren().add(text);
-		previewScrollPane.setStyle("-fx-padding:5 0 0 7; -fx-background-color: rgb(244, 244, 244)");
-		previewScrollPane.setContent(previewContent);
+	public void setPreview(String textToDisplay) {
+		VBox previewContentBox = new VBox();
+		Label text = new Label(textToDisplay);
+		previewContentBox.getChildren().clear();
+		previewContentBox.setStyle(CSS_STYLE_PRIVIEW_CONTENT_BOX);
+		previewContentBox.getChildren().add(text);
+		previewScrollPane.setStyle(CSS_STYLE_PREVIEW_SCROLL_PANE);
+		previewScrollPane.setContent(previewContentBox);
 	}
 
 	
