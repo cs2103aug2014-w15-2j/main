@@ -9,7 +9,10 @@ import org.junit.Test;
 import dataStructure.Task;
 
 public class TaskTest {
-	
+	/**
+	 * test for task methods
+	 * @author linfanshi
+	 */
 	@Test
 	public void test() {		
 		ArrayList<String> tag = new ArrayList<String>();
