@@ -85,6 +85,10 @@ public class User {
 		}
 	}
 
+	/**
+	 * test method
+	 * @author linfanshi
+	 */
 	private void displayForTesting() {
 		int i = 1;
 		for (Task task : currentTasks) {
@@ -95,6 +99,7 @@ public class User {
 	 * add adds a task into the task list.
 	 * 
 	 * @param task
+	 * @author linfanshi
 	 */
 	public boolean add(Task task) {
 		this.updateUndoable();
@@ -114,6 +119,7 @@ public class User {
 	 * 
 	 * @param index
 	 * @throws CommandFailedException
+	 * @author linfanshi
 	 */
 	public boolean delete(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
@@ -178,6 +184,7 @@ public class User {
 	 * @param toBeUpdated
 	 *            attributes to be updated
 	 * @throws CommandFailedException
+	 * @author linfanshi
 	 */
 	@SuppressWarnings("unchecked")
 	public void update(int index, HashMap<String, Object> toBeUpdated)
@@ -226,7 +233,7 @@ public class User {
 	 * delete all current tasks
 	 * 
 	 * @throws CommandFailedException
-	 * 
+	 * @author linfanshi
 	 */
 	public void deleteAll() throws CommandFailedException {
 		this.updateUndoable();
@@ -242,6 +249,7 @@ public class User {
 
 	/**
 	 * clear all current tasks
+	 * @author linfanshi
 	 */
 	public void clear() {
 		this.updateUndoable();
@@ -263,6 +271,7 @@ public class User {
 	 * move new added task to correct position
 	 * 
 	 * @param index
+	 * @author linfanshi
 	 */
 	private void moveAddedTask(int index) {
 		Task newAddedTask = currentTasks.get(currentTasks.size() - 1);
@@ -276,6 +285,7 @@ public class User {
 	 * move new trashed task to the end of currentTasks
 	 * 
 	 * @param index
+	 * @author linfanshi
 	 */
 	private void moveTrashedTask(int index) {
 		int lastTaskIndex = currentTasks.size();
@@ -291,6 +301,7 @@ public class User {
 	 * get valid categories from current tasks' categories
 	 * 
 	 * @return
+	 * @author linfanshi
 	 */
 	private ArrayList<String> getValidCategory() {
 		ArrayList<String> validCategory = new ArrayList<String>();
@@ -309,6 +320,7 @@ public class User {
 	 * 
 	 * @param category
 	 * @throws CommandFailedException
+	 * @author linfanshi
 	 */
 	public void createCategory(String category) throws CommandFailedException {
 		if (validCategory.contains(category)) {
@@ -323,6 +335,7 @@ public class User {
 	 * 
 	 * @param category
 	 * @throws CommandFailedException
+	 * @author linfanshi
 	 */
 	public void deleteCategory(String category) throws CommandFailedException {
 		if (!validCategory.contains(category)) {
@@ -339,6 +352,7 @@ public class User {
 
 	/**
 	 * show a joke to user
+	 * @author linfanshi
 	 */
 	public void showJoke() {
 		System.out
