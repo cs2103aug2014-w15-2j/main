@@ -47,7 +47,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	private ScrollPane displayScrollPane;
 	public ScrollPane previewScrollPane;
 	
-	private Parser parser = new Parser();
+	private Parser parser;
 	private static PrintStream err = System.err;
 	// a property to store the current user
 	private User user;
@@ -79,8 +79,9 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		try {
 			this.loadFont();
 			this.loadFxml();
+//			this.loadParser();
 			this.user = new User();
-			this.initializeShortCuts();
+//			this.initializeShortCuts();
 			this.updatePage();
 			this.addTextFieldListener();
 	        
@@ -114,6 +115,16 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		fxmlLoader.load();
 	}
 
+	private void loadParser() {
+		final MainViewController instance = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				instance.parser = new Parser();
+			}
+		}).start();
+	}
+	
 	private void initializeShortCuts(){
 		final MainViewController instance = this;
 		new Thread(new Runnable() {
