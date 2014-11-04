@@ -230,7 +230,7 @@ public class LayoutManager {
 		Label dateLabel = new Label(new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(date));
 		dateLabel.setStyle("-fx-text-fill: white;");
 		
-		Label weekdayLabel = new Label(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date));
+		Label weekdayLabel = new Label(new SimpleDateFormat("EE", Locale.ENGLISH).format(date));
 		weekdayLabel.setStyle(Constant.CSS_STYLE_WEEKDAY_LABEL);
 		
 		Label timeLabel = new Label(new SimpleDateFormat("HH:mm", Locale.ENGLISH).format(date));

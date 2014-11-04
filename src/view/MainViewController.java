@@ -5,6 +5,7 @@ import infrastructure.Constant.COMMAND_TYPE;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -75,12 +76,13 @@ public class MainViewController extends GridPane implements HotKeyListener{
 
 	public MainViewController(Stage stage) {
 		try {
+			this.copyUserNlpFiles();
 			this.user = new User();
 			this.loadFont();
 			this.loadFxml();
 			this.loadParser();
 			this.addTextFieldListener();
-			this.initializeShortCuts();
+//			this.initializeShortCuts();
 			this.updatePage();
 	        UtilityMethod.makeDraggable(stage, dragNode);
 	        
@@ -106,6 +108,25 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		Font.loadFont(getClass().getResource(Constant.FONT_FILE_TIME).toExternalForm(), 10);
 	}
 	
+	private void copyUserNlpFiles() {
+	
+		InputStream[] propStreams = new InputStream[11];
+		InputStream[] tsvStreams = new InputStream[11];
+		InputStream[] gzStreams = new InputStream[11];
+		
+		for (int i = 0; i < 11; i++) {
+			propStreams[i] = getClass().getResourceAsStream(Constant.PROPS_SOURCE[i]);
+			tsvStreams[i] = getClass().getResourceAsStream(Constant.TSVS_SOURCE[i]);
+			gzStreams[i] = getClass().getResourceAsStream(Constant.GZS_SOURCE[i]);
+		}
+		
+		try {
+			UtilityMethod.copyUserNlpFiles(tsvStreams, propStreams, gzStreams);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void loadFxml() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainView.fxml"));
 		fxmlLoader.setRoot(this);
@@ -118,7 +139,9 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				instance.updateTextField("NLP MODEL LOADING");
 				instance.parser = new Parser();
+				instance.updateTextField("NLP MODEL LOADED");
 			}
 		}).start();
 	}

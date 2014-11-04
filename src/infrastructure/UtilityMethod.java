@@ -143,16 +143,13 @@ public abstract class UtilityMethod {
 		System.out.println(contentsToBeShown);
 	}
 
-	public static void copyFile(String s, String d) throws IOException {
-		File source = new File(s);
+	public static void copyFile(InputStream in, String d) throws IOException {
 		File dest = new File(d);
 		
 		if (!dest.exists()) {
 			dest.createNewFile();
-			InputStream in = null;
 			OutputStream out = null;
 			try {
-				in = new FileInputStream(source);
 				out = new FileOutputStream(dest);
 	
 				// Transfer bytes from in to out
@@ -214,7 +211,11 @@ public abstract class UtilityMethod {
 	    double x, y;
 	  }
 
-	public static void copyUserNlpFiles() throws IOException {
+	  
+	public static void copyUserNlpFiles(InputStream[] tsvStreams, InputStream[] propStreams, InputStream[] gzStreams) throws IOException {
+		assert (tsvStreams.length == 11);
+		assert (propStreams.length == 11);
+		
 		System.err.println("initializeUserTrainingModel");
 		File rootDirectory = new File(Constant.FILE_PATH_ROOT);
 		if (!rootDirectory.exists()) {
@@ -225,45 +226,12 @@ public abstract class UtilityMethod {
 		if (!nlpRootDirectory.exists()) {
 			nlpRootDirectory.mkdir();
 		}
-	
-		copyFile(Constant.FILE_PATH_TIME_PICKER_SOURCE,
-				Constant.FILE_PATH_TIME_PICKER_USER);
-	
-		copyFile(Constant.FILE_PATH_TAG_PICKER_SOURCE,
-				Constant.FILE_PATH_TAG_PICKER_USER);
-	
-		copyFile(Constant.FILE_PATH_DESCRIPTION_PICKER_SOURCE,
-				Constant.FILE_PATH_DESCRIPTION_PICKER_USER);
-	
-		copyFile(Constant.FILE_PATH_INDEX_PICKER_SOURCE,
-				Constant.FILE_PATH_INDEX_PICKER_USER);
-	
-		copyFile(Constant.FILE_PATH_PRIORITY_PICKER_SOURCE,
-				Constant.FILE_PATH_PRIORITY_PICKER_USER);
-	
-		copyFile(Constant.FILE_PATH_COMMAND_PICKER_SOURCE,
-				Constant.FILE_PATH_COMMAND_PICKER_USER);
-	
 		
-		// copy prop files
-	
-		copyFile(Constant.FILE_PATH_TIME_PICKER_PROP_SOURCE,
-				Constant.FILE_PATH_TIME_PICKER_PROP_USER);
-	
-		copyFile(Constant.FILE_PATH_TAG_PICKER_PROP_SOURCE,
-				Constant.FILE_PATH_TAG_PICKER_PROP_USER);
-	
-		copyFile(Constant.FILE_PATH_DESCRIPTION_PICKER_PROP_SOURCE,
-				Constant.FILE_PATH_DESCRIPTION_PICKER_PROP_USER);
-	
-		copyFile(Constant.FILE_PATH_INDEX_PICKER_PROP_SOURCE,
-				Constant.FILE_PATH_INDEX_PICKER_PROP_USER);
-	
-		copyFile(Constant.FILE_PATH_PRIORITY_PICKER_PROP_SOURCE,
-				Constant.FILE_PATH_PRIORITY_PICKER_PROP_USER);
-	
-		copyFile(Constant.FILE_PATH_COMMAND_PICKER_PROP_SOURCE,
-				Constant.FILE_PATH_COMMAND_PICKER_PROP_USER);
+		for (int i = 0; i < 11; i++) {
+			copyFile(tsvStreams[i], Constant.TSVS_USER[i]);
+			copyFile(propStreams[i], Constant.PROPS_USER[i]);
+			copyFile(gzStreams[i], Constant.GZS_USER[i]);
+		}
 	}
 }
 

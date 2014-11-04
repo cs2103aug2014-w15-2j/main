@@ -16,7 +16,7 @@ public abstract class Constant {
 	// directory
 	public static final String FILE_PATH_ROOT = "List-of-Xiao-Ming";
 	public static final String FILE_PATH_NLP_ROOT = "List-of-Xiao-Ming/NLP-Data";
-	public static final String FILE_PATH_NLP_SRC = "src/NLPTraining";
+	public static final String FILE_PATH_NLP_SRC = "/NLPTraining";
 
 	// tsv files
 	public static final String FILE_PATH_TIME_PICKER = "/time-picker-training-data.tsv";
@@ -25,13 +25,11 @@ public abstract class Constant {
 	public static final String FILE_PATH_PRIORITY_PICKER = "/priority-picker-training-data.tsv";
 	public static final String FILE_PATH_INDEX_PICKER = "/index-picker-training-data.tsv";
 	public static final String FILE_PATH_COMMAND_PICKER = "/command-picker-training-data.tsv";
-	
-	//gz models
-	public static final String FILE_PATH_INDEX_GZ = "/index-ner-model.ser.gz";
-	public static final String FILE_PATH_PRIORITY_GZ = "/priority-ner-model.ser.gz";
-	public static final String FILE_PATH_TIME_GZ = "/time-ner-model.ser.gz";
-	public static final String FILE_PATH_COMMAND_GZ = "/command-ner-model.ser.gz";
-	public static final String FILE_PATH_TAG_GZ = "/tag-ner-model.ser.gz";
+	public static final String FILE_PATH_COMMAND = "/command-training-data.tsv";
+	public static final String FILE_PATH_INDEX = "/index-training-data.tsv";
+	public static final String FILE_PATH_PRIORITY = "/priority-training-data.tsv";
+	public static final String FILE_PATH_TAG = "/tag-training-data.tsv";
+	public static final String FILE_PATH_TIME = "/time-training-data.tsv";
 
 	public static final String FILE_PATH_TIME_PICKER_USER = FILE_PATH_NLP_ROOT
 			+ FILE_PATH_TIME_PICKER;
@@ -45,6 +43,32 @@ public abstract class Constant {
 			+ FILE_PATH_INDEX_PICKER;
 	public static final String FILE_PATH_COMMAND_PICKER_USER = FILE_PATH_NLP_ROOT
 			+ FILE_PATH_COMMAND_PICKER;
+	public static final String FILE_PATH_COMMAND_USER = FILE_PATH_NLP_ROOT
+			+ FILE_PATH_COMMAND;
+	public static final String FILE_PATH_INDEX_USER = FILE_PATH_NLP_ROOT
+			+ FILE_PATH_INDEX;
+	public static final String FILE_PATH_PRIORITY_USER = FILE_PATH_NLP_ROOT
+			+ FILE_PATH_PRIORITY;
+	public static final String FILE_PATH_TAG_USER = FILE_PATH_NLP_ROOT
+			+ FILE_PATH_TAG;
+	public static final String FILE_PATH_TIME_USER = FILE_PATH_NLP_ROOT
+			+ FILE_PATH_TIME;
+	
+	public static final String[] TSVS_USER = {
+		FILE_PATH_TIME_PICKER_USER, 
+		FILE_PATH_DESCRIPTION_PICKER_USER, 
+		FILE_PATH_TAG_PICKER_USER,
+		FILE_PATH_PRIORITY_PICKER_USER,
+		FILE_PATH_INDEX_PICKER_USER,
+		FILE_PATH_COMMAND_PICKER_USER,
+		FILE_PATH_COMMAND_USER,
+		FILE_PATH_INDEX_USER,
+		FILE_PATH_PRIORITY_USER,
+		FILE_PATH_TAG_USER,
+		FILE_PATH_TIME_USER
+	};
+	
+	
 
 	public static final String FILE_PATH_TIME_PICKER_SOURCE = FILE_PATH_NLP_SRC
 			+ FILE_PATH_TIME_PICKER;
@@ -58,7 +82,32 @@ public abstract class Constant {
 			+ FILE_PATH_INDEX_PICKER;
 	public static final String FILE_PATH_COMMAND_PICKER_SOURCE = FILE_PATH_NLP_SRC
 			+ FILE_PATH_COMMAND_PICKER;
+	public static final String FILE_PATH_COMMAND_SOURCE = FILE_PATH_NLP_SRC
+			+ FILE_PATH_COMMAND;
+	public static final String FILE_PATH_INDEX_SOURCE = FILE_PATH_NLP_SRC
+			+ FILE_PATH_INDEX;
+	public static final String FILE_PATH_PRIORITY_SOURCE = FILE_PATH_NLP_SRC
+			+ FILE_PATH_PRIORITY;
+	public static final String FILE_PATH_TAG_SOURCE = FILE_PATH_NLP_SRC
+			+ FILE_PATH_TAG;
+	public static final String FILE_PATH_TIME_SOURCE = FILE_PATH_NLP_SRC
+			+ FILE_PATH_TIME;
 
+	public static final String[] TSVS_SOURCE = {
+		FILE_PATH_TIME_PICKER_SOURCE, 
+		FILE_PATH_DESCRIPTION_PICKER_SOURCE, 
+		FILE_PATH_TAG_PICKER_SOURCE,
+		FILE_PATH_PRIORITY_PICKER_SOURCE,
+		FILE_PATH_INDEX_PICKER_SOURCE,
+		FILE_PATH_COMMAND_PICKER_SOURCE,
+		FILE_PATH_COMMAND_SOURCE,
+		FILE_PATH_INDEX_SOURCE,
+		FILE_PATH_PRIORITY_SOURCE,
+		FILE_PATH_TAG_SOURCE,
+		FILE_PATH_TIME_SOURCE
+	};
+	
+	
 	// prop files
 	public static final String FILE_PATH_TIME_PICKER_PROP = "/time_picker.prop";
 	public static final String FILE_PATH_DESCRIPTION_PICKER_PROP = "/description_picker.prop";
@@ -66,7 +115,13 @@ public abstract class Constant {
 	public static final String FILE_PATH_PRIORITY_PICKER_PROP = "/priority_picker.prop";
 	public static final String FILE_PATH_INDEX_PICKER_PROP = "/index_picker.prop";
 	public static final String FILE_PATH_COMMAND_PICKER_PROP = "/command_picker.prop";
-
+	public static final String FILE_PATH_TIME_PROP = "/time.prop";
+	public static final String FILE_PATH_TAG_PROP = "/tag.prop";
+	public static final String FILE_PATH_PRIORITY_PROP = "/priority.prop";
+	public static final String FILE_PATH_INDEX_PROP = "/index.prop";
+	public static final String FILE_PATH_COMMAND_PROP = "/command.prop";
+	
+	
 	public static final String FILE_PATH_TIME_PICKER_PROP_USER = FILE_PATH_NLP_ROOT
 			+ FILE_PATH_TIME_PICKER_PROP;
 	public static final String FILE_PATH_DESCRIPTION_PICKER_PROP_USER = FILE_PATH_NLP_ROOT
@@ -79,7 +134,31 @@ public abstract class Constant {
 			+ FILE_PATH_INDEX_PICKER_PROP;
 	public static final String FILE_PATH_COMMAND_PICKER_PROP_USER = FILE_PATH_NLP_ROOT
 			+ FILE_PATH_COMMAND_PICKER_PROP;
+	public static final String FILE_PATH_TIME_PROP_USER = FILE_PATH_NLP_ROOT
+			+ FILE_PATH_TIME_PROP;
+	public static final String FILE_PATH_TAG_PROP_USER = FILE_PATH_NLP_ROOT
+			+ FILE_PATH_TAG_PROP;
+	public static final String FILE_PATH_PRIORITY_PROP_USER = FILE_PATH_NLP_ROOT
+			+ FILE_PATH_PRIORITY_PROP;
+	public static final String FILE_PATH_INDEX_PROP_USER = FILE_PATH_NLP_ROOT
+			+ FILE_PATH_INDEX_PROP;
+	public static final String FILE_PATH_COMMAND_PROP_USER = FILE_PATH_NLP_ROOT
+			+ FILE_PATH_COMMAND_PROP;
 
+	public static final String[] PROPS_USER= {
+		FILE_PATH_TIME_PICKER_PROP_USER,
+		FILE_PATH_DESCRIPTION_PICKER_PROP_USER,
+		FILE_PATH_TAG_PICKER_PROP_USER,
+		FILE_PATH_PRIORITY_PICKER_PROP_USER,
+		FILE_PATH_INDEX_PICKER_PROP_USER,
+		FILE_PATH_COMMAND_PICKER_PROP_USER,
+		FILE_PATH_TIME_PROP_USER,
+		FILE_PATH_TAG_PROP_USER,
+		FILE_PATH_PRIORITY_PROP_USER,
+		FILE_PATH_INDEX_PROP_USER,
+		FILE_PATH_COMMAND_PROP_USER
+	};
+	
 	public static final String FILE_PATH_TIME_PICKER_PROP_SOURCE = FILE_PATH_NLP_SRC
 			+ FILE_PATH_TIME_PICKER_PROP;
 	public static final String FILE_PATH_DESCRIPTION_PICKER_PROP_SOURCE = FILE_PATH_NLP_SRC
@@ -92,6 +171,31 @@ public abstract class Constant {
 			+ FILE_PATH_INDEX_PICKER_PROP;
 	public static final String FILE_PATH_COMMAND_PICKER_PROP_SOURCE = FILE_PATH_NLP_SRC
 			+ FILE_PATH_COMMAND_PICKER_PROP;
+	public static final String FILE_PATH_TIME_PROP_SOURCE = FILE_PATH_NLP_SRC
+			+ FILE_PATH_TIME_PROP;
+	public static final String FILE_PATH_TAG_PROP_SOURCE = FILE_PATH_NLP_SRC
+			+ FILE_PATH_TAG_PROP;
+	public static final String FILE_PATH_PRIORITY_PROP_SOURCE = FILE_PATH_NLP_SRC
+			+ FILE_PATH_PRIORITY_PROP;
+	public static final String FILE_PATH_INDEX_PROP_SOURCE = FILE_PATH_NLP_SRC
+			+ FILE_PATH_INDEX_PROP;
+	public static final String FILE_PATH_COMMAND_PROP_SOURCE = FILE_PATH_NLP_SRC
+			+ FILE_PATH_COMMAND_PROP;
+	
+	public static final String[] PROPS_SOURCE= {
+		FILE_PATH_TIME_PICKER_PROP_SOURCE,
+		FILE_PATH_DESCRIPTION_PICKER_PROP_SOURCE,
+		FILE_PATH_TAG_PICKER_PROP_SOURCE,
+		FILE_PATH_PRIORITY_PICKER_PROP_SOURCE,
+		FILE_PATH_INDEX_PICKER_PROP_SOURCE,
+		FILE_PATH_COMMAND_PICKER_PROP_SOURCE,
+		FILE_PATH_TIME_PROP_SOURCE,
+		FILE_PATH_TAG_PROP_SOURCE,
+		FILE_PATH_PRIORITY_PROP_SOURCE,
+		FILE_PATH_INDEX_PROP_SOURCE,
+		FILE_PATH_COMMAND_PROP_SOURCE
+	};
+	
 
 	// gz files
 	public static final String FILE_PATH_TIME_PICKER_GZ = "/time-picker-ner-model.ser.gz";
@@ -100,32 +204,43 @@ public abstract class Constant {
 	public static final String FILE_PATH_INDEX_PICKER_GZ = "/index-picker-ner-model.ser.gz";
 	public static final String FILE_PATH_PRIORITY_PICKER_GZ = "/priority-picker-ner-model.ser.gz";
 	public static final String FILE_PATH_COMMAND_PICKER_GZ = "/command-picker-ner-model.ser.gz";
+	public static final String FILE_PATH_INDEX_GZ = "/index-ner-model.ser.gz";
+	public static final String FILE_PATH_PRIORITY_GZ = "/priority-ner-model.ser.gz";
+	public static final String FILE_PATH_TIME_GZ = "/time-ner-model.ser.gz";
+	public static final String FILE_PATH_COMMAND_GZ = "/command-ner-model.ser.gz";
+	public static final String FILE_PATH_TAG_GZ = "/tag-ner-model.ser.gz";
+	
+	
+	public static final String[] GZS_USER = {
+		FILE_PATH_NLP_ROOT + FILE_PATH_TIME_PICKER_GZ,
+		FILE_PATH_NLP_ROOT + FILE_PATH_DESCRIPTION_PICKER_GZ,
+		FILE_PATH_NLP_ROOT + FILE_PATH_TAG_PICKER_GZ,
+		FILE_PATH_NLP_ROOT + FILE_PATH_PRIORITY_PICKER_GZ,
+		FILE_PATH_NLP_ROOT + FILE_PATH_INDEX_PICKER_GZ,
+		FILE_PATH_NLP_ROOT + FILE_PATH_COMMAND_PICKER_GZ,
+		FILE_PATH_NLP_ROOT + FILE_PATH_TIME_GZ,
+		FILE_PATH_NLP_ROOT + FILE_PATH_TAG_GZ,
+		FILE_PATH_NLP_ROOT + FILE_PATH_PRIORITY_GZ,
+		FILE_PATH_NLP_ROOT + FILE_PATH_INDEX_GZ,
+		FILE_PATH_NLP_ROOT + FILE_PATH_COMMAND_GZ
 
-	public static final String FILE_PATH_TIME_PICKER_GZ_USER = FILE_PATH_NLP_ROOT
-			+ "/time-picker-ner-model.ser.gz";
-	public static final String FILE_PATH_TAG_PICKER_GZ_USER = FILE_PATH_NLP_ROOT
-			+ "/tag-picker-ner-model.ser.gz";
-	public static final String FILE_PATH_DESCRIPTION_PICKER_GZ_USER = FILE_PATH_NLP_ROOT
-			+ "/description-picker-ner-model.ser.gz";
-	public static final String FILE_PATH_INDEX_PICKER_GZ_USER = FILE_PATH_NLP_ROOT
-			+ "/index-picker-ner-model.ser.gz";
-	public static final String FILE_PATH_PRIORITY_PICKER_GZ_USER = FILE_PATH_NLP_ROOT
-			+ "/priority-picker-ner-model.ser.gz";
-	public static final String FILE_PATH_COMMAND_PICKER_GZ_USER = FILE_PATH_NLP_ROOT
-			+ "/command-picker-ner-model.ser.gz";
+	};
+	
+	public static final String[] GZS_SOURCE = {
+		FILE_PATH_NLP_SRC + FILE_PATH_TIME_PICKER_GZ,
+		FILE_PATH_NLP_SRC + FILE_PATH_DESCRIPTION_PICKER_GZ,
+		FILE_PATH_NLP_SRC + FILE_PATH_TAG_PICKER_GZ,
+		FILE_PATH_NLP_SRC + FILE_PATH_PRIORITY_PICKER_GZ,
+		FILE_PATH_NLP_SRC + FILE_PATH_INDEX_PICKER_GZ,
+		FILE_PATH_NLP_SRC + FILE_PATH_COMMAND_PICKER_GZ,
+		FILE_PATH_NLP_SRC + FILE_PATH_TIME_GZ,
+		FILE_PATH_NLP_SRC + FILE_PATH_TAG_GZ,
+		FILE_PATH_NLP_SRC + FILE_PATH_PRIORITY_GZ,
+		FILE_PATH_NLP_SRC + FILE_PATH_INDEX_GZ,
+		FILE_PATH_NLP_SRC + FILE_PATH_COMMAND_GZ
 
-	public static final String FILE_PATH_TIME_PICKER_GZ_SOURCE = FILE_PATH_NLP_SRC
-			+ "/time-picker-ner-model.ser.gz";
-	public static final String FILE_PATH_TAG_PICKER_GZ_SOURCE = FILE_PATH_NLP_SRC
-			+ "/tag-picker-ner-model.ser.gz";
-	public static final String FILE_PATH_DESCRIPTION_PICKER_GZ_SOURCE = FILE_PATH_NLP_SRC
-			+ "/description-picker-ner-model.ser.gz";
-	public static final String FILE_PATH_INDEX_PICKER_GZ_SOURCE = FILE_PATH_NLP_SRC
-			+ "/index-picker-ner-model.ser.gz";
-	public static final String FILE_PATH_PRIORITY_PICKER_GZ_SOURCE = FILE_PATH_NLP_SRC
-			+ "/priority-picker-ner-model.ser.gz";
-	public static final String FILE_PATH_COMMAND_PICKER_GZ_SOURCE = FILE_PATH_NLP_SRC
-			+ "/command-picker-ner-model.ser.gz";
+	};
+	
 
 	// XML tags
 	public static final String XML_TAG_DEFAULT = "O";

@@ -1,3 +1,5 @@
+//@author A0119379R
+
 package infrastructure;
 
 import dataStructure.*;
@@ -67,13 +69,8 @@ public class NERParser {
  * ==========================================================================================================================
  */
 	public NERParser() {
-		try {
-			UtilityMethod.copyUserNlpFiles();
-			loadNerModels();
-			loadTimeParser();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		loadNerModels();
+		loadTimeParser();
 	}
 
 	private void loadTimeParser() {
@@ -89,48 +86,28 @@ public class NERParser {
 	}
 
 	private void loadNerModels() {
-		// NER parsers
-		classifierTag = CRFClassifier
-				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + Constant.FILE_PATH_TAG_GZ);
-		classifierCommand = CRFClassifier
-				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + Constant.FILE_PATH_COMMAND_GZ);
-		classifierTime = CRFClassifier
-				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + Constant.FILE_PATH_TIME_GZ);
-		classifierPriority = CRFClassifier
-				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + Constant.FILE_PATH_PRIORITY_GZ);
-		classifierIndex = CRFClassifier
-				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + Constant.FILE_PATH_INDEX_GZ);
+		ArrayList<AbstractSequenceClassifier<CoreLabel>> classifiers = new ArrayList<AbstractSequenceClassifier<CoreLabel>>();
 		
-		// NER pickers
-		try {
-			System.err.println("Using user's customized model");
-			classifierTimePicker = CRFClassifier
-					.getClassifierNoExceptions(Constant.FILE_PATH_TIME_PICKER_GZ_USER);
-			classifierCommandPicker = CRFClassifier
-					.getClassifierNoExceptions(Constant.FILE_PATH_COMMAND_PICKER_GZ_USER);
-			classifierDescriptionPicker = CRFClassifier
-					.getClassifierNoExceptions(Constant.FILE_PATH_DESCRIPTION_PICKER_GZ_USER);
-			classifierIndexPicker = CRFClassifier
-					.getClassifierNoExceptions(Constant.FILE_PATH_INDEX_PICKER_GZ_USER);
-			classifierTagPicker = CRFClassifier
-					.getClassifierNoExceptions(Constant.FILE_PATH_TAG_PICKER_GZ_USER);
-			classifierPriorityPicker = CRFClassifier
-					.getClassifierNoExceptions(Constant.FILE_PATH_PRIORITY_PICKER_GZ_USER);
-		} catch (Exception e) {
-			System.err.println("Using default model");
-			classifierTimePicker = CRFClassifier
-					.getClassifierNoExceptions(Constant.FILE_PATH_TIME_PICKER_GZ_SOURCE);
-			classifierCommandPicker = CRFClassifier
-					.getClassifierNoExceptions(Constant.FILE_PATH_COMMAND_PICKER_GZ_SOURCE);
-			classifierDescriptionPicker = CRFClassifier
-					.getClassifierNoExceptions(Constant.FILE_PATH_DESCRIPTION_PICKER_GZ_SOURCE);
-			classifierIndexPicker = CRFClassifier
-					.getClassifierNoExceptions(Constant.FILE_PATH_INDEX_PICKER_GZ_SOURCE);
-			classifierTagPicker = CRFClassifier
-					.getClassifierNoExceptions(Constant.FILE_PATH_TAG_PICKER_GZ_SOURCE);
-			classifierPriorityPicker = CRFClassifier
-					.getClassifierNoExceptions(Constant.FILE_PATH_PRIORITY_PICKER_GZ_SOURCE);
+		for (int i = 0; i < 11; i ++) {
+			try {
+				classifiers.add(CRFClassifier.getClassifierNoExceptions(Constant.GZS_USER[i]));
+			} catch (Exception e) {
+				updateModal(Constant.PROPS_USER[i]);
+				classifiers.add(CRFClassifier.getClassifierNoExceptions(Constant.GZS_USER[i]));
+			}
 		}
+		
+		classifierTimePicker = classifiers.get(0);
+		classifierDescriptionPicker = classifiers.get(1);
+		classifierTagPicker = classifiers.get(2);
+		classifierPriorityPicker = classifiers.get(3);
+		classifierIndexPicker = classifiers.get(4);
+		classifierCommandPicker = classifiers.get(5);
+		classifierTime = classifiers.get(6);
+		classifierTag = classifiers.get(7);
+		classifierPriority = classifiers.get(8);
+		classifierIndex = classifiers.get(9);
+		classifierCommand = classifiers.get(10);
 	}
 
 	
@@ -684,7 +661,7 @@ public class NERParser {
 			String[] arguments = new String[2];
 			arguments[0] = "-prop";
 			arguments[1] = propFilePath;
-			edu.stanford.nlp.ie.crf.CRFClassifier.main(arguments);
+			CRFClassifier.main(arguments);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
