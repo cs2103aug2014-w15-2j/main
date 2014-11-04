@@ -42,6 +42,7 @@ public class Constraint {
 	 * @param task
 	 * @return boolean
 	 * @throws Exception
+	 * @author linfanshi leimingyu
 	 */
 	public boolean isMeeted(Task task) throws Exception {
 		boolean isKeywordMatched = false;
