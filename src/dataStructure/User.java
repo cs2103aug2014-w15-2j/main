@@ -186,6 +186,7 @@ public class User {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
+			this.updateUndoable();
 			Task task = this.currentTasks.get(index);
 			Iterator<String> attributes = toBeUpdated.keySet().iterator();
 			while (attributes.hasNext()) {
@@ -228,6 +229,7 @@ public class User {
 	 * 
 	 */
 	public void deleteAll() throws CommandFailedException {
+		this.updateUndoable();
 		for (Task task : currentTasks) {
 			if (task.isTrashed()) {
 
@@ -242,6 +244,7 @@ public class User {
 	 * clear all current tasks
 	 */
 	public void clear() {
+		this.updateUndoable();
 		ArrayList<Task> toBeCleared = new ArrayList<Task>();
 
 		for (Task task : currentTasks) {
@@ -407,16 +410,7 @@ public class User {
 	public ArrayList<Task> getTaskList() {
 		ArrayList<Task> nonTrashedTasks = new ArrayList<Task>();
 		for (Task task : this.currentTasks) {
-			Iterator<String> tagIterator = task.getTag().iterator();
-			boolean isTrashed = false;
-			while (tagIterator.hasNext()) {
-				if (tagIterator.next().toLowerCase()
-						.contains(Constant.TRASHED_TAG)) {
-					isTrashed = true;
-				}
-			}
-
-			if (!isTrashed) {
+			if (!task.isTrashed()) {
 				nonTrashedTasks.add(task);
 			}
 		}
