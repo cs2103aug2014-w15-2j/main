@@ -57,11 +57,8 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	private GridPane dragNode;
 	
 	@FXML
-	private ScrollPane display;
-	private VBox content;
-	
-	public ScrollPane preview;
-	private VBox previewContent;
+	private ScrollPane displayScrollPane;
+	public ScrollPane previewScrollPane;
 	
 	private final static boolean ERROR_PRINT_ON = true;
 	private Parser parser = new Parser();
@@ -180,31 +177,33 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		}
     }
 	
-	public void setDisplay(String displayedText) {
-		content = new VBox();
-		Label text = new Label(displayedText);
-		content.getChildren().clear();
-		content.getChildren().add(text);
-		display.setContent(content);
-		display.getStyleClass().add("mylistview");
-		display.setHbarPolicy(ScrollBarPolicy.NEVER);
-		display.setVbarPolicy(ScrollBarPolicy.NEVER);
-		display.setOnScrollFinished(new EventHandler<ScrollEvent>() {
+	public void setDisplay(String textToDisplay) {
+		VBox displayContent = new VBox();
+		Label textLabel = new Label(textToDisplay);
+		displayContent.getChildren().clear();
+		displayContent.getChildren().add(textLabel);
+		displayScrollPane.setContent(displayContent);
+		displayScrollPane.getStyleClass().add("mylistview");
+		displayScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+		displayScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
+		
+		displayScrollPane.setOnScrollFinished(new EventHandler<ScrollEvent>() {
 			@Override
 			public void handle(ScrollEvent event) {
 				// TODO Auto-generated method stub
-				display.setVbarPolicy(ScrollBarPolicy.NEVER);
+				displayScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
 				
 			}
 	    });
-		display.setOnScrollStarted(new EventHandler<ScrollEvent>() {
+		
+		displayScrollPane.setOnScrollStarted(new EventHandler<ScrollEvent>() {
 			@Override
 			public void handle(ScrollEvent event) {
-				display.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+				displayScrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 			}
 		});
 		
-		display.setFocusTraversable(true);
+		displayScrollPane.setFocusTraversable(true);
 	}
 	
 	/**
@@ -215,7 +214,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		displayContent.getChildren().clear();
 		GridPane taskPane = getTaskPane(taskList);
 		displayContent.getChildren().add(taskPane);
-		display.setContent(displayContent);
+		displayScrollPane.setContent(displayContent);
 	}
 	
 	private GridPane getTaskPane(ArrayList<Task> taskList) {
@@ -494,13 +493,13 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 	
 	public void setPreview(String displayedText) {
-		previewContent = new VBox();
+		VBox previewContent = new VBox();
 		Label text = new Label(displayedText);
 		previewContent.getChildren().clear();
 		previewContent.setStyle("-fx-font: 12px \"Akagi\";");
 		previewContent.getChildren().add(text);
-		preview.setStyle("-fx-padding:5 0 0 7; -fx-background-color: rgb(244, 244, 244)");
-		preview.setContent(previewContent);
+		previewScrollPane.setStyle("-fx-padding:5 0 0 7; -fx-background-color: rgb(244, 244, 244)");
+		previewScrollPane.setContent(previewContent);
 	}
 
 	
