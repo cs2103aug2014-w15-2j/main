@@ -6,10 +6,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dataStructure.Task;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class DataStoreTest {
 	
@@ -58,19 +61,14 @@ public class DataStoreTest {
 		} catch (IOException e) {
 			System.out.println("failed in generating the test-save-file");
 		}
-		
 	}
 	
 	@Test
 	public void testLoadFileNotExist() {
 		fileData.delete();
 		try {
-			DataStore.loadFileData();
-			BufferedReader br = new BufferedReader(new FileReader(fileData));
-			assertEquals("[", br.readLine().trim());
-			br.readLine();
-			assertEquals("]", br.readLine().trim());
-			br.close();
+			ArrayList<Task> tasks = new ArrayList<Task>();
+			assertEquals(tasks, DataStore.loadFileData());
 		} catch (Exception e) {
 			System.out.println("failed in loading data");
 		}
