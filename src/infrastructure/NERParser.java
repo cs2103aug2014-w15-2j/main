@@ -60,16 +60,35 @@ public class NERParser {
 	private static boolean isPriorityModelUpdate = false;
 	private static boolean isCommandModelUpdate = false;
 	
-	// private boolean isCategoryChanged = false;
-
+	
+/**
+ * ==========================================================================================================================
+ *  Constructor and Initialization
+ * ==========================================================================================================================
+ */
 	public NERParser() {
 		try {
-			copyUserNlpFiles();
+			UtilityMethod.copyUserNlpFiles();
+			loadNerModels();
+			loadTimeParser();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+	}
+
+	private void loadTimeParser() {
+		// Time parsers
+		props = new Properties();
+		props.put("sutime.binders", "0");
+		props.put(
+				"sutime.rules",
+				"NLPTraining/defs.sutime.txt, NLPTraining/english.holidays.sutime.txt, NLPTraining/english.sutime.txt");
+		pipeline = new AnnotationPipeline();
+		pipeline.addAnnotator(new TokenizerAnnotator(false));
+		pipeline.addAnnotator(new TimeAnnotator("sutime", props));
+	}
+
+	private void loadNerModels() {
 		// NER parsers
 		classifierTag = CRFClassifier
 				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + Constant.FILE_PATH_TAG_GZ);
@@ -112,21 +131,14 @@ public class NERParser {
 			classifierPriorityPicker = CRFClassifier
 					.getClassifierNoExceptions(Constant.FILE_PATH_PRIORITY_PICKER_GZ_SOURCE);
 		}
-
-		// Time parsers
-		props = new Properties();
-		props.put("sutime.binders", "0");
-		props.put(
-				"sutime.rules",
-				"NLPTraining/defs.sutime.txt, NLPTraining/english.holidays.sutime.txt, NLPTraining/english.sutime.txt");
-		pipeline = new AnnotationPipeline();
-		pipeline.addAnnotator(new TokenizerAnnotator(false));
-		pipeline.addAnnotator(new TimeAnnotator("sutime", props));
 	}
 
-	public String pasreTimeToXML(String content) {
-		return classifierTime.classifyToString(content, "inlineXML", false);
-	}
+	
+/**
+ * ==========================================================================================================================
+ *  NER pickers
+ * ==========================================================================================================================
+ */
 
 	/**
 	 * pick out the cmd fragments and translate to the enum
@@ -170,8 +182,7 @@ public class NERParser {
 	 * @return
 	 * @throws CommandFailedException
 	 */
-	public TimeInterval pickTimeInterval(String userInputString)
-			throws CommandFailedException {
+	public TimeInterval pickTimeInterval(String userInputString) throws CommandFailedException {
 		this.isTimeChanged = false;
 		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_TIME);
 
@@ -223,15 +234,7 @@ public class NERParser {
 		}
 	}
 
-	
-	private boolean isDeadlineTask(String userInputString) {
-		userInputString = userInputString.toLowerCase();
-		return userInputString.contains("by") 
-				|| userInputString.contains("until") 
-				|| userInputString.contains("till") 
-				|| userInputString.contains("before");
-	}
-	
+
 	/**
 	 * pick out the description segments
 	 * 
@@ -379,8 +382,15 @@ public class NERParser {
 	}
 	
 	
+/**
+ * ==========================================================================================================================
+ *  Methods used to write back to the training file for learning
+ * ==========================================================================================================================
+ */
+	
 	/**
-	 * pick out the String segment that is tagged
+	 * pick out the String segment that is tagged by a user 
+	 * (which the user want to force the system to interpreted the given string as the give type)
 	 * @param inputString
 	 * @param type
 	 * @return
@@ -403,7 +413,7 @@ public class NERParser {
 	}
 
 	/**
-	 * remove string segments with tag except the given type t
+	 * remove the tagged segment to exclude it from the subsequent NER parsing.
 	 * @param inputString, t
 	 * @return
 	 */
@@ -425,161 +435,9 @@ public class NERParser {
 		
 		return inputString.trim();
 	}
-	
 
 	/**
-	 * parse a task from the given string used when adding an task
-	 * 
-	 * @param userInputString
-	 * @return
-	 * @throws CommandFailedException
-	 */
-
-	public Task getTask(String userInputString) throws CommandFailedException {
-
-		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
-		ArrayList<String> tag = this.pickTag(userInputString);
-		String description = this.pickDescription(userInputString);
-		int priority = this.pickPriority(userInputString);
-		String category = null;
-		
-		if (tag.isEmpty()) {
-			tag.add("ongoing");
-		}
-
-		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT;
-
-		return new Task(description, category, priority, repeatedPeriod, tag,
-				timeInterval);
-	}
-
-	
-	/**
-	 * parse a search constraint used when searching for tasks
-	 * 
-	 * @param userIntputStirng
-	 * @return
-	 * @throws CommandFailedException
-	 */
-	public Constraint getConstraint(String userInputString) {
-		TimeInterval timeInterval;
-		try {
-			timeInterval = this.pickTimeInterval(userInputString);
-			String keyword = "";
-			System.err.println("timeInterval - getConstraint: " + timeInterval.toString());
-			if (timeInterval.equals(new TimeInterval())) {
-				keyword = UtilityMethod.removeFirstWord(userInputString);
-			}
-
-			return new Constraint(keyword, timeInterval);
-		} catch (CommandFailedException e) {
-			return new Constraint(UtilityMethod.removeFirstWord(userInputString), new TimeInterval());
-		}
-
-	}
-
-	/**
-	 * get updated keys and values
-	 * 
-	 * @param userInputStirng
-	 * @return
-	 * @throws CommandFailedException
-	 */
-	public HashMap<String, Object> getUpdatedTaskMap(String userInputString)
-			throws CommandFailedException {
-
-		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
-		ArrayList<String> tag = this.pickTag(userInputString);
-		String description = this.pickDescription(userInputString);
-		int priority = this.pickPriority(userInputString);
-
-		HashMap<String, Object> updateAttributes = new HashMap<String, Object>();
-
-		if (this.isTimeChanged) {
-			System.err.println("getUpdatedTaskMap: time updated to "
-					+ timeInterval);
-			updateAttributes.put("time_interval", timeInterval);
-		}
-
-		if (this.isTagChanged) {
-			System.err.println("getUpdatedTaskMap: tag updated to " + tag);
-			updateAttributes.put("tag", tag);
-		}
-
-		if (this.isDescriptionChanged) {
-			System.err.println("getUpdatedTaskMap: description updated to "
-					+ description);
-			updateAttributes.put("description", description);
-		}
-
-		if (this.isPriorityChanged) {
-			System.err.println("getUpdatedTaskMap: priority updated to "
-					+ priority);
-			updateAttributes.put("priority", priority);
-		}
-
-		return updateAttributes;
-	}
-
-	
-
-	public static boolean updateModal(String propFilePath) {
-		
-		try {
-			String[] a = new String[2];
-			a[0] = "-prop";
-			a[1] = propFilePath;
-			edu.stanford.nlp.ie.crf.CRFClassifier.main(a);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return false;
-	}
-
-	/**
-	 * turn the xml to the required training format
-	 * 
-	 * @param xmlString
-	 * @return
-	 */
-	public static ArrayList<Pair<String, String>> interpretXML(String xmlString) {
-		xmlString = xmlString.replaceAll("<", " <");
-		xmlString = xmlString.replaceAll(">", "> ");
-
-		String[] wordArray = xmlString.split(" ");
-		ArrayList<Pair<String, String>> wordPairs = new ArrayList<Pair<String, String>>();
-
-		String currentKey = Constant.XML_TAG_DEFAULT;
-
-		for (String currentWord : wordArray) {
-			if (currentWord.contains("</") && currentWord.contains(">")
-					&& currentWord.indexOf(">") > currentWord.indexOf("</")) {
-				currentKey = Constant.XML_TAG_DEFAULT;
-
-			} else if (currentWord.contains("<") && currentWord.contains(">")
-					&& currentWord.indexOf(">") > currentWord.indexOf("<")) {
-				if (!currentKey.equals(Constant.XML_TAG_DEFAULT)) {
-					System.err
-							.println("interpretXML: currentKey != defaultKey ----- one word can only have a single tag");
-					return null;
-				}
-				currentKey = currentWord.substring(
-						currentWord.indexOf("<") + 1, currentWord.indexOf(">"))
-						.trim();
-			} else if (!currentWord.equals("")) {
-				wordPairs.add(new Pair<String, String>(currentWord.trim(),
-						currentKey.trim()));
-			}
-		}
-
-		return wordPairs;
-	}
-
-	/**
-	 * translate a mixed list to a map containing pure list
-	 * 
+	 * translate a mixed list to a map containing a list with single tags
 	 * @param wordPairs
 	 * @return
 	 */
@@ -694,9 +552,76 @@ public class NERParser {
 		listMap.put(Constant.XML_TAG_COMMAND, commandList);
 		return listMap;
 	}
-
+	
 	/**
-	 * update the training model with the given xmlString
+	 * interpret the XML string to the required training data format
+	 * 
+	 * @param xmlString
+	 * @return
+	 */
+	public static ArrayList<Pair<String, String>> interpretXML(String xmlString) {
+		xmlString = xmlString.replaceAll("<", " <");
+		xmlString = xmlString.replaceAll(">", "> ");
+
+		String[] wordArray = xmlString.split(" ");
+		ArrayList<Pair<String, String>> wordPairs = new ArrayList<Pair<String, String>>();
+
+		String currentKey = Constant.XML_TAG_DEFAULT;
+
+		for (String currentWord : wordArray) {
+			if (currentWord.contains("</") && currentWord.contains(">")
+					&& currentWord.indexOf(">") > currentWord.indexOf("</")) {
+				currentKey = Constant.XML_TAG_DEFAULT;
+
+			} else if (currentWord.contains("<") && currentWord.contains(">")
+					&& currentWord.indexOf(">") > currentWord.indexOf("<")) {
+				if (!currentKey.equals(Constant.XML_TAG_DEFAULT)) {
+					System.err
+							.println("interpretXML: currentKey != defaultKey ----- one word can only have a single tag");
+					return null;
+				}
+				currentKey = currentWord.substring(
+						currentWord.indexOf("<") + 1, currentWord.indexOf(">"))
+						.trim();
+			} else if (!currentWord.equals("")) {
+				wordPairs.add(new Pair<String, String>(currentWord.trim(),
+						currentKey.trim()));
+			}
+		}
+
+		return wordPairs;
+	}
+	
+	/**
+	 * update the specific file
+	 * @param list
+	 * @param filePath
+	 * @return
+	 * @throws IOException
+	 */
+	public static void updateTsvFile(ArrayList<Pair<String, String>> list,
+			String filePath) throws IOException {
+
+		FileWriter fw = new FileWriter(new File(filePath), true);
+		BufferedWriter bw = new BufferedWriter(fw);
+
+		bw.newLine();
+		for (Pair<String, String> p : list) {
+			String thisLine = p.head + "\t" + p.tail;
+			bw.newLine();
+			bw.write(thisLine);
+		}
+		bw.newLine();
+		
+		System.err.println("Finish writting!");
+
+		bw.flush();
+		bw.close();
+		fw.close();
+	}
+	
+	/**
+	 * update all the training data files relevant to the given xmlString
 	 * 
 	 * @param xmlString
 	 * @throws IOException
@@ -748,94 +673,265 @@ public class NERParser {
 			updateTsvFile(commandList, Constant.FILE_PATH_COMMAND_PICKER_USER);
 		}
 	}
-
+	
 	/**
-	 * update the specific file
-	 * 
-	 * @param list
-	 * @param filePath
+	 * regenerate the NLP model(*.gz file) with the property file
+	 * @param propFilePath
 	 * @return
-	 * @throws IOException
 	 */
-	public static void updateTsvFile(ArrayList<Pair<String, String>> list,
-			String filePath) throws IOException {
-
-		FileWriter fw = new FileWriter(new File(filePath), true);
-		BufferedWriter bw = new BufferedWriter(fw);
-
-		bw.newLine();
-		for (Pair<String, String> p : list) {
-			String thisLine = p.head + "\t" + p.tail;
-			bw.newLine();
-			bw.write(thisLine);
+	public static boolean updateModal(String propFilePath) {
+		try {
+			String[] arguments = new String[2];
+			arguments[0] = "-prop";
+			arguments[1] = propFilePath;
+			edu.stanford.nlp.ie.crf.CRFClassifier.main(arguments);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
-		bw.newLine();
+	}
+	
+	/**
+	 * update all the NLP models (*.gz files)
+	 */
+	public static void updateModal() {
+		updateModal(Constant.FILE_PATH_TIME_PICKER_PROP_USER);
+		updateModal(Constant.FILE_PATH_TAG_PICKER_PROP_USER);
+		updateModal(Constant.FILE_PATH_DESCRIPTION_PICKER_PROP_USER);
+		updateModal(Constant.FILE_PATH_PRIORITY_PICKER_PROP_USER);
+		updateModal(Constant.FILE_PATH_COMMAND_PICKER_PROP_USER);
+		updateModal(Constant.FILE_PATH_INDEX_PICKER_PROP_USER);
+	}
+	
+/**
+ * ==========================================================================================================================
+ *  Methods will be directly called by MainViewController
+ * ==========================================================================================================================
+ */
+	
+	/**
+	 * ADD: parse a task from the given string used when adding an task
+	 * @param userInputString
+	 * @return
+	 * @throws CommandFailedException
+	 */
+
+	public Task getTask(String userInputString) throws CommandFailedException {
+
+		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
+		ArrayList<String> tag = this.pickTag(userInputString);
+		String description = this.pickDescription(userInputString);
+		int priority = this.pickPriority(userInputString);
+		String category = null;
 		
-		System.err.println("Finish writting!");
+		if (tag.isEmpty()) {
+			tag.add("ongoing");
+		}
 
-		bw.flush();
-		bw.close();
-		fw.close();
+		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT;
+
+		return new Task(description, category, priority, repeatedPeriod, tag,
+				timeInterval);
 	}
 
 	/**
-	 * return the key-value map parsed from the xmlString
+	 * UPDATE: get updated keys and values
 	 * 
-	 * @param xmlString
+	 * @param userInputStirng
+	 * @return
+	 * @throws CommandFailedException
+	 */
+	public HashMap<String, Object> getUpdatedTaskMap(String userInputString)
+			throws CommandFailedException {
+
+		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
+		ArrayList<String> tag = this.pickTag(userInputString);
+		String description = this.pickDescription(userInputString);
+		int priority = this.pickPriority(userInputString);
+
+		HashMap<String, Object> updateAttributes = new HashMap<String, Object>();
+
+		if (this.isTimeChanged) {
+			System.err.println("getUpdatedTaskMap: time updated to "
+					+ timeInterval);
+			updateAttributes.put("time_interval", timeInterval);
+		}
+
+		if (this.isTagChanged) {
+			System.err.println("getUpdatedTaskMap: tag updated to " + tag);
+			updateAttributes.put("tag", tag);
+		}
+
+		if (this.isDescriptionChanged) {
+			System.err.println("getUpdatedTaskMap: description updated to "
+					+ description);
+			updateAttributes.put("description", description);
+		}
+
+		if (this.isPriorityChanged) {
+			System.err.println("getUpdatedTaskMap: priority updated to "
+					+ priority);
+			updateAttributes.put("priority", priority);
+		}
+
+		return updateAttributes;
+	}
+	
+	/**
+	 * SEARCH: parse a search constraint used when searching for tasks
+	 * @param userIntputStirng
+	 * @return
+	 * @throws CommandFailedException
+	 */
+	public Constraint getConstraint(String userInputString) {
+		TimeInterval timeInterval;
+		try {
+			timeInterval = this.pickTimeInterval(userInputString);
+			String keyword = "";
+			System.err.println("timeInterval - getConstraint: " + timeInterval.toString());
+			if (timeInterval.equals(new TimeInterval())) {
+				keyword = UtilityMethod.removeFirstWord(userInputString);
+			}
+
+			return new Constraint(keyword, timeInterval);
+		} catch (CommandFailedException e) {
+			return new Constraint(UtilityMethod.removeFirstWord(userInputString), new TimeInterval());
+		}
+
+	}
+
+	
+/**
+ * ==========================================================================================================================
+ *  Methods used for specific task component parsing
+ * ==========================================================================================================================
+ */
+	//time parsing
+	
+	/**
+	 * Break the given String and remove irrelevant words.
+	 * @param content
 	 * @return
 	 */
-	public static HashMap<String, ArrayList<String>> parseToMap(String xmlString) {
-		assert (xmlString != null);
-		assert (xmlString.length() > 5);
-		if (xmlString == null || xmlString.length() <= 5) {
-			System.err.println("Invalid input");
-			return new HashMap<String, ArrayList<String>>();
-		}
-
-		System.err.println("INPUT XML STRING - parseToMap: " + xmlString);
-		HashMap<String, ArrayList<String>> taskMap = new HashMap<String, ArrayList<String>>();
-		taskMap.put("COMMAND", new ArrayList<String>());
-		// get rid of the first and last character
-		xmlString = xmlString.substring(1, xmlString.length() - 2);
-		String[] xmlSegments = xmlString.split("</");
-		// string format: ADD>Add, ADD> <DESCRIPTION> ... , DESCRIPTION>
-		// <DATE>...
-
-		int NumberOfSegments = xmlSegments.length - 1;
-
-		for (int i = 0; i < NumberOfSegments; i++) {
-			String segment = xmlSegments[i];
-			String nextSegment = xmlSegments[i + 1];
-			String key = nextSegment.substring(0, nextSegment.indexOf(">"));
-			String temp = segment.replaceFirst(
-					segment.substring(0, segment.indexOf(">") + 1), "");
-
-			String value = null;
-			if (temp.indexOf(">") != -1) {
-				value = temp.replaceFirst(
-						temp.substring(0, temp.indexOf(">") + 1), "");
-			} else {
-				value = temp;
-			}
-
-			if (taskMap.get(key) == null) {
-				taskMap.put(key, new ArrayList<String>());
-			}
-			taskMap.get(key).add(value);
-		}
-
-		return taskMap;
+	public String parseTimeToXML(String content) {
+		return classifierTime.classifyToString(content, "inlineXML", false);
 	}
-
+	
 	/**
-	 * get a TimeInterval object from a list of date strings
+	 * Using the natural language processor to translate the picked out time input fragments to date
+	 * @param userInputStrings
+	 * @return
+	 */
+	public ArrayList<Date> parseTimeToDate(ArrayList<String> userInputStrings) {
+
+		ArrayList<Date> results = new ArrayList<Date>();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String stringForToday = format.format(Calendar.getInstance().getTime());
+
+		for (String text : userInputStrings) {
+			System.err.println("INPUT TIME STRING - parseTimeToDate: " + text);
+			Annotation annotation = new Annotation(text);
+			annotation.set(CoreAnnotations.DocDateAnnotation.class,
+					stringForToday);
+			pipeline.annotate(annotation);
+			List<CoreMap> timexAnnsAll = annotation
+					.get(TimeAnnotations.TimexAnnotations.class);
+			for (CoreMap cm : timexAnnsAll) {
+				String interpretedTimeString = cm
+						.get(TimeExpression.Annotation.class).getTemporal()
+						.toString();
+				Date d = parseStringToDate(interpretedTimeString);
+				Calendar c = UtilityMethod.dateToCalendar(d);
+				System.err.println("PARSED DATE - parseTimeToDate: "
+						+ c.get(Calendar.SECOND));
+				if (d != null) {
+					if (c.get(Calendar.SECOND) == Constant.CALENDAR_WEEK_IN_SECOND) {
+						System.err.println("parsing weeks");
+						Date d1 = c.getTime();
+						c.add(Calendar.WEEK_OF_YEAR, 1);
+						c.add(Calendar.DATE, -1);
+						c.set(Calendar.HOUR_OF_DAY, 23);
+						c.set(Calendar.MINUTE, 59);
+						Date d2 = c.getTime();
+						results.add(d1);
+						results.add(d2);
+					} else {
+						results.add(d);
+					}
+				}
+			}
+		}
+		return results;
+	}
+	
+	/**
+	 * Parse a time string to a Date Object (called by parseTimeToDate)
 	 * 
+	 * @param timeString
+	 * @return
+	 */
+	private Date parseStringToDate(String timeString) {
+		// the four possible format:
+		// 2014-10-15T14:00
+		// 2014-10-24-WXX-5
+		// 2014-10-24
+		// 2014-02
+		// 2014
+
+		System.err.println("INPUT TIME STRING - parseStringToDate: "
+				+ timeString);
+
+		Date date = null;
+		try {
+			if (timeString.length() == 4) {
+				date = new SimpleDateFormat("yyyy", Locale.ENGLISH)
+						.parse(timeString);
+			} else if (timeString.length() == 7) {
+				date = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH)
+						.parse(timeString);
+			} else if (timeString.length() == 10) {
+				date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+						.parse(timeString);
+			} else if (timeString.length() == 11) {
+				timeString = timeString.replaceFirst("W", "");
+				date = new SimpleDateFormat("yyyy-MM-ww", Locale.ENGLISH)
+						.parse(timeString);
+				Calendar c = UtilityMethod.dateToCalendar(date);
+				c.set(Calendar.SECOND, Constant.CALENDAR_WEEK_IN_SECOND);
+				date = c.getTime();
+				System.err.println("Parsing week: " + date);
+			} else if (timeString.length() == 16) {
+				if (timeString.charAt(10) == 'T') {
+					timeString = timeString.replace("T", " ");
+					date = new SimpleDateFormat("yyyy-MM-dd HH:mm",
+							Locale.ENGLISH).parse(timeString);
+				} else {
+					timeString = timeString.substring(0, 10);
+					date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+							.parse(timeString);
+				}
+			} else {
+				Constant.logger.log(Level.INFO, "unrecognized format: "
+						+ timeString);
+				// will return null
+			}
+		} catch (ParseException e) {
+			// will return null
+			Constant.logger.log(Level.INFO,
+					"parseStringToDate gets expection, returns null");
+			e.printStackTrace();
+		}
+		return date;
+	}
+	
+	/**
+	 * Get a TimeInterval object from a list of date strings
 	 * @param userInputStrings
 	 * @return
 	 * @throws CommandFailedException
 	 */
-	public TimeInterval parseTimeInterval(ArrayList<String> userInputStrings)
-			throws CommandFailedException {
+	public TimeInterval parseTimeInterval(ArrayList<String> userInputStrings) throws CommandFailedException {
 		ArrayList<Date> dates = parseTimeToDate(userInputStrings);
 		assert (dates != null);
 		TimeInterval interval = new TimeInterval();
@@ -911,116 +1007,11 @@ public class NERParser {
 		return interval;
 	}
 
+	
+	//others
+	
 	/**
-	 * translate a list of date string to a list of date objects
-	 * 
-	 * @param userInputStrings
-	 * @return
-	 */
-	public ArrayList<Date> parseTimeToDate(ArrayList<String> userInputStrings) {
-
-		ArrayList<Date> results = new ArrayList<Date>();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		String stringForToday = format.format(Calendar.getInstance().getTime());
-
-		for (String text : userInputStrings) {
-			System.err.println("INPUT TIME STRING - parseTimeToDate: " + text);
-			Annotation annotation = new Annotation(text);
-			annotation.set(CoreAnnotations.DocDateAnnotation.class,
-					stringForToday);
-			pipeline.annotate(annotation);
-			List<CoreMap> timexAnnsAll = annotation
-					.get(TimeAnnotations.TimexAnnotations.class);
-			for (CoreMap cm : timexAnnsAll) {
-				String interpretedTimeString = cm
-						.get(TimeExpression.Annotation.class).getTemporal()
-						.toString();
-				Date d = parseStringToDate(interpretedTimeString);
-				Calendar c = UtilityMethod.dateToCalendar(d);
-				System.err.println("PARSED DATE - parseTimeToDate: "
-						+ c.get(Calendar.SECOND));
-				if (d != null) {
-					if (c.get(Calendar.SECOND) == Constant.CALENDAR_WEEK_IN_SECOND) {
-						System.err.println("parsing weeks");
-						Date d1 = c.getTime();
-						c.add(Calendar.WEEK_OF_YEAR, 1);
-						c.add(Calendar.DATE, -1);
-						c.set(Calendar.HOUR_OF_DAY, 23);
-						c.set(Calendar.MINUTE, 59);
-						Date d2 = c.getTime();
-						results.add(d1);
-						results.add(d2);
-					} else {
-						results.add(d);
-					}
-				}
-			}
-		}
-		return results;
-	}
-
-	/**
-	 * parse a time string
-	 * 
-	 * @param timeString
-	 * @return
-	 */
-	private Date parseStringToDate(String timeString) {
-		// the four possible format:
-		// 2014-10-15T14:00
-		// 2014-10-24-WXX-5
-		// 2014-10-24
-		// 2014-02
-		// 2014
-
-		System.err.println("INPUT TIME STRING - parseStringToDate: "
-				+ timeString);
-
-		Date date = null;
-		try {
-			if (timeString.length() == 4) {
-				date = new SimpleDateFormat("yyyy", Locale.ENGLISH)
-						.parse(timeString);
-			} else if (timeString.length() == 7) {
-				date = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH)
-						.parse(timeString);
-			} else if (timeString.length() == 10) {
-				date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-						.parse(timeString);
-			} else if (timeString.length() == 11) {
-				timeString = timeString.replaceFirst("W", "");
-				date = new SimpleDateFormat("yyyy-MM-ww", Locale.ENGLISH)
-						.parse(timeString);
-				Calendar c = UtilityMethod.dateToCalendar(date);
-				c.set(Calendar.SECOND, Constant.CALENDAR_WEEK_IN_SECOND);
-				date = c.getTime();
-				System.err.println("Parsing week: " + date);
-			} else if (timeString.length() == 16) {
-				if (timeString.charAt(10) == 'T') {
-					timeString = timeString.replace("T", " ");
-					date = new SimpleDateFormat("yyyy-MM-dd HH:mm",
-							Locale.ENGLISH).parse(timeString);
-				} else {
-					timeString = timeString.substring(0, 10);
-					date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-							.parse(timeString);
-				}
-			} else {
-				Constant.logger.log(Level.INFO, "unrecognized format: "
-						+ timeString);
-				// will return null
-			}
-		} catch (ParseException e) {
-			// will return null
-			Constant.logger.log(Level.INFO,
-					"parseStringToDate gets expection, returns null");
-			e.printStackTrace();
-		}
-		return date;
-	}
-
-	/**
-	 * parse tags
+	 * Return a list of tags given list of string
 	 * 
 	 * @param tagMines
 	 * @return
@@ -1049,7 +1040,7 @@ public class NERParser {
 	}
 
 	/**
-	 * parse priorities
+	 * Return a priority value given a priority string
 	 * 
 	 * @param priorityMines
 	 * @return
@@ -1075,8 +1066,8 @@ public class NERParser {
 	}
 
 	/**
-	 * parse commands
-	 * 
+	 * Return a COMMAND_TYPE enumeration given a list of commands string
+	 * when there are more than one commands in the list, only first one will be accepted
 	 * @param commands
 	 * @return
 	 * @throws CommandFailedException
@@ -1106,6 +1097,12 @@ public class NERParser {
 		}
 	}
 
+	/**
+	 * Return a list of Integer representing the picked out index
+	 * @param indexMines
+	 * @return
+	 * @throws CommandFailedException
+	 */
 	private ArrayList<Integer> parseIndex (ArrayList<String> indexMines) throws CommandFailedException {
 		try {
 			ArrayList<Integer> results = new ArrayList<Integer>();
@@ -1127,69 +1124,74 @@ public class NERParser {
 		}
 	}
 	
-	private static void copyUserNlpFiles() throws IOException {
-		System.err.println("initializeUserTrainingModel");
-		File rootDirectory = new File(Constant.FILE_PATH_ROOT);
-		if (!rootDirectory.exists()) {
-			rootDirectory.mkdir();
-		}
-
-		File nlpRootDirectory = new File(Constant.FILE_PATH_NLP_ROOT);
-		if (!nlpRootDirectory.exists()) {
-			nlpRootDirectory.mkdir();
-		}
-
-		UtilityMethod.copyFile(Constant.FILE_PATH_TIME_PICKER_SOURCE,
-				Constant.FILE_PATH_TIME_PICKER_USER);
-
-		UtilityMethod.copyFile(Constant.FILE_PATH_TAG_PICKER_SOURCE,
-				Constant.FILE_PATH_TAG_PICKER_USER);
-
-		UtilityMethod.copyFile(Constant.FILE_PATH_DESCRIPTION_PICKER_SOURCE,
-				Constant.FILE_PATH_DESCRIPTION_PICKER_USER);
-
-		UtilityMethod.copyFile(Constant.FILE_PATH_INDEX_PICKER_SOURCE,
-				Constant.FILE_PATH_INDEX_PICKER_USER);
-
-		UtilityMethod.copyFile(Constant.FILE_PATH_PRIORITY_PICKER_SOURCE,
-				Constant.FILE_PATH_PRIORITY_PICKER_USER);
-
-		UtilityMethod.copyFile(Constant.FILE_PATH_COMMAND_PICKER_SOURCE,
-				Constant.FILE_PATH_COMMAND_PICKER_USER);
-
-		
-		// copy prop files
-
-		UtilityMethod.copyFile(Constant.FILE_PATH_TIME_PICKER_PROP_SOURCE,
-				Constant.FILE_PATH_TIME_PICKER_PROP_USER);
-
-		UtilityMethod.copyFile(Constant.FILE_PATH_TAG_PICKER_PROP_SOURCE,
-				Constant.FILE_PATH_TAG_PICKER_PROP_USER);
-
-		UtilityMethod.copyFile(Constant.FILE_PATH_DESCRIPTION_PICKER_PROP_SOURCE,
-				Constant.FILE_PATH_DESCRIPTION_PICKER_PROP_USER);
-
-		UtilityMethod.copyFile(Constant.FILE_PATH_INDEX_PICKER_PROP_SOURCE,
-				Constant.FILE_PATH_INDEX_PICKER_PROP_USER);
-
-		UtilityMethod.copyFile(Constant.FILE_PATH_PRIORITY_PICKER_PROP_SOURCE,
-				Constant.FILE_PATH_PRIORITY_PICKER_PROP_USER);
-
-		UtilityMethod.copyFile(Constant.FILE_PATH_COMMAND_PICKER_PROP_SOURCE,
-				Constant.FILE_PATH_COMMAND_PICKER_PROP_USER);
+	
+/**
+ * ==========================================================================================================================
+ *  Other methods used during NER parsing
+ * ==========================================================================================================================
+ */
+	
+	/**
+	 * check if a given string contains a deadline task
+	 * @param userInputString
+	 * @return
+	 */
+	private static boolean isDeadlineTask(String userInputString) {
+		userInputString = userInputString.toLowerCase();
+		return userInputString.contains("by") 
+				|| userInputString.contains("until") 
+				|| userInputString.contains("till") 
+				|| userInputString.contains("before");
 	}
 	
 	
 	/**
-	 * update the training modal
+	 * return the key-value map tagged in the xmlString
+	 * 
+	 * @param xmlString
+	 * @return
 	 */
-	public static void updateModal() {
-		updateModal(Constant.FILE_PATH_TIME_PICKER_PROP_USER);
-		updateModal(Constant.FILE_PATH_TAG_PICKER_PROP_USER);
-		updateModal(Constant.FILE_PATH_DESCRIPTION_PICKER_PROP_USER);
-		updateModal(Constant.FILE_PATH_PRIORITY_PICKER_PROP_USER);
-		updateModal(Constant.FILE_PATH_COMMAND_PICKER_PROP_USER);
-		updateModal(Constant.FILE_PATH_INDEX_PICKER_PROP_USER);
+	public static HashMap<String, ArrayList<String>> parseToMap(String xmlString) {
+		assert (xmlString != null);
+		assert (xmlString.length() > 5);
+		if (xmlString == null || xmlString.length() <= 5) {
+			System.err.println("Invalid input");
+			return new HashMap<String, ArrayList<String>>();
+		}
+
+		System.err.println("INPUT XML STRING - parseToMap: " + xmlString);
+		HashMap<String, ArrayList<String>> taskMap = new HashMap<String, ArrayList<String>>();
+		taskMap.put("COMMAND", new ArrayList<String>());
+		// get rid of the first and last character
+		xmlString = xmlString.substring(1, xmlString.length() - 2);
+		String[] xmlSegments = xmlString.split("</");
+		// string format: ADD>Add, ADD> <DESCRIPTION> ... , DESCRIPTION>
+		// <DATE>...
+
+		int NumberOfSegments = xmlSegments.length - 1;
+
+		for (int i = 0; i < NumberOfSegments; i++) {
+			String segment = xmlSegments[i];
+			String nextSegment = xmlSegments[i + 1];
+			String key = nextSegment.substring(0, nextSegment.indexOf(">"));
+			String temp = segment.replaceFirst(
+					segment.substring(0, segment.indexOf(">") + 1), "");
+
+			String value = null;
+			if (temp.indexOf(">") != -1) {
+				value = temp.replaceFirst(
+						temp.substring(0, temp.indexOf(">") + 1), "");
+			} else {
+				value = temp;
+			}
+
+			if (taskMap.get(key) == null) {
+				taskMap.put(key, new ArrayList<String>());
+			}
+			taskMap.get(key).add(value);
+		}
+
+		return taskMap;
 	}
 
 }

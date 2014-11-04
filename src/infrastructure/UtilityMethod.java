@@ -213,5 +213,57 @@ public abstract class UtilityMethod {
 	  private static class Delta {
 	    double x, y;
 	  }
+
+	public static void copyUserNlpFiles() throws IOException {
+		System.err.println("initializeUserTrainingModel");
+		File rootDirectory = new File(Constant.FILE_PATH_ROOT);
+		if (!rootDirectory.exists()) {
+			rootDirectory.mkdir();
+		}
+	
+		File nlpRootDirectory = new File(Constant.FILE_PATH_NLP_ROOT);
+		if (!nlpRootDirectory.exists()) {
+			nlpRootDirectory.mkdir();
+		}
+	
+		copyFile(Constant.FILE_PATH_TIME_PICKER_SOURCE,
+				Constant.FILE_PATH_TIME_PICKER_USER);
+	
+		copyFile(Constant.FILE_PATH_TAG_PICKER_SOURCE,
+				Constant.FILE_PATH_TAG_PICKER_USER);
+	
+		copyFile(Constant.FILE_PATH_DESCRIPTION_PICKER_SOURCE,
+				Constant.FILE_PATH_DESCRIPTION_PICKER_USER);
+	
+		copyFile(Constant.FILE_PATH_INDEX_PICKER_SOURCE,
+				Constant.FILE_PATH_INDEX_PICKER_USER);
+	
+		copyFile(Constant.FILE_PATH_PRIORITY_PICKER_SOURCE,
+				Constant.FILE_PATH_PRIORITY_PICKER_USER);
+	
+		copyFile(Constant.FILE_PATH_COMMAND_PICKER_SOURCE,
+				Constant.FILE_PATH_COMMAND_PICKER_USER);
+	
+		
+		// copy prop files
+	
+		copyFile(Constant.FILE_PATH_TIME_PICKER_PROP_SOURCE,
+				Constant.FILE_PATH_TIME_PICKER_PROP_USER);
+	
+		copyFile(Constant.FILE_PATH_TAG_PICKER_PROP_SOURCE,
+				Constant.FILE_PATH_TAG_PICKER_PROP_USER);
+	
+		copyFile(Constant.FILE_PATH_DESCRIPTION_PICKER_PROP_SOURCE,
+				Constant.FILE_PATH_DESCRIPTION_PICKER_PROP_USER);
+	
+		copyFile(Constant.FILE_PATH_INDEX_PICKER_PROP_SOURCE,
+				Constant.FILE_PATH_INDEX_PICKER_PROP_USER);
+	
+		copyFile(Constant.FILE_PATH_PRIORITY_PICKER_PROP_SOURCE,
+				Constant.FILE_PATH_PRIORITY_PICKER_PROP_USER);
+	
+		copyFile(Constant.FILE_PATH_COMMAND_PICKER_PROP_SOURCE,
+				Constant.FILE_PATH_COMMAND_PICKER_PROP_USER);
+	}
 }
 

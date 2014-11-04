@@ -243,7 +243,7 @@ public class Parser {
 	}
 	
 	public TimeInterval parseTimeInterval(String parameter) throws Exception {
-		HashMap<String, ArrayList<String>> map = NERParser.parseToMap(nerParser.pasreTimeToXML(parameter));
+		HashMap<String, ArrayList<String>> map = NERParser.parseToMap(nerParser.parseTimeToXML(parameter));
 		ArrayList<String> dateList = map.get("DATE");
 		return nerParser.parseTimeInterval(dateList);
 	}
