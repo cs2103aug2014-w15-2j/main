@@ -56,9 +56,24 @@ public class DataStoreTest {
 			assertEquals("]", br.readLine().trim());
 			br.close();
 		} catch (IOException e) {
-			System.out.println("failed in generating the test-file");
+			System.out.println("failed in generating the test-save-file");
 		}
 		
+	}
+	
+	@Test
+	public void testLoadFileNotExist() {
+		fileData.delete();
+		try {
+			DataStore.loadFileData();
+			BufferedReader br = new BufferedReader(new FileReader(fileData));
+			assertEquals("[", br.readLine().trim());
+			br.readLine();
+			assertEquals("]", br.readLine().trim());
+			br.close();
+		} catch (Exception e) {
+			System.out.println("failed in loading data");
+		}
 	}
 	
 }
