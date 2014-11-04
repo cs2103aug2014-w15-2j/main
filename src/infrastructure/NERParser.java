@@ -72,15 +72,15 @@ public class NERParser {
 		
 		// NER parsers
 		classifierTag = CRFClassifier
-				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + "/tag-ner-model.ser.gz");
+				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + Constant.FILE_PATH_TAG_GZ);
 		classifierCommand = CRFClassifier
-				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + "/command-ner-model.ser.gz");
+				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + Constant.FILE_PATH_COMMAND_GZ);
 		classifierTime = CRFClassifier
-				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + "/time-ner-model.ser.gz");
+				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + Constant.FILE_PATH_TIME_GZ);
 		classifierPriority = CRFClassifier
-				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + "/priority-ner-model.ser.gz");
+				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + Constant.FILE_PATH_PRIORITY_GZ);
 		classifierIndex = CRFClassifier
-				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + "/index-ner-model.ser.gz");
+				.getClassifierNoExceptions(Constant.FILE_PATH_NLP_SRC + Constant.FILE_PATH_INDEX_GZ);
 		
 		// NER pickers
 		try {

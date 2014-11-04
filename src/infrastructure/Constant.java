@@ -7,10 +7,12 @@ public abstract class Constant {
 
 	// logger
 	public static Logger logger = Logger.getLogger("ListOfXiaoMing");
-
+	public final static boolean ERROR_PRINT_ON = true;
+	
 	/**
 	 * training data path
 	 */
+	
 	// directory
 	public static final String FILE_PATH_ROOT = "List-of-Xiao-Ming";
 	public static final String FILE_PATH_NLP_ROOT = "List-of-Xiao-Ming/NLP-Data";
@@ -23,6 +25,13 @@ public abstract class Constant {
 	public static final String FILE_PATH_PRIORITY_PICKER = "/priority-picker-training-data.tsv";
 	public static final String FILE_PATH_INDEX_PICKER = "/index-picker-training-data.tsv";
 	public static final String FILE_PATH_COMMAND_PICKER = "/command-picker-training-data.tsv";
+	
+	//gz models
+	public static final String FILE_PATH_INDEX_GZ = "/index-ner-model.ser.gz";
+	public static final String FILE_PATH_PRIORITY_GZ = "/priority-ner-model.ser.gz";
+	public static final String FILE_PATH_TIME_GZ = "/time-ner-model.ser.gz";
+	public static final String FILE_PATH_COMMAND_GZ = "/command-ner-model.ser.gz";
+	public static final String FILE_PATH_TAG_GZ = "/tag-ner-model.ser.gz";
 
 	public static final String FILE_PATH_TIME_PICKER_USER = FILE_PATH_NLP_ROOT
 			+ FILE_PATH_TIME_PICKER;
@@ -342,5 +351,5 @@ public abstract class Constant {
 
 	public static final int MODIFIER_CTRL = 130;
 
-	public final static boolean ERROR_PRINT_ON = true;
+
 }

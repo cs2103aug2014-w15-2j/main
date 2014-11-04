@@ -72,24 +72,22 @@ public class MainViewController extends GridPane implements HotKeyListener{
  * Constructor
  * =========================================================================================
  */
-	
-	
-	
+
 	public MainViewController(Stage stage) {
 		try {
+			this.user = new User();
 			this.loadFont();
 			this.loadFxml();
-//			this.loadParser();
-			this.user = new User();
-//			this.initializeShortCuts();
-			this.updatePage();
+			this.loadParser();
 			this.addTextFieldListener();
-	        
+			this.initializeShortCuts();
+			this.updatePage();
 	        UtilityMethod.makeDraggable(stage, dragNode);
 	        
 	        if (!Constant.ERROR_PRINT_ON) {
 				silentErrorStream();
 			}
+	        
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
