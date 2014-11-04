@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
+
 import javax.swing.KeyStroke;
 
 import reference.CommandFailedException;
@@ -34,6 +35,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -169,7 +171,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
     private void onEnter() {
 		String command = getUserInput(true);
 		if (command.equals("")) {
-			setDisplayGrid(this.display());			
+			displayTaskList(this.display());			
 		} else {
 //			setPreview("\n\n\n\t\t  Welcome to List of Xiao Ming");
 			this.commandHistory.add(command);
@@ -206,139 +208,157 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 	
 	/**
-	 * @param displayList
+	 * @param taskList
 	 */
-	public void setDisplayGrid(ArrayList<Task> displayList) {
-		content = new VBox();
+	public void displayTaskList(ArrayList<Task> taskList) {
+		VBox displayContent = new VBox();
+		displayContent.getChildren().clear();
+		GridPane taskPane = getTaskPane(taskList);
+		displayContent.getChildren().add(taskPane);
+		display.setContent(displayContent);
+	}
+	
+	private GridPane getTaskPane(ArrayList<Task> taskList) {
 		GridPane taskPane = new GridPane();
-		content.getChildren().clear();
 		int row = 0;
 		int index = 1;
 		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
 		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 21));
-		if (displayList != null) {
-			for (Task task : displayList) {
-				String bannerColor = null;
-				String bodyColor = null;
-				switch (task.getPriority()) {
-					case Constant.PRIORITY_HIGH:
-						bannerColor = "rgba(240, 115, 136, 1)";
-						bodyColor = "rgba(240, 115, 136, 0.1)";
-						break;
-					case Constant.PRIORITY_MEDIUM:
-						bannerColor = "rgba(251, 235, 178, 1)";
-						bodyColor = "rgba(251, 235, 178, 0.2)";
-						break;
-						
-					case Constant.PRIORITY_LOW:
-						bannerColor = "rgba(222, 236, 147, 1)";
-						bodyColor = "rgba(222, 236, 147, 0.2)";
-						break;
-						
-					default:
-						
-						break;
-				}
-				GridPane priorityPane = new GridPane();
-				priorityPane.setStyle("-fx-padding: 8 8 0 8; -fx-background-color: " + bannerColor);
-				priorityPane.setPrefWidth(getWidth());
-				Label priority = new Label("\t\t\t\t\t\t\t\t " + index);
-				priority.setStyle("-fx-font: 19px \"Akagi\";"
-						+ "-fx-text-fill: white;");
-				priority.setPrefWidth(getWidth());
-				priorityPane.add(priority, 0, 0);
+		if (taskList != null) {
+			for (Task task : taskList) {
+				String bannerColor = getBannerColor(task);
+				GridPane priorityPane = getPriorityPane(bannerColor, index);
 				taskPane.add(priorityPane, 0, row, 2, 1);
 				setDisplayRow(taskPane, GRID_ROW_HEIGHT);
 				row ++;
 				
 				
-				GridPane contentPane = new GridPane();
-				contentPane.setGridLinesVisible(false);
+				GridPane contentPane = getContentPane(task);
+				int numberOfSubrows = getRowCount(contentPane);
 				
-				if (System.getProperty("os.name").equals("Mac OS X")) {
-					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 29));
-					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 29));
-		        } else {
-		        	contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 29));
-					contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 29));
-		        }
-
-				int subRow = 0;
-				contentPane.setStyle("-fx-padding: 8 8 8 8;"
-						+ "-fx-background-color: " + bodyColor);
-				contentPane.setPrefWidth(getWidth());
-				
-				Label description = new Label(task.getDescription());
-				description.setStyle("-fx-font: 17px \"Akagi\";"
-						+ "-fx-padding:0 0 5 0");
-				description.setPrefWidth(getWidth());
-				
-				contentPane.add(description, 0, subRow, 2, 1);
-				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
-				subRow ++;
-				
-//				if (task.isDeadline()) {
-//					Label deadlineText = new Label("Deadline:");
-//					Label deadline = new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
-//					deadlineText.setStyle("-fx-font: 12px \"Akagi\";");
-//					deadline.setStyle("-fx-font: 12px \"Akagi\";");
-//					contentPane.add(deadlineText, 0, subRow);
-//					contentPane.add(deadline, 1, subRow);
-//					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
-//					subRow ++;
-//				} else if (task.isFloating()) {
-//					
-//				} else if (task.isTimed()) {
-//					Label startText = new Label("Start time:");
-//					Label start = new Label(Converter.convertDateToString(task.getInterval().getStartDate()));
-//					startText.setStyle("-fx-font: 12px \"Akagi\";");
-//					start.setStyle("-fx-font: 12px \"Akagi\";");
-//					
-//					contentPane.add(startText, 0, subRow);
-//					contentPane.add(start, 1, subRow);
-//					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
-//					subRow ++;
-//					
-//					Label endText = new Label("End time:");
-//					Label end= new Label(Converter.convertDateToString(task.getInterval().getEndDate()));
-//					endText.setStyle("-fx-font: 12px \"Akagi\";");
-//					end.setStyle("-fx-font: 12px \"Akagi\";");
-//					
-//					contentPane.add(endText, 0, subRow);
-//					contentPane.add(end, 1, subRow);
-//					setDisplayRow(contentPane, GRID_ROW_HEIGHT);
-//					subRow ++;
-//				}
-				
-				HBox timeBox = getTimePaneForTask(task);
-				if (timeBox != null) {
-					contentPane.add(timeBox, 0, subRow, 2, 2);
-					subRow += 2;
-				}
-				
-				GridPane tagPane = getTagPaneForTask(task);
-				contentPane.add(tagPane, 0, subRow, 2, 1);
-				setDisplayRow(contentPane, GRID_ROW_HEIGHT);
-				subRow ++;
-				
-				taskPane.add(contentPane, 0, row, 1, subRow);
-				setDisplayRow(taskPane, GRID_ROW_HEIGHT * subRow + 11);
+				taskPane.add(contentPane, 0, row, 1, numberOfSubrows);
+				setDisplayRow(taskPane, GRID_ROW_HEIGHT * numberOfSubrows + 11);
 				row ++;
 				
-				GridPane emptyPane = new GridPane();
-				emptyPane.setStyle("-fx-background-color: rgb(244, 244, 244)");
-				emptyPane.setPrefWidth(getWidth());
+				GridPane emptyPane = getEmptyPane();
 				taskPane.add(emptyPane, 0, row, 2, 1);
 				setDisplayRow(taskPane, GRID_ROW_HEIGHT);
 				row ++;
 				index ++;
 			}
 		}
-		
-		content.getChildren().add(taskPane);
-		display.setContent(content);
+		return taskPane;
 	}
 	
+	private GridPane getEmptyPane() {
+		GridPane emptyPane = new GridPane();
+		emptyPane.setStyle("-fx-background-color: rgb(244, 244, 244)");
+		emptyPane.setPrefWidth(getWidth());
+		return emptyPane;
+	}
+	
+	private int getRowCount(GridPane pane) {
+        int numRows = pane.getRowConstraints().size();
+        for (int i = 0; i < pane.getChildren().size(); i++) {
+            Node child = pane.getChildren().get(i);
+            if (child.isManaged()) {
+                int rowIndex = GridPane.getRowIndex(child);
+                int rowEnd = GridPane.getRowIndex(child);
+                numRows = Math.max(numRows, (rowEnd != GridPane.REMAINING? rowEnd : rowIndex) + 1);
+            }
+        }
+        return numRows;
+    }
+	
+	private GridPane getContentPane(Task task) {
+		String bodyColor = getBodyColor(task);
+		GridPane contentPane = getContentPane(bodyColor);
+
+		int subRow = 0;
+
+		
+		Label description = getDescriptionLabel(task);
+		
+		contentPane.add(description, 0, subRow, 2, 1);
+		setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+		subRow ++;
+		
+		HBox timeBox = getTimePaneForTask(task);
+		if (timeBox != null) {
+			contentPane.add(timeBox, 0, subRow, 2, 2);
+			subRow += 2;
+		}
+		
+		GridPane tagPane = getTagPaneForTask(task);
+		contentPane.add(tagPane, 0, subRow, 2, 1);
+		setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+		subRow ++;
+		return contentPane;
+	}
+	
+	private static String getBodyColor(Task task) {
+		switch (task.getPriority()) {
+			case Constant.PRIORITY_HIGH:
+				return "rgba(240, 115, 136, 0.2)";
+	
+			case Constant.PRIORITY_MEDIUM:
+				return "rgba(251, 235, 178, 0.2)";
+				
+			case Constant.PRIORITY_LOW:
+				return "rgba(222, 236, 147, 0.2)";
+				
+			default:
+				return "rgba(222, 222, 222, 0.2)";
+		}
+	}
+	
+	private static String getBannerColor(Task task) {
+		switch (task.getPriority()) {
+			case Constant.PRIORITY_HIGH:
+				return "rgba(240, 115, 136, 1)";
+	
+			case Constant.PRIORITY_MEDIUM:
+				return "rgba(251, 235, 178, 1)";
+				
+			case Constant.PRIORITY_LOW:
+				return "rgba(222, 236, 147, 1)";
+				
+			default:
+				return "rgba(222, 222, 222, 1)";
+		}
+	}
+	
+	private GridPane getPriorityPane(String bannerColor, int index) {
+		GridPane priorityPane = new GridPane();
+		priorityPane.setStyle("-fx-padding: 8 8 0 8; -fx-background-color: " + bannerColor);
+		priorityPane.setPrefWidth(getWidth());
+		Label priority = new Label("\t\t\t\t\t\t\t\t " + index);
+		priority.setStyle("-fx-font: 19px \"Akagi\";"
+				+ "-fx-text-fill: white;");
+		priority.setPrefWidth(getWidth());
+		priorityPane.add(priority, 0, 0);
+		return priorityPane;
+	}
+	
+	private Label getDescriptionLabel(Task task) {
+		Label description = new Label(task.getDescription());
+		description.setStyle("-fx-font: 17px \"Akagi\";"
+				+ "-fx-padding:0 0 5 0");
+		description.setPrefWidth(getWidth());
+		return description;
+	}
+	
+	
+	private GridPane getContentPane(String bodyColor) {
+		GridPane contentPane = new GridPane();
+		contentPane.setGridLinesVisible(false);
+        contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 29));
+		contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 29));
+		contentPane.setStyle("-fx-padding: 8 8 8 8;"
+						   + "-fx-background-color: " + bodyColor);
+		contentPane.setPrefWidth(getWidth());
+		return contentPane;
+	}
 	
 	
 	private HBox getTimePaneForTask(Task task) {
@@ -512,23 +532,23 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	 * @param instance
 	 */
 	private void registerKeyShortCuts(HotKeyListener instance) {
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DESCRIPTION_TAG), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DATE_TAG), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_TAG_TAG), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_COMMAND_TAG), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_INDEX_TAG), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_PRIORITY_TAG), instance);
-		
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_PREVIEW), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_CREATE), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_READ), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_UPDATE), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_DELETE), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_SEARCH), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_RELOAD), instance);
-		
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_LAST_COMMAND), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_NEXT_COMMAND), instance);
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DESCRIPTION_TAG), instance);
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DATE_TAG), instance);
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_TAG_TAG), instance);
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_COMMAND_TAG), instance);
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_INDEX_TAG), instance);
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_PRIORITY_TAG), instance);
+//		
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_PREVIEW), instance);
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_CREATE), instance);
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_READ), instance);
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_UPDATE), instance);
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_DELETE), instance);
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_SEARCH), instance);
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_RELOAD), instance);
+//		
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_LAST_COMMAND), instance);
+//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_NEXT_COMMAND), instance);
 	}
 	
 	
@@ -720,46 +740,46 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 			switch(thisCommand) {
 				case ADD:
 					setPreview(this.add(userInput));
-					setDisplayGrid(this.display());
+					displayTaskList(this.display());
 					break;
 					
 				case DELETE:
 					setPreview(this.delete(userInput));
-					setDisplayGrid(this.display());
+					displayTaskList(this.display());
 					break;
 					
 				case UPDATE:
 					setPreview(this.update(userInput));
-					setDisplayGrid(this.display());
+					displayTaskList(this.display());
 					break;
 					
 				case SEARCH:
 					ArrayList<Task> queryList = this.search(userInput);
 					if (queryList != null) {
-						setDisplayGrid(queryList);
+						displayTaskList(queryList);
 					}
 					break;
 				
 				case DISPLAY:
 					ArrayList<Task> displayList = this.display();
 					if (displayList != null) {
-						setDisplayGrid(displayList);
+						displayTaskList(displayList);
 					}
 					break;
 					
 				case UNDO:
 					setPreview(this.undo());
-					setDisplayGrid(this.display());
+					displayTaskList(this.display());
 					break;
 					
 				case REDO:
 					setPreview(this.redo());
-					setDisplayGrid(this.display());
+					displayTaskList(this.display());
 					break;
 					
 				case CLEAR:
 					setPreview(this.clear());
-					setDisplayGrid(this.display());
+					displayTaskList(this.display());
 					break;
 					
 				case EXIT:
@@ -774,17 +794,17 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 					
 				case EMPTY_TRASH:
 					setPreview(this.emptyTrash());
-					setDisplayGrid(this.display());
+					displayTaskList(this.display());
 					break;
 					
 				case RELOAD:
 					setPreview(this.reloadNLPModel());
-					setDisplayGrid(this.display());
+					displayTaskList(this.display());
 					break;
 					
 				case DONE:
 					setPreview(this.done(userInput));
-					setDisplayGrid(this.display());
+					displayTaskList(this.display());
 					break;
 					
 				default:
