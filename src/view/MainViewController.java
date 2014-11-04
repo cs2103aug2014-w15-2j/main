@@ -44,90 +44,6 @@ import javafx.stage.Stage;
 
 public class MainViewController extends GridPane implements HotKeyListener{
 	
-	private static final String CSS_STYLE_TAG_LABEL = "-fx-font: 10px \"Akagi\";"
-			+ "-fx-padding: 5 10 5 10;"
-			+ "-fx-background-color: %s;"
-			+ "-fx-background-radius: 5px;"
-			+ "-fx-text-fill: white;"
-			+ "-fx-margin: 0 5 0 5;";
-	private static final String CSS_STYLE_TAG_PANE = "-fx-padding: 5 0 0 0;";
-	private static final String CSS_STYLE_PRIORITY_PANE = "-fx-padding: 8 8 0 8; "
-            + "-fx-background-color: %s";
-	private static final String CSS_STYLE_CONTENT_PANE = "-fx-padding: 8 8 8 8;"
-			   + "-fx-background-color: %s";
-	private static final String CSS_STYLE_PRIVIEW_CONTENT_BOX = "-fx-font: 12px \"Akagi\";";
-	private static final String CSS_STYLE_PREVIEW_SCROLL_PANE = "-fx-padding:5 0 0 7;"
-			+ "-fx-background-color: rgb(244, 244, 244)";
-	private static final String CSS_STYLE_DEADLINE_LABEL = "-fx-font: 38px \"Ticking Timebomb BB\";"
-			+ "-fx-padding:5 0 0 0;"
-			+ "-fx-text-fill: white;";
-	private static final String CSS_STYLE_TIME_LABEL = "-fx-text-fill: white;"
-					 + "-fx-font: 38px \"Ticking Timebomb BB\";"
-					 + "-fx-padding: 5 0 0 5";
-	private static final String CSS_STYLE_WEEKDAY_LABEL = "-fx-text-fill: white;"
-						+ "-fx-font: 17px \"Akagi\";"
-						+ "-fx-padding: 2 0 0 0";
-	private static final String CSS_STYLE_TO_LABEL = "-fx-font: 18px \"Akagi\";";
-	private static final String CSS_STYLE_OVERALL_TIME_BOX = "-fx-padding: 5 0 5 0;";
-	private static final String CSS_STYLE_DESCRIPTION_LABEL = "-fx-font: 17px \"Akagi\";"
-			             + "-fx-padding:0 0 5 0";
-	private static final String CSS_STYLE_TIME_BOX = 
-			  CSS_STYLE_PRIVIEW_CONTENT_BOX
-			+ "-fx-background-color: rgba(0, 0, 0, 0.5);"
-			+ "-fx-padding: 5 5 0 5;"
-			+ "-fx-background-radius: 5px;"
-			+ "-fx-text-fill: white;";
-	private static final String CSS_STYLE_PRIORITY_LABEL = 
-			  "-fx-font: 19px \"Akagi\";"
-			+ "-fx-text-fill: white;";
-	private static final String CSS_STYLE_EMPTY_PANE = 
-			  "-fx-background-color: rgb(244, 244, 244);";
-	
-	
-	
-	private static final String COLOR_BANNER_DEFAULT = "rgba(222, 222, 222, 1)";
-	private static final String COLOR_BANNER_PRIORITY_LOW = "rgba(222, 236, 147, 1)";
-	private static final String COLOR_BANNER_PRIORITY_MEDIUM = "rgba(251, 235, 178, 1)";
-	private static final String COLOR_BANNER_PRIORITY_HIGH = "rgba(240, 115, 136, 1)";
-	private static final String COLOR_BODY_DEFAULT = "rgba(222, 222, 222, 0.2)";
-	private static final String COLOR_BODY_PRIORITY_LOW = "rgba(222, 236, 147, 0.2)";
-	private static final String COLOR_BODY_PRIORITY_MEDIUM = "rgba(251, 235, 178, 0.2)";
-	private static final String COLOR_BODY_PRIORITY_HIGH = "rgba(240, 115, 136, 0.2)";
-
-	private static final String FONT_FILE_BASE = "Akagi-SB.ttf";
-	private static final String FONT_FILE_TIME = "TickingTimebombBB.ttf";
-	
-	private static final String HOT_KEY_ADD_DESCRIPTION_TAG 	= "alt D";
-	private static final String HOT_KEY_ADD_DATE_TAG 			= "alt A";
-	private static final String HOT_KEY_ADD_TAG_TAG 			= "alt T";
-	private static final String HOT_KEY_ADD_COMMAND_TAG 		= "alt C";
-	private static final String HOT_KEY_ADD_INDEX_TAG 			= "alt I";
-	private static final String HOT_KEY_ADD_PRIORITY_TAG 		= "alt P";
-	private static final String HOT_KEY_PREVIEW 				= "control ENTER";
-	private static final String HOT_KEY_CREATE 					= "control C";
-	private static final String HOT_KEY_READ 					= "control R";
-	private static final String HOT_KEY_UPDATE 					= "control U";
-	private static final String HOT_KEY_DELETE 					= "control D";
-	private static final String HOT_KEY_SEARCH					= "control F";
-	private static final String HOT_KEY_RELOAD					= "control M";
-	private static final String HOT_KEY_LAST_COMMAND			= "UP";
-	private static final String HOT_KEY_NEXT_COMMAND			= "DOWN";
-	
-	private static final String[] COLORS_TAG = {"rgba(74, 137, 220, 0.7)", 
-												"rgba(59, 175, 218, 0.7)", 
-												"rgba(55, 188, 155, 0.7)",  
-												"rgba(246, 187, 66, 0.7)", 
-												"rgba(140, 193, 82, 0.7)",
-												"rgba(233, 87, 63, 0.7)", 
-												"rgba(218, 68, 84, 0.7)"};
-	
-
-	
-	private static final double GRID_ROW_HEIGHT = 30.0;
-	
-	private static final int MODIFIER_ALT = 520;
-	private static final int MODIFIER_CTRL = 130;
-	
 	@FXML
 	private TextField input;
 	
@@ -138,7 +54,6 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	private ScrollPane displayScrollPane;
 	public ScrollPane previewScrollPane;
 	
-	private final static boolean ERROR_PRINT_ON = true;
 	private Parser parser = new Parser();
 	private static PrintStream err = System.err;
 	// a property to store the current user
@@ -162,8 +77,8 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	
 	public MainViewController(Stage stage) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainView.fxml"));
-		Font.loadFont(getClass().getResource(FONT_FILE_BASE).toExternalForm(), 10);
-		Font.loadFont(getClass().getResource(FONT_FILE_TIME).toExternalForm(), 10);
+		Font.loadFont(getClass().getResource(Constant.FONT_FILE_BASE).toExternalForm(), 10);
+		Font.loadFont(getClass().getResource(Constant.FONT_FILE_TIME).toExternalForm(), 10);
 		
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
@@ -190,7 +105,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
         
         UtilityMethod.makeDraggable(stage, dragNode);
         
-        if (!ERROR_PRINT_ON) {
+        if (!Constant.ERROR_PRINT_ON) {
 			// now make all writes to the System.err stream silent
 			System.setErr(new PrintStream(new OutputStream() {
 				public void write(int b) {
@@ -262,37 +177,37 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		VBox displayContent = new VBox();
 		displayContent.setAlignment(Pos.CENTER);
 		displayContent.getChildren().clear();
-		GridPane taskPane = getTaskPane(taskList);
+		GridPane taskPane = getTaskPane(taskList, getWidth());
 		displayContent.getChildren().add(taskPane);
 		displayScrollPane.setContent(displayContent);
 	}
 	
-	private GridPane getTaskPane(ArrayList<Task> taskList) {
+	private static GridPane getTaskPane(ArrayList<Task> taskList, double width) {
 		GridPane taskPane = new GridPane();
 		taskPane.setStyle("-fx-padding: 10 10 10 10");
 		int row = 0;
 		int index = 1;
-		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
-		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 21));
+		taskPane.getColumnConstraints().add(new ColumnConstraints(width * 0.3 - 21));
+		taskPane.getColumnConstraints().add(new ColumnConstraints(width * 0.7 - 21));
 		if (taskList != null) {
 			for (Task task : taskList) {
 				String bannerColor = getBannerColor(task);
-				GridPane priorityPane = getPriorityPane(bannerColor, index);
+				GridPane priorityPane = getPriorityPane(bannerColor, index, width);
 				taskPane.add(priorityPane, 0, row, 2, 1);
-				setDisplayRow(taskPane, GRID_ROW_HEIGHT);
+				setDisplayRow(taskPane, Constant.GRID_ROW_HEIGHT);
 				row ++;
 				
 				
-				GridPane contentPane = getContentPane(task);
+				GridPane contentPane = getContentPane(task, width);
 				int numberOfSubrows = getRowCount(contentPane);
 				
 				taskPane.add(contentPane, 0, row, 1, numberOfSubrows);
-				setDisplayRow(taskPane, GRID_ROW_HEIGHT * numberOfSubrows + 11);
+				setDisplayRow(taskPane, Constant.GRID_ROW_HEIGHT * numberOfSubrows + 11);
 				row ++;
 				
-				GridPane emptyPane = getEmptyPane();
+				GridPane emptyPane = getEmptyPane(width);
 				taskPane.add(emptyPane, 0, row, 2, 1);
-				setDisplayRow(taskPane, GRID_ROW_HEIGHT);
+				setDisplayRow(taskPane, Constant.GRID_ROW_HEIGHT);
 				row ++;
 				index ++;
 			}
@@ -300,14 +215,14 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		return taskPane;
 	}
 	
-	private GridPane getEmptyPane() {
+	private static GridPane getEmptyPane(double width) {
 		GridPane emptyPane = new GridPane();
-		emptyPane.setStyle(CSS_STYLE_EMPTY_PANE);
-		emptyPane.setPrefWidth(getWidth());
+		emptyPane.setStyle(Constant.CSS_STYLE_EMPTY_PANE);
+		emptyPane.setPrefWidth(width);
 		return emptyPane;
 	}
 	
-	private int getRowCount(GridPane pane) {
+	private static int getRowCount(GridPane pane) {
         int numRows = pane.getRowConstraints().size();
         for (int i = 0; i < pane.getChildren().size(); i++) {
             Node child = pane.getChildren().get(i);
@@ -320,17 +235,17 @@ public class MainViewController extends GridPane implements HotKeyListener{
         return numRows;
     }
 	
-	private GridPane getContentPane(Task task) {
+	private static GridPane getContentPane(Task task, double width) {
 		String bodyColor = getBodyColor(task);
-		GridPane contentPane = getContentPane(bodyColor);
+		GridPane contentPane = getContentPane(bodyColor, width);
 
 		int subRow = 0;
 
 		
-		Label description = getDescriptionLabel(task);
+		Label description = getDescriptionLabel(task, width);
 		
 		contentPane.add(description, 0, subRow, 2, 1);
-		setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+		setDisplayRow(contentPane, Constant.GRID_ROW_HEIGHT);
 		subRow ++;
 		
 		HBox timeBox = getTimePaneForTask(task);
@@ -341,7 +256,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		
 		GridPane tagPane = getTagPaneForTask(task);
 		contentPane.add(tagPane, 0, subRow, 2, 1);
-		setDisplayRow(contentPane, GRID_ROW_HEIGHT);
+		setDisplayRow(contentPane, Constant.GRID_ROW_HEIGHT);
 		subRow ++;
 		return contentPane;
 	}
@@ -349,70 +264,70 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	private static String getBodyColor(Task task) {
 		switch (task.getPriority()) {
 			case Constant.PRIORITY_HIGH:
-				return COLOR_BODY_PRIORITY_HIGH;
+				return Constant.COLOR_BODY_PRIORITY_HIGH;
 	
 			case Constant.PRIORITY_MEDIUM:
-				return COLOR_BODY_PRIORITY_MEDIUM;
+				return Constant.COLOR_BODY_PRIORITY_MEDIUM;
 				
 			case Constant.PRIORITY_LOW:
-				return COLOR_BODY_PRIORITY_LOW;
+				return Constant.COLOR_BODY_PRIORITY_LOW;
 				
 			default:
-				return COLOR_BODY_DEFAULT;
+				return Constant.COLOR_BODY_DEFAULT;
 		}
 	}
 	
 	private static String getBannerColor(Task task) {
 		switch (task.getPriority()) {
 			case Constant.PRIORITY_HIGH:
-				return COLOR_BANNER_PRIORITY_HIGH;
+				return Constant.COLOR_BANNER_PRIORITY_HIGH;
 	
 			case Constant.PRIORITY_MEDIUM:
-				return COLOR_BANNER_PRIORITY_MEDIUM;
+				return Constant.COLOR_BANNER_PRIORITY_MEDIUM;
 				
 			case Constant.PRIORITY_LOW:
-				return COLOR_BANNER_PRIORITY_LOW;
+				return Constant.COLOR_BANNER_PRIORITY_LOW;
 				
 			default:
-				return COLOR_BANNER_DEFAULT;
+				return Constant.COLOR_BANNER_DEFAULT;
 		}
 	}
 	
-	private GridPane getPriorityPane(String bannerColor, int index) {
+	private static GridPane getPriorityPane(String bannerColor, int index, double width) {
 		GridPane priorityPane = new GridPane();
-		priorityPane.setStyle(String.format(CSS_STYLE_PRIORITY_PANE, bannerColor));
-		priorityPane.setPrefWidth(getWidth());
+		priorityPane.setStyle(String.format(Constant.CSS_STYLE_PRIORITY_PANE, bannerColor));
+		priorityPane.setPrefWidth(width);
 		Label priorityLabel = new Label("\t\t\t\t\t\t\t\t " + index);
-		priorityLabel.setStyle(CSS_STYLE_PRIORITY_LABEL);
-		priorityLabel.setPrefWidth(getWidth());
+		priorityLabel.setStyle(Constant.CSS_STYLE_PRIORITY_LABEL);
+		priorityLabel.setPrefWidth(width);
 		priorityPane.add(priorityLabel, 0, 0);
 		return priorityPane;
 	}
 	
-	private Label getDescriptionLabel(Task task) {
+	private static Label getDescriptionLabel(Task task, double width) {
 		Label descriptionLabel = new Label(task.getDescription());
-		descriptionLabel.setStyle(CSS_STYLE_DESCRIPTION_LABEL);
-		descriptionLabel.setPrefWidth(getWidth());
+		descriptionLabel.setStyle(Constant.CSS_STYLE_DESCRIPTION_LABEL);
+		descriptionLabel.setPrefWidth(width);
 		return descriptionLabel;
 	}
 	
 	
-	private GridPane getContentPane(String bodyColor) {
+	private static GridPane getContentPane(String bodyColor, double width) {
 		GridPane contentPane = new GridPane();
 		contentPane.setGridLinesVisible(false);
-        contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 29));
-		contentPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.7 - 29));
-		contentPane.setStyle(String.format(CSS_STYLE_CONTENT_PANE, bodyColor));
-		contentPane.setPrefWidth(getWidth());
+        contentPane.getColumnConstraints().add(new ColumnConstraints(width * 0.3 - 29));
+		contentPane.getColumnConstraints().add(new ColumnConstraints(width * 0.7 - 29));
+		contentPane.setStyle(String.format(Constant.CSS_STYLE_CONTENT_PANE, bodyColor));
+		contentPane.setPrefWidth(width);
 		return contentPane;
 	}
 	
 	
-	private HBox getTimePaneForTask(Task task) {
+	private static HBox getTimePaneForTask(Task task) {
 		TimeInterval timeInterval = task.getInterval();
 		HBox overallTimeBox = new HBox();
 		overallTimeBox.setAlignment(Pos.CENTER);
-		overallTimeBox.setStyle(CSS_STYLE_OVERALL_TIME_BOX);
+		overallTimeBox.setStyle(Constant.CSS_STYLE_OVERALL_TIME_BOX);
 		if (timeInterval.getStartDate().equals(Constant.FLOATING_START_DATE)) {
 			return null;
 		} else if (timeInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
@@ -427,7 +342,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			HBox endDateBox = getTimeBox(timeInterval.getEndDate());
 			Label toLabel = new Label("  to  ");
 			
-			toLabel.setStyle(CSS_STYLE_TO_LABEL);
+			toLabel.setStyle(Constant.CSS_STYLE_TO_LABEL);
 			
 			overallTimeBox.getChildren().addAll(startDateBox, toLabel , endDateBox);
 			return overallTimeBox;
@@ -436,13 +351,13 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	
 	
 	
-	private HBox getTimeBox(Date date) {
+	private static HBox getTimeBox(Date date) {
 		
 		HBox timeBox = new HBox();
 		VBox dateBox = new VBox();
 		timeBox.setPrefWidth(153);
 		timeBox.setAlignment(Pos.CENTER);
-		timeBox.setStyle(CSS_STYLE_TIME_BOX
+		timeBox.setStyle(Constant.CSS_STYLE_TIME_BOX
 				+ "");
 		
 		dateBox.setAlignment(Pos.CENTER);		
@@ -450,10 +365,10 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		dateLabel.setStyle("-fx-text-fill: white;");
 		
 		Label weekdayLabel = new Label(new SimpleDateFormat("EE", Locale.ENGLISH).format(date));
-		weekdayLabel.setStyle(CSS_STYLE_WEEKDAY_LABEL);
+		weekdayLabel.setStyle(Constant.CSS_STYLE_WEEKDAY_LABEL);
 		
 		Label timeLabel = new Label(new SimpleDateFormat("HH:mm", Locale.ENGLISH).format(date));
-		timeLabel.setStyle(CSS_STYLE_TIME_LABEL);
+		timeLabel.setStyle(Constant.CSS_STYLE_TIME_LABEL);
 		
 		dateBox.getChildren().addAll(dateLabel, weekdayLabel);
 		timeBox.getChildren().addAll(dateBox, timeLabel);
@@ -462,25 +377,25 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	}
 	
 	
-	private HBox getDeadlineBox(Date date) {
+	private static HBox getDeadlineBox(Date date) {
 		HBox timeBox = new HBox();
 		VBox dateBox = new VBox();
 		
 		timeBox.setAlignment(Pos.CENTER);
-		timeBox.setStyle(CSS_STYLE_TIME_BOX);
+		timeBox.setStyle(Constant.CSS_STYLE_TIME_BOX);
 		
 		dateBox.setAlignment(Pos.CENTER);
 		Label deadlineLabel = new Label("DEADLINE:     ");
-		deadlineLabel.setStyle(CSS_STYLE_DEADLINE_LABEL);
+		deadlineLabel.setStyle(Constant.CSS_STYLE_DEADLINE_LABEL);
 		
 		Label dateLabel = new Label(new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(date));
 		dateLabel.setStyle("-fx-text-fill: white;");
 		
 		Label weekdayLabel = new Label(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date));
-		weekdayLabel.setStyle(CSS_STYLE_WEEKDAY_LABEL);
+		weekdayLabel.setStyle(Constant.CSS_STYLE_WEEKDAY_LABEL);
 		
 		Label timeLabel = new Label(new SimpleDateFormat("HH:mm", Locale.ENGLISH).format(date));
-		timeLabel.setStyle(CSS_STYLE_TIME_LABEL);
+		timeLabel.setStyle(Constant.CSS_STYLE_TIME_LABEL);
 		
 		dateBox.getChildren().addAll(dateLabel, weekdayLabel);
 		timeBox.getChildren().addAll(deadlineLabel, dateBox, timeLabel);
@@ -489,9 +404,9 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	}
 	
 	
-	private GridPane getTagPaneForTask(Task task) {
+	private static GridPane getTagPaneForTask(Task task) {
 		GridPane tagPane = new GridPane();
-		tagPane.setStyle(CSS_STYLE_TAG_PANE);
+		tagPane.setStyle(Constant.CSS_STYLE_TAG_PANE);
 		tagPane.setHgap(10);
 		ArrayList<String> tags = task.getTag();
 		int columnIndex = 0;
@@ -503,8 +418,8 @@ public class MainViewController extends GridPane implements HotKeyListener{
 				colorOffset += c;
 			}
 			
-			colorOffset = colorOffset%COLORS_TAG.length;
-			tagLabel.setStyle(String.format(CSS_STYLE_TAG_LABEL, COLORS_TAG[colorOffset]));
+			colorOffset = colorOffset%Constant.COLORS_TAG.length;
+			tagLabel.setStyle(String.format(Constant.CSS_STYLE_TAG_LABEL, Constant.COLORS_TAG[colorOffset]));
 			tagPane.add(tagLabel, columnIndex, 0);
 			columnIndex ++;
 		}
@@ -512,7 +427,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	}
 	
 	
-	private void setDisplayRow(GridPane pane, double height) {
+	private static void setDisplayRow(GridPane pane, double height) {
 		pane.getRowConstraints().add(new RowConstraints(height));
 	}
 	
@@ -520,9 +435,9 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		VBox previewContentBox = new VBox();
 		Label text = new Label(textToDisplay);
 		previewContentBox.getChildren().clear();
-		previewContentBox.setStyle(CSS_STYLE_PRIVIEW_CONTENT_BOX);
+		previewContentBox.setStyle(Constant.CSS_STYLE_PRIVIEW_CONTENT_BOX);
 		previewContentBox.getChildren().add(text);
-		previewScrollPane.setStyle(CSS_STYLE_PREVIEW_SCROLL_PANE);
+		previewScrollPane.setStyle(Constant.CSS_STYLE_PREVIEW_SCROLL_PANE);
 		previewScrollPane.setContent(previewContentBox);
 	}
 
@@ -555,23 +470,23 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	 * @param instance
 	 */
 	private void registerKeyShortCuts(HotKeyListener instance) {
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DESCRIPTION_TAG), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DATE_TAG), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_TAG_TAG), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_COMMAND_TAG), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_INDEX_TAG), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_PRIORITY_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_DESCRIPTION_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_DATE_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_TAG_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_COMMAND_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_INDEX_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_PRIORITY_TAG), instance);
 		
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_PREVIEW), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_CREATE), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_READ), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_UPDATE), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_DELETE), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_SEARCH), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_RELOAD), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_PREVIEW), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_CREATE), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_READ), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_UPDATE), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_DELETE), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_SEARCH), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_RELOAD), instance);
 		
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_LAST_COMMAND), instance);
-		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_NEXT_COMMAND), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_LAST_COMMAND), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_NEXT_COMMAND), instance);
 	}
 	
 	
@@ -641,71 +556,71 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		String tag = "";
 		int cursorPosition = this.input.getCaretPosition();
 		switch (key.keyStroke.getKeyCode() + key.keyStroke.getModifiers()) {
-			case KeyEvent.VK_D + MODIFIER_ALT:
+			case KeyEvent.VK_D + Constant.MODIFIER_ALT:
 				descriptionTag = toggleTag(descriptionTag);
 				tag = descriptionTag;
 				insertTextToTextField(cursorPosition, tag);	
 				break;
 
-			case KeyEvent.VK_A + MODIFIER_ALT:
+			case KeyEvent.VK_A + Constant.MODIFIER_ALT:
 				dateTag = toggleTag(dateTag);
 				tag = dateTag;
 				insertTextToTextField(cursorPosition, tag);	
 				break;
 				
-			case KeyEvent.VK_C + MODIFIER_ALT:
+			case KeyEvent.VK_C + Constant.MODIFIER_ALT:
 				commandTag = toggleTag(commandTag);
 				tag = commandTag;
 				insertTextToTextField(cursorPosition, tag);	
 				break;
 				
-			case KeyEvent.VK_T + MODIFIER_ALT:
+			case KeyEvent.VK_T + Constant.MODIFIER_ALT:
 				tagTag = toggleTag(tagTag);
 				tag = tagTag;
 				insertTextToTextField(cursorPosition, tag);	
 				break;
 				
-			case KeyEvent.VK_I + MODIFIER_ALT:
+			case KeyEvent.VK_I + Constant.MODIFIER_ALT:
 				indexTag = toggleTag(indexTag);
 				tag = indexTag;
 				insertTextToTextField(cursorPosition, tag);	
 				break;
 				
-			case KeyEvent.VK_P + MODIFIER_ALT:
+			case KeyEvent.VK_P + Constant.MODIFIER_ALT:
 				priorityTag = toggleTag(priorityTag);
 				tag = priorityTag;
 				insertTextToTextField(cursorPosition, tag);	
 				break;
 			
-			case KeyEvent.VK_ENTER + MODIFIER_CTRL:
+			case KeyEvent.VK_ENTER + Constant.MODIFIER_CTRL:
 				this.loadPreview();	
 				break;
 				
-			case KeyEvent.VK_C + MODIFIER_CTRL:
+			case KeyEvent.VK_C + Constant.MODIFIER_CTRL:
 				insertTextToTextField(cursorPosition, "add ");	
 				break;
 				
-			case KeyEvent.VK_R + MODIFIER_CTRL:
+			case KeyEvent.VK_R + Constant.MODIFIER_CTRL:
 				insertTextToTextField(cursorPosition, "display ");	
 				break;
 				
-			case KeyEvent.VK_U + MODIFIER_CTRL:
+			case KeyEvent.VK_U + Constant.MODIFIER_CTRL:
 				insertTextToTextField(cursorPosition, "update ");	
 				break;
 				
-			case KeyEvent.VK_D + MODIFIER_CTRL:
+			case KeyEvent.VK_D + Constant.MODIFIER_CTRL:
 				insertTextToTextField(cursorPosition, "delete ");	
 				break;
 				
-			case KeyEvent.VK_F + MODIFIER_CTRL:
+			case KeyEvent.VK_F + Constant.MODIFIER_CTRL:
 				insertTextToTextField(cursorPosition, "search ");	
 				break;
 				
-			case KeyEvent.VK_M + MODIFIER_CTRL:
+			case KeyEvent.VK_M + Constant.MODIFIER_CTRL:
 				insertTextToTextField(cursorPosition, "reload model ");	
 				break;
 				
-			case KeyEvent.VK_BACK_SPACE + MODIFIER_CTRL:
+			case KeyEvent.VK_BACK_SPACE + Constant.MODIFIER_CTRL:
 				String inputString = (String) input.getCharacters();
 				insertTextToTextField(cursorPosition, inputString.substring(0, inputString.lastIndexOf(" ")));
 				break;

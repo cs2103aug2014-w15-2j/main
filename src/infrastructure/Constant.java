@@ -230,4 +230,141 @@ public abstract class Constant {
 	public static final Date FLOATING_END_DATE = new Date(9999);
 
 	public static String TIME_MESSAGE_FLOATING = "";
+
+	
+	//CSS styles
+	public static final String CSS_STYLE_TAG_LABEL = 
+	"-fx-font: 10px \"Akagi\";"
+	+ "-fx-padding: 5 10 5 10;"
+	+ "-fx-background-color: %s;"
+	+ "-fx-background-radius: 5px;"
+	+ "-fx-text-fill: white;"
+	+ "-fx-margin: 0 5 0 5;";
+
+	public static final String CSS_STYLE_TAG_PANE = 
+	"-fx-padding: 5 0 0 0;";
+
+	public static final String CSS_STYLE_PRIORITY_PANE =
+	"-fx-padding: 8 8 0 8; "
+	+ "-fx-background-color: %s";
+
+	public static final String CSS_STYLE_CONTENT_PANE = 
+	"-fx-padding: 8 8 8 8;"
+	   + "-fx-background-color: %s";
+
+	public static final String CSS_STYLE_PRIVIEW_CONTENT_BOX = 
+	"-fx-font: 12px \"Akagi\";";
+
+	public static final String CSS_STYLE_PREVIEW_SCROLL_PANE = 
+	"-fx-padding:5 0 0 7;"
+	+ "-fx-background-color: rgb(244, 244, 244)";
+
+	public static final String CSS_STYLE_DEADLINE_LABEL = 
+	"-fx-font: 38px \"Ticking Timebomb BB\";"
+	+ "-fx-padding:5 0 0 0;"
+	+ "-fx-text-fill: white;";
+
+	public static final String CSS_STYLE_TIME_LABEL = 
+	"-fx-text-fill: white;"
+	+ "-fx-font: 38px \"Ticking Timebomb BB\";"
+	+ "-fx-padding: 5 0 0 5";
+
+	public static final String CSS_STYLE_WEEKDAY_LABEL = 
+	"-fx-text-fill: white;"
+	+ "-fx-font: 17px \"Akagi\";"
+	+ "-fx-padding: 2 0 0 0";
+
+	public static final String CSS_STYLE_TO_LABEL = 
+	"-fx-font: 18px \"Akagi\";";
+
+	public static final String CSS_STYLE_OVERALL_TIME_BOX = 
+	"-fx-padding: 5 0 5 0;";
+
+	public static final String CSS_STYLE_DESCRIPTION_LABEL = 
+	"-fx-font: 17px \"Akagi\";"
+	+ "-fx-padding:0 0 5 0";
+
+	public static final String CSS_STYLE_TIME_BOX = 
+	"-fx-font: 12px \"Akagi\";"
+	+ "-fx-background-color: rgba(0, 0, 0, 0.5);"
+	+ "-fx-padding: 5 5 0 5;"
+	+ "-fx-background-radius: 5px;"
+	+ "-fx-text-fill: white;";
+
+	public static final String CSS_STYLE_PRIORITY_LABEL = 
+	"-fx-font: 19px \"Akagi\";"
+	+ "-fx-text-fill: white;";
+
+	public static final String CSS_STYLE_EMPTY_PANE = 
+	  "-fx-background-color: rgb(244, 244, 244);";
+
+	
+	//CSS colors
+	public static final String COLOR_BANNER_DEFAULT = "rgba(222, 222, 222, 1)";
+
+	public static final String COLOR_BANNER_PRIORITY_LOW = "rgba(222, 236, 147, 1)";
+
+	public static final String COLOR_BANNER_PRIORITY_MEDIUM = "rgba(251, 235, 178, 1)";
+
+	public static final String COLOR_BANNER_PRIORITY_HIGH = "rgba(240, 115, 136, 1)";
+
+	public static final String COLOR_BODY_DEFAULT = "rgba(222, 222, 222, 0.2)";
+
+	public static final String COLOR_BODY_PRIORITY_LOW = "rgba(222, 236, 147, 0.2)";
+
+	public static final String COLOR_BODY_PRIORITY_MEDIUM = "rgba(251, 235, 178, 0.2)";
+
+	public static final String COLOR_BODY_PRIORITY_HIGH = "rgba(240, 115, 136, 0.2)";
+
+	public static final String[] COLORS_TAG = {"rgba(74, 137, 220, 0.7)", "rgba(59, 175, 218, 0.7)", 
+												"rgba(55, 188, 155, 0.7)", "rgba(246, 187, 66, 0.7)", 
+												"rgba(140, 193, 82, 0.7)", "rgba(233, 87, 63, 0.7)", 
+												"rgba(218, 68, 84, 0.7)"};
+	
+	//fonts
+	public static final String FONT_FILE_BASE = "Akagi-SB.ttf";
+
+	public static final String FONT_FILE_TIME = "TickingTimebombBB.ttf";
+
+	
+	//shortcuts
+	public static final String HOT_KEY_ADD_DESCRIPTION_TAG 	= "alt D";
+
+	public static final String HOT_KEY_ADD_DATE_TAG 			= "alt A";
+
+	public static final String HOT_KEY_ADD_TAG_TAG 			= "alt T";
+
+	public static final String HOT_KEY_ADD_COMMAND_TAG 		= "alt C";
+
+	public static final String HOT_KEY_ADD_INDEX_TAG 			= "alt I";
+
+	public static final String HOT_KEY_ADD_PRIORITY_TAG 		= "alt P";
+
+	public static final String HOT_KEY_PREVIEW 				= "control ENTER";
+
+	public static final String HOT_KEY_CREATE 					= "control C";
+
+	public static final String HOT_KEY_READ 					= "control R";
+
+	public static final String HOT_KEY_UPDATE 					= "control U";
+
+	public static final String HOT_KEY_DELETE 					= "control D";
+
+	public static final String HOT_KEY_SEARCH					= "control F";
+
+	public static final String HOT_KEY_RELOAD					= "control M";
+
+	public static final String HOT_KEY_LAST_COMMAND			= "UP";
+
+	public static final String HOT_KEY_NEXT_COMMAND			= "DOWN";
+
+
+
+	public static final double GRID_ROW_HEIGHT = 30.0;
+
+	public static final int MODIFIER_ALT = 520;
+
+	public static final int MODIFIER_CTRL = 130;
+
+	public final static boolean ERROR_PRINT_ON = true;
 }
