@@ -146,6 +146,7 @@ public abstract class Constant {
 	public static final String PROMPT_MESSAGE_NO_TASK_FOUNDED = "--- no task found ---";
 	public static final String PROMPT_MESSAGE_DONE_TASK_SUCCESSFULLY = "Tasks are marked done";
 	public static final String PROMPT_MESSAGE_DONE_TASK_FAILED = "Task is failed to finished";
+	public static final String PROMPT_MESSAGE_TRASH_EMPTIED = "Trash emptied";
 	
 	
 	public static final String RETURN_VALUE_LOG_IN_CANCELLED =  "user cancelled logging in";

@@ -1002,7 +1002,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	private String emptyTrash() {
 		this.user.clear();
-		return "Trash emptyed";
+		return Constant.PROMPT_MESSAGE_TRASH_EMPTIED;
 	}
 
 	private String help() {
