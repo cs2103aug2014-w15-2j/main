@@ -1,9 +1,6 @@
-package views;
-
-import infrastructure.Constant;
-import infrastructure.NERParser;
-import infrastructure.Parser;
-import infrastructure.UtilityMethod;
+package view;
+import reference.*;
+import infrastructure.*;
 import infrastructure.Constant.COMMAND_TYPE;
 
 import java.awt.event.KeyEvent;
@@ -17,10 +14,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.KeyStroke;
-
-import reference.CommandFailedException;
-import reference.Constraint;
-import reference.TimeInterval;
 
 import com.tulskiy.keymaster.common.HotKey;
 import com.tulskiy.keymaster.common.HotKeyListener;
@@ -49,7 +42,52 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class ListOfXiaoMingViewsController extends GridPane implements HotKeyListener{
+public class MainViewController extends GridPane implements HotKeyListener{
+	
+	
+	private static final String COLOR_BANNER_DEFAULT = "rgba(222, 222, 222, 1)";
+	private static final String COLOR_BANNER_PRIORITY_LOW = "rgba(222, 236, 147, 1)";
+	private static final String COLOR_BANNER_PRIORITY_MEDIUM = "rgba(251, 235, 178, 1)";
+	private static final String COLOR_BANNER_PRIORITY_HIGH = "rgba(240, 115, 136, 1)";
+	private static final String COLOR_BODY_DEFAULT = "rgba(222, 222, 222, 0.2)";
+	private static final String COLOR_BODY_PRIORITY_LOW = "rgba(222, 236, 147, 0.2)";
+	private static final String COLOR_BODY_PRIORITY_MEDIUM = "rgba(251, 235, 178, 0.2)";
+	private static final String COLOR_BODY_PRIORITY_HIGH = "rgba(240, 115, 136, 0.2)";
+
+	private static final String FONT_FILE_BASE = "Akagi-SB.ttf";
+	private static final String FONT_FILE_TIME = "TickingTimebombBB.ttf";
+	
+	private static final String HOT_KEY_ADD_DESCRIPTION_TAG 	= "alt D";
+	private static final String HOT_KEY_ADD_DATE_TAG 			= "alt A";
+	private static final String HOT_KEY_ADD_TAG_TAG 			= "alt T";
+	private static final String HOT_KEY_ADD_COMMAND_TAG 		= "alt C";
+	private static final String HOT_KEY_ADD_INDEX_TAG 			= "alt I";
+	private static final String HOT_KEY_ADD_PRIORITY_TAG 		= "alt P";
+	private static final String HOT_KEY_PREVIEW 				= "control ENTER";
+	private static final String HOT_KEY_CREATE 					= "control C";
+	private static final String HOT_KEY_READ 					= "control R";
+	private static final String HOT_KEY_UPDATE 					= "control U";
+	private static final String HOT_KEY_DELETE 					= "control D";
+	private static final String HOT_KEY_SEARCH					= "control F";
+	private static final String HOT_KEY_RELOAD					= "control M";
+	private static final String HOT_KEY_LAST_COMMAND			= "UP";
+	private static final String HOT_KEY_NEXT_COMMAND			= "DOWN";
+	
+	private static final String[] COLORS_TAG = {"rgba(74, 137, 220, 0.7)", 
+												"rgba(59, 175, 218, 0.7)", 
+												"rgba(55, 188, 155, 0.7)",  
+												"rgba(246, 187, 66, 0.7)", 
+												"rgba(140, 193, 82, 0.7)",
+												"rgba(233, 87, 63, 0.7)", 
+												"rgba(218, 68, 84, 0.7)"};
+	
+
+	
+	private static final double GRID_ROW_HEIGHT = 30.0;
+	
+	private static final int MODIFIER_ALT = 520;
+	private static final int MODIFIER_CTRL = 130;
+	
 	@FXML
 	private TextField input;
 	
@@ -68,36 +106,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	private Provider keyShortCuts = null;
 	
-	private static final String HOT_KEY_ADD_DESCRIPTION_TAG 	= "alt D";
-	private static final String HOT_KEY_ADD_DATE_TAG 			= "alt A";
-	private static final String HOT_KEY_ADD_TAG_TAG 			= "alt T";
-	private static final String HOT_KEY_ADD_COMMAND_TAG 		= "alt C";
-	private static final String HOT_KEY_ADD_INDEX_TAG 			= "alt I";
-	private static final String HOT_KEY_ADD_PRIORITY_TAG 		= "alt P";
-	
-	private static final String HOT_KEY_PREVIEW 				= "control ENTER";
-	private static final String HOT_KEY_CREATE 					= "control C";
-	private static final String HOT_KEY_READ 					= "control R";
-	private static final String HOT_KEY_UPDATE 					= "control U";
-	private static final String HOT_KEY_DELETE 					= "control D";
-	private static final String HOT_KEY_SEARCH					= "control F";
-	private static final String HOT_KEY_RELOAD					= "control M";
-	
-	private static final String[] CSS_COLORS = {"rgba(74, 137, 220, 0.7)", 
-												"rgba(59, 175, 218, 0.7)", 
-												"rgba(55, 188, 155, 0.7)",  
-												"rgba(246, 187, 66, 0.7)", 
-												"rgba(140, 193, 82, 0.7)",
-												"rgba(233, 87, 63, 0.7)", 
-												"rgba(218, 68, 84, 0.7)"};
-	
-	private static final String HOT_KEY_LAST_COMMAND			= "UP";
-	private static final String HOT_KEY_NEXT_COMMAND			= "DOWN";
-	
-	private static final double GRID_ROW_HEIGHT = 30.0;
-	
-	private static final int MODIFIER_ALT = 520;
-	private static final int MODIFIER_CTRL = 130;
+
 	
 	private String descriptionTag 	= "</DESCRIPTION>";
 	private String dateTag 			= "</DATE>";
@@ -111,10 +120,10 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	
 	
-	public ListOfXiaoMingViewsController(Stage stage) throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ListOfXiaoMingViews.fxml"));
-		Font.loadFont(getClass().getResource("Akagi-SB.ttf").toExternalForm(), 10);
-		Font.loadFont(getClass().getResource("TickingTimebombBB.ttf").toExternalForm(), 10);
+	public MainViewController(Stage stage) throws IOException {
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainView.fxml"));
+		Font.loadFont(getClass().getResource(FONT_FILE_BASE).toExternalForm(), 10);
+		Font.loadFont(getClass().getResource(FONT_FILE_TIME).toExternalForm(), 10);
 		
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
@@ -129,7 +138,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 		this.initializeShortCuts();
         updatePage();
         
-        final ListOfXiaoMingViewsController instance = this;
+        final MainViewController instance = this;
         
         this.input.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -211,6 +220,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	 */
 	public void displayTaskList(ArrayList<Task> taskList) {
 		VBox displayContent = new VBox();
+		displayContent.setAlignment(Pos.CENTER);
 		displayContent.getChildren().clear();
 		GridPane taskPane = getTaskPane(taskList);
 		displayContent.getChildren().add(taskPane);
@@ -219,6 +229,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	private GridPane getTaskPane(ArrayList<Task> taskList) {
 		GridPane taskPane = new GridPane();
+		taskPane.setStyle("-fx-padding: 10 10 10 10");
 		int row = 0;
 		int index = 1;
 		taskPane.getColumnConstraints().add(new ColumnConstraints(getWidth() * 0.3 - 21));
@@ -298,38 +309,39 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	private static String getBodyColor(Task task) {
 		switch (task.getPriority()) {
 			case Constant.PRIORITY_HIGH:
-				return "rgba(240, 115, 136, 0.2)";
+				return COLOR_BODY_PRIORITY_HIGH;
 	
 			case Constant.PRIORITY_MEDIUM:
-				return "rgba(251, 235, 178, 0.2)";
+				return COLOR_BODY_PRIORITY_MEDIUM;
 				
 			case Constant.PRIORITY_LOW:
-				return "rgba(222, 236, 147, 0.2)";
+				return COLOR_BODY_PRIORITY_LOW;
 				
 			default:
-				return "rgba(222, 222, 222, 0.2)";
+				return COLOR_BODY_DEFAULT;
 		}
 	}
 	
 	private static String getBannerColor(Task task) {
 		switch (task.getPriority()) {
 			case Constant.PRIORITY_HIGH:
-				return "rgba(240, 115, 136, 1)";
+				return COLOR_BANNER_PRIORITY_HIGH;
 	
 			case Constant.PRIORITY_MEDIUM:
-				return "rgba(251, 235, 178, 1)";
+				return COLOR_BANNER_PRIORITY_MEDIUM;
 				
 			case Constant.PRIORITY_LOW:
-				return "rgba(222, 236, 147, 1)";
+				return COLOR_BANNER_PRIORITY_LOW;
 				
 			default:
-				return "rgba(222, 222, 222, 1)";
+				return COLOR_BANNER_DEFAULT;
 		}
 	}
 	
 	private GridPane getPriorityPane(String bannerColor, int index) {
 		GridPane priorityPane = new GridPane();
-		priorityPane.setStyle("-fx-padding: 8 8 0 8; -fx-background-color: " + bannerColor);
+		priorityPane.setStyle("-fx-padding: 8 8 0 8; "
+				            + "-fx-background-color: " + bannerColor);
 		priorityPane.setPrefWidth(getWidth());
 		Label priority = new Label("\t\t\t\t\t\t\t\t " + index);
 		priority.setStyle("-fx-font: 19px \"Akagi\";"
@@ -342,7 +354,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	private Label getDescriptionLabel(Task task) {
 		Label description = new Label(task.getDescription());
 		description.setStyle("-fx-font: 17px \"Akagi\";"
-				+ "-fx-padding:0 0 5 0");
+				             + "-fx-padding:0 0 5 0");
 		description.setPrefWidth(getWidth());
 		return description;
 	}
@@ -474,10 +486,10 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 				colorOffset += c;
 			}
 			
-			colorOffset = colorOffset%CSS_COLORS.length;
+			colorOffset = colorOffset%COLORS_TAG.length;
 			tagLabel.setStyle("-fx-font: 10px \"Akagi\";"
 					+ "-fx-padding: 5 10 5 10;"
-					+ "-fx-background-color:" + CSS_COLORS[colorOffset]+ ";"
+					+ "-fx-background-color:" + COLORS_TAG[colorOffset]+ ";"
 					+ "-fx-background-radius: 5px;"
 					+ "-fx-text-fill: white;"
 					+ "-fx-margin: 0 5 0 5;");
@@ -508,7 +520,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	 * initialize the short cut settings
 	 */
 	private void initializeShortCuts(){
-		final ListOfXiaoMingViewsController instance = this;
+		final MainViewController instance = this;
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -531,23 +543,23 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	 * @param instance
 	 */
 	private void registerKeyShortCuts(HotKeyListener instance) {
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DESCRIPTION_TAG), instance);
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DATE_TAG), instance);
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_TAG_TAG), instance);
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_COMMAND_TAG), instance);
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_INDEX_TAG), instance);
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_PRIORITY_TAG), instance);
-//		
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_PREVIEW), instance);
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_CREATE), instance);
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_READ), instance);
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_UPDATE), instance);
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_DELETE), instance);
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_SEARCH), instance);
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_RELOAD), instance);
-//		
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_LAST_COMMAND), instance);
-//		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_NEXT_COMMAND), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DESCRIPTION_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_DATE_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_TAG_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_COMMAND_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_INDEX_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_ADD_PRIORITY_TAG), instance);
+		
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_PREVIEW), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_CREATE), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_READ), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_UPDATE), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_DELETE), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_SEARCH), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_RELOAD), instance);
+		
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_LAST_COMMAND), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(HOT_KEY_NEXT_COMMAND), instance);
 	}
 	
 	
@@ -568,7 +580,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	
 	private void loadPreview() {
 		//open a new thread to execute Java FX
-		final ListOfXiaoMingViewsController instance = this;
+		final MainViewController instance = this;
 		Platform.runLater(new Runnable() {
 	        @Override
 	        public void run() {
@@ -589,7 +601,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	 */
 	private void insertTextToTextField(final int cursorPosition, final String text) {
 		//open a new thread to execute Java FX
-		final ListOfXiaoMingViewsController instance = this;
+		final MainViewController instance = this;
 		Platform.runLater(new Runnable() {
 	        @Override
 	        public void run() {
@@ -599,7 +611,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 	}
 	
 	private void updateTextField(final String text) {
-		final ListOfXiaoMingViewsController instance = this;
+		final MainViewController instance = this;
 		Platform.runLater(new Runnable() {
 	        @Override
 	        public void run() {
@@ -1078,7 +1090,7 @@ public class ListOfXiaoMingViewsController extends GridPane implements HotKeyLis
 						returnValue += (Constant.PROMPT_MESSAGE_DONE_TASK_FAILED + " for task " + index);
 					}
 					isAllSucceeded &= isThisSucceeded;
-//					offset ++;
+					offset ++;
 				} catch (CommandFailedException cfe) {
 					return cfe.toString();
 				}
