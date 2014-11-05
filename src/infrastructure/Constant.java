@@ -445,6 +445,7 @@ public abstract class Constant {
 	// fonts
 	public static final String FONT_FILE_BASE = "/resource/Akagi-SB.ttf";
 	public static final String FONT_FILE_TIME = "/resource/TickingTimebombBB.ttf";
+	public static final String FONT_FILE_FEEDBACK = "/resource/monaco.ttf";
 
 	// shortcuts
 	public static final String HOT_KEY_ADD_DESCRIPTION_TAG = "alt D";
@@ -468,6 +469,7 @@ public abstract class Constant {
 	public static final int MODIFIER_ALT = 520;
 
 	public static final int MODIFIER_CTRL = 130;
+	
 
 
 }

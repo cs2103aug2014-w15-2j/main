@@ -119,12 +119,12 @@ public class TimeInterval {
 			text = text + Constant.TIME_MESSAGE_FLOATING;
 		} else if (this.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 			// deadline task
-			String deadline = new SimpleDateFormat("dd/MMMM/yyyy E HH:mm", Locale.ENGLISH).format(this.getEndDate());
+			String deadline = new SimpleDateFormat("HH:mm   EEEE dd/MMMM/yyyy", Locale.ENGLISH).format(this.getEndDate());
 			text = text + "\ndeadline: \t\t" + deadline;
 		} else {
-			String start = new SimpleDateFormat("dd/MMMM/yyyy E\tHH:mm", Locale.ENGLISH).format(this.getStartDate());
-			String end = new SimpleDateFormat("dd/MMMM/yyyy E\tHH:mm", Locale.ENGLISH).format(this.getEndDate());
-			text = text + "\ntime: \t\tfrom \t" + start + "\n\t\t\tto \t\t" + end;
+			String start = new SimpleDateFormat("HH:mm   EEEE dd/MMMM/yyyy", Locale.ENGLISH).format(this.getStartDate());
+			String end = new SimpleDateFormat("HH:mm   EEEE dd/MMMM/yyyy", Locale.ENGLISH).format(this.getEndDate());
+			text = text + "\ntime: \t\tfrom \t" + start + "\n\t\tto \t" + end;
 		}
 		
 		return text;
