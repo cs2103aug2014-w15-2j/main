@@ -752,12 +752,22 @@ public class NERParser {
 	 * @return
 	 * @throws CommandFailedException
 	 */
-	public HashMap<String, Object> getUpdatedTaskMap(String userInputString)
-			throws CommandFailedException {
+	public HashMap<String, Object> getUpdatedTaskMap(String userInputString) {
 
-		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
+		TimeInterval timeInterval;
+		try {
+			timeInterval = this.pickTimeInterval(userInputString);
+		} catch (CommandFailedException e) {
+			timeInterval = new TimeInterval();
+			this.isTimeChanged = false;
+		}
 		ArrayList<String> tag = this.pickTag(userInputString);
-		String description = this.pickDescription(userInputString);
+		String description;
+		try {
+			description = this.pickDescription(userInputString);
+		} catch (CommandFailedException e) {
+			description = "";
+		}
 		int priority = this.pickPriority(userInputString);
 
 		HashMap<String, Object> updateAttributes = new HashMap<String, Object>();
