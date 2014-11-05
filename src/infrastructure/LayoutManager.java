@@ -68,7 +68,7 @@ public class LayoutManager {
 				
 				panePane.add(contentPane, 0, subRow, 1, 2);
 				LayoutManager.setDisplayRow(panePane, Constant.GRID_ROW_HEIGHT * 2 + 11);
-				panePane.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 5, 3);");
+				panePane.setStyle(Constant.CSS_STYLE_SHADOW);
 				
 				taskPane.add(panePane, 1, row, 2, 1);
 				LayoutManager.setDisplayRow(taskPane, Constant.GRID_ROW_HEIGHT * 3 + 11);

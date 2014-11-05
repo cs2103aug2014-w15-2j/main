@@ -425,6 +425,7 @@ public abstract class Constant {
 	public static final String CSS_STYLE_PRIORITY_LABEL = "-fx-font: 19px \"Akagi\";"
 			+ "-fx-text-fill: white;";
 	public static final String CSS_STYLE_EMPTY_PANE = "-fx-background-color: rgba(0, 0, 0, 0);";
+	public static final String CSS_STYLE_SHADOW = "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 5, 3);";
 
 	// CSS colors
 	public static final String COLOR_BANNER_DEFAULT = "rgba(222, 222, 222, 1)";
