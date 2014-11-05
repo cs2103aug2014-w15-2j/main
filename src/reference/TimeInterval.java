@@ -84,11 +84,11 @@ public class TimeInterval {
 	}
 	
 	/**
+	 * @author A0119444E
 	 * check is overlapped for an interval and a deadline
 	 * @param interval
 	 * @param deadline
 	 * @return
-	 * @author linfanshi
 	 */
 	public static boolean isOverlapped(TimeInterval interval, Date deadline) {
 		if (interval.startDate.before(deadline) && (interval.endDate.after(deadline) || interval.endDate.equals(deadline))) {

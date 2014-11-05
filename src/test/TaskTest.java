@@ -10,8 +10,8 @@ import dataStructure.Task;
 
 public class TaskTest {
 	/**
+	 * @author A0119444E
 	 * test for task methods
-	 * @author linfanshi
 	 */
 	@Test
 	public void test() {		

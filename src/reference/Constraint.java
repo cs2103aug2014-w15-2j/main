@@ -37,12 +37,12 @@ public class Constraint {
 	}
 
 	/**
+	 * @author A0119444E
 	 * isMeeted
 	 * 
 	 * @param task
 	 * @return boolean
 	 * @throws Exception
-	 * @author linfanshi leimingyu
 	 */
 	public boolean isMeeted(Task task) throws Exception {
 		boolean isKeywordMatched = false;
