@@ -35,13 +35,14 @@ public class User {
 	
 	/**
 	 * ==================================================================================================
-	 * Supported methods: CRUD, undo, redo, search
+	 * Functionality methods: CRUD, undo, redo, search
 	 * ==================================================================================================
 	 */
 
 	//@author A0119447Y
 	/**
-	 * undo resets the current task list to one step backwards.
+	 * undo 
+	 * resets the current task list to one step backwards.
 	 * 
 	 * @throws CommandFailedException
 	 */
@@ -61,13 +62,13 @@ public class User {
 		}
 	}
 
+	//@author A0119447Y
 	/**
-	 * redo resets the current task list to one step forwards.
+	 * redo 
+	 * resets the current task list to one step forwards.
 	 * 
 	 * @throws CommandFailedException
 	 */
-	
-	// author A0119447Y
 	public void redo() throws CommandFailedException {
 		if (this.redoable.empty()) {
 			throw new CommandFailedException(Constant.NO_REDOABLE_ERROR_MESSAGE);
@@ -83,41 +84,6 @@ public class User {
 			DataStore.save(this.currentTasks);
 		}
 	}
-
-	/**
-	 * updateUndoable this method should be called BEFORE every operation
-	 * involving task list
-	 */
-	
-	// author A0119447Y
-	private void updateUndoable() {
-		this.redoable.clear();
-		this.undoable.push(cloner.deepClone(this.currentTasks));
-		if (this.undoable.size() > Constant.MAXIMUM_UNDO_TIMES) {
-			this.undoable.remove(0);
-		}
-	}
-
-	//@author A0119444E-unused
-//	/**
-//	 * add 
-//	 * adds a task into the task list.
-//	 * 
-//	 * @param task
-//	 */
-//	
-//	public boolean add(Task task) {
-//		this.updateUndoable();
-//		if (taskEndIndex == -1 || taskEndIndex == currentTasks.size() - 1) {
-//			this.currentTasks.add(task);
-//		} else {
-//			this.currentTasks.add(task);
-//			moveAddedTask(taskEndIndex);
-//		}
-//		taskEndIndex++;
-//		boolean isSuccessful = DataStore.save(this.currentTasks);
-//		return isSuccessful;
-//	}
 	
 	//@author A0119447Y
 	/**
@@ -132,28 +98,6 @@ public class User {
 		boolean isSuccessful = DataStore.save(this.currentTasks);
 		return isSuccessful;
 	}
-
-	//@author A0119444E-unused
-//	/**
-//	 * delete deletes the task with the index from the task list.
-//	 * 
-//	 * @param index
-//	 * @throws CommandFailedException
-//	 */
-//	public boolean delete(int index) throws CommandFailedException {
-//		if (!this.isValidIndex(index)) {
-//			throw new CommandFailedException(String.format(
-//					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
-//		} else {
-//			this.updateUndoable();
-//			boolean isSuccessful = this.currentTasks.get(index).addTag(
-//					Constant.TRASHED_TAG);
-//			moveTrashedTask(index);
-//			taskEndIndex--;
-//			DataStore.save(this.currentTasks);
-//			return isSuccessful;
-//		}
-//	}
 	
 	//@author A0119447Y
 	/**
@@ -211,36 +155,6 @@ public class User {
 			}
 			return task;
 		}
-	}
-	
-	//@author A0119447Y
-	/**
-	 * getNormalTaskList
-	 * 
-	 * return the normal tasks
-	 */
-	public ArrayList<Task> getNormalTaskList() {
-		return this.currentTasks.normalTasks;
-	}
-	
-	//@author A0119447Y
-	/**
-	 * getTrashedTaskList
-	 * 
-	 * return the normal tasks
-	 */
-	public ArrayList<Task> getTrashedTaskList() {
-		return this.currentTasks.trashedTasks;
-	}
-	
-	//@author A0119447Y
-	/**
-	 * getTrashedTaskList
-	 * 
-	 * return the normal tasks
-	 */
-	public ArrayList<Task> getFinishedTaskList() {
-		return this.currentTasks.finishedTasks;
 	}
 
 	//@author A0119444E
@@ -320,7 +234,189 @@ public class User {
 		}
 		return DataStore.save(this.currentTasks);
 	}
+	
+	//@author A0119447Y
+	/**
+	 * emptyTrash
+	 * clear all the trahsed task
+	 */
+	public boolean emptyTrash() {
+		this.updateUndoable();
+		this.currentTasks.getTrashedTasks().clear();
+		return DataStore.save(this.currentTasks);
+	}
 
+	//@author A0119444E
+	/**
+	 * 
+	 * @param index
+	 * @return
+	 * @throws CommandFailedException
+	 */
+	public Task retrieve(int index) throws CommandFailedException {
+		if (!this.isValidIndex(index)) {
+			throw new CommandFailedException(String.format(
+					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+		} else {
+			return this.currentTasks.getNormalTasks().get(index);
+		}
+	}
+
+	//@author A0119444E
+	/**
+	 * find gets the list of tasks that meet the constraint.
+	 * 
+	 * @param constraint
+	 * @return
+	 * @throws Exception
+	 */
+	public ArrayList<Task> find(Constraint constraint) throws Exception {
+		Iterator<Task> taskIterator = this.currentTasks.getNormalTasks().iterator();
+		ArrayList<Task> matchedTasks = new ArrayList<Task>();
+		while (taskIterator.hasNext()) {
+			Task task = taskIterator.next();
+			if (constraint.isMeeted(task)) {
+				matchedTasks.add(task);
+			}
+		}
+		return matchedTasks;
+	}	
+	
+	/**
+	 * ==================================================================================================
+	 * Auxiliary methods
+	 * ==================================================================================================
+	 */
+	
+	//@author A0119447Y
+	/**
+	 * getNormalTaskList
+	 * 
+	 * return the normal tasks
+	 */
+	public ArrayList<Task> getNormalTaskList() {
+		return this.currentTasks.normalTasks;
+	}
+	
+	//@author A0119447Y
+	/**
+	 * getTrashedTaskList
+	 * 
+	 * return the normal tasks
+	 */
+	public ArrayList<Task> getTrashedTaskList() {
+		return this.currentTasks.trashedTasks;
+	}
+	
+	//@author A0119447Y
+	/**
+	 * getTrashedTaskList
+	 * 
+	 * return the normal tasks
+	 */
+	public ArrayList<Task> getFinishedTaskList() {
+		return this.currentTasks.finishedTasks;
+	}
+	
+	/**
+	 * ==================================================================================================
+	 * Private methods
+	 * ==================================================================================================
+	 */
+	
+	//@author A0119447Y
+	/**
+	 * updateUndoable this method should be called BEFORE every operation
+	 * involving task list
+	 */
+	private void updateUndoable() {
+		this.redoable.clear();
+		this.undoable.push(cloner.deepClone(this.currentTasks));
+		if (this.undoable.size() > Constant.MAXIMUM_UNDO_TIMES) {
+			this.undoable.remove(0);
+		}
+	}
+	
+	//@author A0119444E
+	/**
+	 * isValidIndex
+	 * 
+	 * @param index
+	 * @return
+	 */
+	private boolean isValidIndex(int index) {
+		if ((index < 0) || (index > this.currentTasks.getNormalTasks().size())) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * ==================================================================================================
+	 * System level static methods
+	 * ==================================================================================================
+	 */	
+	//@author A0119447Y
+	/**
+	 * exit exits the application
+	 */
+	public static void exit() {
+		UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_SESSION_END);
+		System.exit(0);
+	}
+	
+	
+	/**
+	 * ==================================================================================================
+	 * Unused methods
+	 * ==================================================================================================
+	 */
+	
+	//@author A0119444E-unused
+//	/**
+//	 * add 
+//	 * adds a task into the task list.
+//	 * 
+//	 * @param task
+//	 */
+//	
+//	public boolean add(Task task) {
+//		this.updateUndoable();
+//		if (taskEndIndex == -1 || taskEndIndex == currentTasks.size() - 1) {
+//			this.currentTasks.add(task);
+//		} else {
+//			this.currentTasks.add(task);
+//			moveAddedTask(taskEndIndex);
+//		}
+//		taskEndIndex++;
+//		boolean isSuccessful = DataStore.save(this.currentTasks);
+//		return isSuccessful;
+//	}
+	
+	
+	//@author A0119444E-unused
+//	/**
+//	 * delete deletes the task with the index from the task list.
+//	 * 
+//	 * @param index
+//	 * @throws CommandFailedException
+//	 */
+//	public boolean delete(int index) throws CommandFailedException {
+//		if (!this.isValidIndex(index)) {
+//			throw new CommandFailedException(String.format(
+//					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+//		} else {
+//			this.updateUndoable();
+//			boolean isSuccessful = this.currentTasks.get(index).addTag(
+//					Constant.TRASHED_TAG);
+//			moveTrashedTask(index);
+//			taskEndIndex--;
+//			DataStore.save(this.currentTasks);
+//			return isSuccessful;
+//		}
+//	}
+	
 	//@author A0119444E-unused
 //	/**
 //	 * clear all current tasks
@@ -341,17 +437,6 @@ public class User {
 //		DataStore.save(this.currentTasks);
 //	}
 	
-	//@author A0119447Y
-	/**
-	 * emptyTrash
-	 * clear all the trahsed task
-	 */
-	public boolean emptyTrash() {
-		this.updateUndoable();
-		this.currentTasks.getTrashedTasks().clear();
-		return DataStore.save(this.currentTasks);
-	}
-
 	//@author A0119444E-unused
 //	/**
 //	 * move new added task to correct position
@@ -436,68 +521,6 @@ public class User {
 //			validCategory.remove(category);
 //		}
 //	}
-
-	//@author A0119444E-unused
-	/**
-	 * show a joke to user
-	 * joke is not supported now
-	 */
-	public void showJoke() {
-		System.out.println("How can you expect a Todo-List software to provide you a joke!");
-		System.out.println("This function is actually the joke.");
-		System.out.println("If you really want some, go to jokes.cc.com ");
-	}
-
-	//@author A0119447Y
-	/**
-	 * 
-	 * @param index
-	 * @return
-	 * @throws CommandFailedException
-	 */
-	public Task retrieve(int index) throws CommandFailedException {
-		if (!this.isValidIndex(index)) {
-			throw new CommandFailedException(String.format(
-					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
-		} else {
-			return this.currentTasks.getNormalTasks().get(index);
-		}
-	}
-
-	//@author A0119447Y
-	/**
-	 * find gets the list of tasks that meet the constraint.
-	 * 
-	 * @param constraint
-	 * @return
-	 * @throws Exception
-	 */
-	public ArrayList<Task> find(Constraint constraint) throws Exception {
-		Iterator<Task> taskIterator = this.currentTasks.getNormalTasks().iterator();
-		ArrayList<Task> matchedTasks = new ArrayList<Task>();
-		while (taskIterator.hasNext()) {
-			Task task = taskIterator.next();
-			if (constraint.isMeeted(task)) {
-				matchedTasks.add(task);
-			}
-		}
-		return matchedTasks;
-	}
-
-	//@author A0119447Y
-	/**
-	 * isValidIndex
-	 * 
-	 * @param index
-	 * @return
-	 */
-	private boolean isValidIndex(int index) {
-		if ((index < 0) || (index > this.currentTasks.getNormalTasks().size())) {
-			return false;
-		} else {
-			return true;
-		}
-	}
 	
 	//@author A0119444E-unused
 //	/**
@@ -516,8 +539,17 @@ public class User {
 //		return nonTrashedTasks;
 //	}
 
-	// system level static methods
-
+	//@author A0119444E-unused
+	/**
+	 * show a joke to user
+	 * joke is not supported now
+	 */
+	public void showJoke() {
+		System.out.println("How can you expect a Todo-List software to provide you a joke!");
+		System.out.println("This function is actually the joke.");
+		System.out.println("If you really want some, go to jokes.cc.com ");
+	}
+	
 	//@author A0119447Y-unused
 	/**
 	 * showHelp shows the application manual.
@@ -527,14 +559,5 @@ public class User {
 	public static String showHelp() {
 
 		return "'Help' has not been implemented yet";
-	}
-	
-	//@author A0119447Y
-	/**
-	 * exit exits the application
-	 */
-	public static void exit() {
-		UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_SESSION_END);
-		System.exit(0);
 	}
 }
