@@ -204,12 +204,32 @@ public class User {
 	
 	//@author A0119447Y
 	/**
-	 * getTaskList
+	 * getNormalTaskList
 	 * 
 	 * return the normal tasks
 	 */
-	public ArrayList<Task> getTaskList() {
+	public ArrayList<Task> getNormalTaskList() {
 		return this.currentTasks.normalTasks;
+	}
+	
+	//@author A0119447Y
+	/**
+	 * getTrashedTaskList
+	 * 
+	 * return the normal tasks
+	 */
+	public ArrayList<Task> getTrashedTaskList() {
+		return this.currentTasks.trashedTasks;
+	}
+	
+	//@author A0119447Y
+	/**
+	 * getTrashedTaskList
+	 * 
+	 * return the normal tasks
+	 */
+	public ArrayList<Task> getFinishedTaskList() {
+		return this.currentTasks.finishedTasks;
 	}
 
 	//@author A0119444E
