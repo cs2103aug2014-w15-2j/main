@@ -113,7 +113,7 @@ public class LayoutManager {
 		
 		GridPane tagPane = getTagPaneForTask(task);
 		contentPane.add(tagPane, 0, subRow, 2, 1);
-		LayoutManager.setDisplayRow(contentPane, Constant.GRID_ROW_HEIGHT);
+		LayoutManager.setDisplayRow(contentPane, Constant.GRID_ROW_HEIGHT - 5);
 		subRow ++;
 		return contentPane;
 	}

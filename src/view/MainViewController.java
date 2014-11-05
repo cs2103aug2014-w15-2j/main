@@ -87,6 +87,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			this.addTextFieldListener();
 			this.initializeShortCuts();
 			this.updatePage();
+			stage.getScene().getRoot().setStyle("-fx-background-color: #fff");
 	        UtilityMethod.makeDraggable(stage, dragNode);
 	        
 	        if (!Constant.ERROR_PRINT_ON) {
@@ -255,21 +256,29 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	public void setPreviewPane(String textToDisplay, String listName) {
 		GridPane previewContentPane = new GridPane();
 		previewContentPane.setStyle("-fx-padding: 8 8 8 8;");
-		previewContentPane.setHgap(8);
+		previewContentPane.setHgap(15);
 		
 		VBox parsingFeedbackBox = new VBox();
-		parsingFeedbackBox.setPrefWidth(400);
+		parsingFeedbackBox.setPrefWidth(500);
+		parsingFeedbackBox.setPrefHeight(120);
 		Label text = new Label(textToDisplay);
+		text.setStyle("-fx-font: 12px \"Courier New\";"
+				+ "-fx-text-fill: white;");
 		parsingFeedbackBox.setStyle("-fx-font: 12px \"Akagi\";"
-				+ "-fx-background-color: rgba(0, 200, 255, 1);"
-				+ "-fx-padding: 8 8 8 8;");
+				+ "-fx-background-color: rgba(0, 0, 0, 0.8);"
+				+ "-fx-padding: 8 8 8 8;" 
+				+ Constant.CSS_STYLE_SHADOW);
 		parsingFeedbackBox.getChildren().add(text);
 		
 		VBox listIndicatorBox = new VBox();
-		listIndicatorBox.setPrefWidth(getWidth() - 470);
-		Label listLabel = new Label(listName);
+		listIndicatorBox.setAlignment(Pos.BOTTOM_RIGHT);
+		listIndicatorBox.setPrefWidth(getWidth() - 577);
+		Label listLabel = new Label(listName.toUpperCase());
+		listLabel.setStyle("-fx-font: 40px \"Akagi\";"
+				+ "-fx-text-fill: white;");
 		listIndicatorBox.setStyle("-fx-background-color: rgba(251, 235, 178, 1);"
-				+ "-fx-padding: 8 8 8 8;");
+				+ "-fx-padding: 8 16 8 8;"
+				+ Constant.CSS_STYLE_SHADOW);
 		listIndicatorBox.getChildren().add(listLabel);
 		
 		
@@ -451,17 +460,17 @@ public class MainViewController extends GridPane implements HotKeyListener{
 
 			switch(thisCommand) {
 				case ADD:
-					setPreviewText(this.add(userInput));
+					setPreviewPane(this.add(userInput), this.getCurrentListName());
 					setDisplayPane(this.displayNormal());
 					break;
 					
 				case DELETE:
-					setPreviewText(this.delete(userInput));
+					setPreviewPane(this.delete(userInput), this.getCurrentListName());
 					setDisplayPane(this.displayNormal());
 					break;
 					
 				case UPDATE:
-					setPreviewText(this.update(userInput));
+					setPreviewPane(this.update(userInput), this.getCurrentListName());
 					setDisplayPane(this.displayNormal());
 					break;
 					
@@ -480,17 +489,17 @@ public class MainViewController extends GridPane implements HotKeyListener{
 					break;
 					
 				case UNDO:
-					setPreviewText(this.undo());
+					setPreviewPane(this.undo(), this.getCurrentListName());
 					setDisplayPane(this.displayNormal());
 					break;
 					
 				case REDO:
-					setPreviewText(this.redo());
+					setPreviewPane(this.redo(), this.getCurrentListName());
 					setDisplayPane(this.displayNormal());
 					break;
 					
 				case CLEAR:
-					setPreviewText(this.clear());
+					setPreviewPane(this.clear(), this.getCurrentListName());
 					setDisplayPane(this.displayNormal());
 					break;
 					
@@ -505,17 +514,17 @@ public class MainViewController extends GridPane implements HotKeyListener{
 					break;
 					
 				case EMPTY_TRASH:
-					setPreviewText(this.emptyTrash());
+					setPreviewPane(this.emptyTrash(), this.getCurrentListName());
 					setDisplayPane(this.displayNormal());
 					break;
 					
 				case RELOAD:
-					setPreviewText(this.reloadNLPModel());
+					setPreviewPane(this.reloadNLPModel(), this.getCurrentListName());
 					setDisplayPane(this.displayNormal());
 					break;
 					
 				case DONE:
-					setPreviewText(this.done(userInput));
+					setPreviewPane(this.done(userInput), this.getCurrentListName());
 					setDisplayPane(this.displayNormal());
 					break;
 					
@@ -530,6 +539,11 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	}
 	
 	
+	private String getCurrentListName() {
+		return "normal list";
+	}
+
+
 	//@author A0119379R
 	public String getPreview(String userInput) {
 		try {
