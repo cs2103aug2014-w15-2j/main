@@ -32,14 +32,19 @@ public class User {
 		undoable = new Stack<TaskBox>();
 		redoable = new Stack<TaskBox>();
 	}
+	
+	/**
+	 * ==================================================================================================
+	 * Supported methods: CRUD, undo, redo, search
+	 * ==================================================================================================
+	 */
 
+	//@author A0119447Y
 	/**
 	 * undo resets the current task list to one step backwards.
 	 * 
 	 * @throws CommandFailedException
 	 */
-	
-	// author A0119447Y
 	public void undo() throws CommandFailedException {
 		if (this.undoable.empty()) {
 			throw new CommandFailedException(Constant.NO_UNDOABLE_ERROR_MESSAGE);
