@@ -57,6 +57,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	private User user;
 	
 	private Provider keyShortCuts = null;
+	private String currentListName = "todo";
 	
 
 	
@@ -148,7 +149,8 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			public void run() {
 				instance.updateTextField("NLP MODEL LOADING");
 				instance.parser = new Parser();
-				instance.updateTextField("display");
+				instance.updateTextField("");
+				instance.updatePreviewLater();
 			}
 		}).start();
 	}
@@ -191,13 +193,17 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_SEARCH), instance);
 		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_RELOAD), instance);
 		
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_TO_DO), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_TRASHED), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_DONE), instance);
+		
 		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_LAST_COMMAND), instance);
 		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_NEXT_COMMAND), instance);
 	}
 	
 	//@author A0119379R
 	private void updatePage() {
-		setPreviewPane("Welcome to List of Xiao Ming. \nPlease wait for the NLP model loading...", "normal list");
+		setPreviewPane("Welcome to List of Xiao Ming. \nPlease wait for the NLP model loading...", this.getCurrentListName());
 		this.setDisplayText("HELP:" + "\n\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
 	}
 	
@@ -374,6 +380,8 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	        	if (userInput.length() > 0) {
 	        		System.out.println(userInput);
 	        		setPreviewPane(instance.getPreview(userInput), instance.getCurrentListName());
+	        	} else {
+	        		setPreviewPane("We're ready for your commands!", instance.getCurrentListName());
 	        	}
 	        }
 	   });
@@ -542,7 +550,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	
 	
 	private String getCurrentListName() {
-		return "normal list";
+		return this.currentListName;
 	}
 
 
@@ -828,6 +836,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		ArrayList<Task> queryResult;
 		try {
 			queryResult = this.user.getTrashedTaskList();
+			System.out.println("displayTrashed queryResult length: " + this.user.currentTasks.trashedTasks.size());
 			if (queryResult.isEmpty()) {
 				setDisplayText(Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK);
 				// TODO: create a box for empty list
@@ -1022,9 +1031,22 @@ public class MainViewController extends GridPane implements HotKeyListener{
 				insertTextIntoTextField(cursorPosition, "reload model ");	
 				break;
 				
+				
 			case KeyEvent.VK_BACK_SPACE + Constant.MODIFIER_CTRL:
 				String inputString = (String) input.getCharacters();
 				insertTextIntoTextField(cursorPosition, inputString.substring(0, inputString.lastIndexOf(" ")));
+				break;
+				
+			case KeyEvent.VK_1 + Constant.MODIFIER_CTRL:
+				changeToToDoList();
+				break;
+			
+			case KeyEvent.VK_2 + Constant.MODIFIER_CTRL:
+				changeToTrashedList();
+				break;
+			
+			case KeyEvent.VK_3 + Constant.MODIFIER_CTRL:
+				changeToFinishedList();
 				break;
 		}
 		
@@ -1051,4 +1073,58 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 		
 	}
+
+	
+	private void changeToToDoList() {
+		final MainViewController instance = this;
+		Platform.runLater(new Runnable() {
+	        @Override
+	        public void run() {
+	        	instance.setDisplayPane(instance.displayNormal());
+	        	instance.currentListName = "todo";
+	        	instance.setPreviewPane("hahah", instance.getCurrentListName());
+	        }
+	   });
+	}
+	
+
+	private void changeToTrashedList() {
+		final MainViewController instance = this;
+		Platform.runLater(new Runnable() {
+	        @Override
+	        public void run() {
+	        	instance.setDisplayPane(instance.displayTrashed());
+	        	instance.currentListName = "trashed";
+	        	instance.setPreviewPane("hahah", instance.getCurrentListName());
+	        }
+	   });
+		
+	}
+	
+	private void changeToFinishedList() {
+		final MainViewController instance = this;
+		Platform.runLater(new Runnable() {
+	        @Override
+	        public void run() {
+	        	instance.setDisplayPane(instance.displayFinished());
+	        	instance.currentListName = "finished";
+	        	instance.setPreviewPane("hahah", instance.getCurrentListName());
+	        }
+	   });
+		
+	}
+	
+	
+	private void updatePreviewLater() {
+		final MainViewController instance = this;
+		Platform.runLater(new Runnable() {
+	        @Override
+	        public void run() {
+	        	instance.setPreviewPane("We'are ready for your commands!", instance.getCurrentListName());
+	        }
+	   });
+		
+	}
+	
+	
 }

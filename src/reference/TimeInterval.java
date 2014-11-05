@@ -120,7 +120,7 @@ public class TimeInterval {
 		} else if (this.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 			// deadline task
 			String deadline = new SimpleDateFormat("HH:mm   EEEE dd/MMMM/yyyy", Locale.ENGLISH).format(this.getEndDate());
-			text = text + "\ndeadline: \t\t" + deadline;
+			text = text + "\ndeadline: \t" + deadline;
 		} else {
 			String start = new SimpleDateFormat("HH:mm   EEEE dd/MMMM/yyyy", Locale.ENGLISH).format(this.getStartDate());
 			String end = new SimpleDateFormat("HH:mm   EEEE dd/MMMM/yyyy", Locale.ENGLISH).format(this.getEndDate());

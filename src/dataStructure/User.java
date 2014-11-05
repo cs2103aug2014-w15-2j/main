@@ -16,7 +16,7 @@ import reference.*;
 public class User {
 
 	//@author A0119447Y
-	private TaskBox currentTasks;
+	public TaskBox currentTasks;
 	private Stack<TaskBox> undoable;
 	private Stack<TaskBox> redoable;
 	private Cloner cloner = new Cloner();
