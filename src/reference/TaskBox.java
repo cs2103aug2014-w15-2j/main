@@ -24,7 +24,7 @@ public class TaskBox {
 		return finishedTasks;
 	}
 	
-	public ArrayList<Task> getTrashedTask() {
+	public ArrayList<Task> getTrashedTasks() {
 		return trashedTasks;
 	}
 	
