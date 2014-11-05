@@ -21,15 +21,14 @@ public class Converter {
 		
 		taskMap.put("task-id", task.getTaskId());
 		taskMap.put("description", task.getDescription());
-		taskMap.put("category", task.getCategory());
+		taskMap.put("status", task.getStatus());
 		
 		ArrayList<String> tags = new ArrayList<String>();
 		for(int i = 0; i < task.getTag().size(); i++) {
 			tags.add(task.getTag().get(i));
 		}
 		taskMap.put("tags", tags);
-		
-		taskMap.put("repeated-period", convertRepeatedPeriodIntToString(task));
+	
 		taskMap.put("priority", convertPriorityIntToString(task));
 		taskMap.put("time-interval", convertTimeIntervalToString(task));
 		

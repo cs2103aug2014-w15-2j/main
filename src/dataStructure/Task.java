@@ -355,6 +355,10 @@ public class Task {
 		}
 	}
 	
+	public Constant.TASK_STATUS getStatus() {
+		return this.status;
+	}
+	
 	// check validity of attributes
 	
 	/**
