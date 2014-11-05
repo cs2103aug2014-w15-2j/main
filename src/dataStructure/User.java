@@ -104,28 +104,63 @@ public class User {
 	 * delete 
 	 * deletes the task with the index from the task list.
 	 * 
-	 * @param index
+	 * @param normalIndex
 	 * @param willSave
 	 * @throws CommandFailedException
 	 */
-	public boolean delete(int index, boolean willUpdateUndo) throws CommandFailedException {
-		if (!this.isValidIndex(index)) {
-			throw new CommandFailedException(String.format(Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+	public boolean delete(int normalIndex, boolean willUpdateUndo) throws CommandFailedException {
+		if (!this.isValidNormalIndex(normalIndex)) {
+			throw new CommandFailedException(String.format(Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
 		} else {
 			if (willUpdateUndo) {
 				this.updateUndoable();
 			}
-			Task removedTask = this.currentTasks.getNormalTasks().remove(index);
+			Task removedTask = this.currentTasks.getNormalTasks().remove(normalIndex);
 			this.currentTasks.getTrashedTasks().add(removedTask);
 			return DataStore.save(this.currentTasks);
 		}
 	}
+	
+	//@author A0119447Y
+	/**
+	 * deleteAll
+	 * deletes all current tasks
+	 * 
+	 * @throws CommandFailedException
+	 */
+	public boolean deleteAll() throws CommandFailedException {
+		this.updateUndoable();
+		for (int i = this.currentTasks.getNormalTasks().size() - 1; i >= 0; i--) {
+			this.delete(i, false);
+		}
+		return DataStore.save(this.currentTasks);
+	}
 
+	//@author A0119447Y
+	/**
+	 * putBack
+	 * put the trashed tasks back to normal task list
+	 * 
+	 * @param trashedIndex index in trashed list
+	 * @return
+	 * @throws CommandFailedException 
+	 */
+	public boolean putBack(int trashedIndex) throws CommandFailedException {
+		if (!this.isValidTrashedIndex(trashedIndex)) {
+			throw new CommandFailedException(String.format(Constant.INVALID_INDEX_ERROR_MESSAGE, trashedIndex));
+		} else {
+			this.updateUndoable();
+			Task putBackTask = this.currentTasks.getTrashedTasks().remove(trashedIndex);
+			this.currentTasks.getNormalTasks().add(putBackTask);
+			return DataStore.save(this.currentTasks);
+		}
+	}
+		
 	//@author A0119379R
 	@SuppressWarnings("unchecked")
 	public Task getUpdatePreview(int index, HashMap<String, Object> toBeUpdated)
 			throws CommandFailedException {
-		if (!this.isValidIndex(index)) {
+		if (!this.isValidNormalIndex(index)) {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
@@ -162,20 +197,20 @@ public class User {
 	 * update updates the task with the index according to the key-value pairs
 	 * in toBeUpdated.
 	 * 
-	 * @param index
+	 * @param normalIndex
 	 * @param toBeUpdated
 	 *            attributes to be updated
 	 * @throws CommandFailedException
 	 */
 	@SuppressWarnings("unchecked")
-	public void update(int index, HashMap<String, Object> toBeUpdated)
+	public void update(int normalIndex, HashMap<String, Object> toBeUpdated)
 			throws CommandFailedException {
-		if (!this.isValidIndex(index)) {
+		if (!this.isValidNormalIndex(normalIndex)) {
 			throw new CommandFailedException(String.format(
-					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+					Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
 		} else {
 			this.updateUndoable();
-			Task task = this.currentTasks.getNormalTasks().get(index);
+			Task task = this.currentTasks.getNormalTasks().get(normalIndex);
 			Iterator<String> attributes = toBeUpdated.keySet().iterator();
 			while (attributes.hasNext()) {
 				String currentAttribute = attributes.next();
@@ -205,34 +240,19 @@ public class User {
 	 * done
 	 * mark a task as done
 	 * 
-	 * @param index
+	 * @param normalIndex
 	 * @throws CommandFailedException
 	 */
-	public boolean done(int index) throws CommandFailedException {
-		if (!this.isValidIndex(index)) {
+	public boolean done(int normalIndex) throws CommandFailedException {
+		if (!this.isValidNormalIndex(normalIndex)) {
 			throw new CommandFailedException(String.format(
-					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+					Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
 		} else {
 			this.updateUndoable();
-			Task doneTask = this.currentTasks.getNormalTasks().remove(index);
+			Task doneTask = this.currentTasks.getNormalTasks().remove(normalIndex);
 			this.currentTasks.getFinishedTasks().add(doneTask);
 			return DataStore.save(this.currentTasks);
 		}
-	}
-
-	//@author A0119447Y
-	/**
-	 * deleteAll
-	 * deletes all current tasks
-	 * 
-	 * @throws CommandFailedException
-	 */
-	public boolean deleteAll() throws CommandFailedException {
-		this.updateUndoable();
-		for (int i = this.currentTasks.getNormalTasks().size() - 1; i >= 0; i--) {
-			this.delete(i, false);
-		}
-		return DataStore.save(this.currentTasks);
 	}
 	
 	//@author A0119447Y
@@ -248,19 +268,54 @@ public class User {
 
 	//@author A0119444E
 	/**
+	 * retrieveFromNormalList
 	 * 
-	 * @param index
+	 * @param normalIndex
 	 * @return
 	 * @throws CommandFailedException
 	 */
-	public Task retrieve(int index) throws CommandFailedException {
-		if (!this.isValidIndex(index)) {
+	public Task retrieveFromNormalList(int normalIndex) throws CommandFailedException {
+		if (!this.isValidNormalIndex(normalIndex)) {
 			throw new CommandFailedException(String.format(
-					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+					Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
 		} else {
-			return this.currentTasks.getNormalTasks().get(index);
+			return this.currentTasks.getNormalTasks().get(normalIndex);
 		}
 	}
+	
+	//@author A0119444E
+	/**
+	 * retrieveFromTrashedList
+	 * 
+	 * @param trashedIndex
+	 * @return
+	 * @throws CommandFailedException
+	 */
+	public Task retrieveFromTrashedList(int trashedIndex) throws CommandFailedException {
+		if (!this.isValidTrashedIndex(trashedIndex)) {
+			throw new CommandFailedException(String.format(
+					Constant.INVALID_INDEX_ERROR_MESSAGE, trashedIndex));
+		} else {
+			return this.currentTasks.getTrashedTasks().get(trashedIndex);
+		}
+	}
+		
+	//@author A0119444E
+	/**
+	 * retrieveFromFinishedList
+	 * 
+	 * @param finishedIndex
+	 * @return
+	 * @throws CommandFailedException
+	 */
+	public Task retrieveFromFinishedList(int finishedIndex) throws CommandFailedException {
+		if (!this.isValidFinishedIndex(finishedIndex)) {
+			throw new CommandFailedException(String.format(
+					Constant.INVALID_INDEX_ERROR_MESSAGE, finishedIndex));
+		} else {
+			return this.currentTasks.getFinishedTasks().get(finishedIndex);
+		}
+	}	
 
 	//@author A0119444E
 	/**
@@ -280,7 +335,7 @@ public class User {
 			}
 		}
 		return matchedTasks;
-	}	
+	}
 	
 	/**
 	 * ==================================================================================================
@@ -339,18 +394,48 @@ public class User {
 	
 	//@author A0119444E
 	/**
-	 * isValidIndex
+	 * isValidNormalIndex
 	 * 
 	 * @param index
 	 * @return
 	 */
-	private boolean isValidIndex(int index) {
+	private boolean isValidNormalIndex(int index) {
 		if ((index < 0) || (index > this.currentTasks.getNormalTasks().size())) {
 			return false;
 		} else {
 			return true;
 		}
 	}
+	
+	//@author A0119444E
+	/**
+	 * isValidTrashedIndex
+	 * 
+	 * @param index
+	 * @return
+	 */
+	private boolean isValidTrashedIndex(int index) {
+		if ((index < 0) || (index > this.currentTasks.getNormalTasks().size())) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+		
+	//@author A0119444E
+	/**
+	 * isValidFinishedIndex
+	 * 
+	 * @param index
+	 * @return
+	 */
+	private boolean isValidFinishedIndex(int index) {
+		if ((index < 0) || (index > this.currentTasks.getFinishedTasks().size())) {
+			return false;
+		} else {
+			return true;
+		}
+	}	
 	
 	/**
 	 * ==================================================================================================

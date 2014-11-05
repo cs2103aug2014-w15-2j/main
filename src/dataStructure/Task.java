@@ -278,21 +278,6 @@ public class Task {
 	
 	//@author A0119444E
 	/**
-	 * check whether a repeated period is valid
-	 * 
-	 * @param repeatedPeriod
-	 * @return boolean
-	 */
-	private boolean isValidRepeatedPeriod(int repeatedPeriod){
-		if (repeatedPeriod < 1 || repeatedPeriod > 4) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-	
-	//@author A0119444E
-	/**
 	 * check whether a list of tag is valid
 	 * 
 	 * @param tag
@@ -547,6 +532,21 @@ public class Task {
 //			return true;
 //		} else {
 //			return false;
+//		}
+//	}
+	
+	//@author A0119444E
+//	/**
+//	 * check whether a repeated period is valid
+//	 * 
+//	 * @param repeatedPeriod
+//	 * @return boolean
+//	 */
+//	private boolean isValidRepeatedPeriod(int repeatedPeriod){
+//		if (repeatedPeriod < 1 || repeatedPeriod > 4) {
+//			return false;
+//		} else {
+//			return true;
 //		}
 //	}
 }
