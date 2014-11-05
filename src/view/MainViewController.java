@@ -26,8 +26,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -287,12 +291,16 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	
 	//@author A0119447Y
 	public void setDisplayPane(ArrayList<Task> taskList) {
-		VBox displayContent = new VBox();
-		displayContent.setAlignment(Pos.CENTER);
-		displayContent.getChildren().clear();
-		GridPane taskPane = LayoutManager.getTaskPane(taskList, getWidth());
-		displayContent.getChildren().add(taskPane);
-		displayScrollPane.setContent(displayContent);
+		if (taskList != null && taskList.isEmpty()) {
+			this.loadPreview();
+		} else {
+			VBox displayContent = new VBox();
+			displayContent.setAlignment(Pos.CENTER);
+			displayContent.getChildren().clear();
+			GridPane taskPane = LayoutManager.getTaskPane(taskList, getWidth());
+			displayContent.getChildren().add(taskPane);
+			displayScrollPane.setContent(displayContent);
+		}
 	}
 	
 	
@@ -362,7 +370,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
     private void onEnter() {
 		String command = getUserInput(true);
 		if (command.equals("")) {
-			setDisplayPane(this.displayNormal());			
+			this.loadEmptyImage();			
 		} else {
 			this.commandHistory.add(command);
 			this.currentCommandIndex = this.commandHistory.size();
@@ -371,6 +379,16 @@ public class MainViewController extends GridPane implements HotKeyListener{
     }
 
 	
+	private void loadEmptyImage() {
+		HBox emptyImageBox = new HBox();
+		emptyImageBox.setPrefHeight(200);
+		emptyImageBox.setAlignment(Pos.CENTER_RIGHT);
+		Image emptyImage = new Image(getClass().getResourceAsStream("/resource/empty.png"));
+		ImageView emptyImageView = new ImageView(emptyImage);
+		emptyImageView.fitHeightProperty().bind(emptyImageBox.heightProperty());
+		emptyImageBox.getChildren().add(emptyImageView);
+		this.displayScrollPane.setContent(emptyImageBox);
+	}
 	
 	
 
@@ -398,7 +416,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 				return ;
 			}
 
-			thisCommand = this.parser.nerParser.pickCommand(userInput);
+			thisCommand = this.parser.nerParser.pickCommand(userInput.toLowerCase());
 			System.err.println("CMD - executeNER: " + thisCommand);
 
 			switch(thisCommand) {
@@ -489,7 +507,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 				return "The expected result will be shown here";
 			}
 			
-			COMMAND_TYPE thisCommand = this.parser.nerParser.pickCommand(userInput);
+			COMMAND_TYPE thisCommand = this.parser.nerParser.pickCommand(userInput.toLowerCase());
 			System.err.println("CMD - getPreview: " + thisCommand);
 			
 			switch(thisCommand) {
@@ -745,8 +763,8 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		try {
 			queryResult = this.user.getNormalTaskList();
 			if (queryResult.isEmpty()) {
-				setDisplayText(Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK);
-				// TODO: create a box for empty list
+				System.out.println("displaying image");
+				this.loadEmptyImage();
 				return null;
 			} else {
 				return queryResult;
