@@ -31,7 +31,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -653,7 +652,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			String returnValue = "Command: done \n\n";
 			
 			for (int index : indices) {
-				Task taskToFinish = this.user.retrieve(index - 1);
+				Task taskToFinish = this.user.retrieveFromNormalList(index - 1);
 				returnValue += (index + ": " + taskToFinish.getDescription() + "\n");
 			}
 			return returnValue;
@@ -687,7 +686,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			String returnValue = "Command: delete \n\n";
 			
 			for (int index : indices) {
-				Task taskToDelete = this.user.retrieve(index - 1);
+				Task taskToDelete = this.user.retrieveFromNormalList(index - 1);
 				returnValue += (index + ": " + taskToDelete.getDescription() + "\n");
 			}
 			return returnValue;
