@@ -19,7 +19,6 @@ public class Converter {
 	public static LinkedHashMap convertTaskToMap(Task task) {
 		LinkedHashMap taskMap = new LinkedHashMap();
 		
-		taskMap.put("task-id", task.getTaskId());
 		taskMap.put("description", task.getDescription());
 		taskMap.put("status", task.getStatus());
 		

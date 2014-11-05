@@ -2,7 +2,6 @@
 
 package dataStore;
 
-import infrastructure.Constant;
 import infrastructure.Converter;
 
 import java.io.File;
