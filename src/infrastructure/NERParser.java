@@ -305,11 +305,11 @@ public class NERParser {
 		if (directParseTag != null) {
 			this.isTagChanged = true;
 			ArrayList<String> results = new ArrayList<String>();
-			
-			String[] stringArrayNoSpace = directParseTag.split(" ");
-			for (String s : stringArrayNoSpace) {
-				results.add(s.trim());
-			}
+			results.add(directParseTag);
+//			String[] stringArrayNoSpace = directParseTag.split(" ");
+//			for (String s : stringArrayNoSpace) {
+//				results.add(s.trim());
+//			}
 			
 			return parseTag(results);
 		}
@@ -375,6 +375,7 @@ public class NERParser {
 	public static String pickTheTagged(String inputString, String type) {
 		String prefix = "<" + type + ">";
 		String postfix = "</" + type + ">";
+		
 		int prefixIndex = inputString.indexOf(prefix);
 		int postfixIndex = inputString.indexOf(postfix);
 
@@ -384,6 +385,7 @@ public class NERParser {
 		if (prefixIndex == -1 || postfixIndex == -1) {
 			return null;
 		} else {
+			System.out.println(inputString);
 			return inputString.substring(prefixIndex + prefix.length(),
 					postfixIndex);
 		}
@@ -434,8 +436,9 @@ public class NERParser {
 		isPriorityModelUpdate = false;
 		isCommandModelUpdate = false;
 		
+		
+		
 		for (Pair<String, String> p : wordPairs) {
-			System.err.println("demux: " + p.tail);
 			switch (p.tail) {
 			case Constant.XML_TAG_TIME:
 				Pair<String, String> trivialPair1 = new Pair<String, String>(p.head, Constant.XML_TAG_DEFAULT);
@@ -537,8 +540,11 @@ public class NERParser {
 	 * @return
 	 */
 	public static ArrayList<Pair<String, String>> interpretXML(String xmlString) {
-		xmlString = xmlString.replaceAll("<", " <");
-		xmlString = xmlString.replaceAll(">", "> ");
+		
+		System.out.println("\n\n original: " + xmlString);
+		xmlString = tokenize(xmlString);
+		
+		System.out.println("\n\n\n\n\n\n xmlString: interpretXML: " + xmlString + "\n\n\n\n");
 
 		String[] wordArray = xmlString.split(" ");
 		ArrayList<Pair<String, String>> wordPairs = new ArrayList<Pair<String, String>>();
@@ -546,6 +552,7 @@ public class NERParser {
 		String currentKey = Constant.XML_TAG_DEFAULT;
 
 		for (String currentWord : wordArray) {
+			
 			if (currentWord.contains("</") && currentWord.contains(">")
 					&& currentWord.indexOf(">") > currentWord.indexOf("</")) {
 				currentKey = Constant.XML_TAG_DEFAULT;
@@ -568,6 +575,21 @@ public class NERParser {
 
 		return wordPairs;
 	}
+
+	private static String tokenize(String xmlString) {
+		String[] symbols = {",", "\\.", ":", ";", 
+				"\"", "'", "@", "!", "&", "\\^", "~", "`", 
+				"#", "%", "-"};
+		
+		xmlString = xmlString.replaceAll("<", " <");
+		xmlString = xmlString.replaceAll(">", "> ");
+		
+		for (String s : symbols) {
+			xmlString = xmlString.replaceAll(s, " " + s + " ");
+		}
+		
+		return xmlString;
+	}
 	
 	/**
 	 * update the specific file
@@ -579,6 +601,8 @@ public class NERParser {
 	public static void updateTsvFile(ArrayList<Pair<String, String>> list,
 			String filePath) throws IOException {
 
+		System.out.println("write to file path: " + filePath);
+		
 		FileWriter fw = new FileWriter(new File(filePath), true);
 		BufferedWriter bw = new BufferedWriter(fw);
 
@@ -694,11 +718,24 @@ public class NERParser {
 	 * @throws CommandFailedException
 	 */
 
-	public Task getTask(String userInputString) throws CommandFailedException {
+	public Task getTask(String userInputString) {
 
-		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
+		TimeInterval timeInterval;
+		try {
+			timeInterval = this.pickTimeInterval(userInputString);
+		} catch (CommandFailedException e) {
+			timeInterval = new TimeInterval();
+		}
+		
+		String description;
+		try {
+			description = this.pickDescription(userInputString);
+		} catch (CommandFailedException e) {
+			description = "";
+		}
+		
 		ArrayList<String> tag = this.pickTag(userInputString);
-		String description = this.pickDescription(userInputString);
+		
 		int priority = this.pickPriority(userInputString);
 		
 		if (tag.isEmpty()) {
