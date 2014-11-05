@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import reference.CommandFailedException;
+import reference.TaskBox;
 import reference.TimeInterval;
 import dataStructure.Task;
 import infrastructure.Constant;
@@ -86,17 +87,20 @@ public class DataStoreTest {
 			Date endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
 					Locale.ENGLISH).parse("29-Nov-2014 12:00");
 			TimeInterval time = new TimeInterval(startDate, endDate);
-			Task task1 = new Task("task1", "category1", Constant.PRIORITY_HIGH,
-					Constant.REPEATED_PERIOD_DAILY, tags, time);
-			Task task2 = new Task("task2", "category2", Constant.PRIORITY_LOW,
-					Constant.REPEATED_PERIOD_NONE, tags, time);
+			Task task1 = new Task("task1", Constant.PRIORITY_HIGH, tags, time);
+			task1.setStatus("normal");
+			Task task2 = new Task("task2", Constant.PRIORITY_LOW, tags, time);
+			task2.setStatus("done");
+			Task task3 = new Task("task3", Constant.PRIORITY_MEDIUM, tags, time);
+			task3.setStatus("trashed");
 			
-			ArrayList<Task> tasks = new ArrayList<Task>();
-			tasks.add(task1);
-			tasks.add(task2);
+			TaskBox tasks = new TaskBox();
+			tasks.getNormalTasks().add(task1);
+			tasks.getFinishedTasks().add(task2);
+			tasks.getTrashedTasks().add(task3);
 			
 			assertTrue(DataStore.save(tasks));
-			checkDataFileTC2(task1, task2);
+			checkDataFileTC2();
 		} catch (ParseException | CommandFailedException | IOException e) {
 			System.out.println("failed in testing");
 		}
@@ -117,30 +121,36 @@ public class DataStoreTest {
 	public void testLoadFile() {
 		try {
 			writeDataTC1();
-			ArrayList<Task> tasks = DataStore.loadFileData();
+			TaskBox tasks = DataStore.loadFileData();
 			
 			Date startDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
 					Locale.ENGLISH).parse("29-Nov-2014 10:00");
 			Date endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
 					Locale.ENGLISH).parse("29-Nov-2014 12:00");
 			
-			assertEquals("1", tasks.get(0).getTaskId());
-			assertEquals("task1", tasks.get(0).getDescription());
-			assertEquals("category1", tasks.get(0).getCategory());
-			assertEquals("tag1", tasks.get(0).getTag().get(0));
-			assertEquals("tag2", tasks.get(0).getTag().get(1));
-			assertEquals(Constant.PRIORITY_HIGH, tasks.get(0).getPriority());
-			assertEquals(startDate, tasks.get(0).getInterval().getStartDate());
-			assertEquals(endDate, tasks.get(0).getInterval().getEndDate());
+			assertEquals("task1", tasks.getNormalTasks().get(0).getDescription());
+			assertEquals("normal", tasks.getNormalTasks().get(0).getStatus());
+			assertEquals("tag1", tasks.getNormalTasks().get(0).getTag().get(0));
+			assertEquals("tag2", tasks.getNormalTasks().get(0).getTag().get(1));
+			assertEquals(Constant.PRIORITY_HIGH, tasks.getNormalTasks().get(0).getPriority());
+			assertEquals(startDate, tasks.getNormalTasks().get(0).getInterval().getStartDate());
+			assertEquals(endDate, tasks.getNormalTasks().get(0).getInterval().getEndDate());
 			
-			assertEquals("2", tasks.get(1).getTaskId());
-			assertEquals("task2", tasks.get(1).getDescription());
-			assertEquals("category2", tasks.get(1).getCategory());
-			assertEquals("tag1", tasks.get(1).getTag().get(0));
-			assertEquals("tag2", tasks.get(1).getTag().get(1));
-			assertEquals(Constant.PRIORITY_LOW, tasks.get(1).getPriority());
-			assertEquals(startDate, tasks.get(1).getInterval().getStartDate());
-			assertEquals(endDate, tasks.get(1).getInterval().getEndDate());
+			assertEquals("task2", tasks.getFinishedTasks().get(0).getDescription());
+			assertEquals("done", tasks.getFinishedTasks().get(0).getStatus());
+			assertEquals("tag1", tasks.getFinishedTasks().get(0).getTag().get(0));
+			assertEquals("tag2", tasks.getFinishedTasks().get(0).getTag().get(1));
+			assertEquals(Constant.PRIORITY_LOW, tasks.getFinishedTasks().get(0).getPriority());
+			assertEquals(startDate, tasks.getFinishedTasks().get(0).getInterval().getStartDate());
+			assertEquals(endDate, tasks.getFinishedTasks().get(0).getInterval().getEndDate());
+			
+			assertEquals("task3", tasks.getTrashedTasks().get(0).getDescription());
+			assertEquals("trashed", tasks.getTrashedTasks().get(0).getStatus());
+			assertEquals("tag1", tasks.getTrashedTasks().get(0).getTag().get(0));
+			assertEquals("tag2", tasks.getTrashedTasks().get(0).getTag().get(1));
+			assertEquals(Constant.PRIORITY_MEDIUM, tasks.getTrashedTasks().get(0).getPriority());
+			assertEquals(startDate, tasks.getTrashedTasks().get(0).getInterval().getStartDate());
+			assertEquals(endDate, tasks.getTrashedTasks().get(0).getInterval().getEndDate());
 			
 		} catch (Exception e) {
 			System.out.println("failed in testing");
@@ -153,11 +163,9 @@ public class DataStoreTest {
 		bw.newLine();
 		bw.write("{");
 		bw.newLine();
-		bw.write("\"task-id\":\"1\",");
-		bw.newLine();
 		bw.write("\"description\":\"task1\",");
 		bw.newLine();
-		bw.write("\"category\":\"category1\",");
+		bw.write("\"status\":\"normal\",");
 		bw.newLine();
 		bw.write("\"tags\":[");
 		bw.newLine();
@@ -166,8 +174,6 @@ public class DataStoreTest {
 		bw.write("\"tag2\"");
 		bw.newLine();
 		bw.write("],");
-		bw.newLine();
-		bw.write("\"repeated-period\":\"daily\",");
 		bw.newLine();
 		bw.write("\"priority\":\"high\",");
 		bw.newLine();
@@ -184,11 +190,9 @@ public class DataStoreTest {
 		
 		bw.write("{");
 		bw.newLine();
-		bw.write("\"task-id\":\"2\",");
-		bw.newLine();
 		bw.write("\"description\":\"task2\",");
 		bw.newLine();
-		bw.write("\"category\":\"category2\",");
+		bw.write("\"status\":\"done\",");
 		bw.newLine();
 		bw.write("\"tags\":[");
 		bw.newLine();
@@ -197,8 +201,6 @@ public class DataStoreTest {
 		bw.write("\"tag2\"");
 		bw.newLine();
 		bw.write("],");
-		bw.newLine();
-		bw.write("\"repeated-period\":\"none\",");
 		bw.newLine();
 		bw.write("\"priority\":\"low\",");
 		bw.newLine();
@@ -210,26 +212,51 @@ public class DataStoreTest {
 		bw.newLine();
 		bw.write("}");
 		bw.newLine();
+		bw.write("},");
+		bw.newLine();
+		
+		bw.write("{");
+		bw.newLine();
+		bw.write("\"description\":\"task3\",");
+		bw.newLine();
+		bw.write("\"status\":\"trashed\",");
+		bw.newLine();
+		bw.write("\"tags\":[");
+		bw.newLine();
+		bw.write("\"tag1\",");
+		bw.newLine();
+		bw.write("\"tag2\"");
+		bw.newLine();
+		bw.write("],");
+		bw.newLine();
+		bw.write("\"priority\":\"medium\",");
+		bw.newLine();
+		bw.write("\"time-interval\":{");
+		bw.newLine();
+		bw.write("\"startDate\":\"29-November-2014 10:00\",");
+		bw.newLine();
+		bw.write("\"endDate\":\"29-November-2014 12:00\"");
+		bw.newLine();
 		bw.write("}");
 		bw.newLine();
-		bw.write("]");
+		bw.write("}");
+		bw.newLine();
 		
+		bw.write("]");
 		bw.close();
 	}
 	
-	private void checkDataFileTC2(Task task1, Task task2)
+	private void checkDataFileTC2()
 			throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(fileData));
 		assertEquals("[", br.readLine());
 		assertEquals("{", br.readLine().trim());
-		assertEquals("\"task-id\":\"" + task1.getTaskId() + "\",", br.readLine().trim());
 		assertEquals("\"description\":\"task1\",", br.readLine().trim());
-		assertEquals("\"category\":\"category1\",", br.readLine().trim());
+		assertEquals("\"status\":\"normal\",", br.readLine().trim());
 		assertEquals("\"tags\":[", br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());
 		assertEquals("\"tag2\"", br.readLine().trim());
 		assertEquals("],", br.readLine().trim());
-		assertEquals("\"repeated-period\":\"daily\",", br.readLine().trim());
 		assertEquals("\"priority\":\"high\",", br.readLine().trim());
 		assertEquals("\"time-interval\":{", br.readLine().trim());
 		assertEquals("\"startDate\":\"29-November-2014 10:00\",", br.readLine().trim());
@@ -238,15 +265,27 @@ public class DataStoreTest {
 		assertEquals("},", br.readLine().trim());
 		
 		assertEquals("{", br.readLine().trim());
-		assertEquals("\"task-id\":\"" + task2.getTaskId() + "\",", br.readLine().trim());
 		assertEquals("\"description\":\"task2\",", br.readLine().trim());
-		assertEquals("\"category\":\"category2\",", br.readLine().trim());
+		assertEquals("\"status\":\"done\",", br.readLine().trim());
 		assertEquals("\"tags\":[", br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());
 		assertEquals("\"tag2\"", br.readLine().trim());
 		assertEquals("],", br.readLine().trim());
-		assertEquals("\"repeated-period\":\"none\",", br.readLine().trim());
 		assertEquals("\"priority\":\"low\",", br.readLine().trim());
+		assertEquals("\"time-interval\":{", br.readLine().trim());
+		assertEquals("\"startDate\":\"29-November-2014 10:00\",", br.readLine().trim());
+		assertEquals("\"endDate\":\"29-November-2014 12:00\"", br.readLine().trim());
+		assertEquals("}", br.readLine().trim());
+		assertEquals("},", br.readLine().trim());
+
+		assertEquals("{", br.readLine().trim());
+		assertEquals("\"description\":\"task3\",", br.readLine().trim());
+		assertEquals("\"status\":\"trashed\",", br.readLine().trim());
+		assertEquals("\"tags\":[", br.readLine().trim());
+		assertEquals("\"tag1\",", br.readLine().trim());
+		assertEquals("\"tag2\"", br.readLine().trim());
+		assertEquals("],", br.readLine().trim());
+		assertEquals("\"priority\":\"medium\",", br.readLine().trim());
 		assertEquals("\"time-interval\":{", br.readLine().trim());
 		assertEquals("\"startDate\":\"29-November-2014 10:00\",", br.readLine().trim());
 		assertEquals("\"endDate\":\"29-November-2014 12:00\"", br.readLine().trim());
