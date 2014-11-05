@@ -752,12 +752,22 @@ public class NERParser {
 	 * @return
 	 * @throws CommandFailedException
 	 */
-	public HashMap<String, Object> getUpdatedTaskMap(String userInputString)
-			throws CommandFailedException {
+	public HashMap<String, Object> getUpdatedTaskMap(String userInputString) {
 
-		TimeInterval timeInterval = this.pickTimeInterval(userInputString);
+		TimeInterval timeInterval;
+		try {
+			timeInterval = this.pickTimeInterval(userInputString);
+		} catch (CommandFailedException e) {
+			timeInterval = new TimeInterval();
+			this.isTimeChanged = false;
+		}
 		ArrayList<String> tag = this.pickTag(userInputString);
-		String description = this.pickDescription(userInputString);
+		String description;
+		try {
+			description = this.pickDescription(userInputString);
+		} catch (CommandFailedException e) {
+			description = "";
+		}
 		int priority = this.pickPriority(userInputString);
 
 		HashMap<String, Object> updateAttributes = new HashMap<String, Object>();
@@ -803,10 +813,11 @@ public class NERParser {
 			if (timeInterval.equals(new TimeInterval())) {
 				keyword = UtilityMethod.removeFirstWord(userInputString);
 			}
-
-			return new Constraint(keyword, timeInterval);
+			String[] keywords = keyword.split(" ");
+			return new Constraint(keywords, timeInterval);
 		} catch (CommandFailedException e) {
-			return new Constraint(UtilityMethod.removeFirstWord(userInputString), new TimeInterval());
+			String[] keywords = UtilityMethod.removeFirstWord(userInputString).split(" ");
+			return new Constraint(keywords, new TimeInterval());
 		}
 
 	}

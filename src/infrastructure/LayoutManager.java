@@ -20,7 +20,7 @@ import dataStructure.Task;
 
 public class LayoutManager {
 
-	//author A0119379R
+	//@author A0119379R
 	public static GridPane getTagPaneForTask(Task task) {
 		GridPane tagPane = new GridPane();
 		tagPane.setStyle(Constant.CSS_STYLE_TAG_PANE);
@@ -43,12 +43,17 @@ public class LayoutManager {
 		return tagPane;
 	}
 
-	//author A0119447Y
+	//@author A0119447Y
 	public static GridPane getTaskPane(ArrayList<Task> taskList, double width) {
 		GridPane taskPane = new GridPane();
-		int row = 0;
+		int row = 1;
 		int index = 1;
 		taskPane.getColumnConstraints().add(new ColumnConstraints(5));
+		
+		GridPane placeHolderPane = LayoutManager.getEmptyPane(width);
+		taskPane.add(placeHolderPane, 1, 0, 2, 1);
+		LayoutManager.setDisplayRow(taskPane, Constant.GRID_ROW_HEIGHT / 2);
+		
 		if (taskList != null) {
 			for (Task task : taskList) {
 				int subRow = 0;
@@ -78,7 +83,7 @@ public class LayoutManager {
 		return taskPane;
 	}
 
-	//author A0119379R
+	//@author A0119379R
 	public static GridPane getEmptyPane(double width) {
 		GridPane emptyPane = new GridPane();
 		emptyPane.setStyle(Constant.CSS_STYLE_EMPTY_PANE);
@@ -86,7 +91,7 @@ public class LayoutManager {
 		return emptyPane;
 	}
 
-	//author A0119379R
+	//@author A0119379R
 	public static GridPane getContentPane(Task task, double width) {
 		String bodyColor = LayoutManager.getBodyColor(task);
 		GridPane contentPane = LayoutManager.getContentPane(bodyColor, width);
@@ -101,7 +106,7 @@ public class LayoutManager {
 		LayoutManager.setDisplayRow(contentPane, Constant.GRID_ROW_HEIGHT);
 		subRow ++;
 		
-		HBox timeBox = LayoutManager.getTimePaneForTask(task);
+		HBox timeBox = LayoutManager.getTimeBoxForTask(task);
 		if (timeBox != null) {
 			contentPane.add(timeBox, 1, 0, 2, 2);
 		}
@@ -113,7 +118,7 @@ public class LayoutManager {
 		return contentPane;
 	}
 
-	//author A0119447Y
+	//@author A0119447Y
 	public static String getBodyColor(Task task) {
 		switch (task.getPriority()) {
 			case Constant.PRIORITY_HIGH:
@@ -130,7 +135,7 @@ public class LayoutManager {
 		}
 	}
 
-	//author A0119447Y
+	//@author A0119447Y
 	public static String getBannerColor(Task task) {
 		switch (task.getPriority()) {
 			case Constant.PRIORITY_HIGH:
@@ -147,19 +152,21 @@ public class LayoutManager {
 		}
 	}
 
-	//author A0119447Y
+	//@author A0119447Y
 	public static GridPane getPriorityPane(String bannerColor, int index, double width) {
 		GridPane priorityPane = new GridPane();
+		priorityPane.setAlignment(Pos.CENTER_RIGHT);
 		priorityPane.setStyle(String.format(Constant.CSS_STYLE_PRIORITY_PANE, bannerColor));
 		priorityPane.setPrefWidth(width);
-		Label priorityLabel = new Label(index + "");
+		
+		Label priorityLabel = new Label(String.format("%d", index));
 		priorityLabel.setStyle(Constant.CSS_STYLE_PRIORITY_LABEL);
 		priorityLabel.setPrefWidth(width);
-		priorityPane.add(priorityLabel, 0, 0);
+		priorityPane.getChildren().add(priorityLabel);
 		return priorityPane;
 	}
 
-	//author A0119379R
+	//@author A0119379R
 	public static Label getDescriptionLabel(Task task, double width) {
 		Label descriptionLabel = new Label(task.getDescription());
 		descriptionLabel.setStyle(Constant.CSS_STYLE_DESCRIPTION_LABEL);
@@ -167,7 +174,7 @@ public class LayoutManager {
 		return descriptionLabel;
 	}
 
-	//author A0119447Y
+	//@author A0119447Y
 	public static GridPane getContentPane(String bodyColor, double width) {
 		GridPane contentPane = new GridPane();
 		contentPane.setGridLinesVisible(false);
@@ -178,8 +185,8 @@ public class LayoutManager {
 		return contentPane;
 	}
 
-	//author A0119379R
-	public static HBox getTimePaneForTask(Task task) {
+	//@author A0119379R
+	public static HBox getTimeBoxForTask(Task task) {
 		TimeInterval timeInterval = task.getInterval();
 		HBox overallTimeBox = new HBox();
 		overallTimeBox.setAlignment(Pos.CENTER_RIGHT);
@@ -205,7 +212,7 @@ public class LayoutManager {
 		}
 	}
 
-	//author A0119379R
+	//@author A0119379R
 	public static HBox getTimeBox(Date date) {
 		
 		HBox timeBox = new HBox();
@@ -231,7 +238,7 @@ public class LayoutManager {
 		return timeBox;
 	}
 
-	//author A0119379R
+	//@author A0119379R
 	public static HBox getDeadlineBox(Date date) {
 		HBox timeBox = new HBox();
 		VBox dateBox = new VBox();

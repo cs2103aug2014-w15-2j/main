@@ -595,3 +595,50 @@ low	O
 tag	O
 with	O
 water	O
+
+
+add	O
+abbrecadebra	DESCRIPTION
+tag	O
+with	O
+important	O
+
+
+add	O
+I	DESCRIPTION
+think	DESCRIPTION
+you	DESCRIPTION
+can	DESCRIPTION
+eat	DESCRIPTION
+shit	DESCRIPTION
+first	DESCRIPTION
+
+
+add	O
+finish	DESCRIPTION
+cs2103	DESCRIPTION
+v0	DESCRIPTION
+.	DESCRIPTION
+5	DESCRIPTION
+by	O
+next	O
+Monday	O
+
+
+addd	O
+swimming	DESCRIPTION
+
+
+addd	O
+sha	DESCRIPTION
+wan	DESCRIPTION
+yi	DESCRIPTION
+er	DESCRIPTION
+
+
+addd	O
+cheer	DESCRIPTION
+
+
+addd	O
+b	DESCRIPTION

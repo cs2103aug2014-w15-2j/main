@@ -145,6 +145,8 @@ public class Parser {
 		return updateAttributes;
 	}
 	
+	
+	//@author A0119379R-unused
 	public Task getTaskFromParameterList(ArrayList<String> parameterList) throws CommandFailedException {
 		TimeInterval timeInterval = new TimeInterval();
 //		String category = null; 
@@ -156,9 +158,7 @@ public class Parser {
 //		parameterList.remove(0);
 		
 		boolean hasTime = false;
-		boolean hasCategory = false;
 		boolean hasPriority = false;
-		boolean hasRepeatedPeriod = false;
 		
 		for (String parameter: parameterList) {
 			String key = UtilityMethod.getFirstWord(parameter);
@@ -258,20 +258,6 @@ public class Parser {
 			return Constant.PRIORITY_LOW;
 		} else {
 			return Constant.PRIORITY_INVALID;
-		}
-	}
-
-	private static int parseRepeatedPeriod(String parameter) {
-		if (parameter.equalsIgnoreCase("none")) {
-			return Constant.REPEATED_PERIOD_NONE;
-		} else if (parameter.equalsIgnoreCase("daily")) {
-			return Constant.REPEATED_PERIOD_DAILY;
-		} else if (parameter.equalsIgnoreCase("weekly")) {
-			return Constant.REPEATED_PERIOD_WEEKLY;
-		} else if (parameter.equalsIgnoreCase("monthly")) {
-			return Constant.REPEATED_PERIOD_MONTHLY;
-		} else {
-			return Constant.REPEATED_PERIOD_INVALID;
 		}
 	}
 }

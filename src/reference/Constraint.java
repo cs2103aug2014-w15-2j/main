@@ -2,14 +2,13 @@ package reference;
 
 import infrastructure.Constant;
 import infrastructure.UtilityMethod;
-
 import java.util.Date;
 import java.util.Iterator;
 
 import dataStructure.Task;
 
 public class Constraint {
-	public String keyword;
+	public String[] keywords;
 	public TimeInterval interval;
 
 	/**
@@ -21,21 +20,21 @@ public class Constraint {
 	 * @throws Exception
 	 */
 	//@author A0119447Y
-	public Constraint(String keyword, Date startDate, Date endDate)
+	public Constraint(String[] keyword, Date startDate, Date endDate)
 			throws Exception {
-		this.keyword = keyword.toLowerCase();
+		this.keywords = keyword;
 		this.interval = new TimeInterval(startDate, endDate);
 	}
 
 	//@author A0119447Y
-	public Constraint(String keyword, TimeInterval timeInterval) {
-		this.keyword = keyword.toLowerCase();
+	public Constraint(String[] keyword, TimeInterval timeInterval) {
+		this.keywords = keyword;
 		this.interval = timeInterval;
 	}
 
 	//@author A0119447Y
 	public Constraint() {
-		this.keyword = "";
+		this.keywords = null;
 		this.interval = new TimeInterval();
 	}
 
@@ -52,15 +51,9 @@ public class Constraint {
 		boolean isKeywordMatched = false;
 		boolean isIntervalMatched = false;
 		boolean isPriorityMatched = false;
-		boolean isSearchingTrashed = false;
 		boolean isSearchingDeadline = false;
 		boolean isSearchingFloating = false;
-		boolean isTrashedTask = false;
-
-		if (this.keyword.contains("trash")) {
-			isSearchingTrashed = true;
-		}
-
+		
 		// if constraint's time interval is a deadline
 		if (this.interval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 			isSearchingDeadline = true;
@@ -69,35 +62,7 @@ public class Constraint {
 		if (this.interval.getStartDate().equals(Constant.FLOATING_START_DATE)) {
 			isSearchingFloating = true;
 		}
-
 		
-		if (!keyword.equals("")) {
-			// test description
-			if (task.getDescription().toLowerCase().contains(this.keyword)) {
-				isKeywordMatched = true;
-			}
-			
-			// test priority
-			if (UtilityMethod.priorityToString(task.getPriority()).contains(
-					this.keyword)) {
-				isPriorityMatched = true;
-			}
-			
-			// test tag
-			Iterator<String> tagIterator = task.getTag().iterator();
-			while (tagIterator.hasNext()) {
-				String tag = tagIterator.next();
-				if (tag.toLowerCase().contains(this.keyword)) {
-					isKeywordMatched = true;
-				}
-			}
-		}
-
-		// test trashed
-		if (task.isTrashed()) {
-			isTrashedTask = true;
-		}
-
 		// test interval
 		if (isSearchingDeadline) {
 			if (this.interval.getEndDate().after(
@@ -122,9 +87,37 @@ public class Constraint {
 		} else {
 			// search floating
 		}
+		
+		if (this.keywords != null) {
+			for (String keyword : keywords) {
+				if (!keyword.equals("")) {
+					// test description
+					if (task.getDescription().toLowerCase().contains(keyword)) {
+						isKeywordMatched = true;
+						break;
+					}
+					
+					// test priority
+					if (UtilityMethod.priorityToString(task.getPriority()).equals(
+							keyword)) {
+						isPriorityMatched = true;
+						break;
+					}
+					
+					// test tag
+					Iterator<String> tagIterator = task.getTag().iterator();
+					while (tagIterator.hasNext()) {
+						String tag = tagIterator.next();
+						if (tag.toLowerCase().contains(keyword)) {
+							isKeywordMatched = true;
+							break;
+						}
+					}
+				}
+			}
+		}
 
-		boolean result = ((isIntervalMatched || isKeywordMatched || isPriorityMatched) && !isTrashedTask)
-				|| (isSearchingTrashed && isTrashedTask);
+		boolean result = (isIntervalMatched || isKeywordMatched || isPriorityMatched);
 		return result;
 	}
 
@@ -138,8 +131,18 @@ public class Constraint {
 			result += "Time: " + this.interval.toString() + "\n";
 		}
 
-		if (this.keyword != null && !this.keyword.equals("")) {
-			result += "Keyword: \n\t" + this.keyword;
+		if (this.keywords != null && !this.keywords.equals("")) {
+			result += "Keyword: \n\t";
+			
+			boolean isFirstLine = true;
+			for (String keyword : this.keywords) {
+				if (isFirstLine) {
+					isFirstLine = false;
+				} else {
+					result += ", ";
+				}
+				result += keyword;
+			}
 		}
 
 		return result.equals("") ? "[No Specific Constraint]" : result;
