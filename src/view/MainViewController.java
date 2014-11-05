@@ -210,6 +210,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		});
 	}
 
+	//author A0119379R
 	private void silentErrorStream() {
 		System.setErr(new PrintStream(new OutputStream() {
 			public void write(int b) {
@@ -295,12 +296,12 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	}
 	
 	
-	//@author A0119379R
 	/**
 	 * insert the given text to the given position in the textField
 	 * @param cursorPosition
 	 * @param text
 	 */
+	//author A0119379R
 	private void insertTextIntoTextField(final int cursorPosition, final String text) {
 		//open a new thread to execute Java FX
 		final MainViewController instance = this;
@@ -361,7 +362,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
     private void onEnter() {
 		String command = getUserInput(true);
 		if (command.equals("")) {
-			setDisplayPane(this.display());			
+			setDisplayPane(this.displayNormal());			
 		} else {
 			this.commandHistory.add(command);
 			this.currentCommandIndex = this.commandHistory.size();
@@ -403,17 +404,17 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			switch(thisCommand) {
 				case ADD:
 					setPreviewText(this.add(userInput));
-					setDisplayPane(this.display());
+					setDisplayPane(this.displayNormal());
 					break;
 					
 				case DELETE:
 					setPreviewText(this.delete(userInput));
-					setDisplayPane(this.display());
+					setDisplayPane(this.displayNormal());
 					break;
 					
 				case UPDATE:
 					setPreviewText(this.update(userInput));
-					setDisplayPane(this.display());
+					setDisplayPane(this.displayNormal());
 					break;
 					
 				case SEARCH:
@@ -424,7 +425,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 					break;
 				
 				case DISPLAY:
-					ArrayList<Task> listToDisplay = this.display();
+					ArrayList<Task> listToDisplay = this.displayNormal();
 					if (listToDisplay != null) {
 						setDisplayPane(listToDisplay);
 					}
@@ -432,17 +433,17 @@ public class MainViewController extends GridPane implements HotKeyListener{
 					
 				case UNDO:
 					setPreviewText(this.undo());
-					setDisplayPane(this.display());
+					setDisplayPane(this.displayNormal());
 					break;
 					
 				case REDO:
 					setPreviewText(this.redo());
-					setDisplayPane(this.display());
+					setDisplayPane(this.displayNormal());
 					break;
 					
 				case CLEAR:
 					setPreviewText(this.clear());
-					setDisplayPane(this.display());
+					setDisplayPane(this.displayNormal());
 					break;
 					
 				case EXIT:
@@ -457,17 +458,17 @@ public class MainViewController extends GridPane implements HotKeyListener{
 					
 				case EMPTY_TRASH:
 					setPreviewText(this.emptyTrash());
-					setDisplayPane(this.display());
+					setDisplayPane(this.displayNormal());
 					break;
 					
 				case RELOAD:
 					setPreviewText(this.reloadNLPModel());
-					setDisplayPane(this.display());
+					setDisplayPane(this.displayNormal());
 					break;
 					
 				case DONE:
 					setPreviewText(this.done(userInput));
-					setDisplayPane(this.display());
+					setDisplayPane(this.displayNormal());
 					break;
 					
 				default:
@@ -747,10 +748,50 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	}
 
 	//author A0119379R
-	private ArrayList<Task> display() {
+	private ArrayList<Task> displayNormal() {
 		ArrayList<Task> queryResult;
 		try {
-			queryResult = this.user.getTaskList();
+			queryResult = this.user.getNormalTaskList();
+			if (queryResult.isEmpty()) {
+				setDisplayText(Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK);
+				// TODO: create a box for empty list
+				return null;
+			} else {
+				return queryResult;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			setPreviewText(Constant.PROMPT_MESSAGE_DISPLAY_ERROR);
+			return null;
+		}
+	}
+	
+	//author A0119447Y
+	private ArrayList<Task> displayTrashed() {
+		ArrayList<Task> queryResult;
+		try {
+			queryResult = this.user.getTrashedTaskList();
+			if (queryResult.isEmpty()) {
+				setDisplayText(Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK);
+				// TODO: create a box for empty list
+				return null;
+			} else {
+				return queryResult;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			setPreviewText(Constant.PROMPT_MESSAGE_DISPLAY_ERROR);
+			return null;
+		}
+	}
+	
+	//author A0119447Y
+	private ArrayList<Task> displayFinished() {
+		ArrayList<Task> queryResult;
+		try {
+			queryResult = this.user.getFinishedTaskList();
 			if (queryResult.isEmpty()) {
 				setDisplayText(Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK);
 				// TODO: create a box for empty list
@@ -768,7 +809,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	
 	//author A0119379R
 	private String emptyTrash() {
-		this.user.clear();
+		this.user.emptyTrash();
 		return Constant.PROMPT_MESSAGE_TRASH_EMPTIED;
 	}
 	
@@ -855,11 +896,11 @@ public class MainViewController extends GridPane implements HotKeyListener{
  * the delegation methods to respond to shortcuts
  * ==========================================================================
  */
+	//author A0119447Y
 	@Override
 	public void onHotKey(HotKey key) {
 		String tag = "";
 		int cursorPosition = this.input.getCaretPosition();
-		//@author A0119379R
 		switch (key.keyStroke.getKeyCode() + key.keyStroke.getModifiers()) {
 			case KeyEvent.VK_D + Constant.MODIFIER_ALT:
 				descriptionTag = toggleTag(descriptionTag);
@@ -931,7 +972,6 @@ public class MainViewController extends GridPane implements HotKeyListener{
 				break;
 		}
 		
-		//author A0119447Y
 		switch (key.keyStroke.getKeyCode()) {
 			case KeyEvent.VK_UP:
 				this.currentCommandIndex --;
