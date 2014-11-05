@@ -156,17 +156,21 @@ public class User {
 	 * deletes the task with the index from the task list.
 	 * 
 	 * @param index
+	 * @param willSave
 	 * @throws CommandFailedException
 	 */
-	public boolean delete(int index) throws CommandFailedException {
+	public boolean delete(int index, boolean willSave) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			this.updateUndoable();
 			Task removedTask = this.currentTasks.getNormalTasks().remove(index);
 			this.currentTasks.getTrashedTasks().add(removedTask);
-			boolean isSuccessful = DataStore.save(this.currentTasks);
-			return isSuccessful;
+			if (willSave) {
+				return DataStore.save(this.currentTasks);
+			} else {
+				return true;
+			}
 		}
 	}
 
@@ -309,7 +313,7 @@ public class User {
 	public boolean deleteAll() throws CommandFailedException {
 		this.updateUndoable();
 		for (int i = this.currentTasks.getNormalTasks().size() - 1; i >= 0; i--) {
-			this.delete(i);
+			this.delete(i, false);
 		}
 		return DataStore.save(this.currentTasks);
 	}

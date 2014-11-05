@@ -680,7 +680,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			String returnValue = "";
 			for (int index : indices) {
 				try {
-					boolean isThisSucceeded = this.user.delete(index - offset - 1);
+					boolean isThisSucceeded = this.user.delete(index - offset - 1, true);
 					if (!isThisSucceeded) {
 						returnValue += (Constant.PROMPT_MESSAGE_DELETE_TASK_FAILED + " for task " + index);
 					}
