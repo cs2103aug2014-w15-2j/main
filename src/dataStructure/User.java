@@ -51,6 +51,8 @@ public class User {
 			}
 
 			this.currentTasks = cloner.deepClone(this.undoable.pop());
+			
+			DataStore.save(this.currentTasks);
 		}
 	}
 
@@ -72,6 +74,8 @@ public class User {
 			}
 
 			this.currentTasks = cloner.deepClone(this.redoable.pop());
+			
+			DataStore.save(this.currentTasks);
 		}
 	}
 
