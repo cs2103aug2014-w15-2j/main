@@ -17,10 +17,8 @@ public class User {
 
 	//@author A0119447Y
 	private TaskBox currentTasks;
-	private ArrayList<String> validCategory;
 	private Stack<TaskBox> undoable;
 	private Stack<TaskBox> redoable;
-//	private int taskEndIndex = -1;
 	private Cloner cloner = new Cloner();
 
 	//@author A0119447Y
@@ -187,13 +185,8 @@ public class User {
 
 				if (currentAttribute.equals("description")) {
 					task.setDescription((String) currentObject);
-				} else if (currentAttribute.equals("category")
-						&& validCategory.contains((String) currentObject)) {
-					task.setCategory((String) currentObject);
 				} else if (currentAttribute.equals("priority")) {
 					task.setPriority((int) currentObject);
-				} else if (currentAttribute.equals("repeated_period")) {
-					task.setRepeatedPeriod((int) currentObject);
 				} else if (currentAttribute.equals("tag")) {
 					task.setTag((ArrayList<String>) currentObject);
 				} else if (currentAttribute.equals("time_interval")) {
@@ -245,16 +238,10 @@ public class User {
 
 				if (currentAttribute.equals("description")) {
 					task.setDescription((String) currentObject);
-				} else if (currentAttribute.equals("category")
-						&& validCategory.contains((String) currentObject)) {
-					task.setCategory((String) currentObject);
 				} else if (currentAttribute.equals("priority")) {
 					task.setPriority((int) currentObject);
-				} else if (currentAttribute.equals("repeated_period")) {
-					task.setRepeatedPeriod((int) currentObject);
 				} else if (currentAttribute.equals("tag")) {
 					task.setTag((ArrayList<String>) currentObject);
-					ArrayList<String> tagList = (ArrayList<String>) currentObject;
 				} else if (currentAttribute.equals("time_interval")) {
 					System.err.println("USER UPDATE INTERVAL: "
 							+ (TimeInterval) currentObject);
