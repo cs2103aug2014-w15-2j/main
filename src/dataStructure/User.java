@@ -159,18 +159,16 @@ public class User {
 	 * @param willSave
 	 * @throws CommandFailedException
 	 */
-	public boolean delete(int index, boolean willSave) throws CommandFailedException {
+	public boolean delete(int index, boolean willUpdateUndo) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
-			this.updateUndoable();
+			if (willUpdateUndo) {
+				this.updateUndoable();
+			}
 			Task removedTask = this.currentTasks.getNormalTasks().remove(index);
 			this.currentTasks.getTrashedTasks().add(removedTask);
-			if (willSave) {
-				return DataStore.save(this.currentTasks);
-			} else {
-				return true;
-			}
+			return DataStore.save(this.currentTasks);
 		}
 	}
 
