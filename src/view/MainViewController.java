@@ -243,6 +243,16 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		displayContent.getChildren().clear();
 		displayContent.getChildren().add(textLabel);
 		displayScrollPane.setContent(displayContent);
+		setDisplayScrollbarStyle();
+		
+		displayScrollPane.setFocusTraversable(true);
+	}
+
+	/**
+	 * @author A0119444E
+	 * set the scroll bar style using css and set 2 event handlers
+	 */
+	private void setDisplayScrollbarStyle() {
 		displayScrollPane.getStyleClass().add("mylistview");
 		displayScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		displayScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
@@ -262,8 +272,6 @@ public class MainViewController extends GridPane implements HotKeyListener{
 				displayScrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 			}
 		});
-		
-		displayScrollPane.setFocusTraversable(true);
 	}
 	
 	public void setDisplayPane(ArrayList<Task> taskList) {
