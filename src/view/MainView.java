@@ -15,7 +15,7 @@ public class MainView extends Application {
         if (System.getProperty("os.name").equals("Mac OS X")) {
         	scene = new Scene(control, 990, 700);
         } else {
-        	scene = new Scene(control, 990, 700);
+        	scene = new Scene(control, 980, 690);
         }
         scene.getStylesheets().add("resource/style.css");
         stage.initStyle(StageStyle.DECORATED);
