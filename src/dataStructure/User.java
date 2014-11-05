@@ -94,17 +94,6 @@ public class User {
 	}
 
 	/**
-	 * test method
-	 */
-	
-	// author A0119444E
-	private void displayForTesting() {
-		int i = 1;
-		for (Task task : currentTasks) {
-			System.out.println(i++ + " " + task.getDescription());
-		}
-	}
-	/**
 	 * add adds a task into the task list.
 	 * 
 	 * @param task

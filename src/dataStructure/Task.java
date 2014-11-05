@@ -197,7 +197,7 @@ public class Task {
 	 * @return
 	 */
 	
-	// author A0119444E unused
+	// author A0119444E-unused
 	public String getCategory() {
 		return this.category;
 	}
@@ -209,7 +209,7 @@ public class Task {
 	 * @param newCategory
 	 */
 	
-	// author A0119444E unused
+	// author A0119444E-unused
 	public void setCategory(String newCategory) {
 		try {
 			isValidCategory(newCategory);

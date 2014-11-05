@@ -10,6 +10,10 @@ public class Pair<Object1, Object2> {
 		this.tail = thisTail;
 	}
 	
+	public Pair() {
+		
+	}
+	
 	public void setHead(Object1 h){
 		this.head = h;
 	}
