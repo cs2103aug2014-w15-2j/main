@@ -282,9 +282,21 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		Label listLabel = new Label(listName.toUpperCase());
 		listLabel.setStyle("-fx-font: 40px \"Akagi\";"
 				+ "-fx-text-fill: white;");
-		listIndicatorBox.setStyle("-fx-background-color: rgba(251, 235, 178, 1);"
-				+ "-fx-padding: 8 16 8 8;"
-				+ Constant.CSS_STYLE_SHADOW);
+		
+		if (listName.equalsIgnoreCase("todo")) {
+			listIndicatorBox.setStyle("-fx-background-color: rgba(251, 235, 178, 1);"
+					+ "-fx-padding: 8 16 8 8;"
+					+ Constant.CSS_STYLE_SHADOW);
+		} else if (listName.equalsIgnoreCase("trashed")) {
+			listIndicatorBox.setStyle("-fx-background-color: rgba(80, 80, 80, 1);"
+					+ "-fx-padding: 8 16 8 8;"
+					+ Constant.CSS_STYLE_SHADOW);
+		} else {
+			listIndicatorBox.setStyle("-fx-background-color: rgba(222, 236, 147, 1);"
+					+ "-fx-padding: 8 16 8 8;"
+					+ Constant.CSS_STYLE_SHADOW);
+		}
+		
 		listIndicatorBox.getChildren().add(listLabel);
 		
 		
@@ -1043,11 +1055,11 @@ public class MainViewController extends GridPane implements HotKeyListener{
 				changeToToDoList();
 				break;
 			
-			case KeyEvent.VK_2 + Constant.MODIFIER_CTRL:
+			case KeyEvent.VK_3 + Constant.MODIFIER_CTRL:
 				changeToTrashedList();
 				break;
 			
-			case KeyEvent.VK_3 + Constant.MODIFIER_CTRL:
+			case KeyEvent.VK_2 + Constant.MODIFIER_CTRL:
 				changeToFinishedList();
 				break;
 		}

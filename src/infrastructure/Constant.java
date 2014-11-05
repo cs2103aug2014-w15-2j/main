@@ -463,8 +463,8 @@ public abstract class Constant {
 	public static final String HOT_KEY_RELOAD = "control M";
 	
 	public static final String HOT_KEY_TO_DO = "control 1";
-	public static final String HOT_KEY_TRASHED = "control 2";
-	public static final String HOT_KEY_DONE = "control 3";
+	public static final String HOT_KEY_TRASHED = "control 3";
+	public static final String HOT_KEY_DONE = "control 2";
 	
 	public static final String HOT_KEY_LAST_COMMAND = "UP";
 	public static final String HOT_KEY_NEXT_COMMAND = "DOWN";
