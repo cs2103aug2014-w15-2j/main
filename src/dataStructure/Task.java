@@ -21,6 +21,7 @@ public class Task {
 	private final int REDUCE_CHAR = 1;
 
 	/**
+	 * @author A0119444E
 	 * constructor
 	 * 
 	 * @param description
@@ -29,8 +30,6 @@ public class Task {
 	 * @param task_id
 	 * @param repeated_period
 	 * @param tag
-	 * 
-	 * @author A0119444E
 	 */
 	public Task(String description, String category, int priority,
 			int repeated_period, ArrayList<String> tag, TimeInterval interval) {
@@ -44,7 +43,7 @@ public class Task {
 	}
 
 	/**
-	 * 
+	 * @author A0119444E
 	 * constructor
 	 * 
 	 * @param task_id
@@ -55,8 +54,7 @@ public class Task {
 	 * @param tag
 	 * @param startDate
 	 * @param endDate
-	 * 
-	 * @author A0119444E
+	 * 	 
 	 */
 	public Task(String task_id, String description, String category,
 			int priority, int repeated_period, ArrayList<String> tag,
@@ -95,11 +93,11 @@ public class Task {
 	}
 
 	/**
+	 * @author A0119444E-unused
 	 * toString convert the task information to a string for storage.
 	 * Json is used to manage DataStore so this method is not needed
 	 * 
 	 * @return a task string
-	 * @author A0119444E-unused
 	 */
 	public String toString() {
 		String task = new String();
@@ -119,10 +117,10 @@ public class Task {
 	}
 
 	/**
+	 * @author A0119444E
 	 * tagToString convert the tag list to a string.
 	 * 
 	 * @return tags string
-	 * @author A0119444E
 	 */
 	public String tagToString() {
 		String tags = new String();
@@ -161,20 +159,20 @@ public class Task {
 	// setter and getter
 
 	/**
+	 * @author A0119444E
 	 * getPriority gets the task description
 	 * 
 	 * @return
-	 * @author A0119444E
 	 */
 	public String getDescription() {
 		return this.description;
 	}
 
 	/**
+	 * @author A0119444E
 	 * setDescription sets the task description to given newDescription.
 	 * 
 	 * @param newDescription
-	 * @author A0119444E
 	 */
 	public void setDescription(String newDescription) {
 		try {
@@ -186,22 +184,22 @@ public class Task {
 	}
 
 	/**
+	 * @author A0119444E-unused
 	 * getDescription getter of the category attribute
 	 * category is not supported now
 	 * 
 	 * @return
-	 * @author A0119444E-unused
 	 */
 	public String getCategory() {
 		return this.category;
 	}
 
 	/**
+	 * @author A0119444E-unused
 	 * setDescription setter of the category attribute
 	 * category is not supported now
 	 * 
 	 * @param newCategory
-	 * @author A0119444E-unused
 	 */
 	public void setCategory(String newCategory) {
 		try {
@@ -213,20 +211,21 @@ public class Task {
 	}
 
 	/**
+	 * @author A0119444E
 	 * getPriority getter of the priority attribute
 	 * 
-	 * @return
-	 * @author A0119444E
-	 */
+	 * @return int
+	 */	
+	  
 	public int getPriority() {
 		return this.priority;
 	}
 	
 	/**
+	 * @author A0119444E
 	 * setPriority setter of the priority attribute
 	 * 
 	 * @param newPriority
-	 * @author A0119444E
 	 */
 	public void setPriority(int newPriority) {
 		try {
@@ -241,30 +240,31 @@ public class Task {
 	}
 
 	/**
+	 * @author A0119444E
 	 * getTaskId getter of the task_id attribute
 	 * 
-	 * @return
-	 * @author A0119444E
+	 * @return String
+	 * 
 	 */
 	public String getTaskId() {
 		return this.task_id;
 	}
 
 	/**
+	 * @author A0119444E
 	 * getRepeatedPeriod getter of the repeated_period attribute
 	 * 
-	 * @return
-	 * @author A0119444E
+	 * @return int
 	 */
 	public int getRepeatedPeriod() {
 		return this.repeated_period;
 	}
 
 	/**
+	 * @author A0119444E
 	 * setRepeatedPeriod setter of the repeated_period attribute
 	 * 
 	 * @param newRepeatedPeriod
-	 * @author A0119444E
 	 */
 	public void setRepeatedPeriod(int newRepeatedPeriod) {
 		try {
@@ -279,20 +279,20 @@ public class Task {
 	}
 
 	/**
+	 * @author A0119444E
 	 * getTag getter of the tag attribute
 	 * 
-	 * @return
-	 * @author A0119444E
+	 * @return 
 	 */
 	public ArrayList<String> getTag() {
 		return this.tag;
 	}
 
 	/**
+	 * @author A0119444E
 	 * setTag setter of the tag attribute
 	 * 
-	 * @param newTag
-	 * @author A0119444E
+	 * @param newTag 
 	 */
 	public void setTag(ArrayList<String> newTag) {
 		try {
@@ -307,19 +307,20 @@ public class Task {
 	}
 
 	/**
+	 * @author A0119444E
 	 * @override getInterval
 	 * @return interval
-	 * @author A0119444E
+	 * 
 	 */
 	public TimeInterval getInterval() {
 		return this.interval;
 	}
 
 	/**
+	 * @author A0119444E
 	 * setInterval setter of the interval attribute
 	 * 
 	 * @param newInterval
-	 * @author A0119444E
 	 */
 	public void setInterval(TimeInterval newInterval) {
 		try {
@@ -337,11 +338,11 @@ public class Task {
 	// check validity of attributes
 	
 	/**
+	 * @author A0119444E
 	 * check whether a description is valid
 	 * 
 	 * @param description
 	 * @return boolean
-	 * @author A0119444E
 	 */
 	private boolean isValidDescription(String description){
 		if (description.equals(null) || description.equals("")) {
@@ -352,11 +353,11 @@ public class Task {
 	}
 	
 	/**
+	 * @author A0119444E
 	 * check whether a category is valid
 	 * 
 	 * @param category
 	 * @return boolean
-	 * @author A0119444E
 	 */
 	private boolean isValidCategory(String category){
 		if (description.equals(null) || description.equals("")) {
@@ -367,11 +368,11 @@ public class Task {
 	}
 	
 	/**
+	 * @author A0119444E
 	 * check whether a priority is valid
 	 * 
 	 * @param priority
 	 * @return boolean
-	 * @author A0119444E
 	 */
 	private boolean isValidPriority(int priority){
 		if (priority < 1 || priority > 3) {
@@ -382,11 +383,11 @@ public class Task {
 	}
 	
 	/**
+	 * @author A0119444E
 	 * check whether a repeated period is valid
 	 * 
 	 * @param repeatedPeriod
 	 * @return boolean
-	 * @author A0119444E
 	 */
 	private boolean isValidRepeatedPeriod(int repeatedPeriod){
 		if (repeatedPeriod < 1 || repeatedPeriod > 4) {
@@ -397,11 +398,11 @@ public class Task {
 	}
 	
 	/**
+	 * @author A0119444E
 	 * check whether a list of tag is valid
 	 * 
 	 * @param tag
 	 * @return boolean
-	 * @author A0119444E
 	 */
 	private boolean isValidTag(ArrayList<String> tag){
 		if (tag.equals(null) || tag.contains(null) || tag.contains("")) {
@@ -414,11 +415,11 @@ public class Task {
 	}
 	
 	/**
+	 * @author A0119444E
 	 * check whether all tags in a tag list are valid
 	 * 
 	 * @param tags
 	 * @return boolean
-	 * @author linfanshi
 	 */
 	private boolean isValidOneTag(ArrayList<String> tags){
 		for(String tag : tags){
@@ -430,11 +431,11 @@ public class Task {
 	}
 	
 	/**
+	 * @author A0119444E
 	 * check whether a interval is valid
 	 * 
 	 * @param interval
 	 * @return boolean
-	 * @author linfanshi
 	 */
 	private boolean isValidInterval(TimeInterval interval){
 		if (interval == null) {
@@ -445,9 +446,9 @@ public class Task {
 	}
 	
 	/**
+	 * @author A0119444E
 	 * check whether a task is trashed
 	 * @return boolean
-	 * @author linfanshi
 	 */
 	public boolean isTrashed() {
 		if (tag.contains(Constant.TRASHED_TAG)) {

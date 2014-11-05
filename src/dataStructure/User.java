@@ -86,9 +86,9 @@ public class User {
 	}
 
 	/**
+	 * @author A0119444E
 	 * test method
-	 * @author linfanshi
-	 */
+	 */	 
 	private void displayForTesting() {
 		int i = 1;
 		for (Task task : currentTasks) {
@@ -96,10 +96,10 @@ public class User {
 		}
 	}
 	/**
+	 * @author A0119444E
 	 * add adds a task into the task list.
 	 * 
 	 * @param task
-	 * @author linfanshi
 	 */
 	public boolean add(Task task) {
 		this.updateUndoable();
@@ -115,11 +115,11 @@ public class User {
 	}
 
 	/**
+	 * @author A0119444E
 	 * delete deletes the task with the index from the task list.
 	 * 
 	 * @param index
 	 * @throws CommandFailedException
-	 * @author linfanshi
 	 */
 	public boolean delete(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
@@ -177,6 +177,7 @@ public class User {
 	}
 
 	/**
+	 * @author A0119444E
 	 * update updates the task with the index according to the key-value pairs
 	 * in toBeUpdated.
 	 * 
@@ -184,7 +185,6 @@ public class User {
 	 * @param toBeUpdated
 	 *            attributes to be updated
 	 * @throws CommandFailedException
-	 * @author linfanshi
 	 */
 	@SuppressWarnings("unchecked")
 	public void update(int index, HashMap<String, Object> toBeUpdated)
@@ -230,10 +230,10 @@ public class User {
 	}
 
 	/**
+	 * @author A0119444E
 	 * delete all current tasks
 	 * 
 	 * @throws CommandFailedException
-	 * @author linfanshi
 	 */
 	public void deleteAll() throws CommandFailedException {
 		this.updateUndoable();
@@ -248,8 +248,8 @@ public class User {
 	}
 
 	/**
+	 * @author A0119444E
 	 * clear all current tasks
-	 * @author linfanshi
 	 */
 	public void clear() {
 		this.updateUndoable();
@@ -268,10 +268,10 @@ public class User {
 	}
 
 	/**
+	 * @author A0119444E
 	 * move new added task to correct position
 	 * 
 	 * @param index
-	 * @author linfanshi
 	 */
 	private void moveAddedTask(int index) {
 		Task newAddedTask = currentTasks.get(currentTasks.size() - 1);
@@ -282,10 +282,10 @@ public class User {
 	}
 
 	/**
+	 * @author A0119444E
 	 * move new trashed task to the end of currentTasks
 	 * 
 	 * @param index
-	 * @author linfanshi
 	 */
 	private void moveTrashedTask(int index) {
 		int lastTaskIndex = currentTasks.size();
@@ -298,10 +298,10 @@ public class User {
 	}
 
 	/**
+	 * @author A0119444E-unused
 	 * get valid categories from current tasks' categories
-	 * 
+	 * category is not supported now
 	 * @return
-	 * @author linfanshi
 	 */
 	private ArrayList<String> getValidCategory() {
 		ArrayList<String> validCategory = new ArrayList<String>();
@@ -316,11 +316,12 @@ public class User {
 	}
 
 	/**
+	 * @author A0119444E-unused
 	 * create a new category
+	 * category is not supported now
 	 * 
 	 * @param category
 	 * @throws CommandFailedException
-	 * @author linfanshi
 	 */
 	public void createCategory(String category) throws CommandFailedException {
 		if (validCategory.contains(category)) {
@@ -331,11 +332,12 @@ public class User {
 	}
 
 	/**
+	 * @author A0119444E
+	 *
 	 * delete a category
-	 * 
+	 * caetgory is not supported now
 	 * @param category
 	 * @throws CommandFailedException
-	 * @author linfanshi
 	 */
 	public void deleteCategory(String category) throws CommandFailedException {
 		if (!validCategory.contains(category)) {
@@ -351,8 +353,9 @@ public class User {
 	}
 
 	/**
+	 * @author A0119444E-unused
 	 * show a joke to user
-	 * @author linfanshi
+	 * joke is not supported now
 	 */
 	public void showJoke() {
 		System.out
