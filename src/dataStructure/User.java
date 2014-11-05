@@ -162,7 +162,7 @@ public class User {
 		} else {
 			this.updateUndoable();
 			Task removedTask = this.currentTasks.getNormalTasks().remove(index);
-			this.currentTasks.getTrashedTask().add(removedTask);
+			this.currentTasks.getTrashedTasks().add(removedTask);
 			boolean isSuccessful = DataStore.save(this.currentTasks);
 			return isSuccessful;
 		}
@@ -207,6 +207,16 @@ public class User {
 			}
 			return task;
 		}
+	}
+	
+	//@author A0119447Y
+	/**
+	 * getTaskList
+	 * 
+	 * return the normal tasks
+	 */
+	public ArrayList<Task> getTaskList() {
+		return this.currentTasks.normalTasks;
 	}
 
 	//@author A0119444E
@@ -320,7 +330,7 @@ public class User {
 	 */
 	public boolean emptyTrash() {
 		this.updateUndoable();
-		this.currentTasks.getTrashedTask().clear();
+		this.currentTasks.getTrashedTasks().clear();
 		return DataStore.save(this.currentTasks);
 	}
 
@@ -420,28 +430,21 @@ public class User {
 		System.out.println("If you really want some, go to jokes.cc.com ");
 	}
 
-	//@author A0119447Y-unused
-//	/**
-//	 * getTaskIdByIndex
-//	 * 
-//	 * @param index
-//	 * @return
-//	 * @throws CommandFailedException
-//	 */
-//	public Task retrieve(int index) throws CommandFailedException {
-//		if (!this.isValidIndex(index)) {
-//			throw new CommandFailedException(String.format(
-//					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
-//		} else {
-//			if (this.currentTasks.get(index).isTrashed()) {
-//				throw new CommandFailedException(String.format(
-//						Constant.INVALID_INDEX_ERROR_MESSAGE, index));
-//			} else {
-//				return this.currentTasks.get(index);
-//			}
-//
-//		}
-//	}
+	//@author A0119447Y
+	/**
+	 * 
+	 * @param index
+	 * @return
+	 * @throws CommandFailedException
+	 */
+	public Task retrieve(int index) throws CommandFailedException {
+		if (!this.isValidIndex(index)) {
+			throw new CommandFailedException(String.format(
+					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+		} else {
+			return this.currentTasks.getNormalTasks().get(index);
+		}
+	}
 
 	//@author A0119447Y
 	/**
