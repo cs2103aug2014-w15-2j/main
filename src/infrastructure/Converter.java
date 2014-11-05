@@ -43,11 +43,9 @@ public class Converter {
 	 */
 	@SuppressWarnings("rawtypes") 
 	public static Task getTask(LinkedHashMap task) throws Exception {
-		String task_id = (String) task.get("task-id");
 		String description = (String) task.get("description");
-		String category = (String) task.get("category");
+		String status = (String) task.get("status");
 		int priority = convertPriorityStringToInt(task);
-		int repeated_period = convertRepeatedPeriodStringToInt(task);
 		
 		ArrayList tags = (ArrayList) task.get("tags");
 		ArrayList<String> tag = new ArrayList<String>();
@@ -58,8 +56,10 @@ public class Converter {
 		LinkedHashMap intervalObj = (LinkedHashMap) task.get("time-interval");
 		TimeInterval interval = convertStringToTimeInterval(intervalObj);
 		
-		return new Task(task_id, description, category, priority,
-				repeated_period, tag, interval);
+		Task newTask = new Task(description, priority, tag, interval);
+		newTask.setStatus(status);
+		
+		return newTask;
 	}
 
 	@SuppressWarnings("rawtypes") 

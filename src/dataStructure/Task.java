@@ -20,6 +20,15 @@ public class Task {
 	private Constant.TASK_STATUS status;
 
 	private final int REDUCE_CHAR = 1;
+	
+	public Task(String description, int priority, ArrayList<String> tag, 
+				TimeInterval interval) {
+		this.description = description;
+		this.priority = priority;
+		this.tag = tag;
+		this.interval = interval;
+		this.status = Constant.TASK_STATUS.NORMAL;
+	}
 
 	/**
 	 * constructor
@@ -33,7 +42,7 @@ public class Task {
 	 */
 	
 	//@author A0119447Y
-	public Task(String description, String category, int priority,
+	public Task(String description, int priority,
 			int repeated_period, ArrayList<String> tag, TimeInterval interval) {
 		this.description = description;
 		this.category = (category == null) ? Constant.DEFAULT_CATEGORY : category;
