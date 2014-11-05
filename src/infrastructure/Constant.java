@@ -420,7 +420,7 @@ public abstract class Constant {
 			+ "-fx-padding:0 0 5 0";
 	public static final String CSS_STYLE_TIME_BOX = "-fx-font: 12px \"Akagi\";"
 			+ "-fx-background-color: rgba(0, 0, 0, 0.5);"
-			+ "-fx-padding: 5 5 0 5;" + "-fx-background-radius: 5px;"
+			+ "-fx-padding: 5 0 0 5;" + "-fx-background-radius: 5px;"
 			+ "-fx-text-fill: white;";
 	public static final String CSS_STYLE_PRIORITY_LABEL = "-fx-font: 19px \"Akagi\";"
 			+ "-fx-text-fill: white;";
