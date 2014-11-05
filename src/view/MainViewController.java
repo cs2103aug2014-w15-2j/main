@@ -73,7 +73,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
  * Constructor
  * =========================================================================================
  */
-
+	//@author A0119447Y
 	public MainViewController(Stage stage) {
 		try {
 			this.copyUserNlpFiles();
@@ -108,6 +108,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		Font.loadFont(getClass().getResource(Constant.FONT_FILE_TIME).toExternalForm(), 10);
 	}
 	
+	//author A0119379R
 	private void copyUserNlpFiles() {
 	
 		InputStream[] propStreams = new InputStream[11];
@@ -127,6 +128,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 	
+	//author A0119379R
 	private void loadFxml() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainView.fxml"));
 		fxmlLoader.setRoot(this);
@@ -134,6 +136,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		fxmlLoader.load();
 	}
 
+	//author A0119379R
 	private void loadParser() {
 		final MainViewController instance = this;
 		new Thread(new Runnable() {
@@ -146,6 +149,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}).start();
 	}
 	
+	//author A0119379R
 	private void initializeShortCuts(){
 		final MainViewController instance = this;
 		new Thread(new Runnable() {
@@ -166,6 +170,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	}
 	
 
+	//author A0119379R
 	private void registerKeyShortCuts(HotKeyListener instance) {
 		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_DESCRIPTION_TAG), instance);
 		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_DATE_TAG), instance);
@@ -186,11 +191,13 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_NEXT_COMMAND), instance);
 	}
 	
+	//author A0119379R
 	private void updatePage() {
 		setPreviewText("\n\n\n\t\t\t  Welcome to List of Xiao Ming");
 		this.setDisplayText("HELP:" + "\n\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
 	}
 	
+	//author A0119379R
 	private void addTextFieldListener() {
 		final MainViewController instance = this;
 		
@@ -219,7 +226,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
  *  I/O & hot key responding methods
  * ===========================================================================================================
  */
-	
+	//@author A0119447Y
 	public String getUserInput(boolean willClear) {
 		String text = input.getText();
 		if (willClear) {
@@ -239,6 +246,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		previewScrollPane.setContent(previewContentBox);
 	}
 	
+	//@author A0119447Y
 	public void setDisplayText(String textToDisplay) {
 		VBox displayContent = new VBox();
 		Label textLabel = new Label(textToDisplay);
@@ -251,9 +259,9 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	}
 
 	/**
-	 * @author A0119444E
 	 * set the scroll bar style using css and set 2 event handlers
 	 */
+	//author A0119444E
 	private void setDisplayScrollbarStyle() {
 		displayScrollPane.getStyleClass().add("mylistview");
 		displayScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
@@ -276,6 +284,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		});
 	}
 	
+	//@author A0119447Y
 	public void setDisplayPane(ArrayList<Task> taskList) {
 		VBox displayContent = new VBox();
 		displayContent.setAlignment(Pos.CENTER);
@@ -303,6 +312,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	   });
 	}
 	
+	//author A0119447Y
 	private void updateTextField(final String text) {
 		final MainViewController instance = this;
 		Platform.runLater(new Runnable() {
@@ -320,6 +330,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	 * @param tag
 	 * @return
 	 */
+	//author A0119379R
 	private String toggleTag(String tag) {
 		if (tag.contains("</")) {
 			return tag.replace("</", "<");
@@ -329,6 +340,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		
 	}
 	
+	//author A0119379R
 	private void loadPreview() {
 		//open a new thread to execute Java FX
 		final MainViewController instance = this;
@@ -344,6 +356,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	   });
 	}
 	
+	//@author A0119447Y
 	@FXML
     private void onEnter() {
 		String command = getUserInput(true);
@@ -543,38 +556,47 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		return "Command not recognized";
 	}
 
+	//author A0119379R
 	private String getReloadPreview() {
 		return "Command: reload model";
 	}
 
+	//author A0119379R
 	private String getEmptyTrashPreview() {
 		return "Command: empty trash";
 	}
 
+	//author A0119379R
 	private String getHelpPreview() {
 		return "Command: help";
 	}
 
+	//author A0119379R
 	private String getExitPreview() {
 		return "Command: exit";
 	}
 
+	//author A0119379R
 	private String getClearPreview() {
 		return "Command: clear";
 	}
 
+	//author A0119379R
 	private String getRedoPreview() {
 		return "Command: redo";
 	}
 
+	//author A0119379R
 	private String getUndoPreview() {
 		return "Command: undo";
 	}
 
+	//author A0119379R
 	private String getDisplayPreview() {
 		return "Command: display";
 	}
 
+	//author A0119379R
 	private String getDonePreview(String userInput) {
 		try {
 			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
@@ -590,11 +612,13 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 
+	//author A0119379R
 	private String getSearchPreview(String userInput) {
 		Constraint thisConstraint = parser.nerParser.getConstraint(userInput);
 		return "Command: search \n\n" + thisConstraint.toString();
 	}
 
+	//author A0119379R
 	private String getUpdatePreview(String userInput) {
 		try {
 			int index = parser.nerParser.pickIndex(userInput).get(0);
@@ -606,6 +630,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 
+	//author A0119379R
 	private String getDeletePreview(String userInput) {
 		try {
 			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
@@ -621,6 +646,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 
+	//author A0119379R
 	private String getAddPreview(String userInput) {
 		try {
 			Task taskToAdd = parser.nerParser.getTask(userInput);
@@ -651,6 +677,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 
+	//author A0119379R
 	private String delete(String userInput) {
 		try {
 			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
@@ -679,6 +706,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 
+	//author A0119379R
 	private String update(String userInput) {
 		try {
 			int index = parser.nerParser.pickIndex(userInput).get(0);
@@ -692,6 +720,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		return Constant.PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY;
 	}
 
+	//author A0119379R
 	private ArrayList<Task> search(String userInput) {
 		Constraint thisConstraint;
 		try {
@@ -717,6 +746,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 
 	}
 
+	//author A0119379R
 	private ArrayList<Task> display() {
 		ArrayList<Task> queryResult;
 		try {
@@ -736,15 +766,18 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 	
+	//author A0119379R
 	private String emptyTrash() {
 		this.user.clear();
 		return Constant.PROMPT_MESSAGE_TRASH_EMPTIED;
 	}
-
+	
+	//author A0119379R
 	private String help() {
 		return Constant.GUI_MESSAGE_WELCOME + "\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION;
 	}
 
+	//author A0119379R
 	private String clear() {
 		try {
 			this.user.deleteAll();
@@ -755,6 +788,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 
+	//author A0119379R
 	private String undo() {
 		try {
 			this.user.undo();
@@ -765,6 +799,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 
+	//author A0119379R
 	private String redo() {
 		try {
 			this.user.redo();
@@ -775,12 +810,14 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 	
+	//author A0119379R
 	private String reloadNLPModel() {
 		NERParser.updateModal();
 		this.parser = new Parser();
 		return "Model reloaded!";
 	}
 	
+	//author A0119379R
 	private String done(String userInput) {
 		try {
 			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
@@ -818,11 +855,11 @@ public class MainViewController extends GridPane implements HotKeyListener{
  * the delegation methods to respond to shortcuts
  * ==========================================================================
  */
-	//@author A0119379R
 	@Override
 	public void onHotKey(HotKey key) {
 		String tag = "";
 		int cursorPosition = this.input.getCaretPosition();
+		//@author A0119379R
 		switch (key.keyStroke.getKeyCode() + key.keyStroke.getModifiers()) {
 			case KeyEvent.VK_D + Constant.MODIFIER_ALT:
 				descriptionTag = toggleTag(descriptionTag);
@@ -894,6 +931,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 				break;
 		}
 		
+		//author A0119447Y
 		switch (key.keyStroke.getKeyCode()) {
 			case KeyEvent.VK_UP:
 				this.currentCommandIndex --;

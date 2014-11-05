@@ -28,6 +28,8 @@ public class User {
 	 * @param recordFilePath
 	 * @throws Exception
 	 */
+	
+	// author A0119447Y
 	public User() throws Exception {
 		currentTasks = DataStore.loadFileData();
 		undoable = new Stack<ArrayList<Task>>();
@@ -40,6 +42,8 @@ public class User {
 	 * 
 	 * @throws CommandFailedException
 	 */
+	
+	// author A0119447Y
 	public void undo() throws CommandFailedException {
 		if (this.undoable.empty()) {
 			throw new CommandFailedException(Constant.NO_UNDOABLE_ERROR_MESSAGE);
@@ -59,6 +63,8 @@ public class User {
 	 * 
 	 * @throws CommandFailedException
 	 */
+	
+	// author A0119447Y
 	public void redo() throws CommandFailedException {
 		if (this.redoable.empty()) {
 			throw new CommandFailedException(Constant.NO_REDOABLE_ERROR_MESSAGE);
@@ -77,6 +83,8 @@ public class User {
 	 * updateUndoable this method should be called BEFORE every operation
 	 * involving task list
 	 */
+	
+	// author A0119447Y
 	private void updateUndoable() {
 		this.redoable.clear();
 		this.undoable.push(cloner.deepClone(this.currentTasks));
@@ -86,9 +94,10 @@ public class User {
 	}
 
 	/**
-	 * @author A0119444E
 	 * test method
-	 */	 
+	 */
+	
+	// author A0119444E
 	private void displayForTesting() {
 		int i = 1;
 		for (Task task : currentTasks) {
@@ -96,11 +105,12 @@ public class User {
 		}
 	}
 	/**
-	 * @author A0119444E
 	 * add adds a task into the task list.
 	 * 
 	 * @param task
 	 */
+	
+	// author A0119444E
 	public boolean add(Task task) {
 		this.updateUndoable();
 		if (taskEndIndex == -1 || taskEndIndex == currentTasks.size() - 1) {
@@ -115,12 +125,13 @@ public class User {
 	}
 
 	/**
-	 * @author A0119444E
 	 * delete deletes the task with the index from the task list.
 	 * 
 	 * @param index
 	 * @throws CommandFailedException
 	 */
+	
+	// author A0119444E
 	public boolean delete(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
@@ -136,6 +147,7 @@ public class User {
 		}
 	}
 
+	// author A0119479R
 	@SuppressWarnings("unchecked")
 	public Task getUpdatePreview(int index, HashMap<String, Object> toBeUpdated)
 			throws CommandFailedException {
@@ -177,7 +189,6 @@ public class User {
 	}
 
 	/**
-	 * @author A0119444E
 	 * update updates the task with the index according to the key-value pairs
 	 * in toBeUpdated.
 	 * 
@@ -186,6 +197,8 @@ public class User {
 	 *            attributes to be updated
 	 * @throws CommandFailedException
 	 */
+	
+	// author A0119444E
 	@SuppressWarnings("unchecked")
 	public void update(int index, HashMap<String, Object> toBeUpdated)
 			throws CommandFailedException {
@@ -230,11 +243,12 @@ public class User {
 	}
 
 	/**
-	 * @author A0119444E
 	 * delete all current tasks
 	 * 
 	 * @throws CommandFailedException
 	 */
+	
+	// author A0119447Y
 	public void deleteAll() throws CommandFailedException {
 		this.updateUndoable();
 		for (Task task : currentTasks) {
@@ -248,9 +262,10 @@ public class User {
 	}
 
 	/**
-	 * @author A0119444E
 	 * clear all current tasks
 	 */
+	
+	// author A0119444E
 	public void clear() {
 		this.updateUndoable();
 		ArrayList<Task> toBeCleared = new ArrayList<Task>();
@@ -268,11 +283,12 @@ public class User {
 	}
 
 	/**
-	 * @author A0119444E
 	 * move new added task to correct position
 	 * 
 	 * @param index
 	 */
+	
+	// author A0119444E
 	private void moveAddedTask(int index) {
 		Task newAddedTask = currentTasks.get(currentTasks.size() - 1);
 		for (int i = currentTasks.size() - 1; i > index + 1; i--) {
@@ -282,11 +298,12 @@ public class User {
 	}
 
 	/**
-	 * @author A0119444E
 	 * move new trashed task to the end of currentTasks
 	 * 
 	 * @param index
 	 */
+	
+	// author A0119444E
 	private void moveTrashedTask(int index) {
 		int lastTaskIndex = currentTasks.size();
 		Task newTrashedTask = currentTasks.get(index);
@@ -298,11 +315,12 @@ public class User {
 	}
 
 	/**
-	 * @author A0119444E-unused
 	 * get valid categories from current tasks' categories
 	 * category is not supported now
 	 * @return
 	 */
+	
+	// author A0119444E unused
 	private ArrayList<String> getValidCategory() {
 		ArrayList<String> validCategory = new ArrayList<String>();
 		if (currentTasks.equals(null) || currentTasks.isEmpty()) {
@@ -316,13 +334,14 @@ public class User {
 	}
 
 	/**
-	 * @author A0119444E-unused
 	 * create a new category
 	 * category is not supported now
 	 * 
 	 * @param category
 	 * @throws CommandFailedException
 	 */
+	
+	// author A0119444E unused
 	public void createCategory(String category) throws CommandFailedException {
 		if (validCategory.contains(category)) {
 			throw new CommandFailedException("invalid category");
@@ -332,13 +351,14 @@ public class User {
 	}
 
 	/**
-	 * @author A0119444E
 	 *
 	 * delete a category
 	 * caetgory is not supported now
 	 * @param category
 	 * @throws CommandFailedException
 	 */
+	
+	// author A0119444E
 	public void deleteCategory(String category) throws CommandFailedException {
 		if (!validCategory.contains(category)) {
 			throw new CommandFailedException("no such category");
@@ -353,10 +373,11 @@ public class User {
 	}
 
 	/**
-	 * @author A0119444E-unused
 	 * show a joke to user
 	 * joke is not supported now
 	 */
+	
+	// author A0119444E unused
 	public void showJoke() {
 		System.out
 				.println("How can you expect a Todo-List software to provide you a joke!");
@@ -371,6 +392,8 @@ public class User {
 	 * @return
 	 * @throws CommandFailedException
 	 */
+	
+	// author A0119447Y
 	public Task retrieve(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
@@ -393,6 +416,8 @@ public class User {
 	 * @return
 	 * @throws Exception
 	 */
+	
+	// author A0119447Y
 	public ArrayList<Task> find(Constraint constraint) throws Exception {
 		Iterator<Task> taskIterator = this.currentTasks.iterator();
 		ArrayList<Task> matchedTasks = new ArrayList<Task>();
@@ -411,6 +436,8 @@ public class User {
 	 * @param index
 	 * @return
 	 */
+	
+	// author A0119447Y
 	private boolean isValidIndex(int index) {
 		if ((index < 0) || (index > this.currentTasks.size())) {
 			return false;
@@ -424,6 +451,8 @@ public class User {
 	 * 
 	 * @return
 	 */
+	
+	// author A0119447Y
 	public ArrayList<Task> getTaskList() {
 		ArrayList<Task> nonTrashedTasks = new ArrayList<Task>();
 		for (Task task : this.currentTasks) {
@@ -441,19 +470,26 @@ public class User {
 	 * 
 	 * @return
 	 */
+	
+	// author A0119447Y unused
 	public static String showHelp() {
 
 		return "'Help' has not been implemented yet";
 	}
+	
+	
 
 	/**
 	 * exit exits the application
 	 */
+	
+	// author A0119447Y
 	public static void exit() {
 		UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_SESSION_END);
 		System.exit(0);
 	}
 
+	// author A0119447Y unused
 	public boolean done(int index) throws CommandFailedException {
 		// TODO Auto-generated method stub
 		return false;
