@@ -82,7 +82,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			this.loadFxml();
 			this.loadParser();
 			this.addTextFieldListener();
-//			this.initializeShortCuts();
+			this.initializeShortCuts();
 			this.updatePage();
 	        UtilityMethod.makeDraggable(stage, dragNode);
 	        
@@ -306,6 +306,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	        public void run() {
 	        	instance.input.setText(text);
 	        	instance.input.positionCaret(text.length());
+	        	instance.input.selectAll();
 	        }
 	   });
 	}
