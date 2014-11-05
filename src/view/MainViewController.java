@@ -31,7 +31,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -201,7 +201,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		this.setDisplayText("HELP:" + "\n\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
 	}
 	
-	//@author A0119379R
+
 	private void addTextFieldListener() {
 		final MainViewController instance = this;
 		
@@ -251,6 +251,36 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		previewScrollPane.setContent(previewContentBox);
 	}
 	
+	
+	//@author A0119379R
+	public void setPreviewPane(String textToDisplay, String listName) {
+		GridPane previewContentPane = new GridPane();
+		previewContentPane.setStyle("-fx-padding: 8 8 8 8;");
+		previewContentPane.setHgap(8);
+		
+		VBox parsingFeedbackBox = new VBox();
+		parsingFeedbackBox.setPrefWidth(400);
+		Label text = new Label(textToDisplay);
+		parsingFeedbackBox.setStyle("-fx-font: 12px \"Akagi\";"
+				+ "-fx-background-color: rgba(0, 200, 255, 1);"
+				+ "-fx-padding: 8 8 8 8;");
+		parsingFeedbackBox.getChildren().add(text);
+		
+		VBox listIndicatorBox = new VBox();
+		listIndicatorBox.setPrefWidth(getWidth() - 470);
+		Label listLabel = new Label(listName);
+		listIndicatorBox.setStyle("-fx-background-color: rgba(251, 235, 178, 1);"
+				+ "-fx-padding: 8 8 8 8;");
+		listIndicatorBox.getChildren().add(listLabel);
+		
+		
+		previewContentPane.add(parsingFeedbackBox, 0, 0);
+		previewContentPane.add(listIndicatorBox, 1, 0);
+		
+		previewScrollPane.setStyle(Constant.CSS_STYLE_PREVIEW_SCROLL_PANE);
+		previewScrollPane.setContent(previewContentPane);
+	}
+	
 	//@author A0119447Y
 	public void setDisplayText(String textToDisplay) {
 		VBox displayContent = new VBox();
@@ -261,32 +291,6 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		setDisplayScrollbarStyle();
 		
 		displayScrollPane.setFocusTraversable(true);
-	}
-
-	/**
-	 * set the scroll bar style using css and set 2 event handlers
-	 */
-	//@author A0119444E
-	private void setDisplayScrollbarStyle() {
-		displayScrollPane.getStyleClass().add("mylistview");
-		displayScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-		displayScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
-		
-		displayScrollPane.setOnScrollFinished(new EventHandler<ScrollEvent>() {
-			@Override
-			public void handle(ScrollEvent event) {
-				// TODO Auto-generated method stub
-				displayScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
-				
-			}
-	    });
-		
-		displayScrollPane.setOnScrollStarted(new EventHandler<ScrollEvent>() {
-			@Override
-			public void handle(ScrollEvent event) {
-				displayScrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-			}
-		});
 	}
 	
 	//@author A0119447Y
@@ -302,7 +306,6 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			displayScrollPane.setContent(displayContent);
 		}
 	}
-	
 	
 	//@author A0119379R
 	/**
@@ -359,7 +362,8 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	        	String userInput = getUserInput(false);
 	        	if (userInput.length() > 0) {
 	        		System.out.println(userInput);
-	        		setPreviewText(instance.getPreview(userInput));
+//	        		setPreviewText(instance.getPreview(userInput));
+	        		setPreviewPane(instance.getPreview(userInput), "Normal List");
 	        	}
 	        }
 	   });
@@ -370,7 +374,10 @@ public class MainViewController extends GridPane implements HotKeyListener{
     private void onEnter() {
 		String command = getUserInput(true);
 		if (command.equals("")) {
-			this.loadEmptyImage();			
+			ArrayList<Task> taskList = this.displayNormal();
+			if (taskList != null) {
+				this.setDisplayPane(taskList);
+			}
 		} else {
 			this.commandHistory.add(command);
 			this.currentCommandIndex = this.commandHistory.size();
@@ -378,7 +385,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
     }
 
-	
+	//@author A0119379R
 	private void loadEmptyImage() {
 		HBox emptyImageBox = new HBox();
 		emptyImageBox.setPrefHeight(200);
@@ -390,7 +397,31 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		this.displayScrollPane.setContent(emptyImageBox);
 	}
 	
-	
+	//@author A0119444E
+	/**
+	 * set the scroll bar style using css and set 2 event handlers
+	 */
+	private void setDisplayScrollbarStyle() {
+		displayScrollPane.getStyleClass().add("mylistview");
+		displayScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+		displayScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
+		
+		displayScrollPane.setOnScrollFinished(new EventHandler<ScrollEvent>() {
+			@Override
+			public void handle(ScrollEvent event) {
+				// TODO Auto-generated method stub
+				displayScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
+				
+			}
+	    });
+		
+		displayScrollPane.setOnScrollStarted(new EventHandler<ScrollEvent>() {
+			@Override
+			public void handle(ScrollEvent event) {
+				displayScrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+			}
+		});
+	}
 
 /**
  * ==================================================================================================

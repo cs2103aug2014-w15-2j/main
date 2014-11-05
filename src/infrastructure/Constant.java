@@ -404,7 +404,8 @@ public abstract class Constant {
 			+ "-fx-background-color: %s";
 	public static final String CSS_STYLE_CONTENT_PANE = "-fx-padding: 8 8 8 8;"
 			+ "-fx-background-color: %s";
-	public static final String CSS_STYLE_PRIVIEW_CONTENT_BOX = "-fx-font: 12px \"Akagi\";";
+	public static final String CSS_STYLE_PRIVIEW_CONTENT_BOX = "-fx-font: 12px \"Akagi\";"
+			+ "-fx-background-color: rgba(0, 200, 255, 1)";
 	public static final String CSS_STYLE_PREVIEW_SCROLL_PANE = "-fx-padding:5 0 0 7;"
 			+ "-fx-background-color: rgb(244, 244, 244)";
 	public static final String CSS_STYLE_DEADLINE_LABEL = "-fx-font: 38px \"Ticking Timebomb BB\";"
