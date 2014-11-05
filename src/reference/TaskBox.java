@@ -17,7 +17,7 @@ public class TaskBox {
 	}
 	
 	public ArrayList<Task> getCurrentTasks() {
-		return currentTasks;
+		return normalTasks;
 	}
 	
 	public ArrayList<Task> getFinishedTasks() {
