@@ -1,7 +1,6 @@
 package infrastructure;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +19,7 @@ import reference.CommandFailedException;
 import dataStructure.Task;
 
 public abstract class UtilityMethod {
+//@author A0119379R
 	private static Scanner scanner_ = new Scanner(System.in);
 
 	public static int selectDifferentDate(Calendar c1, Calendar c2, Calendar c3)
@@ -168,6 +168,30 @@ public abstract class UtilityMethod {
 			}
 		}
 	}
+
+	  
+	public static void copyUserNlpFiles(InputStream[] tsvStreams, InputStream[] propStreams, InputStream[] gzStreams) throws IOException {
+		assert (tsvStreams.length == 11);
+		assert (propStreams.length == 11);
+		
+		System.err.println("initializeUserTrainingModel");
+		File rootDirectory = new File(Constant.FILE_PATH_ROOT);
+		if (!rootDirectory.exists()) {
+			rootDirectory.mkdir();
+		}
+	
+		File nlpRootDirectory = new File(Constant.FILE_PATH_NLP_ROOT);
+		if (!nlpRootDirectory.exists()) {
+			nlpRootDirectory.mkdir();
+		}
+		
+		for (int i = 0; i < 11; i++) {
+			copyFile(tsvStreams[i], Constant.TSVS_USER[i]);
+			copyFile(propStreams[i], Constant.PROPS_USER[i]);
+			copyFile(gzStreams[i], Constant.GZS_USER[i]);
+		}
+	}
+	
 	
 	public static void makeDraggable(final Stage stage, final Node byNode) {
 	    final Delta dragDelta = new Delta();
@@ -210,28 +234,5 @@ public abstract class UtilityMethod {
 	  private static class Delta {
 	    double x, y;
 	  }
-
-	  
-	public static void copyUserNlpFiles(InputStream[] tsvStreams, InputStream[] propStreams, InputStream[] gzStreams) throws IOException {
-		assert (tsvStreams.length == 11);
-		assert (propStreams.length == 11);
-		
-		System.err.println("initializeUserTrainingModel");
-		File rootDirectory = new File(Constant.FILE_PATH_ROOT);
-		if (!rootDirectory.exists()) {
-			rootDirectory.mkdir();
-		}
-	
-		File nlpRootDirectory = new File(Constant.FILE_PATH_NLP_ROOT);
-		if (!nlpRootDirectory.exists()) {
-			nlpRootDirectory.mkdir();
-		}
-		
-		for (int i = 0; i < 11; i++) {
-			copyFile(tsvStreams[i], Constant.TSVS_USER[i]);
-			copyFile(propStreams[i], Constant.PROPS_USER[i]);
-			copyFile(gzStreams[i], Constant.GZS_USER[i]);
-		}
-	}
 }
 

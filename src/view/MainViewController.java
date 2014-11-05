@@ -102,7 +102,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
  *  Methods which might be called during initialization (in constructor)
  * ========================================================================================
  */
-	
+	//@author A0119379R
 	private void loadFont() {
 		Font.loadFont(getClass().getResource(Constant.FONT_FILE_BASE).toExternalForm(), 10);
 		Font.loadFont(getClass().getResource(Constant.FONT_FILE_TIME).toExternalForm(), 10);
@@ -165,6 +165,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}).start();
 	}
 	
+
 	private void registerKeyShortCuts(HotKeyListener instance) {
 		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_DESCRIPTION_TAG), instance);
 		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_DATE_TAG), instance);
@@ -227,6 +228,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		return text;
 	}
 	
+	//@author A0119379R
 	public void setPreviewText(String textToDisplay) {
 		VBox previewContentBox = new VBox();
 		Label text = new Label(textToDisplay);
@@ -283,6 +285,8 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		displayScrollPane.setContent(displayContent);
 	}
 	
+	
+	//@author A0119379R
 	/**
 	 * insert the given text to the given position in the textField
 	 * @param cursorPosition
@@ -361,6 +365,8 @@ public class MainViewController extends GridPane implements HotKeyListener{
  * Demux methods
  * ==================================================================================================
  */
+	
+	//@author A0119379R
 	public void execute(String userInput) {
 		
 			if (!userInput.equals("")) {
@@ -461,6 +467,8 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 	
+	
+	//@author A0119379R
 	public String getPreview(String userInput) {
 		try {
 			if (userInput.equals("")) {
@@ -530,6 +538,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
  *  Specific methods to get previews
  *  =======================================================================================================
  */
+	//@author A0119379R
 	private String getDefaultPreview() {
 		return "Command not recognized";
 	}
@@ -630,7 +639,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
  * Methods to execute the specific operations
  * ============================================================================================================
  */
-	
+	//@author A0119379R
 	private String add(String userInput) {
 		try {
 			Task taskToAdd = parser.nerParser.getTask(userInput);
@@ -809,6 +818,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
  * the delegation methods to respond to shortcuts
  * ==========================================================================
  */
+	//@author A0119379R
 	@Override
 	public void onHotKey(HotKey key) {
 		String tag = "";

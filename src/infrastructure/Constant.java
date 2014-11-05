@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 
 public abstract class Constant {
 
+	
+	//@author A0119379R
 	// logger
 	public static Logger logger = Logger.getLogger("ListOfXiaoMing");
 	public final static boolean ERROR_PRINT_ON = true;
@@ -390,7 +392,7 @@ public abstract class Constant {
 	 * MainViewController
 	 */
 	
-	
+
 	// CSS styles
 	public static final String CSS_STYLE_TAG_LABEL = "-fx-font: 10px \"Akagi\";"
 			+ "-fx-padding: 5 10 5 10;"
