@@ -17,6 +17,8 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
+
+import reference.TaskBox;
 import dataStructure.Task;
 
 public abstract class DataStore {
@@ -37,7 +39,7 @@ public abstract class DataStore {
 	 * @return true if succeed, false otherwise
 	 */
 	@SuppressWarnings("rawtypes")
-	public static boolean save(ArrayList<Task> tasks) {
+	public static boolean save(TaskBox tasks) {
 		if (!isFileExisting()) {
 			return false;
 		}
@@ -124,12 +126,20 @@ public abstract class DataStore {
 	 */
 
 	@SuppressWarnings({ "rawtypes" })
-	private static ArrayList getContent(ArrayList<Task> tasks) {
+	private static ArrayList getContent(TaskBox tasks) {
 		//list all tasks
 		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
 		if( tasks != null) {
-			for(int i = 0; i < tasks.size(); i++) {
-				LinkedHashMap task = Converter.convertTaskToMap(tasks.get(i));
+			for(int i = 0; i < tasks.getNormalTasks().size(); i++) {
+				LinkedHashMap task = Converter.convertTaskToMap(tasks.getNormalTasks().get(i));
+				tasksList.add(task);
+			}
+			for(int i = 0; i < tasks.getFinishedTasks().size(); i++) {
+				LinkedHashMap task = Converter.convertTaskToMap(tasks.getFinishedTasks().get(i));
+				tasksList.add(task);
+			}
+			for(int i = 0; i < tasks.getTrashedTasks().size(); i++) {
+				LinkedHashMap task = Converter.convertTaskToMap(tasks.getTrashedTasks().get(i));
 				tasksList.add(task);
 			}
 		}
