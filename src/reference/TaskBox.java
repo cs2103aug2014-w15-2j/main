@@ -15,4 +15,17 @@ public class TaskBox {
 		this.finishedTasks = new ArrayList<Task>();
 		this.trashedTasks = new ArrayList<Task>();
 	}
+	
+	public ArrayList<Task> getCurrentTasks() {
+		return currentTasks;
+	}
+	
+	public ArrayList<Task> getFinishedTasks() {
+		return finishedTasks;
+	}
+	
+	public ArrayList<Task> getTrashedTask() {
+		return trashedTasks;
+	}
+	
 }
