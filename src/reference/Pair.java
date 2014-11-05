@@ -1,6 +1,7 @@
 package reference;
 
 public class Pair<Object1, Object2> {
+	//@author A0119379R
 	public Object1 head;
 	public Object2 tail;
 	

@@ -1,4 +1,4 @@
-//@author A0119379R
+
 
 package infrastructure;
 
@@ -20,6 +20,7 @@ import dataStructure.Task;
 
 public class LayoutManager {
 
+	//author A0119379R
 	public static GridPane getTagPaneForTask(Task task) {
 		GridPane tagPane = new GridPane();
 		tagPane.setStyle(Constant.CSS_STYLE_TAG_PANE);
@@ -42,6 +43,7 @@ public class LayoutManager {
 		return tagPane;
 	}
 
+	//author A0119447Y
 	public static GridPane getTaskPane(ArrayList<Task> taskList, double width) {
 		GridPane taskPane = new GridPane();
 		int row = 0;
@@ -74,6 +76,7 @@ public class LayoutManager {
 		return taskPane;
 	}
 
+	//author A0119379R
 	public static GridPane getEmptyPane(double width) {
 		GridPane emptyPane = new GridPane();
 		emptyPane.setStyle(Constant.CSS_STYLE_EMPTY_PANE);
@@ -81,6 +84,7 @@ public class LayoutManager {
 		return emptyPane;
 	}
 
+	//author A0119379R
 	public static GridPane getContentPane(Task task, double width) {
 		String bodyColor = LayoutManager.getBodyColor(task);
 		GridPane contentPane = LayoutManager.getContentPane(bodyColor, width);
@@ -107,6 +111,7 @@ public class LayoutManager {
 		return contentPane;
 	}
 
+	//author A0119447Y
 	public static String getBodyColor(Task task) {
 		switch (task.getPriority()) {
 			case Constant.PRIORITY_HIGH:
@@ -123,6 +128,7 @@ public class LayoutManager {
 		}
 	}
 
+	//author A0119447Y
 	public static String getBannerColor(Task task) {
 		switch (task.getPriority()) {
 			case Constant.PRIORITY_HIGH:
@@ -139,6 +145,7 @@ public class LayoutManager {
 		}
 	}
 
+	//author A0119447Y
 	public static GridPane getPriorityPane(String bannerColor, int index, double width) {
 		GridPane priorityPane = new GridPane();
 		priorityPane.setStyle(String.format(Constant.CSS_STYLE_PRIORITY_PANE, bannerColor));
@@ -150,6 +157,7 @@ public class LayoutManager {
 		return priorityPane;
 	}
 
+	//author A0119379R
 	public static Label getDescriptionLabel(Task task, double width) {
 		Label descriptionLabel = new Label(task.getDescription());
 		descriptionLabel.setStyle(Constant.CSS_STYLE_DESCRIPTION_LABEL);
@@ -157,6 +165,7 @@ public class LayoutManager {
 		return descriptionLabel;
 	}
 
+	//author A0119447Y
 	public static GridPane getContentPane(String bodyColor, double width) {
 		GridPane contentPane = new GridPane();
 		contentPane.setGridLinesVisible(false);
@@ -167,6 +176,7 @@ public class LayoutManager {
 		return contentPane;
 	}
 
+	//author A0119379R
 	public static HBox getTimePaneForTask(Task task) {
 		TimeInterval timeInterval = task.getInterval();
 		HBox overallTimeBox = new HBox();
@@ -193,6 +203,7 @@ public class LayoutManager {
 		}
 	}
 
+	//author A0119379R
 	public static HBox getTimeBox(Date date) {
 		
 		HBox timeBox = new HBox();
@@ -218,6 +229,7 @@ public class LayoutManager {
 		return timeBox;
 	}
 
+	//author A0119379R
 	public static HBox getDeadlineBox(Date date) {
 		HBox timeBox = new HBox();
 		VBox dateBox = new VBox();
@@ -244,6 +256,7 @@ public class LayoutManager {
 		return timeBox;
 	}
 
+	//author A0119379R
 	public static int getRowCount(GridPane pane) {
 	    int numRows = pane.getRowConstraints().size();
 	    for (int i = 0; i < pane.getChildren().size(); i++) {
@@ -257,6 +270,7 @@ public class LayoutManager {
 	    return numRows;
 	}
 
+	//author A0119447Y
 	public static void setDisplayRow(GridPane pane, double height) {
 		pane.getRowConstraints().add(new RowConstraints(height));
 	}
