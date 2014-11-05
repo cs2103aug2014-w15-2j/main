@@ -9,7 +9,7 @@ public abstract class Constant {
 	//@author A0119379R
 	// logger
 	public static Logger logger = Logger.getLogger("ListOfXiaoMing");
-	public final static boolean ERROR_PRINT_ON = true;
+	public final static boolean ERROR_PRINT_ON = false;
 	
 	/**
 	 * training data path

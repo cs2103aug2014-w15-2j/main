@@ -224,6 +224,10 @@ public class Task {
 	
 	//@author A0113029U
 	public void setStatus(String state) {
+		if ((state == null) || state == "") {
+			this.status = Constant.TASK_STATUS_NORMAL;
+			return ;
+		}
 		switch(state.toLowerCase()) {
 			case Constant.TASK_STATUS_NORMAL:
 				this.status = Constant.TASK_STATUS_NORMAL;

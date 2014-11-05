@@ -257,6 +257,26 @@ public class User {
 	
 	//@author A0119447Y
 	/**
+	 * done
+	 * mark a task as done
+	 * 
+	 * @param normalIndex
+	 * @throws CommandFailedException
+	 */
+	public boolean unDone(int normalIndex) throws CommandFailedException {
+		if (!this.isValidNormalIndex(normalIndex)) {
+			throw new CommandFailedException(String.format(
+					Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
+		} else {
+			this.updateUndoable();
+			Task doneTask = this.currentTasks.getNormalTasks().remove(normalIndex);
+			this.currentTasks.getFinishedTasks().add(doneTask);
+			return DataStore.save(this.currentTasks);
+		}
+	}
+	
+	//@author A0119447Y
+	/**
 	 * emptyTrash
 	 * clear all the trahsed task
 	 */

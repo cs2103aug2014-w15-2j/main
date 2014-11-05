@@ -87,7 +87,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			this.addTextFieldListener();
 			this.initializeShortCuts();
 			this.updatePage();
-			stage.getScene().getRoot().setStyle("-fx-background-color: #fff");
+//			this.displayScrollPane.setStyle("-fx-background-color:transparent");
 	        UtilityMethod.makeDraggable(stage, dragNode);
 	        
 	        if (!Constant.ERROR_PRINT_ON) {
@@ -547,7 +547,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	//@author A0119379R
 	public String getPreview(String userInput) {
 		try {
-			if (userInput.equals("")) {
+			if (userInput.equals("") || (userInput == null)) {
 				return "The expected result will be shown here";
 			}
 			
