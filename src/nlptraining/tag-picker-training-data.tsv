@@ -1,4 +1,4 @@
-Add	O
+﻿Add	O
 I’m	O
 going	O
 to	O
@@ -50,132 +50,29 @@ and	TAG
 hate	TAG
 .	O
 
-clean	O
-my	O
-room	O
-,	O
+add	O
+cs2105	O
+assessment	O
 tag	TAG
 with	TAG
-:	TAG
-private	TAG
+good	TAG
 ,	TAG
-house	TAG
-.	O
-
-buy	O
-a	O
-new	O
-3dsll	O
-tag	TAG
-with	TAG
-:	TAG
-game	TAG
-.	O
-
-mark	TAG
-task	O
-1	O
-as	TAG
-done	TAG
-.	O
-
-mark	TAG
-1	O
-as	TAG
-done	TAG
-.	O
-
-tag	TAG
-task	O
-1	O
-with	TAG
-done	TAG
-.	O
-
-tag	TAG
-1	O
-with	TAG
-done	TAG
-.	O
-
-task	O
-1	O
-tag	TAG
-with	TAG
-done	TAG
-.	O
-
-1	O
-tag	TAG
-with	TAG
-done	TAG
-.	O
-
-1	O
-mark	TAG
-as	TAG
-done	TAG
-.	O
-
-task	O
-1	O
-mark	TAG
-as	TAG
-done	TAG
-.	O
-
-search	O
-trashed	TAG
-.	O
-
-mark	O
-task	O
-2	O
-as	TAG
-done	TAG
-.	O
-
-mark	O
-task	O
-1	O
-done	TAG
-.	O
-
-
-mark	O
-task	O
-1	O
-as	TAG
-done	TAG
-.	O
-
-
-mark	O
-task	O
-1	O
-as	O
-done	TAG
-.	O
-
-
-mark	O
-task	O
-1	O
-as	TAG
-done	TAG
-.	O
-
-
-search	O
-trashed	TAG
+bad	TAG
+,	TAG
+shit	TAG
+,	TAG
+right	TAG
 
 
 add	O
-mua	O
-,	O
-priority	O
-low	O
-,	O
-tag	O
-with	O
-water	TAG
+lsm	O
+assignment	O
+tag	TAG
+with	TAG
+aa	TAG
+,	TAG
+bb	TAG
+,	TAG
+cc	TAG
+,	TAG
+dd	TAG
