@@ -145,6 +145,8 @@ public class Parser {
 		return updateAttributes;
 	}
 	
+	
+	//@author A0119379R-unused
 	public Task getTaskFromParameterList(ArrayList<String> parameterList) throws CommandFailedException {
 		TimeInterval timeInterval = new TimeInterval();
 //		String category = null; 
