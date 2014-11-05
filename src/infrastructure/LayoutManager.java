@@ -100,8 +100,7 @@ public class LayoutManager {
 		
 		HBox timeBox = LayoutManager.getTimePaneForTask(task);
 		if (timeBox != null) {
-			contentPane.add(timeBox, 0, subRow, 2, 2);
-			subRow += 2;
+			contentPane.add(timeBox, 1, 0, 2, 2);
 		}
 		
 		GridPane tagPane = getTagPaneForTask(task);
@@ -169,8 +168,8 @@ public class LayoutManager {
 	public static GridPane getContentPane(String bodyColor, double width) {
 		GridPane contentPane = new GridPane();
 		contentPane.setGridLinesVisible(false);
-	    contentPane.getColumnConstraints().add(new ColumnConstraints(width * 0.3 - 29));
-		contentPane.getColumnConstraints().add(new ColumnConstraints(width * 0.7 - 29));
+	    contentPane.getColumnConstraints().add(new ColumnConstraints(width * 0.62 - 29));
+		contentPane.getColumnConstraints().add(new ColumnConstraints(width * 0.38 - 29));
 		contentPane.setStyle(String.format(Constant.CSS_STYLE_CONTENT_PANE, bodyColor));
 		contentPane.setPrefWidth(width);
 		return contentPane;
@@ -180,14 +179,14 @@ public class LayoutManager {
 	public static HBox getTimePaneForTask(Task task) {
 		TimeInterval timeInterval = task.getInterval();
 		HBox overallTimeBox = new HBox();
-		overallTimeBox.setAlignment(Pos.CENTER);
+		overallTimeBox.setAlignment(Pos.CENTER_RIGHT);
 		overallTimeBox.setStyle(Constant.CSS_STYLE_OVERALL_TIME_BOX);
 		if (timeInterval.getStartDate().equals(Constant.FLOATING_START_DATE)) {
 			return null;
 		} else if (timeInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 			
 			HBox deadlineBox = LayoutManager.getDeadlineBox(timeInterval.getEndDate());
-			deadlineBox.setPrefWidth(400);
+			deadlineBox.setPrefWidth(343);
 			overallTimeBox.getChildren().addAll(deadlineBox);
 			
 			return overallTimeBox;
@@ -238,7 +237,7 @@ public class LayoutManager {
 		timeBox.setStyle(Constant.CSS_STYLE_TIME_BOX);
 		
 		dateBox.setAlignment(Pos.CENTER);
-		Label deadlineLabel = new Label("DEADLINE:     ");
+		Label deadlineLabel = new Label("DEADLINE:      ");
 		deadlineLabel.setStyle(Constant.CSS_STYLE_DEADLINE_LABEL);
 		
 		Label dateLabel = new Label(new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(date));
