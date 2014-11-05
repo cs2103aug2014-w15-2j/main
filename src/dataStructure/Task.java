@@ -101,7 +101,7 @@ public class Task {
 			task = task + "\ntags: \t\t" + tagToString();
 		}
 	
-		task = task + "\npriority: \t\t" + UtilityMethod.priorityToString(getPriority());
+		task = task + "\npriority: \t" + UtilityMethod.priorityToString(getPriority());
 		task = task + this.getInterval().toString();
 
 		return task;

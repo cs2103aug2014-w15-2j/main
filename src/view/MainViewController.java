@@ -87,7 +87,6 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			this.addTextFieldListener();
 			this.initializeShortCuts();
 			this.updatePage();
-			stage.getScene().getRoot().setStyle("-fx-background-color: #fff");
 	        UtilityMethod.makeDraggable(stage, dragNode);
 	        
 	        if (!Constant.ERROR_PRINT_ON) {
@@ -110,6 +109,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	private void loadFont() {
 		Font.loadFont(getClass().getResource(Constant.FONT_FILE_BASE).toExternalForm(), 10);
 		Font.loadFont(getClass().getResource(Constant.FONT_FILE_TIME).toExternalForm(), 10);
+		Font.loadFont(getClass().getResource(Constant.FONT_FILE_FEEDBACK).toExternalForm(), 10);
 	}
 	
 	//@author A0119379R
@@ -148,7 +148,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			public void run() {
 				instance.updateTextField("NLP MODEL LOADING");
 				instance.parser = new Parser();
-				instance.updateTextField("NLP MODEL LOADED");
+				instance.updateTextField("display");
 			}
 		}).start();
 	}
@@ -197,7 +197,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	
 	//@author A0119379R
 	private void updatePage() {
-		setPreviewText("\n\n\n\t\t\t  Welcome to List of Xiao Ming");
+		setPreviewPane("Welcome to List of Xiao Ming. \nPlease wait for the NLP model loading...", "normal list");
 		this.setDisplayText("HELP:" + "\n\n" + Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
 	}
 	
@@ -338,6 +338,9 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		Platform.runLater(new Runnable() {
 	        @Override
 	        public void run() {
+	        	if (text == null) {
+	        		instance.input.deleteText(0, instance.input.getText().length());;
+	        	}
 	        	instance.input.setText(text);
 	        	instance.input.positionCaret(text.length());
 	        	instance.input.selectAll();
@@ -370,8 +373,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	        	String userInput = getUserInput(false);
 	        	if (userInput.length() > 0) {
 	        		System.out.println(userInput);
-//	        		setPreviewText(instance.getPreview(userInput));
-	        		setPreviewPane(instance.getPreview(userInput), "Normal List");
+	        		setPreviewPane(instance.getPreview(userInput), instance.getCurrentListName());
 	        	}
 	        }
 	   });
