@@ -93,44 +93,6 @@ public class Converter {
 		return priority;
 	}
 
-	@SuppressWarnings("rawtypes") 
-	public static int convertRepeatedPeriodStringToInt(LinkedHashMap task) {
-		int repeated_period = Constant.REPEATED_PERIOD_DEFAULT;
-		if (task.get("repeated-period").equals("none")) {
-			repeated_period = Constant.REPEATED_PERIOD_NONE;
-		} else if (task.get("repeated-period").equals("none")) {
-			repeated_period = Constant.REPEATED_PERIOD_DAILY;
-		} else if (task.get("repeated-period").equals("none")) {
-			repeated_period =  Constant.REPEATED_PERIOD_WEEKLY;
-		} else if (task.get("repeated-period").equals("none")) {
-			repeated_period = Constant.REPEATED_PERIOD_MONTHLY;
-		} else {
-			repeated_period = Constant.REPEATED_PERIOD_INVALID;
-		}
-		return repeated_period;
-	}
-	
-	public static String convertRepeatedPeriodIntToString(Task task) {
-		String repeatedPeriod = "none";
-		switch (task.getRepeatedPeriod()) {
-			case Constant.REPEATED_PERIOD_NONE:
-				repeatedPeriod = "none";
-				break;
-			case Constant.REPEATED_PERIOD_DAILY:
-				repeatedPeriod = "daily";
-				break;
-			case Constant.REPEATED_PERIOD_WEEKLY:
-				repeatedPeriod = "weekly";
-				break;
-			case Constant.REPEATED_PERIOD_MONTHLY:
-				repeatedPeriod = "monthly";
-				break;
-			default:
-				repeatedPeriod = "invalid";
-		}
-		return repeatedPeriod;
-	}
-
 	@SuppressWarnings("rawtypes")
 	public static TimeInterval convertStringToTimeInterval
 								(LinkedHashMap intervalObj) 
