@@ -612,6 +612,8 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
 			return "Failure in Parsing The Task";
+		} catch (Exception e) {
+			return e.toString();
 		}
 	}
 	

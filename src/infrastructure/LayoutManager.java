@@ -286,11 +286,11 @@ public class LayoutManager {
 
 	//@author A0119447Y
 	public static Double calculateDescriptionWidth(Double fullWidth) {
-		return fullWidth * 0.62 - 29;
+		return fullWidth * 0.647 - 29;
 	}
 	
 	//@author A0119447Y
 	public static Double calculateTimeWidth(Double fullWidth) {
-		return fullWidth * 0.38 - 29;
+		return fullWidth * 0.37 - 29;
 	}
 }
