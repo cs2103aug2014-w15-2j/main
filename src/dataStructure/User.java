@@ -15,26 +15,24 @@ import reference.*;
 
 public class User {
 
-	private ArrayList<Task> currentTasks;
+	//@author A0119447Y
+	private TaskBox currentTasks;
 	private ArrayList<String> validCategory;
-	private Stack<ArrayList<Task>> undoable;
-	private Stack<ArrayList<Task>> redoable;
+	private Stack<TaskBox> undoable;
+	private Stack<TaskBox> redoable;
 	private int taskEndIndex = -1;
 	private Cloner cloner = new Cloner();
 
+	//@author A0119447Y
 	/**
-	 * constructor
+	 * constructor for class User
 	 * 
-	 * @param recordFilePath
 	 * @throws Exception
 	 */
-	
-	// author A0119447Y
 	public User() throws Exception {
 		currentTasks = DataStore.loadFileData();
-		undoable = new Stack<ArrayList<Task>>();
-		redoable = new Stack<ArrayList<Task>>();
-		validCategory = getValidCategory();
+		undoable = new Stack<TaskBox>();
+		redoable = new Stack<TaskBox>();
 	}
 
 	/**
@@ -93,50 +91,84 @@ public class User {
 		}
 	}
 
+	//@author A0119444E-unused
+//	/**
+//	 * add 
+//	 * adds a task into the task list.
+//	 * 
+//	 * @param task
+//	 */
+//	
+//	public boolean add(Task task) {
+//		this.updateUndoable();
+//		if (taskEndIndex == -1 || taskEndIndex == currentTasks.size() - 1) {
+//			this.currentTasks.add(task);
+//		} else {
+//			this.currentTasks.add(task);
+//			moveAddedTask(taskEndIndex);
+//		}
+//		taskEndIndex++;
+//		boolean isSuccessful = DataStore.save(this.currentTasks);
+//		return isSuccessful;
+//	}
+	
+	//@author A0119447Y
 	/**
-	 * add adds a task into the task list.
+	 * add 
+	 * adds a task into the current task list.
 	 * 
 	 * @param task
 	 */
-	
-	// author A0119444E
 	public boolean add(Task task) {
 		this.updateUndoable();
-		if (taskEndIndex == -1 || taskEndIndex == currentTasks.size() - 1) {
-			this.currentTasks.add(task);
-		} else {
-			this.currentTasks.add(task);
-			moveAddedTask(taskEndIndex);
-		}
-		taskEndIndex++;
+		this.currentTasks.normalTasks.add(task);
 		boolean isSuccessful = DataStore.save(this.currentTasks);
 		return isSuccessful;
 	}
 
+	//@author A0119444E-unused
+//	/**
+//	 * delete deletes the task with the index from the task list.
+//	 * 
+//	 * @param index
+//	 * @throws CommandFailedException
+//	 */
+//	public boolean delete(int index) throws CommandFailedException {
+//		if (!this.isValidIndex(index)) {
+//			throw new CommandFailedException(String.format(
+//					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+//		} else {
+//			this.updateUndoable();
+//			boolean isSuccessful = this.currentTasks.get(index).addTag(
+//					Constant.TRASHED_TAG);
+//			moveTrashedTask(index);
+//			taskEndIndex--;
+//			DataStore.save(this.currentTasks);
+//			return isSuccessful;
+//		}
+//	}
+	
+	//@author A0119447Y
 	/**
-	 * delete deletes the task with the index from the task list.
+	 * delete 
+	 * deletes the task with the index from the task list.
 	 * 
 	 * @param index
 	 * @throws CommandFailedException
 	 */
-	
-	// author A0119444E
 	public boolean delete(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
-			throw new CommandFailedException(String.format(
-					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+			throw new CommandFailedException(String.format(Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			this.updateUndoable();
-			boolean isSuccessful = this.currentTasks.get(index).addTag(
-					Constant.TRASHED_TAG);
-			moveTrashedTask(index);
-			taskEndIndex--;
-			DataStore.save(this.currentTasks);
+			Task removedTask = this.currentTasks.normalTasks.remove(index);
+			this.currentTasks.trashedTasks.add(removedTask);
+			boolean isSuccessful = DataStore.save(this.currentTasks);
 			return isSuccessful;
 		}
 	}
 
-	// author A0119479R
+	//@author A0119379R
 	@SuppressWarnings("unchecked")
 	public Task getUpdatePreview(int index, HashMap<String, Object> toBeUpdated)
 			throws CommandFailedException {
@@ -144,7 +176,7 @@ public class User {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
-			Task task = cloner.deepClone(this.currentTasks.get(index));
+			Task task = cloner.deepClone(this.currentTasks.normalTasks.get(index));
 			if (task.isTrashed()) {
 				throw new CommandFailedException("Task is trashed");
 			}
@@ -177,6 +209,7 @@ public class User {
 		}
 	}
 
+	//@author A0119444E
 	/**
 	 * update updates the task with the index according to the key-value pairs
 	 * in toBeUpdated.
@@ -186,8 +219,6 @@ public class User {
 	 *            attributes to be updated
 	 * @throws CommandFailedException
 	 */
-	
-	// author A0119444E
 	@SuppressWarnings("unchecked")
 	public void update(int index, HashMap<String, Object> toBeUpdated)
 			throws CommandFailedException {
@@ -196,7 +227,7 @@ public class User {
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			this.updateUndoable();
-			Task task = this.currentTasks.get(index);
+			Task task = this.currentTasks.normalTasks.get(index);
 			Iterator<String> attributes = toBeUpdated.keySet().iterator();
 			while (attributes.hasNext()) {
 				String currentAttribute = attributes.next();
@@ -214,10 +245,6 @@ public class User {
 				} else if (currentAttribute.equals("tag")) {
 					task.setTag((ArrayList<String>) currentObject);
 					ArrayList<String> tagList = (ArrayList<String>) currentObject;
-					String tag = tagList.get(0);
-					if (tag.equals("done")) {
-						delete(index);
-					}
 				} else if (currentAttribute.equals("time_interval")) {
 					System.err.println("USER UPDATE INTERVAL: "
 							+ (TimeInterval) currentObject);
@@ -230,174 +257,193 @@ public class User {
 		}
 		DataStore.save(this.currentTasks);
 	}
-
-	/**
-	 * delete all current tasks
-	 * 
-	 * @throws CommandFailedException
-	 */
 	
-	// author A0119447Y
-	public void deleteAll() throws CommandFailedException {
-		this.updateUndoable();
-		for (Task task : currentTasks) {
-			if (task.isTrashed()) {
-
-			} else {
-				task.addTag(Constant.TRASHED_TAG);
-			}
-		}
-		DataStore.save(this.currentTasks);
-	}
-
+	//@author A0119447Y
 	/**
-	 * clear all current tasks
-	 */
-	
-	// author A0119444E
-	public void clear() {
-		this.updateUndoable();
-		ArrayList<Task> toBeCleared = new ArrayList<Task>();
-
-		for (Task task : currentTasks) {
-			if (task.isTrashed()) {
-				toBeCleared.add(task);
-			}
-		}
-
-		for (Task task : toBeCleared) {
-			currentTasks.remove(task);
-		}
-		DataStore.save(this.currentTasks);
-	}
-
-	/**
-	 * move new added task to correct position
+	 * done
+	 * mark a task as done
 	 * 
 	 * @param index
-	 */
-	
-	// author A0119444E
-	private void moveAddedTask(int index) {
-		Task newAddedTask = currentTasks.get(currentTasks.size() - 1);
-		for (int i = currentTasks.size() - 1; i > index + 1; i--) {
-			currentTasks.set(i, currentTasks.get(i - 1));
-		}
-		currentTasks.set(index + 1, newAddedTask);
-	}
-
-	/**
-	 * move new trashed task to the end of currentTasks
-	 * 
-	 * @param index
-	 */
-	
-	// author A0119444E
-	private void moveTrashedTask(int index) {
-		int lastTaskIndex = currentTasks.size();
-		Task newTrashedTask = currentTasks.get(index);
-		currentTasks.add(newTrashedTask);
-		for (int i = index; i < lastTaskIndex; i++) {
-			currentTasks.set(i, currentTasks.get(i + 1));
-		}
-		currentTasks.remove(lastTaskIndex);
-	}
-
-	/**
-	 * get valid categories from current tasks' categories
-	 * category is not supported now
-	 * @return
-	 */
-	
-	// author A0119444E unused
-	private ArrayList<String> getValidCategory() {
-		ArrayList<String> validCategory = new ArrayList<String>();
-		if (currentTasks.equals(null) || currentTasks.isEmpty()) {
-
-		} else {
-			for (Task task : currentTasks) {
-				validCategory.add(task.getCategory());
-			}
-		}
-		return validCategory;
-	}
-
-	/**
-	 * create a new category
-	 * category is not supported now
-	 * 
-	 * @param category
 	 * @throws CommandFailedException
 	 */
-	
-	// author A0119444E unused
-	public void createCategory(String category) throws CommandFailedException {
-		if (validCategory.contains(category)) {
-			throw new CommandFailedException("invalid category");
-		} else {
-			validCategory.add(category);
-		}
-	}
-
-	/**
-	 *
-	 * delete a category
-	 * caetgory is not supported now
-	 * @param category
-	 * @throws CommandFailedException
-	 */
-	
-	// author A0119444E
-	public void deleteCategory(String category) throws CommandFailedException {
-		if (!validCategory.contains(category)) {
-			throw new CommandFailedException("no such category");
-		} else {
-			for (Task task : currentTasks) {
-				if (task.getCategory().equals(category)) {
-					task.setCategory(Constant.DEFAULT_CATEGORY);
-				}
-			}
-			validCategory.remove(category);
-		}
-	}
-
-	/**
-	 * show a joke to user
-	 * joke is not supported now
-	 */
-	
-	// author A0119444E unused
-	public void showJoke() {
-		System.out
-				.println("How can you expect a Todo-List software to provide you a joke!");
-		System.out.println("This function is actually the joke.");
-		System.out.println("If you really want some, go to jokes.cc.com ");
-	}
-
-	/**
-	 * getTaskIdByIndex
-	 * 
-	 * @param index
-	 * @return
-	 * @throws CommandFailedException
-	 */
-	
-	// author A0119447Y
-	public Task retrieve(int index) throws CommandFailedException {
+	public boolean done(int index) throws CommandFailedException {
 		if (!this.isValidIndex(index)) {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
-			if (this.currentTasks.get(index).isTrashed()) {
-				throw new CommandFailedException(String.format(
-						Constant.INVALID_INDEX_ERROR_MESSAGE, index));
-			} else {
-				return this.currentTasks.get(index);
-			}
-
+			this.updateUndoable();
+			Task doneTask = this.currentTasks.normalTasks.remove(index);
+			this.currentTasks.finishedTasks.add(doneTask);
+			return DataStore.save(this.currentTasks);
 		}
 	}
 
+	//@author A0119447Y
+	/**
+	 * deleteAll
+	 * deletes all current tasks
+	 * 
+	 * @throws CommandFailedException
+	 */
+	public boolean deleteAll() throws CommandFailedException {
+		this.updateUndoable();
+		for (int i = this.currentTasks.normalTasks.size() - 1; i >= 0; i--) {
+			this.delete(i);
+		}
+		return DataStore.save(this.currentTasks);
+	}
+
+	//@author A0119444E-unused
+//	/**
+//	 * clear all current tasks
+//	 */
+//	public void clear() {
+//		this.updateUndoable();
+//		ArrayList<Task> toBeCleared = new ArrayList<Task>();
+//
+//		for (Task task : currentTasks) {
+//			if (task.isTrashed()) {
+//				toBeCleared.add(task);
+//			}
+//		}
+//
+//		for (Task task : toBeCleared) {
+//			currentTasks.remove(task);
+//		}
+//		DataStore.save(this.currentTasks);
+//	}
+	
+	//@author A0119447Y
+	/**
+	 * emptyTrash
+	 * clear all the trahsed task
+	 */
+	public boolean emptyTrash() {
+		this.updateUndoable();
+		this.currentTasks.trashedTasks.clear();
+		return DataStore.save(this.currentTasks);
+	}
+
+	//@author A0119444E-unused
+//	/**
+//	 * move new added task to correct position
+//	 * 
+//	 * @param index
+//	 */
+//	private void moveAddedTask(int index) {
+//		Task newAddedTask = currentTasks.get(currentTasks.size() - 1);
+//		for (int i = currentTasks.size() - 1; i > index + 1; i--) {
+//			currentTasks.set(i, currentTasks.get(i - 1));
+//		}
+//		currentTasks.set(index + 1, newAddedTask);
+//	}
+
+	//@author A0119444E-unused
+//	/**
+//	 * move new trashed task to the end of currentTasks
+//	 * 
+//	 * @param index
+//	 */
+//	private void moveTrashedTask(int index) {
+//		int lastTaskIndex = currentTasks.size();
+//		Task newTrashedTask = currentTasks.get(index);
+//		currentTasks.add(newTrashedTask);
+//		for (int i = index; i < lastTaskIndex; i++) {
+//			currentTasks.set(i, currentTasks.get(i + 1));
+//		}
+//		currentTasks.remove(lastTaskIndex);
+//	}
+
+	//@author A0119444E-unused
+//	/**
+//	 * get valid categories from current tasks' categories
+//	 * category is not supported now
+//	 * @return
+//	 */
+//	private ArrayList<String> getValidCategory() {
+//		ArrayList<String> validCategory = new ArrayList<String>();
+//		if (currentTasks.equals(null) || currentTasks.isEmpty()) {
+//
+//		} else {
+//			for (Task task : currentTasks) {
+//				validCategory.add(task.getCategory());
+//			}
+//		}
+//		return validCategory;
+//	}
+
+	//@author A0119444E-unused
+//	/**
+//	 * create a new category
+//	 * category is not supported now
+//	 * 
+//	 * @param category
+//	 * @throws CommandFailedException
+//	 */
+//	public void createCategory(String category) throws CommandFailedException {
+//		if (validCategory.contains(category)) {
+//			throw new CommandFailedException("invalid category");
+//		} else {
+//			validCategory.add(category);
+//		}
+//	}
+
+	//@author A0119444E-unused
+//	/**
+//	 * deleteCategory
+//	 * delete a category
+//	 * caetgory is not supported now
+//	 * @param category
+//	 * @throws CommandFailedException
+//	 */
+//	public void deleteCategory(String category) throws CommandFailedException {
+//		if (!validCategory.contains(category)) {
+//			throw new CommandFailedException("no such category");
+//		} else {
+//			for (Task task : currentTasks) {
+//				if (task.getCategory().equals(category)) {
+//					task.setCategory(Constant.DEFAULT_CATEGORY);
+//				}
+//			}
+//			validCategory.remove(category);
+//		}
+//	}
+
+	//@author A0119444E-unused
+	/**
+	 * show a joke to user
+	 * joke is not supported now
+	 */
+	public void showJoke() {
+		System.out.println("How can you expect a Todo-List software to provide you a joke!");
+		System.out.println("This function is actually the joke.");
+		System.out.println("If you really want some, go to jokes.cc.com ");
+	}
+
+	//@author A0119447Y-unused
+//	/**
+//	 * getTaskIdByIndex
+//	 * 
+//	 * @param index
+//	 * @return
+//	 * @throws CommandFailedException
+//	 */
+//	public Task retrieve(int index) throws CommandFailedException {
+//		if (!this.isValidIndex(index)) {
+//			throw new CommandFailedException(String.format(
+//					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+//		} else {
+//			if (this.currentTasks.get(index).isTrashed()) {
+//				throw new CommandFailedException(String.format(
+//						Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+//			} else {
+//				return this.currentTasks.get(index);
+//			}
+//
+//		}
+//	}
+
+	//@author A0119447Y
 	/**
 	 * find gets the list of tasks that meet the constraint.
 	 * 
@@ -405,10 +451,8 @@ public class User {
 	 * @return
 	 * @throws Exception
 	 */
-	
-	// author A0119447Y
 	public ArrayList<Task> find(Constraint constraint) throws Exception {
-		Iterator<Task> taskIterator = this.currentTasks.iterator();
+		Iterator<Task> taskIterator = this.currentTasks.normalTasks.iterator();
 		ArrayList<Task> matchedTasks = new ArrayList<Task>();
 		while (taskIterator.hasNext()) {
 			Task task = taskIterator.next();
@@ -419,68 +463,57 @@ public class User {
 		return matchedTasks;
 	}
 
+	//@author A0119447Y
 	/**
 	 * isValidIndex
 	 * 
 	 * @param index
 	 * @return
 	 */
-	
-	// author A0119447Y
 	private boolean isValidIndex(int index) {
-		if ((index < 0) || (index > this.currentTasks.size())) {
+		if ((index < 0) || (index > this.currentTasks.normalTasks.size())) {
 			return false;
 		} else {
 			return true;
 		}
 	}
-
-	/**
-	 * getTaskList gets the list of every non-trashed tasks of the user.
-	 * 
-	 * @return
-	 */
 	
-	// author A0119447Y
-	public ArrayList<Task> getTaskList() {
-		ArrayList<Task> nonTrashedTasks = new ArrayList<Task>();
-		for (Task task : this.currentTasks) {
-			if (!task.isTrashed()) {
-				nonTrashedTasks.add(task);
-			}
-		}
-		return nonTrashedTasks;
-	}
+	//@author A0119444E-unused
+//	/**
+//	 * getTaskList 
+//	 * gets the list of every non-trashed tasks of the user.
+//	 * 
+//	 * @return
+//	 */
+//	public ArrayList<Task> getTaskList() {
+//		ArrayList<Task> nonTrashedTasks = new ArrayList<Task>();
+//		for (Task task : this.currentTasks) {
+//			if (!task.isTrashed()) {
+//				nonTrashedTasks.add(task);
+//			}
+//		}
+//		return nonTrashedTasks;
+//	}
 
 	// system level static methods
 
+	//@author A0119447Y-unused
 	/**
 	 * showHelp shows the application manual.
 	 * 
 	 * @return
 	 */
-	
-	// author A0119447Y unused
 	public static String showHelp() {
 
 		return "'Help' has not been implemented yet";
 	}
 	
-	
-
+	//@author A0119447Y
 	/**
 	 * exit exits the application
 	 */
-	
-	// author A0119447Y
 	public static void exit() {
 		UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_SESSION_END);
 		System.exit(0);
-	}
-
-	// author A0119447Y unused
-	public boolean done(int index) throws CommandFailedException {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }
