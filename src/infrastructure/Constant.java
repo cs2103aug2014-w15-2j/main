@@ -352,14 +352,7 @@ public abstract class Constant {
 	public static final int REPEATED_PERIOD_MONTHLY = 4;
 
 	public static final int CALENDAR_WEEK_IN_SECOND = 37;
-
-	// DataStore
-	public static final int ATTRIBUTE_END_POSITION = 1;
-	public static final int NO_TAG_ENDINDEX = 0;
-	public static final int NO_STARTDATE_ENDINDEX = 0;
-	public static final int LAST_TAG_COMMAINDEX = -1;
-	public final static String SPLIT_SECTION = "**********";
-
+	
 	// Logic
 	public static final String TRASHED_TAG = "trashed";
 	public static final String NO_REDOABLE_ERROR_MESSAGE = "nothing available for redoing";
