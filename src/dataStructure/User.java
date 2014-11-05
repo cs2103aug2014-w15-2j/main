@@ -115,7 +115,8 @@ public class User {
 			if (willUpdateUndo) {
 				this.updateUndoable();
 			}
-			Task removedTask = this.currentTasks.getNormalTasks().remove(normalIndex);
+			Task removedTask = cloner.deepClone(this.currentTasks.getNormalTasks().remove(normalIndex));
+			removedTask.setStatus(Constant.TASK_STATUS_TRASHED);
 			this.currentTasks.getTrashedTasks().add(removedTask);
 			return DataStore.save(this.currentTasks);
 		}
@@ -150,7 +151,8 @@ public class User {
 			throw new CommandFailedException(String.format(Constant.INVALID_INDEX_ERROR_MESSAGE, trashedIndex));
 		} else {
 			this.updateUndoable();
-			Task putBackTask = this.currentTasks.getTrashedTasks().remove(trashedIndex);
+			Task putBackTask = cloner.deepClone(this.currentTasks.getTrashedTasks().remove(trashedIndex));
+			putBackTask.setStatus(Constant.TASK_STATUS_NORMAL);
 			this.currentTasks.getNormalTasks().add(putBackTask);
 			return DataStore.save(this.currentTasks);
 		}
@@ -249,7 +251,8 @@ public class User {
 					Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
 		} else {
 			this.updateUndoable();
-			Task doneTask = this.currentTasks.getNormalTasks().remove(normalIndex);
+			Task doneTask = cloner.deepClone(this.currentTasks.getNormalTasks().remove(normalIndex));
+			doneTask.setStatus(Constant.TASK_STATUS_DONE);
 			this.currentTasks.getFinishedTasks().add(doneTask);
 			return DataStore.save(this.currentTasks);
 		}
@@ -269,7 +272,8 @@ public class User {
 					Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
 		} else {
 			this.updateUndoable();
-			Task doneTask = this.currentTasks.getNormalTasks().remove(normalIndex);
+			Task doneTask = cloner.deepClone(this.currentTasks.getNormalTasks().remove(normalIndex));
+			doneTask.setStatus(Constant.TASK_STATUS_NORMAL);
 			this.currentTasks.getFinishedTasks().add(doneTask);
 			return DataStore.save(this.currentTasks);
 		}
