@@ -145,9 +145,9 @@ public class Parser {
 	
 	public Task getTaskFromParameterList(ArrayList<String> parameterList) throws CommandFailedException {
 		TimeInterval timeInterval = new TimeInterval();
-		String category = null; 
+//		String category = null; 
 		int priority = Constant.PRIORITY_DEFAULT;
-		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT; 
+//		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT; 
 		ArrayList<String> tag = new ArrayList<String>();
 		String description = null;
 //		String description = parameterList.get(0);
@@ -179,7 +179,7 @@ public class Parser {
 						UtilityMethod.showToUser("start time should be earlier than end time");
 					}
 					break;
-				
+	/*			
 				case Constant.KEY_CATEGORY:
 					if (hasCategory) {
 						UtilityMethod.showToUser("You can only assign one category for a task");
@@ -187,7 +187,7 @@ public class Parser {
 						category = value;
 					}
 					break;
-				
+	*/			
 				case Constant.KEY_PRIORITY:
 					if (hasPriority) {
 						UtilityMethod.showToUser("You can only assign one priority to a task");
@@ -202,7 +202,7 @@ public class Parser {
 
 					}
 					break;
-				
+		/*		
 				case Constant.KEY_REPEATED_PERIOD:
 					if (hasRepeatedPeriod) {
 						UtilityMethod.showToUser("You can only assign one repeated period to a task");
@@ -216,7 +216,7 @@ public class Parser {
 						}
 					}
 					break;
-					
+		*/			
 				case Constant.KEY_TAG:
 					if (!tag.contains(value)) {
 						tag.add(value);
@@ -230,7 +230,7 @@ public class Parser {
 		}
 		
 		
-		return new Task(description, category, priority, repeatedPeriod, tag, timeInterval);
+		return new Task(description, /*category,*/ priority, /*repeatedPeriod,*/ tag, timeInterval);
 	}
 
 	
