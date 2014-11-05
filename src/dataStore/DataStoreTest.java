@@ -110,8 +110,8 @@ public class DataStoreTest {
 	public void testLoadFileNotExist() {
 		fileData.delete();
 		try {
-			ArrayList<Task> tasks = new ArrayList<Task>();
-			assertEquals(tasks, DataStore.loadFileData());
+			TaskBox tasks = new TaskBox();
+			assertEquals(tasks.getNormalTasks(), DataStore.loadFileData().getNormalTasks());
 		} catch (Exception e) {
 			System.out.println("failed in loading data");
 		}
@@ -129,7 +129,7 @@ public class DataStoreTest {
 					Locale.ENGLISH).parse("29-Nov-2014 12:00");
 			
 			assertEquals("task1", tasks.getNormalTasks().get(0).getDescription());
-			assertEquals("normal", tasks.getNormalTasks().get(0).getStatus());
+			assertEquals(Constant.TASK_STATUS.NORMAL, tasks.getNormalTasks().get(0).getStatus());
 			assertEquals("tag1", tasks.getNormalTasks().get(0).getTag().get(0));
 			assertEquals("tag2", tasks.getNormalTasks().get(0).getTag().get(1));
 			assertEquals(Constant.PRIORITY_HIGH, tasks.getNormalTasks().get(0).getPriority());
@@ -137,7 +137,7 @@ public class DataStoreTest {
 			assertEquals(endDate, tasks.getNormalTasks().get(0).getInterval().getEndDate());
 			
 			assertEquals("task2", tasks.getFinishedTasks().get(0).getDescription());
-			assertEquals("done", tasks.getFinishedTasks().get(0).getStatus());
+			assertEquals(Constant.TASK_STATUS.DONE, tasks.getFinishedTasks().get(0).getStatus());
 			assertEquals("tag1", tasks.getFinishedTasks().get(0).getTag().get(0));
 			assertEquals("tag2", tasks.getFinishedTasks().get(0).getTag().get(1));
 			assertEquals(Constant.PRIORITY_LOW, tasks.getFinishedTasks().get(0).getPriority());
@@ -145,7 +145,7 @@ public class DataStoreTest {
 			assertEquals(endDate, tasks.getFinishedTasks().get(0).getInterval().getEndDate());
 			
 			assertEquals("task3", tasks.getTrashedTasks().get(0).getDescription());
-			assertEquals("trashed", tasks.getTrashedTasks().get(0).getStatus());
+			assertEquals(Constant.TASK_STATUS.TRASHED, tasks.getTrashedTasks().get(0).getStatus());
 			assertEquals("tag1", tasks.getTrashedTasks().get(0).getTag().get(0));
 			assertEquals("tag2", tasks.getTrashedTasks().get(0).getTag().get(1));
 			assertEquals(Constant.PRIORITY_MEDIUM, tasks.getTrashedTasks().get(0).getPriority());
@@ -252,7 +252,7 @@ public class DataStoreTest {
 		assertEquals("[", br.readLine());
 		assertEquals("{", br.readLine().trim());
 		assertEquals("\"description\":\"task1\",", br.readLine().trim());
-		assertEquals("\"status\":\"normal\",", br.readLine().trim());
+		assertEquals("\"status\":NORMAL,", br.readLine().trim());
 		assertEquals("\"tags\":[", br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());
 		assertEquals("\"tag2\"", br.readLine().trim());
@@ -266,7 +266,7 @@ public class DataStoreTest {
 		
 		assertEquals("{", br.readLine().trim());
 		assertEquals("\"description\":\"task2\",", br.readLine().trim());
-		assertEquals("\"status\":\"done\",", br.readLine().trim());
+		assertEquals("\"status\":DONE,", br.readLine().trim());
 		assertEquals("\"tags\":[", br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());
 		assertEquals("\"tag2\"", br.readLine().trim());
@@ -280,7 +280,7 @@ public class DataStoreTest {
 
 		assertEquals("{", br.readLine().trim());
 		assertEquals("\"description\":\"task3\",", br.readLine().trim());
-		assertEquals("\"status\":\"trashed\",", br.readLine().trim());
+		assertEquals("\"status\":TRASHED,", br.readLine().trim());
 		assertEquals("\"tags\":[", br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());
 		assertEquals("\"tag2\"", br.readLine().trim());
