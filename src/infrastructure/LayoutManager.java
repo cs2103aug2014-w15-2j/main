@@ -53,7 +53,7 @@ public class LayoutManager {
 		if (taskList != null) {
 			for (Task task : taskList) {
 				String bannerColor = LayoutManager.getBannerColor(task);
-				GridPane priorityPane = LayoutManager.getPriorityPane(bannerColor, index, width);
+				HBox priorityPane = LayoutManager.getPriorityPane(bannerColor, index, width);
 				taskPane.add(priorityPane, 0, row, 2, 1);
 				LayoutManager.setDisplayRow(taskPane, Constant.GRID_ROW_HEIGHT);
 				row ++;
@@ -98,7 +98,7 @@ public class LayoutManager {
 		LayoutManager.setDisplayRow(contentPane, Constant.GRID_ROW_HEIGHT);
 		subRow ++;
 		
-		HBox timeBox = LayoutManager.getTimePaneForTask(task);
+		HBox timeBox = LayoutManager.getTimeBoxForTask(task);
 		if (timeBox != null) {
 			contentPane.add(timeBox, 1, 0, 2, 2);
 		}
@@ -145,14 +145,16 @@ public class LayoutManager {
 	}
 
 	//author A0119447Y
-	public static GridPane getPriorityPane(String bannerColor, int index, double width) {
-		GridPane priorityPane = new GridPane();
+	public static HBox getPriorityPane(String bannerColor, int index, double width) {
+		HBox priorityPane = new HBox();
+		priorityPane.setAlignment(Pos.CENTER_RIGHT);
 		priorityPane.setStyle(String.format(Constant.CSS_STYLE_PRIORITY_PANE, bannerColor));
 		priorityPane.setPrefWidth(width);
-		Label priorityLabel = new Label("\t\t\t\t\t\t\t\t " + index);
+		
+		Label priorityLabel = new Label(String.format("%d", index));
 		priorityLabel.setStyle(Constant.CSS_STYLE_PRIORITY_LABEL);
 		priorityLabel.setPrefWidth(width);
-		priorityPane.add(priorityLabel, 0, 0);
+		priorityPane.getChildren().add(priorityLabel);
 		return priorityPane;
 	}
 
@@ -176,7 +178,7 @@ public class LayoutManager {
 	}
 
 	//author A0119379R
-	public static HBox getTimePaneForTask(Task task) {
+	public static HBox getTimeBoxForTask(Task task) {
 		TimeInterval timeInterval = task.getInterval();
 		HBox overallTimeBox = new HBox();
 		overallTimeBox.setAlignment(Pos.CENTER_RIGHT);
