@@ -474,7 +474,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			if (userInput.equals("")) {
 				return "The expected result will be shown here";
 			}
-		
+			
 			COMMAND_TYPE thisCommand = this.parser.nerParser.pickCommand(userInput);
 			System.err.println("CMD - getPreview: " + thisCommand);
 			
@@ -622,12 +622,8 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	}
 
 	private String getAddPreview(String userInput) {
-		try {
-			Task taskToAdd = parser.nerParser.getTask(userInput);
-			return "Command: create \n\n" + taskToAdd.toStringForDisplaying();
-		} catch (CommandFailedException ae) {
-			return "Command: create \n\n" + "Fail to Parse The Task";
-		}
+		Task taskToAdd = parser.nerParser.getTask(userInput);
+		return "Command: create \n\n" + taskToAdd.toStringForDisplaying();
 	}
 
 
@@ -641,14 +637,10 @@ public class MainViewController extends GridPane implements HotKeyListener{
  */
 	//@author A0119379R
 	private String add(String userInput) {
-		try {
-			Task taskToAdd = parser.nerParser.getTask(userInput);
-			assert (taskToAdd != null);
-			return (this.user.add(taskToAdd)) ? Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY
-					: Constant.PROMPT_MESSAGE_ADD_TASK_FAILED;
-		} catch (CommandFailedException e) {
-			return e.toString();
-		}
+		Task taskToAdd = parser.nerParser.getTask(userInput);
+		assert (taskToAdd != null);
+		return (this.user.add(taskToAdd)) ? Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY
+				: Constant.PROMPT_MESSAGE_ADD_TASK_FAILED;
 	}
 
 	private String delete(String userInput) {
