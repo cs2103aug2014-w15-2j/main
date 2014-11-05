@@ -359,6 +359,23 @@ public class Task {
 		return this.status;
 	}
 	
+	public void setStatus(String state) {
+		switch(state.toLowerCase()) {
+			case "normal" :
+				this.status = Constant.TASK_STATUS.NORMAL;
+				break;
+			case "done" :
+				this.status = Constant.TASK_STATUS.DONE;
+				break;
+			case "trashed" :
+				this.status = Constant.TASK_STATUS.TRASHED;
+				break;
+			default :
+				this.status = Constant.TASK_STATUS.NORMAL;
+				break;
+		}
+	}
+	
 	// check validity of attributes
 	
 	/**
