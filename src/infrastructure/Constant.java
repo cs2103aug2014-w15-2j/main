@@ -368,6 +368,11 @@ public abstract class Constant {
 	public static enum COMMAND_TYPE {
 		LOG_IN, LOG_OUT, CREATE_ACCOUNT, DELETE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR, NLP, EMPTY_TRASH, RELOAD, DONE
 	}
+	
+	// task status
+	public static enum TASK_STATUS {
+		NORMAL, DONE, TRASHED
+	}
 
 	// category
 	public static final String DEFAULT_CATEGORY = "default";

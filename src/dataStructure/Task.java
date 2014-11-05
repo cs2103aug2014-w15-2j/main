@@ -9,7 +9,7 @@ import reference.*;
 
 public class Task {
 	
-
+	//@author A0119447Y
 	private String description;
 	private String category;
 	private int priority;
@@ -17,6 +17,7 @@ public class Task {
 	private int repeated_period;
 	private ArrayList<String> tag;
 	private TimeInterval interval;
+	private Constant.TASK_STATUS status;
 
 	private final int REDUCE_CHAR = 1;
 
@@ -31,7 +32,7 @@ public class Task {
 	 * @param tag
 	 */
 	
-	// author A0119447Y
+	//@author A0119447Y
 	public Task(String description, String category, int priority,
 			int repeated_period, ArrayList<String> tag, TimeInterval interval) {
 		this.description = description;
@@ -41,6 +42,7 @@ public class Task {
 		this.repeated_period = repeated_period;
 		this.tag = tag;
 		this.interval = interval;
+		this.status = Constant.TASK_STATUS.NORMAL;
 	}
 
 	/**
@@ -67,6 +69,7 @@ public class Task {
 		this.repeated_period = repeated_period;
 		this.tag = tag;
 		this.interval = interval;
+		this.status = Constant.TASK_STATUS.NORMAL;
 	}
 
 	/**
