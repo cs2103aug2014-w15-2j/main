@@ -813,10 +813,11 @@ public class NERParser {
 			if (timeInterval.equals(new TimeInterval())) {
 				keyword = UtilityMethod.removeFirstWord(userInputString);
 			}
-
-			return new Constraint(keyword, timeInterval);
+			String[] keywords = keyword.split(" ");
+			return new Constraint(keywords, timeInterval);
 		} catch (CommandFailedException e) {
-			return new Constraint(UtilityMethod.removeFirstWord(userInputString), new TimeInterval());
+			String[] keywords = UtilityMethod.removeFirstWord(userInputString).split(" ");
+			return new Constraint(keywords, new TimeInterval());
 		}
 
 	}
