@@ -424,17 +424,17 @@ public abstract class Constant {
 			+ "-fx-text-fill: white;";
 	public static final String CSS_STYLE_PRIORITY_LABEL = "-fx-font: 19px \"Akagi\";"
 			+ "-fx-text-fill: white;";
-	public static final String CSS_STYLE_EMPTY_PANE = "-fx-background-color: rgb(244, 244, 244);";
+	public static final String CSS_STYLE_EMPTY_PANE = "-fx-background-color: rgba(0, 0, 0, 0);";
 
 	// CSS colors
 	public static final String COLOR_BANNER_DEFAULT = "rgba(222, 222, 222, 1)";
 	public static final String COLOR_BANNER_PRIORITY_LOW = "rgba(222, 236, 147, 1)";
 	public static final String COLOR_BANNER_PRIORITY_MEDIUM = "rgba(251, 235, 178, 1)";
 	public static final String COLOR_BANNER_PRIORITY_HIGH = "rgba(240, 115, 136, 1)";
-	public static final String COLOR_BODY_DEFAULT = "rgba(222, 222, 222, 0.2)";
-	public static final String COLOR_BODY_PRIORITY_LOW = "rgba(222, 236, 147, 0.2)";
-	public static final String COLOR_BODY_PRIORITY_MEDIUM = "rgba(251, 235, 178, 0.2)";
-	public static final String COLOR_BODY_PRIORITY_HIGH = "rgba(240, 115, 136, 0.2)";
+	public static final String COLOR_BODY_DEFAULT = "rgba(0, 0, 0, 1)";
+	public static final String COLOR_BODY_PRIORITY_LOW = "rgba(239, 242, 224, 1)";
+	public static final String COLOR_BODY_PRIORITY_MEDIUM = "rgba(245, 242, 230, 1)";
+	public static final String COLOR_BODY_PRIORITY_HIGH = "rgba(243, 218, 222, 1)";
 	public static final String[] COLORS_TAG = { "rgba(74, 137, 220, 0.7)",
 			"rgba(59, 175, 218, 0.7)", "rgba(55, 188, 155, 0.7)",
 			"rgba(246, 187, 66, 0.7)", "rgba(140, 193, 82, 0.7)",

@@ -48,28 +48,30 @@ public class LayoutManager {
 		GridPane taskPane = new GridPane();
 		int row = 0;
 		int index = 1;
-		taskPane.getColumnConstraints().add(new ColumnConstraints(width * 0.3 - 21));
-		taskPane.getColumnConstraints().add(new ColumnConstraints(width * 0.7 - 21));
+		taskPane.getColumnConstraints().add(new ColumnConstraints(5));
 		if (taskList != null) {
 			for (Task task : taskList) {
+				int subRow = 0;
+				GridPane panePane = new GridPane();
 				String bannerColor = LayoutManager.getBannerColor(task);
-				GridPane priorityPane = LayoutManager.getPriorityPane(bannerColor, index, width);
-				taskPane.add(priorityPane, 0, row, 2, 1);
-				LayoutManager.setDisplayRow(taskPane, Constant.GRID_ROW_HEIGHT);
-				row ++;
+				GridPane priorityPane = LayoutManager.getPriorityPane(bannerColor, index, width - 60);
+				panePane.add(priorityPane, 0, subRow, 2, 1);
+				LayoutManager.setDisplayRow(panePane, Constant.GRID_ROW_HEIGHT);
+				subRow ++;
 				
+				GridPane contentPane = LayoutManager.getContentPane(task, width - 60);
 				
-				GridPane contentPane = LayoutManager.getContentPane(task, width);
-				int numberOfSubrows = LayoutManager.getRowCount(contentPane);
+				panePane.add(contentPane, 0, subRow, 1, 2);
+				LayoutManager.setDisplayRow(panePane, Constant.GRID_ROW_HEIGHT * 2 + 11);
+				panePane.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 5, 3);");
 				
-				taskPane.add(contentPane, 0, row, 1, numberOfSubrows);
-				LayoutManager.setDisplayRow(taskPane, Constant.GRID_ROW_HEIGHT * numberOfSubrows + 11);
-				row ++;
+				taskPane.add(panePane, 1, row, 2, 1);
+				LayoutManager.setDisplayRow(taskPane, Constant.GRID_ROW_HEIGHT * 3 + 11);
 				
 				GridPane emptyPane = LayoutManager.getEmptyPane(width);
-				taskPane.add(emptyPane, 0, row, 2, 1);
+				taskPane.add(emptyPane, 1, row + 1, 2, 1);
 				LayoutManager.setDisplayRow(taskPane, Constant.GRID_ROW_HEIGHT);
-				row ++;
+				row += 2;
 				index ++;
 			}
 		}
@@ -88,11 +90,12 @@ public class LayoutManager {
 	public static GridPane getContentPane(Task task, double width) {
 		String bodyColor = LayoutManager.getBodyColor(task);
 		GridPane contentPane = LayoutManager.getContentPane(bodyColor, width);
+		
 	
 		int subRow = 0;
 	
 		
-		Label description = LayoutManager.getDescriptionLabel(task, width);
+		Label description = LayoutManager.getDescriptionLabel(task, LayoutManager.calculateDescriptionWidth(width));
 		
 		contentPane.add(description, 0, subRow, 2, 1);
 		LayoutManager.setDisplayRow(contentPane, Constant.GRID_ROW_HEIGHT);
@@ -149,7 +152,7 @@ public class LayoutManager {
 		GridPane priorityPane = new GridPane();
 		priorityPane.setStyle(String.format(Constant.CSS_STYLE_PRIORITY_PANE, bannerColor));
 		priorityPane.setPrefWidth(width);
-		Label priorityLabel = new Label("\t\t\t\t\t\t\t\t " + index);
+		Label priorityLabel = new Label(index + "");
 		priorityLabel.setStyle(Constant.CSS_STYLE_PRIORITY_LABEL);
 		priorityLabel.setPrefWidth(width);
 		priorityPane.add(priorityLabel, 0, 0);
@@ -168,8 +171,8 @@ public class LayoutManager {
 	public static GridPane getContentPane(String bodyColor, double width) {
 		GridPane contentPane = new GridPane();
 		contentPane.setGridLinesVisible(false);
-	    contentPane.getColumnConstraints().add(new ColumnConstraints(width * 0.62 - 29));
-		contentPane.getColumnConstraints().add(new ColumnConstraints(width * 0.38 - 29));
+	    contentPane.getColumnConstraints().add(new ColumnConstraints(LayoutManager.calculateDescriptionWidth(width)));
+		contentPane.getColumnConstraints().add(new ColumnConstraints(LayoutManager.calculateTimeWidth(width)));
 		contentPane.setStyle(String.format(Constant.CSS_STYLE_CONTENT_PANE, bodyColor));
 		contentPane.setPrefWidth(width);
 		return contentPane;
@@ -255,7 +258,7 @@ public class LayoutManager {
 		return timeBox;
 	}
 
-	//author A0119379R
+	//@author A0119379R
 	public static int getRowCount(GridPane pane) {
 	    int numRows = pane.getRowConstraints().size();
 	    for (int i = 0; i < pane.getChildren().size(); i++) {
@@ -269,9 +272,18 @@ public class LayoutManager {
 	    return numRows;
 	}
 
-	//author A0119447Y
+	//@author A0119447Y
 	public static void setDisplayRow(GridPane pane, double height) {
 		pane.getRowConstraints().add(new RowConstraints(height));
 	}
 
+	//@author A0119447Y
+	public static Double calculateDescriptionWidth(Double fullWidth) {
+		return fullWidth * 0.62 - 29;
+	}
+	
+	//@author A0119447Y
+	public static Double calculateTimeWidth(Double fullWidth) {
+		return fullWidth * 0.38 - 29;
+	}
 }
