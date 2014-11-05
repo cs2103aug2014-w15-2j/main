@@ -3,7 +3,6 @@ package dataStructure;
 import infrastructure.*;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import reference.*;
 
@@ -11,9 +10,7 @@ public class Task {
 	
 	//@author A0119447Y
 	private String description;
-	private String category;
 	private int priority;
-	private String task_id;
 	private int repeated_period;
 	private ArrayList<String> tag;
 	private TimeInterval interval;
@@ -21,61 +18,18 @@ public class Task {
 
 	private final int REDUCE_CHAR = 1;
 	
-	public Task(String description, int priority, ArrayList<String> tag, 
-				TimeInterval interval) {
-		this.description = description;
-		this.priority = priority;
-		this.tag = tag;
-		this.interval = interval;
-		this.status = Constant.TASK_STATUS.NORMAL;
-	}
-
-	/**
-	 * constructor
-	 * 
-	 * @param description
-	 * @param category
-	 * @param priority
-	 * @param task_id
-	 * @param repeated_period
-	 * @param tag
-	 */
-	
 	//@author A0119447Y
-	public Task(String description, int priority,
-			int repeated_period, ArrayList<String> tag, TimeInterval interval) {
-		this.description = description;
-		this.category = (category == null) ? Constant.DEFAULT_CATEGORY : category;
-		this.priority = priority;
-		this.task_id = UUID.randomUUID().toString();
-		this.repeated_period = repeated_period;
-		this.tag = tag;
-		this.interval = interval;
-		this.status = Constant.TASK_STATUS.NORMAL;
-	}
-
 	/**
-	 * constructor
+	 * constructor 
 	 * 
-	 * @param task_id
 	 * @param description
-	 * @param category
 	 * @param priority
-	 * @param repeated_period
 	 * @param tag
-	 * @param startDate
-	 * @param endDate
-	 * 	 
+	 * @param interval
 	 */
-	// author A0119447Y
-	public Task(String task_id, String description, String category,
-			int priority, int repeated_period, ArrayList<String> tag,
-			TimeInterval interval) {
+	public Task(String description, int priority, ArrayList<String> tag, TimeInterval interval) {
 		this.description = description;
-		this.category = category;
 		this.priority = priority;
-		this.task_id = task_id;
-		this.repeated_period = repeated_period;
 		this.tag = tag;
 		this.interval = interval;
 		this.status = Constant.TASK_STATUS.NORMAL;
@@ -97,39 +51,39 @@ public class Task {
 		}
 	}
 
+	//@author A0119447Y
 	/**
 	 * removeTag remove the tag from the task.
 	 * 
 	 * @param tag
 	 */
-	// author A0119447Y
 	public boolean removeTag(String tag) {
 		return this.tag.remove(tag);
 	}
 
-	/**
-	 * toString convert the task information to a string for storage.
-	 * Json is used to manage DataStore so this method is not needed
-	 * 
-	 * @return a task string
-	 */
-	// author A0119444E unused
-	public String toString() {
-		String task = new String();
-
-		task = task + getTaskId() + '`';
-		task = task + getDescription() + '`';
-		task = task + getCategory() + '`';
-		task = task + tagToString() + '`';
-		task = task + Integer.toString(getRepeatedPeriod()) + '`';
-		task = task + Integer.toString(getPriority()) + '`';
-		Long start = getInterval().getStartDate().getTime();
-		task = task + start + '`';
-		Long end = getInterval().getEndDate().getTime();
-		task = task + end;
-
-		return task;
-	}
+	//@author A0119444E-unused
+//	/**
+//	 * toString convert the task information to a string for storage.
+//	 * Json is used to manage DataStore so this method is not needed
+//	 * 
+//	 * @return a task string
+//	 */
+//	public String toString() {
+//		String task = new String();
+//
+//		task = task + getTaskId() + '`';
+//		task = task + getDescription() + '`';
+//		task = task + getCategory() + '`';
+//		task = task + tagToString() + '`';
+//		task = task + Integer.toString(getRepeatedPeriod()) + '`';
+//		task = task + Integer.toString(getPriority()) + '`';
+//		Long start = getInterval().getStartDate().getTime();
+//		task = task + start + '`';
+//		Long end = getInterval().getEndDate().getTime();
+//		task = task + end;
+//
+//		return task;
+//	}
 
 	/**
 	 * tagToString convert the tag list to a string.
@@ -202,53 +156,50 @@ public class Task {
 		}
 	}
 
-	/**
-	 * getDescription getter of the category attribute
-	 * category is not supported now
-	 * 
-	 * @return
-	 */
+	//@author A0119444E-unused
+//	/**
+//	 * getDescription getter of the category attribute
+//	 * category is not supported now
+//	 * 
+//	 * @return
+//	 */
+//	public String getCategory() {
+//		return this.category;
+//	}
 	
-	// author A0119444E-unused
-	public String getCategory() {
-		return this.category;
-	}
+	//@author A0119444E-unused
+//	/**
+//	 * setDescription setter of the category attribute
+//	 * category is not supported now
+//	 * 
+//	 * @param newCategory
+//	 */
+//	
+//	public void setCategory(String newCategory) {
+//		try {
+//			isValidCategory(newCategory);
+//			this.category = newCategory;
+//		} catch (Exception e) {
+//
+//		}
+//	}
 
-	/**
-	 * setDescription setter of the category attribute
-	 * category is not supported now
-	 * 
-	 * @param newCategory
-	 */
-	
-	// author A0119444E-unused
-	public void setCategory(String newCategory) {
-		try {
-			isValidCategory(newCategory);
-			this.category = newCategory;
-		} catch (Exception e) {
-
-		}
-	}
-
+	//@author A0119444E
 	/**
 	 * getPriority getter of the priority attribute
 	 * 
 	 * @return int
 	 */	
-	  
-	// author A0119444E
 	public int getPriority() {
 		return this.priority;
 	}
 	
+	//@author A0119444E
 	/**
 	 * setPriority setter of the priority attribute
 	 * 
 	 * @param newPriority
 	 */
-	
-	// author A0119444E
 	public void setPriority(int newPriority) {
 		try {
 			if(isValidPriority(newPriority)){
@@ -261,36 +212,33 @@ public class Task {
 		}
 	}
 
-	/**
-	 * getTaskId getter of the task_id attribute
-	 * 
-	 * @return String
-	 * 
-	 */
-	
-	// author A0119444E
-	public String getTaskId() {
-		return this.task_id;
-	}
+	//@author A0119444E-unused
+//	/**
+//	 * getTaskId getter of the task_id attribute
+//	 * 
+//	 * @return String
+//	 * 
+//	 */
+//	public String getTaskId() {
+//		return this.task_id;
+//	}
 
+	//@author A0119444E
 	/**
 	 * getRepeatedPeriod getter of the repeated_period attribute
 	 * 
 	 * @return int
 	 */
-	
-	// author A0119444E
 	public int getRepeatedPeriod() {
 		return this.repeated_period;
 	}
 
+	//@author A0119444E-unused
 	/**
 	 * setRepeatedPeriod setter of the repeated_period attribute
 	 * 
 	 * @param newRepeatedPeriod
 	 */
-	
-	// author A0119444E unused
 	public void setRepeatedPeriod(int newRepeatedPeriod) {
 		try {
 			if(isValidRepeatedPeriod(newRepeatedPeriod)){
@@ -303,24 +251,22 @@ public class Task {
 		}
 	}
 
+	//@author A0119444E
 	/**
 	 * getTag getter of the tag attribute
 	 * 
 	 * @return 
 	 */
-	
-	// author A0119444E
 	public ArrayList<String> getTag() {
 		return this.tag;
 	}
 
+	//@author A0119444E
 	/**
 	 * setTag setter of the tag attribute
 	 * 
 	 * @param newTag 
 	 */
-	
-	// author A0119444E
 	public void setTag(ArrayList<String> newTag) {
 		try {
 			if(isValidTag(newTag)) {
@@ -333,24 +279,22 @@ public class Task {
 		}
 	}
 
+	//@author A0119444E
 	/**
 	 * @override getInterval
 	 * @return interval
 	 * 
 	 */
-	
-	// author A0119444E
 	public TimeInterval getInterval() {
 		return this.interval;
 	}
 
+	//@author A0119444E
 	/**
 	 * setInterval setter of the interval attribute
 	 * 
 	 * @param newInterval
 	 */
-	
-	// author A0119444E
 	public void setInterval(TimeInterval newInterval) {
 		try {
 			if(isValidInterval(newInterval)) {
@@ -364,21 +308,26 @@ public class Task {
 		}
 	}
 	
+	//@author A0113029U
 	public Constant.TASK_STATUS getStatus() {
 		return this.status;
 	}
 	
+	//@author A0113029U
 	public void setStatus(String state) {
 		switch(state.toLowerCase()) {
 			case "normal" :
 				this.status = Constant.TASK_STATUS.NORMAL;
 				break;
+				
 			case "done" :
 				this.status = Constant.TASK_STATUS.DONE;
 				break;
+				
 			case "trashed" :
 				this.status = Constant.TASK_STATUS.TRASHED;
 				break;
+				
 			default :
 				this.status = Constant.TASK_STATUS.NORMAL;
 				break;
@@ -387,14 +336,13 @@ public class Task {
 	
 	// check validity of attributes
 	
+	//@author A0119444E
 	/**
 	 * check whether a description is valid
 	 * 
 	 * @param description
 	 * @return boolean
 	 */
-	
-	// author A0119444E
 	private boolean isValidDescription(String description){
 		if (description.equals(null) || description.equals("")) {
 			return false;
@@ -403,30 +351,28 @@ public class Task {
 		}
 	}
 	
-	/**
-	 * check whether a category is valid
-	 * 
-	 * @param category
-	 * @return boolean
-	 */
+	//@author A0119444E-unused
+//	/**
+//	 * check whether a category is valid
+//	 * 
+//	 * @param category
+//	 * @return boolean
+//	 */
+//	private boolean isValidCategory(String category){
+//		if (description.equals(null) || description.equals("")) {
+//			return false;
+//		} else {
+//			return true;
+//		}
+//	}
 	
-	// author A0119444E
-	private boolean isValidCategory(String category){
-		if (description.equals(null) || description.equals("")) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-	
+	//@author A0119444E
 	/**
 	 * check whether a priority is valid
 	 * 
 	 * @param priority
 	 * @return boolean
 	 */
-	
-	// author A0119444E
 	private boolean isValidPriority(int priority){
 		if (priority < 1 || priority > 3) {
 			return false;
@@ -435,14 +381,13 @@ public class Task {
 		}
 	}
 	
+	//@author A0119444E
 	/**
 	 * check whether a repeated period is valid
 	 * 
 	 * @param repeatedPeriod
 	 * @return boolean
 	 */
-	
-	// author A0119444E
 	private boolean isValidRepeatedPeriod(int repeatedPeriod){
 		if (repeatedPeriod < 1 || repeatedPeriod > 4) {
 			return false;
@@ -451,14 +396,13 @@ public class Task {
 		}
 	}
 	
+	//@author A0119444E
 	/**
 	 * check whether a list of tag is valid
 	 * 
 	 * @param tag
 	 * @return boolean
 	 */
-	
-	// author A0119444E
 	private boolean isValidTag(ArrayList<String> tag){
 		if (tag.equals(null) || tag.contains(null) || tag.contains("")) {
 			return false;
@@ -469,14 +413,13 @@ public class Task {
 		}
 	}
 	
+	//@author A0119444E
 	/**
 	 * check whether all tags in a tag list are valid
 	 * 
 	 * @param tags
 	 * @return boolean
 	 */
-	
-	// author A0119444E
 	private boolean isValidOneTag(ArrayList<String> tags){
 		for(String tag : tags){
 			if (tag.contains(" ")){
@@ -486,14 +429,13 @@ public class Task {
 		return true;
 	}
 	
+	//@author A0119444E
 	/**
 	 * check whether a interval is valid
 	 * 
 	 * @param interval
 	 * @return boolean
 	 */
-	
-	// author A0119444E
 	private boolean isValidInterval(TimeInterval interval){
 		if (interval == null) {
 			return false;
@@ -502,28 +444,69 @@ public class Task {
 		}
 	}
 	
+	//@author A0119444E-unused
+//	/**
+//	 * check whether a task is trashed
+//	 * @return boolean
+//	 */
+//	public boolean isTrashed() {
+//		if (tag.contains(Constant.TRASHED_TAG)) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
+	
+	// check task type
+	
+	//@author A0119447
 	/**
+	 * isTrashed
 	 * check whether a task is trashed
 	 * @return boolean
 	 */
-	
-	// author A0119444E
 	public boolean isTrashed() {
-		if (tag.contains(Constant.TRASHED_TAG)) {
+		if (this.status.equals(Constant.TASK_STATUS.TRASHED)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	// check task type
 	
+	//@author A0119447
+	/**
+	 * isNormal
+	 * check whether a task is normal
+	 * @return boolean
+	 */
+	public boolean isNormal() {
+		if (this.status.equals(Constant.TASK_STATUS.NORMAL)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	//@author A0119447
+	/**
+	 * isDone
+	 * check whether a task is done
+	 * @return boolean
+	 */
+	public boolean isDone() {
+		if (this.status.equals(Constant.TASK_STATUS.DONE)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	//@author A0119447Y
 	/**
 	 * isFloating check whether the task is floating task, i.e. there is no start date or end date for it
 	 * 
 	 * @return boolean
 	 */
-	
-	// author A0119447Y
 	public boolean isFloating() {
 		if (this.getInterval().getStartDate().equals(Constant.FLOATING_START_DATE)) {
 			return true;
@@ -532,13 +515,12 @@ public class Task {
 		}
 	}
 	
+	//@author A0119447Y
 	/**
 	 * isDeadline check whether the task is deadline task, i.e. there is only a deadline for it
 	 * 
 	 * @return boolean
 	 */
-	
-	// author A0119447Y
 	public boolean isDeadline() {
 		if (this.getInterval().getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 			return true;
@@ -547,13 +529,12 @@ public class Task {
 		}
 	}
 	
+	//@author A0119447Y
 	/**
 	 * isTimed check whether the task is timed task
 	 * 
 	 * @return boolean
 	 */
-	
-	// author A0119447Y
 	public boolean isTimed() {
 		if (!this.isDeadline() && !this.isFloating()) {
 			return true;
