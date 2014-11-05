@@ -4,7 +4,6 @@ import infrastructure.Constant.COMMAND_TYPE;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 
 import reference.CommandFailedException;
@@ -272,111 +271,5 @@ public class Parser {
 		} else {
 			return Constant.REPEATED_PERIOD_INVALID;
 		}
-	}
-	
-	/**
-	 * parse String to task
-	 * 
-	 * @param taskDescription
-	 * @return task
-	 * @throws Exception
-	 */
-	public static Task parseTaskFromRecords(String taskDescription) throws Exception {
-		Task task;
-		String description;
-		String category;
-		int priority;
-		String task_id;
-		int repeated_period;
-		ArrayList<String> tag;
-		Date startDate;
-		Date endDate;
-		TimeInterval interval;
-
-		int endIndex;
-
-		endIndex = taskDescription.indexOf("`");
-		task_id = taskDescription.substring(0, endIndex);
-		taskDescription = taskDescription.substring(endIndex
-				+ Constant.ATTRIBUTE_END_POSITION);
-
-		endIndex = taskDescription.indexOf("`");
-		description = taskDescription.substring(0, endIndex);
-		taskDescription = taskDescription.substring(endIndex
-				+ Constant.ATTRIBUTE_END_POSITION);
-
-		endIndex = taskDescription.indexOf("`");
-		category = taskDescription.substring(0, endIndex);
-		taskDescription = taskDescription.substring(endIndex
-				+ Constant.ATTRIBUTE_END_POSITION);
-
-		tag = getTaskTags(taskDescription);
-		endIndex = taskDescription.indexOf("`");
-		taskDescription = taskDescription.substring(endIndex
-				+ Constant.ATTRIBUTE_END_POSITION);
-
-		endIndex = taskDescription.indexOf("`");
-		repeated_period = Integer.parseInt(taskDescription.substring(0,
-				endIndex));
-		taskDescription = taskDescription.substring(endIndex
-				+ Constant.ATTRIBUTE_END_POSITION);
-
-		endIndex = taskDescription.indexOf("`");
-		priority = Integer.parseInt(taskDescription.substring(0, endIndex
-				));
-		taskDescription = taskDescription.substring(endIndex
-				+ Constant.ATTRIBUTE_END_POSITION);
-
-		endIndex = taskDescription.indexOf("`");
-		// no startDate
-		if (endIndex == Constant.NO_STARTDATE_ENDINDEX) {
-			startDate = null;
-		} else {
-			startDate = new Date(Long.parseLong(taskDescription.substring(0,
-					endIndex)));
-		}
-
-		// no endDate
-		if (endIndex == taskDescription.length() - Constant.ATTRIBUTE_END_POSITION) {
-			endDate = null;
-		} else {
-			taskDescription = taskDescription.substring(endIndex
-					+ Constant.ATTRIBUTE_END_POSITION);
-			endDate = new Date(Long.parseLong(taskDescription));
-		}
-		
-		interval = new TimeInterval(startDate, endDate);
-
-		task = new Task(task_id, description, category, priority,
-				repeated_period, tag, interval);
-		return task;
-	}
-
-	/**
-	 * get the tags of a task
-	 * 
-	 * @param taskDescription
-	 * @return list of tags
-	 */
-	private static ArrayList<String> getTaskTags(String taskDescription) {
-		ArrayList<String> tag = new ArrayList<String>();
-		int endIndex;
-		int commaIndex;
-		endIndex = taskDescription.indexOf("`");
-		commaIndex = taskDescription.indexOf(",");
-		// no tag
-		if (endIndex == Constant.NO_TAG_ENDINDEX) {
-			return tag;
-		}
-		while (commaIndex != Constant.LAST_TAG_COMMAINDEX) {
-			tag.add(taskDescription.substring(0, commaIndex));
-			taskDescription = taskDescription.substring(commaIndex
-					+ Constant.ATTRIBUTE_END_POSITION);
-			endIndex = taskDescription.indexOf("`");
-			commaIndex = taskDescription.indexOf(",");
-		}
-		// add last tag
-		tag.add(taskDescription.substring(0, endIndex));
-		return tag;
 	}
 }
