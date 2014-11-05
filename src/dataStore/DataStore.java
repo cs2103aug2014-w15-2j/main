@@ -2,6 +2,7 @@
 
 package dataStore;
 
+import infrastructure.Constant;
 import infrastructure.Converter;
 
 import java.io.File;
@@ -102,8 +103,7 @@ public abstract class DataStore {
 		TaskBox tasksList = new TaskBox();
 		JSONParser parser = new JSONParser();
 		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
-		ArrayList allTasks = (ArrayList) parser.parse
-								(user, orderedKeyFactory);
+		ArrayList allTasks = (ArrayList) parser.parse(user, orderedKeyFactory);
 		
 		LinkedHashMap task;
 		if(allTasks != null) {
@@ -111,13 +111,13 @@ public abstract class DataStore {
 				task = (LinkedHashMap) allTasks.get(i);
 				Task newTask = Converter.getTask(task);
 				switch(newTask.getStatus()) {
-					case NORMAL :
+					case Constant.TASK_STATUS_NORMAL :
 						tasksList.getNormalTasks().add(newTask);
 						break;
-					case DONE :
+					case Constant.TASK_STATUS_DONE :
 						tasksList.getFinishedTasks().add(newTask);
 						break;
-					case TRASHED :
+					case Constant.TASK_STATUS_TRASHED :
 						tasksList.getTrashedTasks().add(newTask);
 						break;
 					default :

@@ -14,8 +14,7 @@ public class Task {
 	private int repeated_period;
 	private ArrayList<String> tag;
 	private TimeInterval interval;
-	private Constant.TASK_STATUS status;
-
+	private String status;
 	private final int REDUCE_CHAR = 1;
 	
 	//@author A0119447Y
@@ -32,7 +31,7 @@ public class Task {
 		this.priority = priority;
 		this.tag = tag;
 		this.interval = interval;
-		this.status = Constant.TASK_STATUS.NORMAL;
+		this.status = Constant.TASK_STATUS_NORMAL;
 	}
 
 	/**
@@ -309,27 +308,27 @@ public class Task {
 	}
 	
 	//@author A0113029U
-	public Constant.TASK_STATUS getStatus() {
+	public String getStatus() {
 		return this.status;
 	}
 	
 	//@author A0113029U
 	public void setStatus(String state) {
 		switch(state.toLowerCase()) {
-			case "normal" :
-				this.status = Constant.TASK_STATUS.NORMAL;
+			case Constant.TASK_STATUS_NORMAL:
+				this.status = Constant.TASK_STATUS_NORMAL;
 				break;
 				
-			case "done" :
-				this.status = Constant.TASK_STATUS.DONE;
+			case Constant.TASK_STATUS_DONE:
+				this.status = Constant.TASK_STATUS_DONE;
 				break;
 				
-			case "trashed" :
-				this.status = Constant.TASK_STATUS.TRASHED;
+			case Constant.TASK_STATUS_TRASHED:
+				this.status = Constant.TASK_STATUS_TRASHED;
 				break;
 				
 			default :
-				this.status = Constant.TASK_STATUS.NORMAL;
+				this.status = Constant.TASK_STATUS_NORMAL;
 				break;
 		}
 	}
@@ -466,7 +465,7 @@ public class Task {
 	 * @return boolean
 	 */
 	public boolean isTrashed() {
-		if (this.status.equals(Constant.TASK_STATUS.TRASHED)) {
+		if (this.status.equals(Constant.TASK_STATUS_TRASHED)) {
 			return true;
 		} else {
 			return false;
@@ -480,7 +479,7 @@ public class Task {
 	 * @return boolean
 	 */
 	public boolean isNormal() {
-		if (this.status.equals(Constant.TASK_STATUS.NORMAL)) {
+		if (this.status.equals(Constant.TASK_STATUS_NORMAL)) {
 			return true;
 		} else {
 			return false;
@@ -494,7 +493,7 @@ public class Task {
 	 * @return boolean
 	 */
 	public boolean isDone() {
-		if (this.status.equals(Constant.TASK_STATUS.DONE)) {
+		if (this.status.equals(Constant.TASK_STATUS_DONE)) {
 			return true;
 		} else {
 			return false;

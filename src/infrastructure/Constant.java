@@ -370,9 +370,10 @@ public abstract class Constant {
 	}
 	
 	// task status
-	public static enum TASK_STATUS {
-		NORMAL, DONE, TRASHED
-	}
+	public static final String TASK_STATUS_NORMAL = "normal";
+	public static final String TASK_STATUS_DONE = "done";
+	public static final String TASK_STATUS_TRASHED = "trashed";
+	
 
 	// category
 	public static final String DEFAULT_CATEGORY = "default";

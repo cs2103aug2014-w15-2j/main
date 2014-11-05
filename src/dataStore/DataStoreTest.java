@@ -129,7 +129,7 @@ public class DataStoreTest {
 					Locale.ENGLISH).parse("29-Nov-2014 12:00");
 			
 			assertEquals("task1", tasks.getNormalTasks().get(0).getDescription());
-			assertEquals(Constant.TASK_STATUS.NORMAL, tasks.getNormalTasks().get(0).getStatus());
+			assertEquals(Constant.TASK_STATUS_NORMAL, tasks.getNormalTasks().get(0).getStatus());
 			assertEquals("tag1", tasks.getNormalTasks().get(0).getTag().get(0));
 			assertEquals("tag2", tasks.getNormalTasks().get(0).getTag().get(1));
 			assertEquals(Constant.PRIORITY_HIGH, tasks.getNormalTasks().get(0).getPriority());
@@ -137,7 +137,7 @@ public class DataStoreTest {
 			assertEquals(endDate, tasks.getNormalTasks().get(0).getInterval().getEndDate());
 			
 			assertEquals("task2", tasks.getFinishedTasks().get(0).getDescription());
-			assertEquals(Constant.TASK_STATUS.DONE, tasks.getFinishedTasks().get(0).getStatus());
+			assertEquals(Constant.TASK_STATUS_DONE, tasks.getFinishedTasks().get(0).getStatus());
 			assertEquals("tag1", tasks.getFinishedTasks().get(0).getTag().get(0));
 			assertEquals("tag2", tasks.getFinishedTasks().get(0).getTag().get(1));
 			assertEquals(Constant.PRIORITY_LOW, tasks.getFinishedTasks().get(0).getPriority());
@@ -145,7 +145,7 @@ public class DataStoreTest {
 			assertEquals(endDate, tasks.getFinishedTasks().get(0).getInterval().getEndDate());
 			
 			assertEquals("task3", tasks.getTrashedTasks().get(0).getDescription());
-			assertEquals(Constant.TASK_STATUS.TRASHED, tasks.getTrashedTasks().get(0).getStatus());
+			assertEquals(Constant.TASK_STATUS_TRASHED, tasks.getTrashedTasks().get(0).getStatus());
 			assertEquals("tag1", tasks.getTrashedTasks().get(0).getTag().get(0));
 			assertEquals("tag2", tasks.getTrashedTasks().get(0).getTag().get(1));
 			assertEquals(Constant.PRIORITY_MEDIUM, tasks.getTrashedTasks().get(0).getPriority());
