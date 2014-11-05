@@ -16,7 +16,7 @@ public class TaskBox {
 		this.trashedTasks = new ArrayList<Task>();
 	}
 	
-	public ArrayList<Task> getCurrentTasks() {
+	public ArrayList<Task> getNormalTasks() {
 		return normalTasks;
 	}
 	
