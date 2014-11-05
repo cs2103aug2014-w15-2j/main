@@ -20,7 +20,7 @@ public class User {
 	private ArrayList<String> validCategory;
 	private Stack<TaskBox> undoable;
 	private Stack<TaskBox> redoable;
-	private int taskEndIndex = -1;
+//	private int taskEndIndex = -1;
 	private Cloner cloner = new Cloner();
 
 	//@author A0119447Y
@@ -121,7 +121,7 @@ public class User {
 	 */
 	public boolean add(Task task) {
 		this.updateUndoable();
-		this.currentTasks.normalTasks.add(task);
+		this.currentTasks.getNormalTasks().add(task);
 		boolean isSuccessful = DataStore.save(this.currentTasks);
 		return isSuccessful;
 	}
@@ -161,8 +161,8 @@ public class User {
 			throw new CommandFailedException(String.format(Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			this.updateUndoable();
-			Task removedTask = this.currentTasks.normalTasks.remove(index);
-			this.currentTasks.trashedTasks.add(removedTask);
+			Task removedTask = this.currentTasks.getNormalTasks().remove(index);
+			this.currentTasks.getTrashedTask().add(removedTask);
 			boolean isSuccessful = DataStore.save(this.currentTasks);
 			return isSuccessful;
 		}
@@ -176,7 +176,7 @@ public class User {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
-			Task task = cloner.deepClone(this.currentTasks.normalTasks.get(index));
+			Task task = cloner.deepClone(this.currentTasks.getNormalTasks().get(index));
 			if (task.isTrashed()) {
 				throw new CommandFailedException("Task is trashed");
 			}
@@ -227,7 +227,7 @@ public class User {
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			this.updateUndoable();
-			Task task = this.currentTasks.normalTasks.get(index);
+			Task task = this.currentTasks.getNormalTasks().get(index);
 			Iterator<String> attributes = toBeUpdated.keySet().iterator();
 			while (attributes.hasNext()) {
 				String currentAttribute = attributes.next();
@@ -272,8 +272,8 @@ public class User {
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
 			this.updateUndoable();
-			Task doneTask = this.currentTasks.normalTasks.remove(index);
-			this.currentTasks.finishedTasks.add(doneTask);
+			Task doneTask = this.currentTasks.getNormalTasks().remove(index);
+			this.currentTasks.getFinishedTasks().add(doneTask);
 			return DataStore.save(this.currentTasks);
 		}
 	}
@@ -287,7 +287,7 @@ public class User {
 	 */
 	public boolean deleteAll() throws CommandFailedException {
 		this.updateUndoable();
-		for (int i = this.currentTasks.normalTasks.size() - 1; i >= 0; i--) {
+		for (int i = this.currentTasks.getNormalTasks().size() - 1; i >= 0; i--) {
 			this.delete(i);
 		}
 		return DataStore.save(this.currentTasks);
@@ -320,7 +320,7 @@ public class User {
 	 */
 	public boolean emptyTrash() {
 		this.updateUndoable();
-		this.currentTasks.trashedTasks.clear();
+		this.currentTasks.getTrashedTask().clear();
 		return DataStore.save(this.currentTasks);
 	}
 
@@ -452,7 +452,7 @@ public class User {
 	 * @throws Exception
 	 */
 	public ArrayList<Task> find(Constraint constraint) throws Exception {
-		Iterator<Task> taskIterator = this.currentTasks.normalTasks.iterator();
+		Iterator<Task> taskIterator = this.currentTasks.getNormalTasks().iterator();
 		ArrayList<Task> matchedTasks = new ArrayList<Task>();
 		while (taskIterator.hasNext()) {
 			Task task = taskIterator.next();
@@ -471,7 +471,7 @@ public class User {
 	 * @return
 	 */
 	private boolean isValidIndex(int index) {
-		if ((index < 0) || (index > this.currentTasks.normalTasks.size())) {
+		if ((index < 0) || (index > this.currentTasks.getNormalTasks().size())) {
 			return false;
 		} else {
 			return true;
