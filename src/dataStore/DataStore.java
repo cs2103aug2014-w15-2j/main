@@ -1,3 +1,5 @@
+//@author A0113029U
+
 package dataStore;
 
 import infrastructure.Converter;
@@ -15,6 +17,8 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
+
+import reference.TaskBox;
 import dataStructure.Task;
 
 public abstract class DataStore {
@@ -22,7 +26,7 @@ public abstract class DataStore {
 	private static final String DATA_FILEPATH = 
 								"List-of-Xiao-Ming/task-list.xiaoming";
 	
-	public static ArrayList<Task> loadFileData() throws Exception {
+	public static TaskBox loadFileData() throws Exception {
 		if(!isFileExisting()) {
 			createTaskFile();
 		}
@@ -35,7 +39,7 @@ public abstract class DataStore {
 	 * @return true if succeed, false otherwise
 	 */
 	@SuppressWarnings("rawtypes")
-	public static boolean save(ArrayList<Task> tasks) {
+	public static boolean save(TaskBox tasks) {
 		if (!isFileExisting()) {
 			return false;
 		}
@@ -92,10 +96,10 @@ public abstract class DataStore {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
-	private static ArrayList<Task> getCurrentTasks(File userFile)
+	private static TaskBox getCurrentTasks(File userFile)
 													throws Exception {
 		FileReader user = new FileReader(userFile);
-		ArrayList<Task> currentTasks = new ArrayList<Task>();
+		TaskBox tasksList = new TaskBox();
 		JSONParser parser = new JSONParser();
 		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
 		ArrayList allTasks = (ArrayList) parser.parse
@@ -106,12 +110,25 @@ public abstract class DataStore {
 			for(int i=0; i<allTasks.size(); i++) {
 				task = (LinkedHashMap) allTasks.get(i);
 				Task newTask = Converter.getTask(task);
-				currentTasks.add(newTask);
+				switch(newTask.getStatus()) {
+					case NORMAL :
+						tasksList.getNormalTasks().add(newTask);
+						break;
+					case DONE :
+						tasksList.getFinishedTasks().add(newTask);
+						break;
+					case TRASHED :
+						tasksList.getTrashedTasks().add(newTask);
+						break;
+					default :
+						tasksList.getNormalTasks().add(newTask);
+						break;
+				}
 			}
 		}
 		
 		user.close();
-		return currentTasks;
+		return tasksList;
 	}
 	
 	/**
@@ -122,12 +139,20 @@ public abstract class DataStore {
 	 */
 
 	@SuppressWarnings({ "rawtypes" })
-	private static ArrayList getContent(ArrayList<Task> tasks) {
+	private static ArrayList getContent(TaskBox tasks) {
 		//list all tasks
 		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
 		if( tasks != null) {
-			for(int i = 0; i < tasks.size(); i++) {
-				LinkedHashMap task = Converter.convertTaskToMap(tasks.get(i));
+			for(int i = 0; i < tasks.getNormalTasks().size(); i++) {
+				LinkedHashMap task = Converter.convertTaskToMap(tasks.getNormalTasks().get(i));
+				tasksList.add(task);
+			}
+			for(int i = 0; i < tasks.getFinishedTasks().size(); i++) {
+				LinkedHashMap task = Converter.convertTaskToMap(tasks.getFinishedTasks().get(i));
+				tasksList.add(task);
+			}
+			for(int i = 0; i < tasks.getTrashedTasks().size(); i++) {
+				LinkedHashMap task = Converter.convertTaskToMap(tasks.getTrashedTasks().get(i));
 				tasksList.add(task);
 			}
 		}

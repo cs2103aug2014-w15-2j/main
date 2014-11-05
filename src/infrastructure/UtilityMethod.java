@@ -16,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import reference.CommandFailedException;
+import reference.Pair;
 import dataStructure.Task;
 
 public abstract class UtilityMethod {
@@ -193,46 +194,49 @@ public abstract class UtilityMethod {
 	}
 	
 	
-	public static void makeDraggable(final Stage stage, final Node byNode) {
-	    final Delta dragDelta = new Delta();
-	    byNode.setOnMousePressed(new EventHandler<MouseEvent>() {
-	      @Override public void handle(MouseEvent mouseEvent) {
-	        // record a delta distance for the drag and drop operation.
-	        dragDelta.x = stage.getX() - mouseEvent.getScreenX();
-	        dragDelta.y = stage.getY() - mouseEvent.getScreenY();
-	        byNode.setCursor(Cursor.MOVE);
-	      }
-	    });
-	    byNode.setOnMouseReleased(new EventHandler<MouseEvent>() {
-	      @Override public void handle(MouseEvent mouseEvent) {
-	        byNode.setCursor(Cursor.HAND);
-	      }
-	    });
-	    byNode.setOnMouseDragged(new EventHandler<MouseEvent>() {
-	      @Override public void handle(MouseEvent mouseEvent) {
-	        stage.setX(mouseEvent.getScreenX() + dragDelta.x);
-	        stage.setY(mouseEvent.getScreenY() + dragDelta.y);
-	      }
-	    });
-	    byNode.setOnMouseEntered(new EventHandler<MouseEvent>() {
-	      @Override public void handle(MouseEvent mouseEvent) {
-	        if (!mouseEvent.isPrimaryButtonDown()) {
-	          byNode.setCursor(Cursor.HAND);
-	        }
-	      }
-	    });
-	    byNode.setOnMouseExited(new EventHandler<MouseEvent>() {
-	      @Override public void handle(MouseEvent mouseEvent) {
-	        if (!mouseEvent.isPrimaryButtonDown()) {
-	          byNode.setCursor(Cursor.DEFAULT);
-	        }
-	      }
-	    });
-	  }
-
-	  /** records relative x and y co-ordinates. */
-	  private static class Delta {
-	    double x, y;
-	  }
+	public static void makeDraggable(final Stage stage, final Node draggedNode) {
+		final Pair<Double, Double> dragDelta = new Pair<Double, Double>();
+		draggedNode.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override 
+			public void handle(MouseEvent mouseEvent) {
+				dragDelta.setHead(stage.getX() - mouseEvent.getScreenX());
+				dragDelta.setTail(stage.getY() - mouseEvent.getScreenY());
+				draggedNode.setCursor(Cursor.MOVE);
+			}
+		});
+		
+		draggedNode.setOnMouseReleased(new EventHandler<MouseEvent>() {
+			@Override 
+			public void handle(MouseEvent mouseEvent) {
+				draggedNode.setCursor(Cursor.HAND);
+			}
+		});
+		
+		draggedNode.setOnMouseDragged(new EventHandler<MouseEvent>() {
+			@Override 
+			public void handle(MouseEvent mouseEvent) {
+				stage.setX(mouseEvent.getScreenX() + dragDelta.head);
+				stage.setY(mouseEvent.getScreenY() + dragDelta.tail);
+			}
+		});
+		
+		draggedNode.setOnMouseEntered(new EventHandler<MouseEvent>() {
+			@Override 
+			public void handle(MouseEvent mouseEvent) {
+				if (!mouseEvent.isPrimaryButtonDown()) {
+					draggedNode.setCursor(Cursor.HAND);
+				}
+			}
+		});
+		
+		draggedNode.setOnMouseExited(new EventHandler<MouseEvent>() {
+			@Override 
+			public void handle(MouseEvent mouseEvent) {
+				if (!mouseEvent.isPrimaryButtonDown()) {
+					draggedNode.setCursor(Cursor.DEFAULT);
+				}
+			}
+		});
+	}
 }
 

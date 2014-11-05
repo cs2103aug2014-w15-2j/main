@@ -7,6 +7,7 @@ import javafx.stage.StageStyle;
 
 public class MainView extends Application {
 
+	//author A0119447Y
 	@Override
     public void start(Stage stage) throws Exception {
         MainViewController control = new MainViewController(stage);

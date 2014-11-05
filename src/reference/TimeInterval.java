@@ -16,6 +16,8 @@ public class TimeInterval {
 	 * @param endDate
 	 * @throws Exception
 	 */
+	
+	//@author A0119447Y
 	public TimeInterval(Date startDate, Date endDate) throws CommandFailedException {
 		if (startDate == null) {
 			if (endDate != null) {
@@ -39,6 +41,7 @@ public class TimeInterval {
 		}
 	}
 	
+	//@author A0119447Y
 	public TimeInterval() {
 		// by default it is floating task
 		this.startDate = Constant.FLOATING_START_DATE;
@@ -49,6 +52,7 @@ public class TimeInterval {
 	 * getStartDate
 	 * @return start date
 	 */
+	//@author A0119447Y
 	public Date getStartDate() {
 		return this.startDate;
 	}
@@ -57,10 +61,12 @@ public class TimeInterval {
 	 * getEndDate
 	 * @return end date
 	 */
+	//@author A0119447Y
 	public Date getEndDate() {
 		return this.endDate;
 	}
 	
+	// @author A0119444E
 	public static boolean isValid(Date startDate, Date endDate){
 		if (startDate.after(endDate)) {
 			return false;
@@ -74,6 +80,7 @@ public class TimeInterval {
 	 * @param secondInterval
 	 * @return
 	 */
+	//@author A0119447Y
 	public static boolean isOverlapped(TimeInterval firstInterval, TimeInterval secondInterval) {
 		if ((firstInterval.getStartDate().after(secondInterval.getEndDate())) || 
 		   (firstInterval.getEndDate().before(secondInterval.getStartDate()))) {
@@ -84,12 +91,13 @@ public class TimeInterval {
 	}
 	
 	/**
-	 * @author A0119444E
 	 * check is overlapped for an interval and a deadline
 	 * @param interval
 	 * @param deadline
 	 * @return
 	 */
+
+	// @author A0119444E
 	public static boolean isOverlapped(TimeInterval interval, Date deadline) {
 		if (interval.startDate.before(deadline) && (interval.endDate.after(deadline) || interval.endDate.equals(deadline))) {
 			return true;
@@ -104,6 +112,7 @@ public class TimeInterval {
 	 * 
 	 * @return
 	 */
+	//@author A0119379R
 	public String toString() {
 		String text = new String();
 		if (this.getEndDate().equals(Constant.FLOATING_END_DATE)) {
@@ -121,6 +130,7 @@ public class TimeInterval {
 		return text;
 	}
 	
+	//@author A0119447Y
 	/**
 	 * Two time intervals are equal if and only if their start date and end date are both equal
 	 * @param t

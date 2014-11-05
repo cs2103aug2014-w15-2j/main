@@ -352,14 +352,7 @@ public abstract class Constant {
 	public static final int REPEATED_PERIOD_MONTHLY = 4;
 
 	public static final int CALENDAR_WEEK_IN_SECOND = 37;
-
-	// DataStore
-	public static final int ATTRIBUTE_END_POSITION = 1;
-	public static final int NO_TAG_ENDINDEX = 0;
-	public static final int NO_STARTDATE_ENDINDEX = 0;
-	public static final int LAST_TAG_COMMAINDEX = -1;
-	public final static String SPLIT_SECTION = "**********";
-
+	
 	// Logic
 	public static final String TRASHED_TAG = "trashed";
 	public static final String NO_REDOABLE_ERROR_MESSAGE = "nothing available for redoing";
@@ -374,6 +367,11 @@ public abstract class Constant {
 	// command type
 	public static enum COMMAND_TYPE {
 		LOG_IN, LOG_OUT, CREATE_ACCOUNT, DELETE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR, NLP, EMPTY_TRASH, RELOAD, DONE
+	}
+	
+	// task status
+	public static enum TASK_STATUS {
+		NORMAL, DONE, TRASHED
 	}
 
 	// category

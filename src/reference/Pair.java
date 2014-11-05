@@ -1,12 +1,17 @@
 package reference;
 
 public class Pair<Object1, Object2> {
+	//@author A0119379R
 	public Object1 head;
 	public Object2 tail;
 	
 	public Pair(Object1 thisHead, Object2 thisTail) {
 		this.head = thisHead;
 		this.tail = thisTail;
+	}
+	
+	public Pair() {
+		
 	}
 	
 	public void setHead(Object1 h){

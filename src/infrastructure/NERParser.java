@@ -737,16 +737,12 @@ public class NERParser {
 		ArrayList<String> tag = this.pickTag(userInputString);
 		
 		int priority = this.pickPriority(userInputString);
-		String category = null;
 		
 		if (tag.isEmpty()) {
 			tag.add("ongoing");
 		}
 
-		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT;
-
-		return new Task(description, category, priority, repeatedPeriod, tag,
-				timeInterval);
+		return new Task(description, priority, tag, timeInterval);
 	}
 
 	/**

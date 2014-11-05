@@ -1,3 +1,5 @@
+//@author A0113029U
+
 package infrastructure;
 
 import dataStructure.Task;
@@ -17,17 +19,15 @@ public class Converter {
 	public static LinkedHashMap convertTaskToMap(Task task) {
 		LinkedHashMap taskMap = new LinkedHashMap();
 		
-		taskMap.put("task-id", task.getTaskId());
 		taskMap.put("description", task.getDescription());
-		taskMap.put("category", task.getCategory());
+		taskMap.put("status", task.getStatus());
 		
 		ArrayList<String> tags = new ArrayList<String>();
 		for(int i = 0; i < task.getTag().size(); i++) {
 			tags.add(task.getTag().get(i));
 		}
 		taskMap.put("tags", tags);
-		
-		taskMap.put("repeated-period", convertRepeatedPeriodIntToString(task));
+	
 		taskMap.put("priority", convertPriorityIntToString(task));
 		taskMap.put("time-interval", convertTimeIntervalToString(task));
 		
@@ -42,11 +42,9 @@ public class Converter {
 	 */
 	@SuppressWarnings("rawtypes") 
 	public static Task getTask(LinkedHashMap task) throws Exception {
-		String task_id = (String) task.get("task-id");
 		String description = (String) task.get("description");
-		String category = (String) task.get("category");
+		String status = (String) task.get("status");
 		int priority = convertPriorityStringToInt(task);
-		int repeated_period = convertRepeatedPeriodStringToInt(task);
 		
 		ArrayList tags = (ArrayList) task.get("tags");
 		ArrayList<String> tag = new ArrayList<String>();
@@ -57,8 +55,10 @@ public class Converter {
 		LinkedHashMap intervalObj = (LinkedHashMap) task.get("time-interval");
 		TimeInterval interval = convertStringToTimeInterval(intervalObj);
 		
-		return new Task(task_id, description, category, priority,
-				repeated_period, tag, interval);
+		Task newTask = new Task(description, priority, tag, interval);
+		newTask.setStatus(status);
+		
+		return newTask;
 	}
 
 	@SuppressWarnings("rawtypes") 
@@ -90,44 +90,6 @@ public class Converter {
 				priority = "invalid";
 		}
 		return priority;
-	}
-
-	@SuppressWarnings("rawtypes") 
-	public static int convertRepeatedPeriodStringToInt(LinkedHashMap task) {
-		int repeated_period = Constant.REPEATED_PERIOD_DEFAULT;
-		if (task.get("repeated-period").equals("none")) {
-			repeated_period = Constant.REPEATED_PERIOD_NONE;
-		} else if (task.get("repeated-period").equals("none")) {
-			repeated_period = Constant.REPEATED_PERIOD_DAILY;
-		} else if (task.get("repeated-period").equals("none")) {
-			repeated_period =  Constant.REPEATED_PERIOD_WEEKLY;
-		} else if (task.get("repeated-period").equals("none")) {
-			repeated_period = Constant.REPEATED_PERIOD_MONTHLY;
-		} else {
-			repeated_period = Constant.REPEATED_PERIOD_INVALID;
-		}
-		return repeated_period;
-	}
-	
-	public static String convertRepeatedPeriodIntToString(Task task) {
-		String repeatedPeriod = "none";
-		switch (task.getRepeatedPeriod()) {
-			case Constant.REPEATED_PERIOD_NONE:
-				repeatedPeriod = "none";
-				break;
-			case Constant.REPEATED_PERIOD_DAILY:
-				repeatedPeriod = "daily";
-				break;
-			case Constant.REPEATED_PERIOD_WEEKLY:
-				repeatedPeriod = "weekly";
-				break;
-			case Constant.REPEATED_PERIOD_MONTHLY:
-				repeatedPeriod = "monthly";
-				break;
-			default:
-				repeatedPeriod = "invalid";
-		}
-		return repeatedPeriod;
 	}
 
 	@SuppressWarnings("rawtypes")
