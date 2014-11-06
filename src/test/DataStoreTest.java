@@ -253,7 +253,7 @@ public class DataStoreTest {
 		assertEquals("[", br.readLine());
 		assertEquals("{", br.readLine().trim());
 		assertEquals("\"description\":\"task1\",", br.readLine().trim());
-		assertEquals("\"status\":NORMAL,", br.readLine().trim());
+		assertEquals("\"status\":\"normal\",", br.readLine().trim());
 		assertEquals("\"tags\":[", br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());
 		assertEquals("\"tag2\"", br.readLine().trim());
@@ -267,7 +267,7 @@ public class DataStoreTest {
 		
 		assertEquals("{", br.readLine().trim());
 		assertEquals("\"description\":\"task2\",", br.readLine().trim());
-		assertEquals("\"status\":DONE,", br.readLine().trim());
+		assertEquals("\"status\":\"done\",", br.readLine().trim());
 		assertEquals("\"tags\":[", br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());
 		assertEquals("\"tag2\"", br.readLine().trim());
@@ -281,7 +281,7 @@ public class DataStoreTest {
 
 		assertEquals("{", br.readLine().trim());
 		assertEquals("\"description\":\"task3\",", br.readLine().trim());
-		assertEquals("\"status\":TRASHED,", br.readLine().trim());
+		assertEquals("\"status\":\"trashed\",", br.readLine().trim());
 		assertEquals("\"tags\":[", br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());
 		assertEquals("\"tag2\"", br.readLine().trim());
