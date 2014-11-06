@@ -1,4 +1,4 @@
-package view;
+package userInterface;
 
 import infrastructure.*;
 import infrastructure.Constant.COMMAND_TYPE;
@@ -557,7 +557,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 					break;
 					
 				case RECOVER:
-					
+					setPreviewPane(this.recover(), this.getCurrentListName());
 					break;
 					
 				default:
@@ -569,8 +569,8 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 	private String getCurrentListName() {
 		return this.currentListName;
 	}
@@ -626,6 +626,9 @@ public class MainViewController extends GridPane implements HotKeyListener{
 				case EXIT:
 					return getExitPreview();
 					
+				case RECOVER:
+					return getRecoverPreview();
+					
 				default:
 					return getDefaultPreview();
 	
@@ -638,16 +641,20 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			return e.toString();
 		}
 	}
-	
-	
-	
 
-		
+
 /**
  * 	=======================================================================================================
  *  Specific methods to get previews
  *  =======================================================================================================
  */
+	
+	//@author A0119379R
+	private String getRecoverPreview() {
+		return "Command: recover";
+	}
+	
+	
 	//@author A0119379R
 	private String getDefaultPreview() {
 		return "Command not recognized";
@@ -977,7 +984,9 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	}
 
 
-
+	private String recover() {
+		return this.user.recover(this.getCurrentListName());
+	}
 
 
 /**
