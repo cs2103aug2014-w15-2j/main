@@ -34,13 +34,9 @@ public class UserTest {
 		for (int i = currentSize - testSize; i < currentSize - 1; i++) {
 			testAdd("test add for task: " + i, "task" + p++, user, i);
 		}
-		System.out.println("all add tests are passed");
 		for (int i = currentSize - testSize; i < currentSize; i++) {
 			user.delete(currentSize - testSize, true);
 		}
-		
-		System.out.println("user normal task size after testing: "
-				+ user.getNormalTaskList().size());
 	}
 	
 	@Test
@@ -50,8 +46,6 @@ public class UserTest {
 
 		User user = new User();
 		int initialSize = user.getNormalTaskList().size();
-		System.out.println("user normal task size: " + initialSize);
-
 		ArrayList<String> tag = new ArrayList<String>();
 		TimeInterval interval = new TimeInterval();
 
@@ -65,8 +59,6 @@ public class UserTest {
 			testDelete("test delete for task: " + i, "task" + p++, user, currentSize - testSize);
 			user.delete(currentSize - testSize, true);
 		}
-		System.out.println("user normal task size after testing: "
-				+ initialSize);
 		System.out.println("all delete tests are passed");		
 	}
 	

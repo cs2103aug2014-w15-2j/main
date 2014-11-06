@@ -329,8 +329,10 @@ public class MainViewController extends GridPane implements HotKeyListener{
 			displayContent.setAlignment(Pos.CENTER);
 			displayContent.getChildren().clear();
 			GridPane taskPane = LayoutManager.getTaskPane(taskList, getWidth());
+			
 			displayContent.getChildren().add(taskPane);
 			displayScrollPane.setContent(displayContent);
+			
 		}
 	}
 	
@@ -435,6 +437,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	private void setDisplayScrollbarStyle() {
 		displayScrollPane.getStyleClass().add("mylistview");
 		displayScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+		displayScrollPane.setFitToWidth(true);
 		displayScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
 		
 		displayScrollPane.setOnScrollFinished(new EventHandler<ScrollEvent>() {
