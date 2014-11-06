@@ -393,7 +393,7 @@ public abstract class Constant {
 	
 
 	// CSS styles
-	public static final String CSS_STYLE_TAG_LABEL = "-fx-font: 10px \"Akagi\";"
+	public static final String CSS_STYLE_TAG_LABEL = "-fx-font: 10px \"Akagi-SemiBold\";"
 			+ "-fx-padding: 5 10 5 10;"
 			+ "-fx-background-color: %s;"
 			+ "-fx-background-radius: 5px;"
@@ -405,7 +405,7 @@ public abstract class Constant {
 			+ "-fx-background-color: %s";
 	public static final String CSS_STYLE_CONTENT_PANE = "-fx-padding: 8 8 8 8;"
 			+ "-fx-background-color: %s";
-	public static final String CSS_STYLE_PRIVIEW_CONTENT_BOX = "-fx-font: 12px \"Akagi\";"
+	public static final String CSS_STYLE_PRIVIEW_CONTENT_BOX = "-fx-font: 12px \"Akagi-SemiBold\";"
 			+ "-fx-background-color: rgba(0, 200, 255, 1)";
 	public static final String CSS_STYLE_PREVIEW_SCROLL_PANE = "-fx-padding:8 8 8 8;"
 			+ "-fx-background-color: rgb(244, 244, 244)";
@@ -415,18 +415,18 @@ public abstract class Constant {
 			+ "-fx-font: 38px \"Ticking Timebomb BB\";"
 			+ "-fx-padding: 5 0 0 5";
 	public static final String CSS_STYLE_WEEKDAY_LABEL = "-fx-text-fill: white;"
-			+ "-fx-font: 17px \"Akagi\";" + "-fx-padding: 2 0 0 0";
-	public static final String CSS_STYLE_TO_LABEL = "-fx-font: 18px \"Akagi\";";
+			+ "-fx-font: 17px \"Akagi-SemiBold\";" + "-fx-padding: 2 0 0 0";
+	public static final String CSS_STYLE_TO_LABEL = "-fx-font: 18px \"Akagi-SemiBold\";";
 	public static final String CSS_STYLE_OVERALL_TIME_BOX = "-fx-padding: 0 0 0 0;"
 			+ "-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );";
-	public static final String CSS_STYLE_DESCRIPTION_LABEL = "-fx-font: 17px \"Akagi\";"
+	public static final String CSS_STYLE_DESCRIPTION_LABEL = "-fx-font: 17px \"Akagi-SemiBold\";"
 			+ "-fx-padding:0 0 5 0;"
 			+ "-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );";
-	public static final String CSS_STYLE_TIME_BOX = "-fx-font: 12px \"Akagi\";"
+	public static final String CSS_STYLE_TIME_BOX = "-fx-font: 12px \"Akagi-SemiBold\";"
 			+ "-fx-background-color: rgba(0, 0, 0, 0.5);"
 			+ "-fx-padding: 5 0 0 5;" + "-fx-background-radius: 5px;"
 			+ "-fx-text-fill: white;";
-	public static final String CSS_STYLE_PRIORITY_LABEL = "-fx-font: 19px \"Akagi\";"
+	public static final String CSS_STYLE_PRIORITY_LABEL = "-fx-font: 19px \"Akagi-SemiBold\";"
 			+ "-fx-padding: 0 0 10 0;"
 			+ "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 1);"
 			+ "-fx-text-fill: white;";
@@ -449,6 +449,7 @@ public abstract class Constant {
 
 	// fonts
 	public static final String FONT_FILE_BASE = "/resource/Akagi-SB.ttf";
+	public static final String FONT_FILE_BASE_BOLD = "/resource/Akagi-EB.ttf";
 	public static final String FONT_FILE_TIME = "/resource/TickingTimebombBB.ttf";
 	public static final String FONT_FILE_FEEDBACK = "/resource/monaco.ttf";
 

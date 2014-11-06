@@ -37,6 +37,7 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class MainViewController extends GridPane implements HotKeyListener{
@@ -108,9 +109,9 @@ public class MainViewController extends GridPane implements HotKeyListener{
  */
 	//@author A0119379R
 	private void loadFont() {
+		Font.loadFont(getClass().getResource(Constant.FONT_FILE_BASE_BOLD).toExternalForm(), 10);
 		Font.loadFont(getClass().getResource(Constant.FONT_FILE_BASE).toExternalForm(), 10);
 		Font.loadFont(getClass().getResource(Constant.FONT_FILE_TIME).toExternalForm(), 10);
-//		Font.loadFont(getClass().getResource(Constant.FONT_FILE_FEEDBACK).toExternalForm(), 10);
 	}
 	
 	//@author A0119379R
@@ -266,12 +267,11 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		
 		VBox parsingFeedbackBox = new VBox();
 		parsingFeedbackBox.setPrefWidth(500);
-		parsingFeedbackBox.setPrefHeight(120);
+		parsingFeedbackBox.setPrefHeight(138);
 		Label text = new Label(textToDisplay);
-		text.setStyle("-fx-font: 12px \"Courier New\";"
+		text.setStyle("-fx-font: 12px \"Monaco\";"
 				+ "-fx-text-fill: white;");
-		parsingFeedbackBox.setStyle("-fx-font: 12px \"Akagi\";"
-				+ "-fx-background-color: rgba(0, 0, 0, 0.8);"
+		parsingFeedbackBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8);"
 				+ "-fx-padding: 8 8 8 8;" 
 				+ Constant.CSS_STYLE_SHADOW);
 		parsingFeedbackBox.getChildren().add(text);
@@ -280,14 +280,14 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		listIndicatorBox.setAlignment(Pos.BOTTOM_RIGHT);
 		listIndicatorBox.setPrefWidth(getWidth() - 577);
 		Label listLabel = new Label(listName.toUpperCase());
-		listLabel.setStyle("-fx-font: 40px \"Akagi\";"
-				+ "-fx-text-fill: white;"
-				+ "-fx-effect: innershadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
+		listLabel.setFont(Font.font("Akagi", FontWeight.EXTRA_BOLD, 50));
+		listLabel.setStyle( "-fx-text-fill: white;"
+				+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 3, 1);");
 		
 		if (listName.equalsIgnoreCase("todo")) {
 			listIndicatorBox.setStyle("-fx-background-color: rgba(251, 235, 178, 1);"
 					+ "-fx-padding: 8 16 8 8;"
-					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
+					+ Constant.CSS_STYLE_SHADOW);
 		} else if (listName.equalsIgnoreCase("trashed")) {
 			listIndicatorBox.setStyle("-fx-background-color: rgba(150, 150, 150, 1);"
 					+ "-fx-padding: 8 16 8 8;"
