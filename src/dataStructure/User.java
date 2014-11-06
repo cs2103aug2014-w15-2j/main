@@ -282,7 +282,7 @@ public class User {
 	//@author A0119447Y
 	/**
 	 * emptyTrash
-	 * clear all the trahsed task
+	 * clear all the trashed task
 	 */
 	public boolean emptyTrash() {
 		this.updateUndoable();
