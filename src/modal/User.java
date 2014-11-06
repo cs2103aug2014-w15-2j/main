@@ -1,4 +1,4 @@
-package dataStructure;
+package modal;
 
 import infrastructure.Constant;
 import infrastructure.UtilityMethod;
@@ -11,7 +11,6 @@ import java.util.Stack;
 import com.rits.cloning.*;
 
 import dataStore.DataStore;
-import reference.*;
 
 public class User {
 

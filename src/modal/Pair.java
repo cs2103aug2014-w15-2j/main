@@ -1,4 +1,4 @@
-package reference;
+package modal;
 
 public class Pair<Object1, Object2> {
 	//@author A0119379R

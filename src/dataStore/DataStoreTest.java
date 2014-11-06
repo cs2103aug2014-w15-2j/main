@@ -3,15 +3,15 @@
 package dataStore;
 
 import static org.junit.Assert.*;
+import modal.CommandFailedException;
+import modal.Task;
+import modal.TaskBox;
+import modal.TimeInterval;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import reference.CommandFailedException;
-import reference.TaskBox;
-import reference.TimeInterval;
-import dataStructure.Task;
 import infrastructure.Constant;
 
 import java.io.BufferedReader;

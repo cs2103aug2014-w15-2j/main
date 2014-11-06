@@ -1,9 +1,7 @@
 //@author A0119379R
 
-package infrastructure;
+package parser;
 
-import dataStructure.*;
-import reference.*;
 import edu.stanford.nlp.ie.AbstractSequenceClassifier;
 import edu.stanford.nlp.ie.crf.CRFClassifier;
 import edu.stanford.nlp.ling.CoreAnnotations;
@@ -15,6 +13,8 @@ import edu.stanford.nlp.time.TimeAnnotations;
 import edu.stanford.nlp.time.TimeAnnotator;
 import edu.stanford.nlp.time.TimeExpression;
 import edu.stanford.nlp.util.CoreMap;
+import infrastructure.Constant;
+import infrastructure.UtilityMethod;
 import infrastructure.Constant.COMMAND_TYPE;
 
 import java.io.BufferedWriter;
@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
+
+import modal.*;
 
 public class NERParser {
 	private AbstractSequenceClassifier<CoreLabel> classifierTag;

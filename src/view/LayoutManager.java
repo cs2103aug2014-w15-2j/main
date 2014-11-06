@@ -1,13 +1,16 @@
 
 
-package infrastructure;
+package view;
+
+import infrastructure.Constant;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import reference.TimeInterval;
+import modal.Task;
+import modal.TimeInterval;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -16,7 +19,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
-import dataStructure.Task;
 
 public class LayoutManager {
 

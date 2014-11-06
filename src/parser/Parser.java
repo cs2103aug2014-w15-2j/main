@@ -1,17 +1,19 @@
 //@author A0119379R
 
-package infrastructure;
+package parser;
 
+import infrastructure.Constant;
+import infrastructure.UtilityMethod;
 import infrastructure.Constant.COMMAND_TYPE;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import reference.CommandFailedException;
-import reference.Pair;
-import reference.TimeInterval;
-import dataStructure.Task;
+import modal.CommandFailedException;
+import modal.Pair;
+import modal.Task;
+import modal.TimeInterval;
 
 
 

@@ -1,10 +1,9 @@
-package dataStructure;
+package modal;
 
 import infrastructure.*;
 
 import java.util.ArrayList;
 
-import reference.*;
 
 public class Task {
 	

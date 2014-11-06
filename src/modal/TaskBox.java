@@ -1,8 +1,6 @@
-package reference;
+package modal;
 
 import java.util.ArrayList;
-
-import dataStructure.Task;
 
 //@author A0119447Y
 public class TaskBox {

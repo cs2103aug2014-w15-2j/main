@@ -1,4 +1,4 @@
-package reference;
+package modal;
 
 public class CommandFailedException extends Exception {
 

@@ -1,11 +1,10 @@
-package reference;
+package modal;
 
 import infrastructure.Constant;
 import infrastructure.UtilityMethod;
+
 import java.util.Date;
 import java.util.Iterator;
-
-import dataStructure.Task;
 
 public class Constraint {
 	public String[] keywords;

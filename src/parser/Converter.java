@@ -1,8 +1,8 @@
 //@author A0113029U
 
-package infrastructure;
+package parser;
 
-import dataStructure.Task;
+import infrastructure.Constant;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.LinkedHashMap;
-import reference.CommandFailedException;
-import reference.TimeInterval;
+
+import modal.CommandFailedException;
+import modal.Task;
+import modal.TimeInterval;
 
 public class Converter {
 	
