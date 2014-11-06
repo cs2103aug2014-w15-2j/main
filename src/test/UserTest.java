@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 
 public class UserTest {
 
-	// @author A0119444E
+	//@author A0119444E
 
 	@Test
 	public void testAdd() throws Exception {
