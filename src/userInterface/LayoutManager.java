@@ -52,7 +52,7 @@ public class LayoutManager {
 		int index = 1;
 		taskPane.getColumnConstraints().add(new ColumnConstraints(5));
 		
-		GridPane placeHolderPane = LayoutManager.getEmptyPane(width - 50);
+		GridPane placeHolderPane = LayoutManager.getEmptyPane(width - 55);
 		taskPane.add(placeHolderPane, 1, 0, 2, 1);
 		LayoutManager.setDisplayRow(taskPane, Constant.GRID_ROW_HEIGHT / 2);
 		
@@ -61,12 +61,12 @@ public class LayoutManager {
 				int subRow = 0;
 				GridPane panePane = new GridPane();
 				String bannerColor = LayoutManager.getBannerColor(task);
-				GridPane priorityPane = LayoutManager.getPriorityPane(bannerColor, index, width - 50);
+				GridPane priorityPane = LayoutManager.getPriorityPane(bannerColor, index, width - 55);
 				panePane.add(priorityPane, 0, subRow, 2, 1);
 				LayoutManager.setDisplayRow(panePane, Constant.GRID_ROW_HEIGHT);
 				subRow ++;
 				
-				GridPane contentPane = LayoutManager.getContentPane(task, width - 50);
+				GridPane contentPane = LayoutManager.getContentPane(task, width - 55);
 				
 				panePane.add(contentPane, 0, subRow, 1, 2);
 				LayoutManager.setDisplayRow(panePane, Constant.GRID_ROW_HEIGHT * 2 + 11);
@@ -75,7 +75,7 @@ public class LayoutManager {
 				taskPane.add(panePane, 1, row, 2, 1);
 				LayoutManager.setDisplayRow(taskPane, Constant.GRID_ROW_HEIGHT * 3 + 11);
 				
-				GridPane emptyPane = LayoutManager.getEmptyPane(width - 50);
+				GridPane emptyPane = LayoutManager.getEmptyPane(width - 55);
 				taskPane.add(emptyPane, 1, row + 1, 2, 1);
 				LayoutManager.setDisplayRow(taskPane, Constant.GRID_ROW_HEIGHT);
 				row += 2;
