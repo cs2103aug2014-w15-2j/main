@@ -304,7 +304,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		previewContentPane.setHgap(15);
 
 		VBox parsingFeedbackBox = new VBox();
-		parsingFeedbackBox.setPrefWidth(500);
+		parsingFeedbackBox.setPrefWidth(650);
 		parsingFeedbackBox.setPrefHeight(138);
 
 		consoleTextLabel = new Label(textToDisplay);
@@ -317,7 +317,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 		VBox listIndicatorBox = new VBox();
 		listIndicatorBox.setAlignment(Pos.BOTTOM_RIGHT);
-		listIndicatorBox.setPrefWidth(getWidth() - 570);
+		listIndicatorBox.setPrefWidth(getWidth() - 720);
 		Label listLabel = new Label(listName.toUpperCase());
 		listLabel.setFont(Font.font("Akagi", FontWeight.EXTRA_BOLD, 50));
 
@@ -626,6 +626,10 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			if (userInput.equals("") || (userInput == null)) {
 				return "The expected result will be shown here";
 			}
+			
+			if (this.parser == null) {
+				return "";
+			}
 
 			COMMAND_TYPE thisCommand = this.parser.nerParser
 					.pickCommand(userInput.toLowerCase());
@@ -821,11 +825,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	}
 
 	/**
-	 * ========================================================================
-	 * ==================================== Methods to execute the specific
-	 * operations
-	 * ================================================================
-	 * ============================================
+	 * ===================== Methods to execute the specific operations ================
 	 */
 	//@author A0119379R
 	private String add(String userInput) {
@@ -885,7 +885,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		Constraint thisConstraint;
 		try {
 			thisConstraint = parser.nerParser.getConstraint(userInput);
-			ArrayList<Task> queryResult = this.user.find(thisConstraint);
+			ArrayList<Task> queryResult = this.user.find(thisConstraint, this.getCurrentListName());
 			if (queryResult.isEmpty()) {
 				setPreviewText(Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED);
 				return null;
