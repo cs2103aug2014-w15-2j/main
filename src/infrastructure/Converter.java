@@ -114,7 +114,30 @@ public class Converter {
 		return timeInterval;
 	}
 	
+	private static String convertDateToString(Date date) {
+		String dateString;
+		if(date.equals(Constant.FLOATING_START_DATE)||
+			date.equals(Constant.FLOATING_END_DATE) ||
+			date.equals(Constant.DEADLINE_START_DATE)) {
+			dateString = "-"; 
+		} else {
+			dateString = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
+					Locale.ENGLISH).format(date);	
+		}
+		return dateString;
+	}
+	
+	private static Date convertDateStringToDate(String dateString) throws ParseException {
+		if(dateString.trim().equals("-")) {
+			return null;
+		}
+		return new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
+				Locale.ENGLISH).parse(dateString);
+	}
+	
 	/*
+	 * Unused
+	 * 
 	@SuppressWarnings("rawtypes") 
 	public static int convertRepeatedPeriodStringToInt(LinkedHashMap task) {
 		int repeated_period = Constant.REPEATED_PERIOD_DEFAULT;
@@ -153,26 +176,5 @@ public class Converter {
 		return repeatedPeriod;
 	}
 	*/
-	
-	private static String convertDateToString(Date date) {
-		String dateString;
-		if(date.equals(Constant.FLOATING_START_DATE)||
-			date.equals(Constant.FLOATING_END_DATE) ||
-			date.equals(Constant.DEADLINE_START_DATE)) {
-			dateString = "-"; 
-		} else {
-			dateString = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
-					Locale.ENGLISH).format(date);	
-		}
-		return dateString;
-	}
-	
-	private static Date convertDateStringToDate(String dateString) throws ParseException {
-		if(dateString.trim().equals("-")) {
-			return null;
-		}
-		return new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
-				Locale.ENGLISH).parse(dateString);
-	}
 	
 }
