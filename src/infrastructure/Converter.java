@@ -62,7 +62,7 @@ public class Converter {
 	}
 
 	@SuppressWarnings("rawtypes") 
-	public static int convertPriorityStringToInt(LinkedHashMap task) {
+	private static int convertPriorityStringToInt(LinkedHashMap task) {
 		int priority = Constant.PRIORITY_DEFAULT;
 		String priorityString = ((String) task.get("priority")).toLowerCase().trim();
 		if(priorityString.equals("high")) {
@@ -75,7 +75,7 @@ public class Converter {
 		return priority;
 	}
 	
-	public static String convertPriorityIntToString(Task task) {
+	private static String convertPriorityIntToString(Task task) {
 		String priority = "medium";
 		switch(task.getPriority()) {
 			case Constant.PRIORITY_HIGH:
@@ -95,7 +95,7 @@ public class Converter {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static TimeInterval convertStringToTimeInterval
+	private static TimeInterval convertStringToTimeInterval
 								(LinkedHashMap intervalObj) 
 								throws ParseException, CommandFailedException {
 		Date startDate = convertDateStringToDate((String)intervalObj.get("startDate")); 
@@ -104,7 +104,7 @@ public class Converter {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static LinkedHashMap convertTimeIntervalToString(Task task) {
+	private static LinkedHashMap convertTimeIntervalToString(Task task) {
 		LinkedHashMap timeInterval = new LinkedHashMap();
 		
 		String startDate = convertDateToString(task.getInterval().getStartDate());
@@ -155,7 +155,7 @@ public class Converter {
 	}
 	*/
 	
-	public static String convertDateToString(Date date) {
+	private static String convertDateToString(Date date) {
 		String dateString;
 		if(date.equals(Constant.FLOATING_START_DATE)||
 			date.equals(Constant.FLOATING_END_DATE) ||
@@ -168,13 +168,12 @@ public class Converter {
 		return dateString;
 	}
 	
-	public static Date convertDateStringToDate(String dateString) throws ParseException {
+	private static Date convertDateStringToDate(String dateString) throws ParseException {
 		if(dateString.trim().equals("-")) {
 			return null;
 		}
-		Date date = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
+		return new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
 				Locale.ENGLISH).parse(dateString);
-		return date;
 	}
 	
 }
