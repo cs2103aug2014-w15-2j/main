@@ -5,10 +5,10 @@ import infrastructure.Constant;
 
 import java.util.ArrayList;
 
-import org.junit.Test;
+import modal.Task;
+import modal.TimeInterval;
 
-import reference.TimeInterval;
-import dataStructure.Task;
+import org.junit.Test;
 
 public class TaskTest {
 	/**

@@ -1,5 +1,5 @@
 package view;
-import reference.*;
+
 import infrastructure.*;
 import infrastructure.Constant.COMMAND_TYPE;
 
@@ -13,12 +13,17 @@ import java.util.Collections;
 
 import javax.swing.KeyStroke;
 
+import modal.CommandFailedException;
+import modal.Constraint;
+import modal.Task;
+import modal.User;
+import parser.NERParser;
+import parser.Parser;
+
 import com.tulskiy.keymaster.common.HotKey;
 import com.tulskiy.keymaster.common.HotKeyListener;
 import com.tulskiy.keymaster.common.Provider;
 
-import dataStructure.Task;
-import dataStructure.User;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

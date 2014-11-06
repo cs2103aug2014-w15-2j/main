@@ -2,12 +2,12 @@ package test;
 
 import java.util.ArrayList;
 
-import dataStructure.Task;
-import dataStructure.User;
+import modal.Task;
+import modal.TimeInterval;
+import modal.User;
 
 import org.junit.Test;
 
-import reference.TimeInterval;
 import static org.junit.Assert.assertEquals;
 
 public class UserTest {
