@@ -1,8 +1,6 @@
 //@author A0113029U
 
-package parser;
-
-import infrastructure.Constant;
+package infrastructure;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

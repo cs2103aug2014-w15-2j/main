@@ -17,8 +17,6 @@ import modal.CommandFailedException;
 import modal.Constraint;
 import modal.Task;
 import modal.User;
-import parser.NERParser;
-import parser.Parser;
 
 import com.tulskiy.keymaster.common.HotKey;
 import com.tulskiy.keymaster.common.HotKeyListener;
@@ -557,6 +555,10 @@ public class MainViewController extends GridPane implements HotKeyListener{
 				case DONE:
 					setPreviewPane(this.done(userInput), this.getCurrentListName());
 					setDisplayPane(this.displayNormal());
+					break;
+					
+				case RECOVER:
+					
 					break;
 					
 				default:

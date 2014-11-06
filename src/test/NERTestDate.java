@@ -1,14 +1,13 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
+import infrastructure.NERParser;
 
 import java.util.ArrayList;
 
 import modal.CommandFailedException;
 
 import org.junit.Test;
-
-import parser.NERParser;
 
 public class NERTestDate {
 	static final String TERMINATOR = "\n";

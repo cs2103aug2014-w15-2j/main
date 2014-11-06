@@ -3,6 +3,7 @@
 package dataStore;
 
 import infrastructure.Constant;
+import infrastructure.Converter;
 
 import java.io.File;
 import java.io.FileReader;
@@ -20,8 +21,6 @@ import modal.TaskBox;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
-
-import parser.Converter;
 
 public abstract class DataStore {
 	

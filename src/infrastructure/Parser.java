@@ -1,9 +1,7 @@
 //@author A0119379R
 
-package parser;
+package infrastructure;
 
-import infrastructure.Constant;
-import infrastructure.UtilityMethod;
 import infrastructure.Constant.COMMAND_TYPE;
 
 import java.util.ArrayList;
@@ -86,6 +84,9 @@ public class Parser {
 				
 			case Constant.COMMAND_STRING_DONE:
 				return COMMAND_TYPE.DONE;
+				
+			case Constant.COMMAND_STRING_RECOVER:
+				return COMMAND_TYPE.RECOVER;
 				
 			default:
 				return COMMAND_TYPE.HELP;

@@ -1,6 +1,6 @@
 //@author A0119379R
 
-package parser;
+package infrastructure;
 
 import edu.stanford.nlp.ie.AbstractSequenceClassifier;
 import edu.stanford.nlp.ie.crf.CRFClassifier;
@@ -13,8 +13,6 @@ import edu.stanford.nlp.time.TimeAnnotations;
 import edu.stanford.nlp.time.TimeAnnotator;
 import edu.stanford.nlp.time.TimeExpression;
 import edu.stanford.nlp.util.CoreMap;
-import infrastructure.Constant;
-import infrastructure.UtilityMethod;
 import infrastructure.Constant.COMMAND_TYPE;
 
 import java.io.BufferedWriter;
