@@ -408,9 +408,9 @@ public abstract class Constant {
 	public static final String COLOR_BANNER_PRIORITY_MEDIUM = "rgba(250, 230, 155, 1)";
 	public static final String COLOR_BANNER_PRIORITY_HIGH = "rgba(240, 115, 136, 1)";
 	public static final String COLOR_BODY_DEFAULT = "rgba(0, 0, 0, 1)";
-	public static final String COLOR_BODY_PRIORITY_LOW = "rgba(239, 242, 224, 1)";
+	public static final String COLOR_BODY_PRIORITY_LOW = "rgba(250, 255, 230, 1)";
 	public static final String COLOR_BODY_PRIORITY_MEDIUM = "rgba(255, 248, 222, 1)";
-	public static final String COLOR_BODY_PRIORITY_HIGH = "rgba(243, 218, 222, 1)";
+	public static final String COLOR_BODY_PRIORITY_HIGH = "rgba(250, 223, 227, 1)";
 	public static final String[] COLORS_TAG = { "rgba(74, 137, 220, 0.7)",
 			"rgba(59, 175, 218, 0.7)", "rgba(55, 188, 155, 0.7)",
 			"rgba(246, 187, 66, 0.7)", "rgba(140, 193, 82, 0.7)",
