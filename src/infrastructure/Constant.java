@@ -451,6 +451,6 @@ public abstract class Constant {
 	public static final int MODIFIER_CTRL = 130;
 	public static final String TASK_LIST_FINISHED = "finished";
 	public static final String TASK_LIST_TRASHED = "trashed";
-	public static final String TASK_LIST_TODO = "todo";
+	public static final String TASK_LIST_TODO = "ongoing";
 	public static final String TASK_LIST_SEARCH = "search";
 }

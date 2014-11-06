@@ -245,7 +245,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		setPreviewPane(
 				"Welcome to List of Xiao Ming. \nPlease wait for the NLP model loading...",
 				this.getCurrentListName());
-		displayScrollPane.setStyle("-fx-font: 12px \"Monaco\";" + "-fx-text-fill: white;");
+		displayScrollPane.setStyle("-fx-font: 12px \"Monaco\";");
 		this.setDisplayText("HELP:" + "\n\n"
 				+ Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
 	}
