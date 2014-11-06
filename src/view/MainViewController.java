@@ -440,9 +440,8 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	private void setDisplayScrollbarStyle() {
 		displayScrollPane.getStyleClass().add("mylistview");
 		displayScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-		displayScrollPane.setFitToWidth(true);
-		displayScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
 		
+		displayScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
 		displayScrollPane.setOnScrollFinished(new EventHandler<ScrollEvent>() {
 			@Override
 			public void handle(ScrollEvent event) {
