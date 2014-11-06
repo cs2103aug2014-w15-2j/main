@@ -5,16 +5,15 @@ import java.util.logging.Logger;
 
 public abstract class Constant {
 
-	
-	//@author A0119379R
+	// @author A0119379R
 	// logger
 	public static Logger logger = Logger.getLogger("ListOfXiaoMing");
 	public final static boolean ERROR_PRINT_ON = true;
-	
+
 	/**
 	 * training data path
 	 */
-	
+
 	// directory
 	public static final String FILE_PATH_ROOT = "List-of-Xiao-Ming";
 	public static final String FILE_PATH_NLP_ROOT = "List-of-Xiao-Ming/NLP-Data";
@@ -55,22 +54,13 @@ public abstract class Constant {
 			+ FILE_PATH_TAG;
 	public static final String FILE_PATH_TIME_USER = FILE_PATH_NLP_ROOT
 			+ FILE_PATH_TIME;
-	
-	public static final String[] TSVS_USER = {
-		FILE_PATH_TIME_PICKER_USER, 
-		FILE_PATH_DESCRIPTION_PICKER_USER, 
-		FILE_PATH_TAG_PICKER_USER,
-		FILE_PATH_PRIORITY_PICKER_USER,
-		FILE_PATH_INDEX_PICKER_USER,
-		FILE_PATH_COMMAND_PICKER_USER,
-		FILE_PATH_COMMAND_USER,
-		FILE_PATH_INDEX_USER,
-		FILE_PATH_PRIORITY_USER,
-		FILE_PATH_TAG_USER,
-		FILE_PATH_TIME_USER
-	};
-	
-	
+
+	public static final String[] TSVS_USER = { FILE_PATH_TIME_PICKER_USER,
+			FILE_PATH_DESCRIPTION_PICKER_USER, FILE_PATH_TAG_PICKER_USER,
+			FILE_PATH_PRIORITY_PICKER_USER, FILE_PATH_INDEX_PICKER_USER,
+			FILE_PATH_COMMAND_PICKER_USER, FILE_PATH_COMMAND_USER,
+			FILE_PATH_INDEX_USER, FILE_PATH_PRIORITY_USER, FILE_PATH_TAG_USER,
+			FILE_PATH_TIME_USER };
 
 	public static final String FILE_PATH_TIME_PICKER_SOURCE = FILE_PATH_NLP_SRC
 			+ FILE_PATH_TIME_PICKER;
@@ -95,21 +85,13 @@ public abstract class Constant {
 	public static final String FILE_PATH_TIME_SOURCE = FILE_PATH_NLP_SRC
 			+ FILE_PATH_TIME;
 
-	public static final String[] TSVS_SOURCE = {
-		FILE_PATH_TIME_PICKER_SOURCE, 
-		FILE_PATH_DESCRIPTION_PICKER_SOURCE, 
-		FILE_PATH_TAG_PICKER_SOURCE,
-		FILE_PATH_PRIORITY_PICKER_SOURCE,
-		FILE_PATH_INDEX_PICKER_SOURCE,
-		FILE_PATH_COMMAND_PICKER_SOURCE,
-		FILE_PATH_COMMAND_SOURCE,
-		FILE_PATH_INDEX_SOURCE,
-		FILE_PATH_PRIORITY_SOURCE,
-		FILE_PATH_TAG_SOURCE,
-		FILE_PATH_TIME_SOURCE
-	};
-	
-	
+	public static final String[] TSVS_SOURCE = { FILE_PATH_TIME_PICKER_SOURCE,
+			FILE_PATH_DESCRIPTION_PICKER_SOURCE, FILE_PATH_TAG_PICKER_SOURCE,
+			FILE_PATH_PRIORITY_PICKER_SOURCE, FILE_PATH_INDEX_PICKER_SOURCE,
+			FILE_PATH_COMMAND_PICKER_SOURCE, FILE_PATH_COMMAND_SOURCE,
+			FILE_PATH_INDEX_SOURCE, FILE_PATH_PRIORITY_SOURCE,
+			FILE_PATH_TAG_SOURCE, FILE_PATH_TIME_SOURCE };
+
 	// prop files
 	public static final String FILE_PATH_TIME_PICKER_PROP = "/time_picker.prop";
 	public static final String FILE_PATH_DESCRIPTION_PICKER_PROP = "/description_picker.prop";
@@ -122,8 +104,7 @@ public abstract class Constant {
 	public static final String FILE_PATH_PRIORITY_PROP = "/priority.prop";
 	public static final String FILE_PATH_INDEX_PROP = "/index.prop";
 	public static final String FILE_PATH_COMMAND_PROP = "/command.prop";
-	
-	
+
 	public static final String FILE_PATH_TIME_PICKER_PROP_USER = FILE_PATH_NLP_ROOT
 			+ FILE_PATH_TIME_PICKER_PROP;
 	public static final String FILE_PATH_DESCRIPTION_PICKER_PROP_USER = FILE_PATH_NLP_ROOT
@@ -147,20 +128,16 @@ public abstract class Constant {
 	public static final String FILE_PATH_COMMAND_PROP_USER = FILE_PATH_NLP_ROOT
 			+ FILE_PATH_COMMAND_PROP;
 
-	public static final String[] PROPS_USER= {
-		FILE_PATH_TIME_PICKER_PROP_USER,
-		FILE_PATH_DESCRIPTION_PICKER_PROP_USER,
-		FILE_PATH_TAG_PICKER_PROP_USER,
-		FILE_PATH_PRIORITY_PICKER_PROP_USER,
-		FILE_PATH_INDEX_PICKER_PROP_USER,
-		FILE_PATH_COMMAND_PICKER_PROP_USER,
-		FILE_PATH_TIME_PROP_USER,
-		FILE_PATH_TAG_PROP_USER,
-		FILE_PATH_PRIORITY_PROP_USER,
-		FILE_PATH_INDEX_PROP_USER,
-		FILE_PATH_COMMAND_PROP_USER
-	};
-	
+	public static final String[] PROPS_USER = {
+			FILE_PATH_TIME_PICKER_PROP_USER,
+			FILE_PATH_DESCRIPTION_PICKER_PROP_USER,
+			FILE_PATH_TAG_PICKER_PROP_USER,
+			FILE_PATH_PRIORITY_PICKER_PROP_USER,
+			FILE_PATH_INDEX_PICKER_PROP_USER,
+			FILE_PATH_COMMAND_PICKER_PROP_USER, FILE_PATH_TIME_PROP_USER,
+			FILE_PATH_TAG_PROP_USER, FILE_PATH_PRIORITY_PROP_USER,
+			FILE_PATH_INDEX_PROP_USER, FILE_PATH_COMMAND_PROP_USER };
+
 	public static final String FILE_PATH_TIME_PICKER_PROP_SOURCE = FILE_PATH_NLP_SRC
 			+ FILE_PATH_TIME_PICKER_PROP;
 	public static final String FILE_PATH_DESCRIPTION_PICKER_PROP_SOURCE = FILE_PATH_NLP_SRC
@@ -183,21 +160,16 @@ public abstract class Constant {
 			+ FILE_PATH_INDEX_PROP;
 	public static final String FILE_PATH_COMMAND_PROP_SOURCE = FILE_PATH_NLP_SRC
 			+ FILE_PATH_COMMAND_PROP;
-	
-	public static final String[] PROPS_SOURCE= {
-		FILE_PATH_TIME_PICKER_PROP_SOURCE,
-		FILE_PATH_DESCRIPTION_PICKER_PROP_SOURCE,
-		FILE_PATH_TAG_PICKER_PROP_SOURCE,
-		FILE_PATH_PRIORITY_PICKER_PROP_SOURCE,
-		FILE_PATH_INDEX_PICKER_PROP_SOURCE,
-		FILE_PATH_COMMAND_PICKER_PROP_SOURCE,
-		FILE_PATH_TIME_PROP_SOURCE,
-		FILE_PATH_TAG_PROP_SOURCE,
-		FILE_PATH_PRIORITY_PROP_SOURCE,
-		FILE_PATH_INDEX_PROP_SOURCE,
-		FILE_PATH_COMMAND_PROP_SOURCE
-	};
-	
+
+	public static final String[] PROPS_SOURCE = {
+			FILE_PATH_TIME_PICKER_PROP_SOURCE,
+			FILE_PATH_DESCRIPTION_PICKER_PROP_SOURCE,
+			FILE_PATH_TAG_PICKER_PROP_SOURCE,
+			FILE_PATH_PRIORITY_PICKER_PROP_SOURCE,
+			FILE_PATH_INDEX_PICKER_PROP_SOURCE,
+			FILE_PATH_COMMAND_PICKER_PROP_SOURCE, FILE_PATH_TIME_PROP_SOURCE,
+			FILE_PATH_TAG_PROP_SOURCE, FILE_PATH_PRIORITY_PROP_SOURCE,
+			FILE_PATH_INDEX_PROP_SOURCE, FILE_PATH_COMMAND_PROP_SOURCE };
 
 	// gz files
 	public static final String FILE_PATH_TIME_PICKER_GZ = "/time-picker-ner-model.ser.gz";
@@ -211,38 +183,36 @@ public abstract class Constant {
 	public static final String FILE_PATH_TIME_GZ = "/time-ner-model.ser.gz";
 	public static final String FILE_PATH_COMMAND_GZ = "/command-ner-model.ser.gz";
 	public static final String FILE_PATH_TAG_GZ = "/tag-ner-model.ser.gz";
-	
-	
+
 	public static final String[] GZS_USER = {
-		FILE_PATH_NLP_ROOT + FILE_PATH_TIME_PICKER_GZ,
-		FILE_PATH_NLP_ROOT + FILE_PATH_DESCRIPTION_PICKER_GZ,
-		FILE_PATH_NLP_ROOT + FILE_PATH_TAG_PICKER_GZ,
-		FILE_PATH_NLP_ROOT + FILE_PATH_PRIORITY_PICKER_GZ,
-		FILE_PATH_NLP_ROOT + FILE_PATH_INDEX_PICKER_GZ,
-		FILE_PATH_NLP_ROOT + FILE_PATH_COMMAND_PICKER_GZ,
-		FILE_PATH_NLP_ROOT + FILE_PATH_TIME_GZ,
-		FILE_PATH_NLP_ROOT + FILE_PATH_TAG_GZ,
-		FILE_PATH_NLP_ROOT + FILE_PATH_PRIORITY_GZ,
-		FILE_PATH_NLP_ROOT + FILE_PATH_INDEX_GZ,
-		FILE_PATH_NLP_ROOT + FILE_PATH_COMMAND_GZ
+			FILE_PATH_NLP_ROOT + FILE_PATH_TIME_PICKER_GZ,
+			FILE_PATH_NLP_ROOT + FILE_PATH_DESCRIPTION_PICKER_GZ,
+			FILE_PATH_NLP_ROOT + FILE_PATH_TAG_PICKER_GZ,
+			FILE_PATH_NLP_ROOT + FILE_PATH_PRIORITY_PICKER_GZ,
+			FILE_PATH_NLP_ROOT + FILE_PATH_INDEX_PICKER_GZ,
+			FILE_PATH_NLP_ROOT + FILE_PATH_COMMAND_PICKER_GZ,
+			FILE_PATH_NLP_ROOT + FILE_PATH_TIME_GZ,
+			FILE_PATH_NLP_ROOT + FILE_PATH_TAG_GZ,
+			FILE_PATH_NLP_ROOT + FILE_PATH_PRIORITY_GZ,
+			FILE_PATH_NLP_ROOT + FILE_PATH_INDEX_GZ,
+			FILE_PATH_NLP_ROOT + FILE_PATH_COMMAND_GZ
 
 	};
-	
+
 	public static final String[] GZS_SOURCE = {
-		FILE_PATH_NLP_SRC + FILE_PATH_TIME_PICKER_GZ,
-		FILE_PATH_NLP_SRC + FILE_PATH_DESCRIPTION_PICKER_GZ,
-		FILE_PATH_NLP_SRC + FILE_PATH_TAG_PICKER_GZ,
-		FILE_PATH_NLP_SRC + FILE_PATH_PRIORITY_PICKER_GZ,
-		FILE_PATH_NLP_SRC + FILE_PATH_INDEX_PICKER_GZ,
-		FILE_PATH_NLP_SRC + FILE_PATH_COMMAND_PICKER_GZ,
-		FILE_PATH_NLP_SRC + FILE_PATH_TIME_GZ,
-		FILE_PATH_NLP_SRC + FILE_PATH_TAG_GZ,
-		FILE_PATH_NLP_SRC + FILE_PATH_PRIORITY_GZ,
-		FILE_PATH_NLP_SRC + FILE_PATH_INDEX_GZ,
-		FILE_PATH_NLP_SRC + FILE_PATH_COMMAND_GZ
+			FILE_PATH_NLP_SRC + FILE_PATH_TIME_PICKER_GZ,
+			FILE_PATH_NLP_SRC + FILE_PATH_DESCRIPTION_PICKER_GZ,
+			FILE_PATH_NLP_SRC + FILE_PATH_TAG_PICKER_GZ,
+			FILE_PATH_NLP_SRC + FILE_PATH_PRIORITY_PICKER_GZ,
+			FILE_PATH_NLP_SRC + FILE_PATH_INDEX_PICKER_GZ,
+			FILE_PATH_NLP_SRC + FILE_PATH_COMMAND_PICKER_GZ,
+			FILE_PATH_NLP_SRC + FILE_PATH_TIME_GZ,
+			FILE_PATH_NLP_SRC + FILE_PATH_TAG_GZ,
+			FILE_PATH_NLP_SRC + FILE_PATH_PRIORITY_GZ,
+			FILE_PATH_NLP_SRC + FILE_PATH_INDEX_GZ,
+			FILE_PATH_NLP_SRC + FILE_PATH_COMMAND_GZ
 
 	};
-	
 
 	// XML tags
 	public static final String XML_TAG_DEFAULT = "O";
@@ -278,31 +248,32 @@ public abstract class Constant {
 	public static final String PROMPT_MESSAGE_NEED_USERNAME = "Please enter your username: ";
 	public static final String PROMPT_MESSAGE_NEED_PASSWORD = "Please enter your password: ";
 	public static final String PROMPT_MESSAGE_NEED_ENTER_AGAIN = "Please re-enter your password: ";
-	public static final String PROMPT_MESSAGE_PASSWORD_INCORRECT = "Incorrect password! Please try again.";
+	public static final String PROMPT_MESSAGE_PASSWORD_INCORRECT = "Incorrect password. Please try again";
 	public static final String PROMPT_MESSAGE_ACCOUNT_NOT_EXIST = "The account doesn't exist! Do you want to enter the name again? (Y/N)";
 	public static final String PROMPT_MESSAGE_ACCOUNT_EXIST = "The account has existed already. Do you want to change a name? (Y/N)";
 	public static final String PROMPT_MESSAGE_ACCOUNT_CREATED = "Account Created";
 	public static final String PROMPT_MESSAGE_ACCOUNT_NOT_CREATED = "Fail to create account: Please check again";
-	public static final String PROMPT_MESSAGE_SESSION_END = "Session end!";
-	public static final String PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY = "Task added!";
-	public static final String PROMPT_MESSAGE_ADD_TASK_FAILED = "Failed to add task!";
-	public static final String PROMPT_MESSAGE_DELETE_TASK_SUCCESSFULLY = "Task deleted!";
-	public static final String PROMPT_MESSAGE_DELETE_TASK_FAILED = "Failed to delete task!";
-	public static final String PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY = "Task updated!";
-	public static final String PROMPT_MESSAGE_UPDATE_TASK_FAILED = "Failed to update task!";
-	public static final String PROMPT_MESSAGE_DISPLAY_EMPTY_TASK = "--- no task in the list ---      _(:з」∠)_ ";
+	public static final String PROMPT_MESSAGE_SESSION_END = "Session end";
+	public static final String PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY = "Task added";
+	public static final String PROMPT_MESSAGE_ADD_TASK_FAILED = "Failed to add task";
+	public static final String PROMPT_MESSAGE_DELETE_TASK_SUCCESSFULLY = "Task deleted";
+	public static final String PROMPT_MESSAGE_DELETE_TASK_FAILED = "Failed to delete task";
+	public static final String PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY = "Task updated";
+	public static final String PROMPT_MESSAGE_UPDATE_TASK_FAILED = "Failed to update task";
+	public static final String PROMPT_MESSAGE_DISPLAY_EMPTY_TASK = "No task in the list";
 	public static final String PROMPT_MESSAGE_DISPLAY_ERROR = "display error";
-	public static final String PROMPT_MESSAGE_CLEAR_CACHE_FAILED = "Failed to clear cache!";
-	public static final String PROMPT_MESSAGE_UNDO_SUCCESSFULLY = "Undo successfully!";
-	public static final String PROMPT_MESSAGE_UNDO_FAILED = "Unable to undo!";
-	public static final String PROMPT_MESSAGE_REDO_SUCCESSFULLY = "Redo successfully!";
-	public static final String PROMPT_MESSAGE_REDO_FAILED = "Unable to redo!";
+	public static final String PROMPT_MESSAGE_CLEAR_CACHE_FAILED = "Failed to clear cache";
+	public static final String PROMPT_MESSAGE_UNDO_SUCCESSFULLY = "Undo successfully";
+	public static final String PROMPT_MESSAGE_UNDO_FAILED = "Unable to undo";
+	public static final String PROMPT_MESSAGE_REDO_SUCCESSFULLY = "Redo successfully";
+	public static final String PROMPT_MESSAGE_REDO_FAILED = "Unable to redo";
 	public static final String PROMPT_MESSAGE_SEARCH_TIME_INTERVAL = "Searching for tasks within time Interval: %1$s";
 	public static final String PROMPT_MESSAGE_SEARCH_KEYWORD = "Searching for tasks containing keywords: %1$s";
-	public static final String PROMPT_MESSAGE_NO_TASK_FOUNDED = "--- no task found ---";
+	public static final String PROMPT_MESSAGE_NO_TASK_FOUNDED = "No task found";
 	public static final String PROMPT_MESSAGE_DONE_TASK_SUCCESSFULLY = "Tasks are marked done";
 	public static final String PROMPT_MESSAGE_DONE_TASK_FAILED = "Task is failed to finished";
 	public static final String PROMPT_MESSAGE_TRASH_EMPTIED = "Trash emptied";
+	public static final String PROMPT_MESSAGE_INVALID_TASK_LISE = "Invalid task list name";
 
 	public static final String RETURN_VALUE_LOG_IN_CANCELLED = "user cancelled logging in";
 	public static final String RETURN_VALUE_AUTHENTICATION_FAILED = "authentication failed.";
@@ -353,7 +324,7 @@ public abstract class Constant {
 	public static final int REPEATED_PERIOD_MONTHLY = 4;
 
 	public static final int CALENDAR_WEEK_IN_SECOND = 37;
-	
+
 	// Logic
 	public static final String TRASHED_TAG = "trashed";
 	public static final String NO_REDOABLE_ERROR_MESSAGE = "nothing available for redoing";
@@ -369,12 +340,11 @@ public abstract class Constant {
 	public static enum COMMAND_TYPE {
 		LOG_IN, LOG_OUT, CREATE_ACCOUNT, DELETE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR, NLP, EMPTY_TRASH, RELOAD, DONE, RECOVER
 	}
-	
+
 	// task status
 	public static final String TASK_STATUS_NORMAL = "normal";
 	public static final String TASK_STATUS_DONE = "done";
 	public static final String TASK_STATUS_TRASHED = "trashed";
-	
 
 	// category
 	public static final String DEFAULT_CATEGORY = "default";
@@ -386,12 +356,9 @@ public abstract class Constant {
 
 	public static String TIME_MESSAGE_FLOATING = "";
 
-	
-	
 	/**
 	 * MainViewController
 	 */
-	
 
 	// CSS styles
 	public static final String CSS_STYLE_TAG_LABEL = "-fx-font: 10px \"Akagi-SemiBold\";"
@@ -425,7 +392,8 @@ public abstract class Constant {
 			+ "-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );";
 	public static final String CSS_STYLE_TIME_BOX = "-fx-font: 12px \"Akagi-SemiBold\";"
 			+ "-fx-background-color: rgba(0, 0, 0, 0.5);"
-			+ "-fx-padding: 5 0 0 5;" + "-fx-background-radius: 5px;"
+			+ "-fx-padding: 5 0 0 5;"
+			+ "-fx-background-radius: 5px;"
 			+ "-fx-text-fill: white;";
 	public static final String CSS_STYLE_PRIORITY_LABEL = "-fx-font: 19px \"Akagi-SemiBold\";"
 			+ "-fx-padding: 0 0 10 0;"
@@ -468,11 +436,11 @@ public abstract class Constant {
 	public static final String HOT_KEY_DELETE = "control D";
 	public static final String HOT_KEY_SEARCH = "control F";
 	public static final String HOT_KEY_RELOAD = "control M";
-	
+
 	public static final String HOT_KEY_TO_DO = "control 1";
 	public static final String HOT_KEY_TRASHED = "control 3";
 	public static final String HOT_KEY_DONE = "control 2";
-	
+
 	public static final String HOT_KEY_LAST_COMMAND = "UP";
 	public static final String HOT_KEY_NEXT_COMMAND = "DOWN";
 
@@ -481,4 +449,7 @@ public abstract class Constant {
 	public static final int MODIFIER_ALT = 520;
 
 	public static final int MODIFIER_CTRL = 130;
+	public static final String TASK_LIST_FINISHED = "finished";
+	public static final String TASK_LIST_TRASHED = "trashed";
+	public static final String TASK_LIST_TODO = "todo";
 }

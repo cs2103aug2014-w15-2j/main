@@ -1,6 +1,6 @@
 
 
-package view;
+package userInterface;
 
 import infrastructure.Constant;
 

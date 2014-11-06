@@ -1,4 +1,4 @@
-package view;
+package userInterface;
 
 import infrastructure.*;
 import infrastructure.Constant.COMMAND_TYPE;
@@ -61,14 +61,16 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	private User user;
 
 	private Provider keyShortCuts = null;
-	private String currentListName = "todo";
+	private String currentListName = Constant.TASK_LIST_TODO;
+	
 
-	private String descriptionTag = "</DESCRIPTION>";
-	private String dateTag = "</DATE>";
-	private String tagTag = "</TAG>";
-	private String commandTag = "</COMMAND>";
-	private String indexTag = "</INDEX>";
-	private String priorityTag = "</PRIORITY>";
+	
+	private String descriptionTag 	= "</DESCRIPTION>";
+	private String dateTag 			= "</DATE>";
+	private String tagTag 			= "</TAG>";
+	private String commandTag		= "</COMMAND>";
+	private String indexTag 		= "</INDEX>";
+	private String priorityTag 		= "</PRIORITY>";
 
 	private ArrayList<String> commandHistory = new ArrayList<String>();
 	private int currentCommandIndex = 0;
@@ -141,8 +143,8 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			e.printStackTrace();
 		}
 	}
-
-	// @author A0119379R
+	
+	//@author A0119447Y
 	private void loadFxml() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
 				"MainView.fxml"));
@@ -314,20 +316,18 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		listIndicatorBox.setPrefWidth(getWidth() - 570);
 		Label listLabel = new Label(listName.toUpperCase());
 		listLabel.setFont(Font.font("Akagi", FontWeight.EXTRA_BOLD, 50));
-		listLabel
-				.setStyle("-fx-text-fill: white;"
-						+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 3, 1);");
 
-		if (listName.equalsIgnoreCase("todo")) {
-			listIndicatorBox
-					.setStyle("-fx-background-color: rgba(251, 235, 178, 1);"
-							+ "-fx-padding: 8 16 8 8;"
-							+ Constant.CSS_STYLE_SHADOW);
-		} else if (listName.equalsIgnoreCase("trashed")) {
-			listIndicatorBox
-					.setStyle("-fx-background-color: rgba(150, 150, 150, 1);"
-							+ "-fx-padding: 8 16 8 8;"
-							+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
+		listLabel.setStyle( "-fx-text-fill: white;"
+				+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 3, 1);");
+		
+		if (listName.equalsIgnoreCase(Constant.TASK_LIST_TODO)) {
+			listIndicatorBox.setStyle("-fx-background-color: rgba(251, 235, 178, 1);"
+					+ "-fx-padding: 8 16 8 8;"
+					+ Constant.CSS_STYLE_SHADOW);
+		} else if (listName.equalsIgnoreCase(Constant.TASK_LIST_TRASHED)) {
+			listIndicatorBox.setStyle("-fx-background-color: rgba(150, 150, 150, 1);"
+					+ "-fx-padding: 8 16 8 8;"
+					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
 		} else {
 			listIndicatorBox
 					.setStyle("-fx-background-color: rgba(222, 236, 147, 1);"
@@ -528,84 +528,82 @@ public class MainViewController extends GridPane implements HotKeyListener {
 					.toLowerCase());
 			System.err.println("CMD - executeNER: " + thisCommand);
 
-			switch (thisCommand) {
-			case ADD:
-				setPreviewPane(this.add(userInput), this.getCurrentListName());
-				setDisplayPane(this.displayNormal());
-				break;
-
-			case DELETE:
-				setPreviewPane(this.delete(userInput),
-						this.getCurrentListName());
-				setDisplayPane(this.displayNormal());
-				break;
-
-			case UPDATE:
-				setPreviewPane(this.update(userInput),
-						this.getCurrentListName());
-				setDisplayPane(this.displayNormal());
-				break;
-
-			case SEARCH:
-				ArrayList<Task> queryList = this.search(userInput);
-				if (queryList != null) {
-					setDisplayPane(queryList);
-				}
-				break;
-
-			case DISPLAY:
-				ArrayList<Task> listToDisplay = this.displayNormal();
-				if (listToDisplay != null) {
-					setDisplayPane(listToDisplay);
-				}
-				break;
-
-			case UNDO:
-				setPreviewPane(this.undo(), this.getCurrentListName());
-				setDisplayPane(this.displayNormal());
-				break;
-
-			case REDO:
-				setPreviewPane(this.redo(), this.getCurrentListName());
-				setDisplayPane(this.displayNormal());
-				break;
-
-			case CLEAR:
-				setPreviewPane(this.clear(), this.getCurrentListName());
-				setDisplayPane(this.displayNormal());
-				break;
-
-			case EXIT:
-				System.setErr(err);
-				NERParser.updateModal();
-				User.exit();
-				break;
-
-			case HELP:
-				setDisplayText(this.help());
-				break;
-
-			case EMPTY_TRASH:
-				setPreviewPane(this.emptyTrash(), this.getCurrentListName());
-				setDisplayPane(this.displayNormal());
-				break;
-
-			case RELOAD:
-				setPreviewPane(this.reloadNLPModel(), this.getCurrentListName());
-				setDisplayPane(this.displayNormal());
-				break;
-
-			case DONE:
-				setPreviewPane(this.done(userInput), this.getCurrentListName());
-				setDisplayPane(this.displayNormal());
-				break;
-
-			case RECOVER:
-
-				break;
-
-			default:
-				break;
+			switch(thisCommand) {
+				case ADD:
+					setPreviewPane(this.add(userInput), this.getCurrentListName());
+					setDisplayPane(this.displayNormal());
+					break;
+					
+				case DELETE:
+					setPreviewPane(this.delete(userInput), this.getCurrentListName());
+					setDisplayPane(this.displayNormal());
+					break;
+					
+				case UPDATE:
+					setPreviewPane(this.update(userInput), this.getCurrentListName());
+					setDisplayPane(this.displayNormal());
+					break;
+					
+				case SEARCH:
+					ArrayList<Task> queryList = this.search(userInput);
+					if (queryList != null) {
+						setDisplayPane(queryList);
+					}
+					break;
+				
+				case DISPLAY:
+					ArrayList<Task> listToDisplay = this.displayNormal();
+					if (listToDisplay != null) {
+						setDisplayPane(listToDisplay);
+					}
+					break;
+					
+				case UNDO:
+					setPreviewPane(this.undo(), this.getCurrentListName());
+					setDisplayPane(this.displayNormal());
+					break;
+					
+				case REDO:
+					setPreviewPane(this.redo(), this.getCurrentListName());
+					setDisplayPane(this.displayNormal());
+					break;
+					
+				case CLEAR:
+					setPreviewPane(this.clear(), this.getCurrentListName());
+					setDisplayPane(this.displayNormal());
+					break;
+					
+				case EXIT:
+					System.setErr(err); 
+					NERParser.updateModal();
+					User.exit();
+					break;
+					
+				case HELP:
+					setDisplayText(this.help());
+					break;
+					
+				case EMPTY_TRASH:
+					setPreviewPane(this.emptyTrash(), this.getCurrentListName());
+					setDisplayPane(this.displayNormal());
+					break;
+					
+				case RELOAD:
+					setPreviewPane(this.reloadNLPModel(), this.getCurrentListName());
+					setDisplayPane(this.displayNormal());
+					break;
+					
+				case DONE:
+					setPreviewPane(this.done(userInput), this.getCurrentListName());
+					setDisplayPane(this.displayNormal());
+					break;
+					
+				case RECOVER:
+					setPreviewPane(this.recover(), this.getCurrentListName());
+					break;
+					
+				default:
+					break;
 
 			}
 		} catch (CommandFailedException e) {
@@ -613,7 +611,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			e.printStackTrace();
 		}
 	}
-
+		
 	private String getCurrentListName() {
 		return this.currentListName;
 	}
@@ -629,67 +627,78 @@ public class MainViewController extends GridPane implements HotKeyListener {
 					.pickCommand(userInput.toLowerCase());
 			System.err.println("CMD - getPreview: " + thisCommand);
 
-			switch (thisCommand) {
-			case ADD:
-				return getAddPreview(userInput);
+		
+			switch(thisCommand) {
+				case ADD:
+					return getAddPreview(userInput);
+					
+				case DELETE:
+					return getDeletePreview(userInput);
+					
+				case UPDATE:
+					return getUpdatePreview(userInput);
+					
+				case SEARCH:
+					return getSearchPreview(userInput);
+				
+				case DONE:
+					return getDonePreview(userInput);
+					
+				case DISPLAY:
+					return getDisplayPreview();
+	
+				case UNDO:
+					return getUndoPreview();
+					
+				case REDO:
+					return getRedoPreview();
+					
+				case CLEAR:
+					return getClearPreview();
+					
+				case EMPTY_TRASH:
+					return getEmptyTrashPreview();
+					
+				case RELOAD:
+					return getReloadPreview();
+					
+				case HELP:
+					return getHelpPreview();
+					
+				case EXIT:
+					return getExitPreview();
+					
+				case RECOVER:
+					return getRecoverPreview();
+					
+				default:
+					return getDefaultPreview();
 
-			case DELETE:
-				return getDeletePreview(userInput);
-
-			case UPDATE:
-				return getUpdatePreview(userInput);
-
-			case SEARCH:
-				return getSearchPreview(userInput);
-
-			case DONE:
-				return getDonePreview(userInput);
-
-			case DISPLAY:
-				return getDisplayPreview();
-
-			case UNDO:
-				return getUndoPreview();
-
-			case REDO:
-				return getRedoPreview();
-
-			case CLEAR:
-				return getClearPreview();
-
-			case EMPTY_TRASH:
-				return getEmptyTrashPreview();
-
-			case RELOAD:
-				return getReloadPreview();
-
-			case HELP:
-				return getHelpPreview();
-
-			case EXIT:
-				return getExitPreview();
-
-			default:
-				return getDefaultPreview();
-
-			}
-
+			}		
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
 			return "Failure in Parsing The Task";
-		} catch (Exception e) {
-			return e.toString();
 		}
 	}
 
 	/**
 	 * ========================================================================
-	 * =============================== Specific methods to get previews
-	 * ==========
-	 * ================================================================
-	 * =============================
+	 * =============================== Specific methods to get previews==========
 	 */
 	// @author A0119379R
+
+/**
+ * 	=======================================================================================================
+ *  Specific methods to get previews
+ *  =======================================================================================================
+ */
+	
+	//@author A0119379R
+	private String getRecoverPreview() {
+		return "Command: recover";
+	}
+	
+	//@author A0119379R
 	private String getDefaultPreview() {
 		return "Command not recognized";
 	}
@@ -1031,6 +1040,17 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	 * ==================================================
 	 */
 	// @author A0119447Y
+	private String recover() {
+		return this.user.recover(this.getCurrentListName());
+	}
+
+
+/**
+ * ==========================================================================
+ * the delegation methods to respond to shortcuts
+ * ==========================================================================
+ */
+	//@author A0119447Y
 	@Override
 	public void onHotKey(HotKey key) {
 		String tag = "";
@@ -1148,39 +1168,39 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	private void changeToToDoList() {
 		final MainViewController instance = this;
 		Platform.runLater(new Runnable() {
+			
 			@Override
-			public void run() {
-				instance.setDisplayPane(instance.displayNormal());
-				instance.currentListName = "todo";
-				instance.setPreviewPane("hahah", instance.getCurrentListName());
-			}
-		});
+	        public void run() {
+	        	instance.setDisplayPane(instance.displayNormal());
+	        	instance.currentListName = Constant.TASK_LIST_TODO;
+	        	instance.setPreviewPane("hahah", instance.getCurrentListName());
+	        }
+	   });
 	}
 
 	private void changeToTrashedList() {
 		final MainViewController instance = this;
 		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				instance.setDisplayPane(instance.displayTrashed());
-				instance.currentListName = "trashed";
-				instance.setPreviewPane("hahah", instance.getCurrentListName());
-			}
-		});
-
+	        @Override
+	        public void run() {
+	        	instance.setDisplayPane(instance.displayTrashed());
+	        	instance.currentListName = Constant.TASK_LIST_TRASHED;
+	        	instance.setPreviewPane("hahah", instance.getCurrentListName());
+	        }
+	   });
 	}
 
 	private void changeToFinishedList() {
 		final MainViewController instance = this;
 		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				instance.setDisplayPane(instance.displayFinished());
-				instance.currentListName = "finished";
-				instance.setPreviewPane("hahah", instance.getCurrentListName());
-			}
-		});
-
+	        @Override
+	        public void run() {
+	        	instance.setDisplayPane(instance.displayFinished());
+	        	instance.currentListName = Constant.TASK_LIST_FINISHED;
+	        	instance.setPreviewPane("hahah", instance.getCurrentListName());
+	        }
+	   });
+		
 	}
 
 	private void updatePreviewLater() {
