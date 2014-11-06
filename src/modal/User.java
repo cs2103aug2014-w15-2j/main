@@ -293,6 +293,26 @@ public class User {
 		return DataStore.save(this.currentTasks);
 	}
 
+	
+	//@author A0119379R
+	public Task retrieve(int index, String listName) throws CommandFailedException {
+		switch (listName) {
+		case Constant.TASK_LIST_TODO:
+			return this.retrieveFromNormalList(index);
+		
+		case Constant.TASK_LIST_FINISHED:
+			return this.retrieveFromFinishedList(index);
+			
+		case Constant.TASK_LIST_TRASHED:
+			return this.retrieveFromTrashedList(index);
+		
+		default:
+			throw new CommandFailedException("There is no list found with name: " + listName);
+		}
+	}
+	
+	
+	
 	//@author A0119444E
 	/**
 	 * retrieveFromNormalList

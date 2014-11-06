@@ -452,4 +452,5 @@ public abstract class Constant {
 	public static final String TASK_LIST_FINISHED = "finished";
 	public static final String TASK_LIST_TRASHED = "trashed";
 	public static final String TASK_LIST_TODO = "todo";
+	public static final String TASK_LIST_SEARCH = "search";
 }

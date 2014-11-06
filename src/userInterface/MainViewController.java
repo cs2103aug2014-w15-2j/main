@@ -62,7 +62,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	private Provider keyShortCuts = null;
 	private String currentListName = Constant.TASK_LIST_TODO;
-	
+	private Label consoleTextLabel;
 
 	
 	private String descriptionTag 	= "</DESCRIPTION>";
@@ -306,11 +306,14 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		VBox parsingFeedbackBox = new VBox();
 		parsingFeedbackBox.setPrefWidth(500);
 		parsingFeedbackBox.setPrefHeight(138);
-		Label text = new Label(textToDisplay);
-		text.setStyle("-fx-font: 12px \"Monaco\";" + "-fx-text-fill: white;");
+
+		consoleTextLabel = new Label(textToDisplay);
+		consoleTextLabel.setStyle("-fx-font: 12px \"Monaco\";"
+				+ "-fx-text-fill: white;");
 		parsingFeedbackBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8);"
-				+ "-fx-padding: 8 8 8 8;" + Constant.CSS_STYLE_SHADOW);
-		parsingFeedbackBox.getChildren().add(text);
+				+ "-fx-padding: 8 8 8 8;" 
+				+ Constant.CSS_STYLE_SHADOW);
+		parsingFeedbackBox.getChildren().add(consoleTextLabel);
 
 		VBox listIndicatorBox = new VBox();
 		listIndicatorBox.setAlignment(Pos.BOTTOM_RIGHT);
@@ -329,11 +332,15 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			listIndicatorBox.setStyle("-fx-background-color: rgba(150, 150, 150, 1);"
 					+ "-fx-padding: 8 16 8 8;"
 					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
+		} else if (listName.equalsIgnoreCase(Constant.TASK_LIST_FINISHED)){
+			listIndicatorBox.setStyle("-fx-background-color: rgba(222, 236, 147, 1);"
+					+ "-fx-padding: 8 16 8 8;"
+					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
 		} else {
-			listIndicatorBox
-					.setStyle("-fx-background-color: rgba(222, 236, 147, 1);"
-							+ "-fx-padding: 8 16 8 8;"
-							+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
+			listIndicatorBox.setStyle("-fx-background-color: rgba(21, 107, 182, 1);"
+					+ "-fx-padding: 8 16 8 8;"
+					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
+
 		}
 
 		listIndicatorBox.getChildren().add(listLabel);
@@ -451,10 +458,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	private void onEnter() {
 		String command = getUserInput(true);
 		if (command.equals("")) {
-			ArrayList<Task> taskList = this.displayNormal();
-			if (taskList != null) {
-				this.setDisplayPane(taskList);
-			}
+			refresh(Constant.TASK_LIST_TODO);
 		} else {
 			this.commandHistory.add(command);
 			this.currentCommandIndex = this.commandHistory.size();
@@ -532,17 +536,17 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			switch(thisCommand) {
 				case ADD:
 					setPreviewPane(this.add(userInput), this.getCurrentListName());
-					setDisplayPane(this.displayNormal());
+					refresh(Constant.TASK_LIST_TODO);
 					break;
 					
 				case DELETE:
 					setPreviewPane(this.delete(userInput), this.getCurrentListName());
-					setDisplayPane(this.displayNormal());
+					refreshCurrentList();
 					break;
 					
 				case UPDATE:
 					setPreviewPane(this.update(userInput), this.getCurrentListName());
-					setDisplayPane(this.displayNormal());
+					refresh(Constant.TASK_LIST_TODO);
 					break;
 					
 				case SEARCH:
@@ -550,28 +554,26 @@ public class MainViewController extends GridPane implements HotKeyListener {
 					if (queryList != null) {
 						setDisplayPane(queryList);
 					}
+					refresh(Constant.TASK_LIST_SEARCH);
 					break;
 				
 				case DISPLAY:
-					ArrayList<Task> listToDisplay = this.displayNormal();
-					if (listToDisplay != null) {
-						setDisplayPane(listToDisplay);
-					}
+					refresh(Constant.TASK_LIST_TODO);
 					break;
 					
 				case UNDO:
 					setPreviewPane(this.undo(), this.getCurrentListName());
-					setDisplayPane(this.displayNormal());
+					refreshCurrentList();
 					break;
 					
 				case REDO:
 					setPreviewPane(this.redo(), this.getCurrentListName());
-					setDisplayPane(this.displayNormal());
+					refreshCurrentList();
 					break;
 					
 				case CLEAR:
 					setPreviewPane(this.clear(), this.getCurrentListName());
-					setDisplayPane(this.displayNormal());
+					refreshCurrentList();
 					break;
 					
 				case EXIT:
@@ -586,21 +588,22 @@ public class MainViewController extends GridPane implements HotKeyListener {
 					
 				case EMPTY_TRASH:
 					setPreviewPane(this.emptyTrash(), this.getCurrentListName());
-					setDisplayPane(this.displayNormal());
+					refreshCurrentList();
 					break;
 					
 				case RELOAD:
 					setPreviewPane(this.reloadNLPModel(), this.getCurrentListName());
-					setDisplayPane(this.displayNormal());
+					refreshCurrentList();
 					break;
 					
 				case DONE:
 					setPreviewPane(this.done(userInput), this.getCurrentListName());
-					setDisplayPane(this.displayNormal());
+					refreshCurrentList();
 					break;
 					
 				case RECOVER:
 					setPreviewPane(this.recover(), this.getCurrentListName());
+					refresh(Constant.TASK_LIST_TODO);
 					break;
 					
 				default:
@@ -747,6 +750,12 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	// @author A0119379R
 	private String getDonePreview(String userInput) {
 		try {
+			if (this.getCurrentListName().equals(Constant.TASK_LIST_FINISHED)) {
+				return "Command: done \n\n" + "All tasks in 'FINISHED' section have been finished already";
+			} else if (this.getCurrentListName().equals(Constant.TASK_LIST_TRASHED)) {
+				return "Command: done \n\n" + "Move the task out of 'TRASHED' section first to finish it";
+			}
+			
 			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
 			String returnValue = "Command: done \n\n";
 
@@ -769,6 +778,10 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	// @author A0119379R
 	private String getUpdatePreview(String userInput) {
 		try {
+			if (!this.getCurrentListName().equals(Constant.TASK_LIST_TODO)) {
+				return "Command: update \n\n" + "You can only update the task in 'TODO' section";
+			}
+			
 			int index = parser.nerParser.pickIndex(userInput).get(0);
 			Task taskToUpdate = this.user.getUpdatePreview(index - 1,
 					parser.nerParser.getUpdatedTaskMap(userInput));
@@ -784,11 +797,15 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	// @author A0119379R
 	private String getDeletePreview(String userInput) {
 		try {
+			if (this.getCurrentListName().equals(Constant.TASK_LIST_TRASHED)) {
+				return "Command: delete \n\n" + "All tasks in 'TRASHED' section have been trashed already.";
+			}
+			
 			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
 			String returnValue = "Command: delete \n\n";
 
 			for (int index : indices) {
-				Task taskToDelete = this.user.retrieveFromNormalList(index - 1);
+				Task taskToDelete = this.user.retrieve(index - 1, this.getCurrentListName());
 				returnValue += (index + ": " + taskToDelete.getDescription() + "\n");
 			}
 			return returnValue;
@@ -828,8 +845,8 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			String returnValue = "";
 			for (int index : indices) {
 				try {
-					boolean isThisSucceeded = this.user.delete(index - offset
-							- 1, true);
+					boolean isThisSucceeded = this.user.delete(index - offset - 1, this.getCurrentListName());
+
 					if (!isThisSucceeded) {
 						returnValue += (Constant.PROMPT_MESSAGE_DELETE_TASK_FAILED
 								+ " for task " + index);
@@ -966,7 +983,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	// @author A0119379R
 	private String clear() {
 		try {
-			this.user.deleteAll();
+			this.user.deleteAll(this.getCurrentListName());
 			return "All tasks trashed";
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
@@ -1174,7 +1191,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	        public void run() {
 	        	instance.setDisplayPane(instance.displayNormal());
 	        	instance.currentListName = Constant.TASK_LIST_TODO;
-	        	instance.setPreviewPane("hahah", instance.getCurrentListName());
+	        	instance.refresh(Constant.TASK_LIST_TODO);
 	        }
 	   });
 	}
@@ -1186,7 +1203,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	        public void run() {
 	        	instance.setDisplayPane(instance.displayTrashed());
 	        	instance.currentListName = Constant.TASK_LIST_TRASHED;
-	        	instance.setPreviewPane("hahah", instance.getCurrentListName());
+	        	instance.refresh(Constant.TASK_LIST_TRASHED);
 	        }
 	   });
 	}
@@ -1198,7 +1215,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	        public void run() {
 	        	instance.setDisplayPane(instance.displayFinished());
 	        	instance.currentListName = Constant.TASK_LIST_FINISHED;
-	        	instance.setPreviewPane("hahah", instance.getCurrentListName());
+	        	instance.refresh(Constant.TASK_LIST_FINISHED);
 	        }
 	   });
 		
@@ -1215,5 +1232,32 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		});
 
 	}
-
+	
+	private void refresh(String listName) {
+		this.currentListName = listName;
+		switch(listName) {
+			case Constant.TASK_LIST_TODO:
+				this.setPreviewPane(this.consoleTextLabel.getText(), Constant.TASK_LIST_TODO);
+				this.setDisplayPane(this.displayNormal());
+				break;
+				
+			case Constant.TASK_LIST_FINISHED:
+				this.setPreviewPane(this.consoleTextLabel.getText(), Constant.TASK_LIST_FINISHED);
+				this.setDisplayPane(this.displayFinished());
+				break;
+				
+			case Constant.TASK_LIST_TRASHED:
+				this.setPreviewPane(this.consoleTextLabel.getText(), Constant.TASK_LIST_TRASHED);
+				this.setDisplayPane(this.displayTrashed());
+				break;
+				
+			default:
+				this.setPreviewPane(this.consoleTextLabel.getText(), Constant.TASK_LIST_SEARCH);
+		}
+	}
+	
+	private void refreshCurrentList() {
+		this.refresh(this.getCurrentListName());
+	}
+	
 }
