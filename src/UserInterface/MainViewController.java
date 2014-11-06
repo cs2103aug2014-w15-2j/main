@@ -1,4 +1,4 @@
-package view;
+package UserInterface;
 
 import infrastructure.*;
 import infrastructure.Constant.COMMAND_TYPE;
