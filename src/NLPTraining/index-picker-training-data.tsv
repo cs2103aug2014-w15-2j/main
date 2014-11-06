@@ -1,0 +1,149 @@
+delete 	O
+2	INDEX
+.	O
+
+delete 	O
+5	INDEX
+.	O
+
+delete 	O
+6	INDEX
+.	O
+
+delete 	O
+7	INDEX
+.	O
+
+delete 	O
+9	INDEX
+.	O
+
+remove	O
+1	INDEX
+.	O
+
+remove	O
+2	INDEX
+.	O
+
+remove	O
+3	INDEX
+.	O
+
+remove	O
+4	INDEX
+.	O
+
+edit	O
+12	INDEX
+tomorrow	O
+.	O
+
+change	O
+12	INDEX
+today	O
+.	O
+
+change	O
+12	INDEX
+tomorrow	O
+.	O
+
+update	O
+12	INDEX
+moving	O
+to	O
+next	O
+place	O
+.	O
+
+update	O
+12	INDEX
+moving	O
+to	O
+next	O
+place	O
+.	O
+
+update	O
+12	INDEX
+moving	O
+to	O
+next	O
+place	O
+.	O
+
+update	O
+12	INDEX
+today	O
+.	O
+
+update	O
+12	INDEX
+today	O
+.	O
+
+update	O
+12	INDEX
+next	O
+friday	O
+.	O
+
+update	O
+task	O
+2	INDEX
+today	O
+.	O
+
+update	O
+task	O
+13	INDEX
+today	O
+.	O
+
+delete	O
+task	O
+1	INDEX
+.	O
+
+delete	O
+task	O
+11	INDEX
+.	O
+
+mark	O
+task	O
+2	INDEX
+as	O
+done	O
+.	O
+
+mark	O
+task	O
+1	INDEX
+done	O
+.	O
+
+
+mark	O
+task	O
+1	INDEX
+as	O
+done	O
+.	O
+
+
+mark	O
+task	O
+1	INDEX
+as	O
+done	O
+.	O
+
+
+mark	O
+task	INDEX
+1	INDEX
+as	O
+done	O
+.	O
