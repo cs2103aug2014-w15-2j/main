@@ -4,7 +4,7 @@ import java.io.StringWriter;
 
 /**
 *
-* @author Elad Tabak
+*@author Elad Tabak
 * @since 28-Nov-2011
 * @version 0.1
 *
