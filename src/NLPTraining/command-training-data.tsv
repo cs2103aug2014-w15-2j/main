@@ -1,3 +1,6 @@
+recover	RECOVER
+.	O
+
 Add	ADD
 .	O
 
@@ -152,4 +155,7 @@ done	DONE
 .	O
 
 finish	DONE
+.	O
+
+recover	RECOVER
 .	O

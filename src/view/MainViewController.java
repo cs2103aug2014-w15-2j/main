@@ -557,7 +557,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 					break;
 					
 				case RECOVER:
-					
+					setPreviewPane("recover", this.getCurrentListName());
 					break;
 					
 				default:
