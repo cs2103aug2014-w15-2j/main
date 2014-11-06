@@ -67,7 +67,7 @@ public class UserTest {
 		}
 		System.out.println("user normal task size after testing: "
 				+ initialSize);
-		System.out.println("all add tests are passed");		
+		System.out.println("all delete tests are passed");		
 	}
 	
 	private void testAdd(String description, String expected, User user, int i) {
