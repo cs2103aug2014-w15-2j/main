@@ -428,15 +428,6 @@ public class NERParser {
 		ArrayList<Pair<String, String>> priorityList = new ArrayList<Pair<String, String>>();
 		ArrayList<Pair<String, String>> indexList = new ArrayList<Pair<String, String>>();
 		ArrayList<Pair<String, String>> commandList = new ArrayList<Pair<String, String>>();
-
-		isTimeModelUpdate = false;
-		isTagModelUpdate = false;
-		isDescriptionModelUpdate = false;
-		isIndexModelUpdate = false;
-		isPriorityModelUpdate = false;
-		isCommandModelUpdate = false;
-		
-		
 		
 		for (Pair<String, String> p : wordPairs) {
 			switch (p.tail) {
@@ -567,6 +558,7 @@ public class NERParser {
 				currentKey = currentWord.substring(
 						currentWord.indexOf("<") + 1, currentWord.indexOf(">"))
 						.trim();
+				setIsUpdate(currentKey);
 			} else if (!currentWord.equals("")) {
 				wordPairs.add(new Pair<String, String>(currentWord.trim(),
 						currentKey.trim()));
@@ -576,6 +568,35 @@ public class NERParser {
 		return wordPairs;
 	}
 
+	private static void setIsUpdate(String currentKey) {
+		System.out.println(currentKey);
+		switch (currentKey) {
+		case Constant.XML_TAG_COMMAND:
+			isCommandModelUpdate = true;
+			break;
+			
+		case Constant.XML_TAG_DESCRIPTION:
+			isDescriptionModelUpdate = true;
+			break;
+			
+		case Constant.XML_TAG_INDEX:
+			isIndexModelUpdate = true;
+			break;
+			
+		case Constant.XML_TAG_PRIORITY:
+			isPriorityModelUpdate = true;
+			break;
+			
+		case Constant.XML_TAG_TAG:
+			isTagModelUpdate = true;
+			break;
+			
+		case Constant.XML_TAG_TIME:
+			isTimeModelUpdate = true;
+			break;
+		}
+	}
+	
 	private static String tokenize(String xmlString) {
 		String[] symbols = {",", "\\.", ":", ";", 
 				"\"", "'", "@", "!", "&", "\\^", "~", "`", 

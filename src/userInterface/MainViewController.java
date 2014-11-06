@@ -885,7 +885,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		Constraint thisConstraint;
 		try {
 			thisConstraint = parser.nerParser.getConstraint(userInput);
-			ArrayList<Task> queryResult = this.user.find(thisConstraint, this.getCurrentListName());
+			ArrayList<Task> queryResult = this.user.find(thisConstraint);
 			if (queryResult.isEmpty()) {
 				setPreviewText(Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED);
 				return null;
