@@ -1,6 +1,6 @@
 //@author A0113029U
 
-package dataStore;
+package test;
 
 import static org.junit.Assert.*;
 import modal.CommandFailedException;
@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dataStore.DataStore;
 import infrastructure.Constant;
 
 import java.io.BufferedReader;
