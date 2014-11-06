@@ -388,8 +388,8 @@ public abstract class Constant {
 	public static final String CSS_STYLE_OVERALL_TIME_BOX = "-fx-padding: 0 0 0 0;"
 			+ "-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );";
 	public static final String CSS_STYLE_DESCRIPTION_LABEL = "-fx-font: 17px \"Akagi-SemiBold\";"
-			+ "-fx-padding:0 0 5 0;"
-			+ "-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );";
+			+ "-fx-padding:0 0 5 0;";
+//			+ "-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , z, 0.0 , 0 , 1 );";
 	public static final String CSS_STYLE_TIME_BOX = "-fx-font: 12px \"Akagi-SemiBold\";"
 			+ "-fx-background-color: rgba(0, 0, 0, 0.5);"
 			+ "-fx-padding: 5 0 0 5;"
