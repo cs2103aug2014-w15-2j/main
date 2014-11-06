@@ -64,11 +64,12 @@ public class Converter {
 	@SuppressWarnings("rawtypes") 
 	public static int convertPriorityStringToInt(LinkedHashMap task) {
 		int priority = Constant.PRIORITY_DEFAULT;
-		if(task.get("priority").equals("high")) {
+		String priorityString = ((String) task.get("priority")).toLowerCase().trim();
+		if(priorityString.equals("high")) {
 			priority = Constant.PRIORITY_HIGH;
-		} else if(task.get("priority").equals("medium")) {
+		} else if(priorityString.equals("medium")) {
 			priority = Constant.PRIORITY_MEDIUM;
-		} else if(task.get("priority").equals("low")) {
+		} else if(priorityString.equals("low")) {
 			priority = Constant.PRIORITY_LOW;
 		}
 		return priority;
@@ -88,6 +89,7 @@ public class Converter {
 				break;
 			default:
 				priority = "invalid";
+				break;
 		}
 		return priority;
 	}
