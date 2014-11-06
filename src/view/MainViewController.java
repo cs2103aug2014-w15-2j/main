@@ -61,7 +61,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	private User user;
 	
 	private Provider keyShortCuts = null;
-	private String currentListName = "todo";
+	private String currentListName = Constant.TASK_LIST_TODO;
 	
 
 	
@@ -287,11 +287,11 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		listLabel.setStyle( "-fx-text-fill: white;"
 				+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 3, 1);");
 		
-		if (listName.equalsIgnoreCase("todo")) {
+		if (listName.equalsIgnoreCase(Constant.TASK_LIST_TODO)) {
 			listIndicatorBox.setStyle("-fx-background-color: rgba(251, 235, 178, 1);"
 					+ "-fx-padding: 8 16 8 8;"
 					+ Constant.CSS_STYLE_SHADOW);
-		} else if (listName.equalsIgnoreCase("trashed")) {
+		} else if (listName.equalsIgnoreCase(Constant.TASK_LIST_TRASHED)) {
 			listIndicatorBox.setStyle("-fx-background-color: rgba(150, 150, 150, 1);"
 					+ "-fx-padding: 8 16 8 8;"
 					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
@@ -1105,7 +1105,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	        @Override
 	        public void run() {
 	        	instance.setDisplayPane(instance.displayNormal());
-	        	instance.currentListName = "todo";
+	        	instance.currentListName = Constant.TASK_LIST_TODO;
 	        	instance.setPreviewPane("hahah", instance.getCurrentListName());
 	        }
 	   });
@@ -1118,7 +1118,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	        @Override
 	        public void run() {
 	        	instance.setDisplayPane(instance.displayTrashed());
-	        	instance.currentListName = "trashed";
+	        	instance.currentListName = Constant.TASK_LIST_TRASHED;
 	        	instance.setPreviewPane("hahah", instance.getCurrentListName());
 	        }
 	   });
@@ -1131,7 +1131,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	        @Override
 	        public void run() {
 	        	instance.setDisplayPane(instance.displayFinished());
-	        	instance.currentListName = "finished";
+	        	instance.currentListName = Constant.TASK_LIST_FINISHED;
 	        	instance.setPreviewPane("hahah", instance.getCurrentListName());
 	        }
 	   });
