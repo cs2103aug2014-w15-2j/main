@@ -28,8 +28,8 @@ public class Converter {
 		}
 		taskMap.put("tags", tags);
 	
-		taskMap.put("priority", convertPriorityIntToString(task));
-		taskMap.put("time-interval", convertTimeIntervalToString(task));
+		taskMap.put("priority", convertPriorityIntToString(task.getPriority()));
+		taskMap.put("time-interval", convertTimeIntervalToString(task.getInterval()));
 		
 		return taskMap;
 	}
@@ -44,7 +44,7 @@ public class Converter {
 	public static Task getTask(LinkedHashMap task) throws Exception {
 		String description = (String) task.get("description");
 		String status = (String) task.get("status");
-		int priority = convertPriorityStringToInt(task);
+		int priority = convertPriorityStringToInt((String) task.get("priority"));
 		
 		ArrayList tags = (ArrayList) task.get("tags");
 		ArrayList<String> tag = new ArrayList<String>();
@@ -61,10 +61,9 @@ public class Converter {
 		return newTask;
 	}
 
-	@SuppressWarnings("rawtypes") 
-	private static int convertPriorityStringToInt(LinkedHashMap task) {
+	private static int convertPriorityStringToInt(String priorityString) {
+		priorityString = priorityString.toLowerCase().trim();
 		int priority = Constant.PRIORITY_DEFAULT;
-		String priorityString = ((String) task.get("priority")).toLowerCase().trim();
 		if(priorityString.equals("high")) {
 			priority = Constant.PRIORITY_HIGH;
 		} else if(priorityString.equals("medium")) {
@@ -75,9 +74,9 @@ public class Converter {
 		return priority;
 	}
 	
-	private static String convertPriorityIntToString(Task task) {
+	private static String convertPriorityIntToString(int priorityInt) {
 		String priority = "medium";
-		switch(task.getPriority()) {
+		switch(priorityInt) {
 			case Constant.PRIORITY_HIGH:
 				priority = "high";
 				break;
@@ -104,12 +103,12 @@ public class Converter {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static LinkedHashMap convertTimeIntervalToString(Task task) {
+	private static LinkedHashMap convertTimeIntervalToString(TimeInterval time) {
 		LinkedHashMap timeInterval = new LinkedHashMap();
 		
-		String startDate = convertDateToString(task.getInterval().getStartDate());
+		String startDate = convertDateToString(time.getStartDate());
 		timeInterval.put("startDate", startDate);
-		String endDate = convertDateToString(task.getInterval().getEndDate());
+		String endDate = convertDateToString(time.getEndDate());
 		timeInterval.put("endDate", endDate);
 		
 		return timeInterval;
