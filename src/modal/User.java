@@ -668,4 +668,9 @@ public class User {
 
 		return "'Help' has not been implemented yet";
 	}
+
+	public String recover(String currentListName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
