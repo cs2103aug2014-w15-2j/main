@@ -110,7 +110,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 	private void loadFont() {
 		Font.loadFont(getClass().getResource(Constant.FONT_FILE_BASE).toExternalForm(), 10);
 		Font.loadFont(getClass().getResource(Constant.FONT_FILE_TIME).toExternalForm(), 10);
-		Font.loadFont(getClass().getResource(Constant.FONT_FILE_FEEDBACK).toExternalForm(), 10);
+//		Font.loadFont(getClass().getResource(Constant.FONT_FILE_FEEDBACK).toExternalForm(), 10);
 	}
 	
 	//@author A0119379R
@@ -281,20 +281,21 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		listIndicatorBox.setPrefWidth(getWidth() - 577);
 		Label listLabel = new Label(listName.toUpperCase());
 		listLabel.setStyle("-fx-font: 40px \"Akagi\";"
-				+ "-fx-text-fill: white;");
+				+ "-fx-text-fill: white;"
+				+ "-fx-effect: innershadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
 		
 		if (listName.equalsIgnoreCase("todo")) {
 			listIndicatorBox.setStyle("-fx-background-color: rgba(251, 235, 178, 1);"
 					+ "-fx-padding: 8 16 8 8;"
-					+ Constant.CSS_STYLE_SHADOW);
+					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
 		} else if (listName.equalsIgnoreCase("trashed")) {
-			listIndicatorBox.setStyle("-fx-background-color: rgba(80, 80, 80, 1);"
+			listIndicatorBox.setStyle("-fx-background-color: rgba(150, 150, 150, 1);"
 					+ "-fx-padding: 8 16 8 8;"
-					+ Constant.CSS_STYLE_SHADOW);
+					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
 		} else {
 			listIndicatorBox.setStyle("-fx-background-color: rgba(222, 236, 147, 1);"
 					+ "-fx-padding: 8 16 8 8;"
-					+ Constant.CSS_STYLE_SHADOW);
+					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
 		}
 		
 		listIndicatorBox.getChildren().add(listLabel);

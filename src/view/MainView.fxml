@@ -13,8 +13,8 @@
 	  </columnConstraints>
 	  <rowConstraints>
 	    <RowConstraints maxHeight="460.65362548828125" minHeight="10.0" prefHeight="51.029666900634766" vgrow="SOMETIMES" />
-	    <RowConstraints maxHeight="706.7570114135742" minHeight="10.0" prefHeight="149.18812561035156" vgrow="SOMETIMES" />
-	    <RowConstraints maxHeight="1017.5772094726562" minHeight="10.0" prefHeight="494.81187438964844" vgrow="SOMETIMES" />
+	    <RowConstraints maxHeight="706.7570114135742" minHeight="10.0" prefHeight="157.81932067871094" vgrow="SOMETIMES" />
+	    <RowConstraints maxHeight="1017.5772094726562" minHeight="10.0" prefHeight="491.18067932128906" vgrow="SOMETIMES" />
 	  </rowConstraints>
 	   <children>
 	      <TextField fx:id="input" onAction="#onEnter" prefHeight="48.0" prefWidth="780.0">
@@ -22,7 +22,7 @@
 	            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 	         </GridPane.margin>
 	      </TextField>
-	      <ScrollPane fx:id="displayScrollPane" pannable="true" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+	      <ScrollPane fx:id="displayScrollPane" pannable="true" prefHeight="454.0" prefWidth="971.0" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin></ScrollPane>
