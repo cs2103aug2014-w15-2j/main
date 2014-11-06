@@ -98,16 +98,8 @@ public class Converter {
 	public static TimeInterval convertStringToTimeInterval
 								(LinkedHashMap intervalObj) 
 								throws ParseException, CommandFailedException {
-		Date startDate = null;
-		if(!intervalObj.get("startDate").equals("-")) {
-			startDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
-				Locale.ENGLISH).parse((String) intervalObj.get("startDate"));
-		}
-		Date endDate = null;
-		if(!intervalObj.get("endDate").equals("-")) {
-			endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
-				Locale.ENGLISH).parse((String) intervalObj.get("endDate"));
-		}
+		Date startDate = convertDateStringToDate((String)intervalObj.get("startDate")); 
+		Date endDate = convertDateStringToDate((String) intervalObj.get("endDate"));
 		return new TimeInterval(startDate, endDate);
 	}
 	
@@ -180,6 +172,15 @@ public class Converter {
 			String dateString = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
 					Locale.ENGLISH).format(date);	
 		return dateString;
+	}
+	
+	public static Date convertDateStringToDate(String dateString) throws ParseException {
+		if(dateString.trim().equals("-")) {
+			return null;
+		}
+		Date date = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
+				Locale.ENGLISH).parse(dateString);
+		return date;
 	}
 	
 }
