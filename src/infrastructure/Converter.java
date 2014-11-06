@@ -107,23 +107,10 @@ public class Converter {
 	public static LinkedHashMap convertTimeIntervalToString(Task task) {
 		LinkedHashMap timeInterval = new LinkedHashMap();
 		
-		if(task.getInterval().getStartDate() == Constant.FLOATING_START_DATE &&
-			task.getInterval().getEndDate() == Constant.FLOATING_END_DATE) {
-			timeInterval.put("startDate", "-");
-			timeInterval.put("endDate", "-");
-		} else if(task.getInterval().getStartDate() == Constant.DEADLINE_START_DATE) {
-			String endDate = Converter.convertDateToString
-							(task.getInterval().getEndDate());
-			timeInterval.put("startDate", "-");
-			timeInterval.put("endDate", endDate);
-		} else {
-			String startDate = Converter.convertDateToString(task.getInterval()
-								.getStartDate());
-			String endDate = Converter.convertDateToString(task.getInterval()
-								.getEndDate());
-			timeInterval.put("startDate", startDate);
-			timeInterval.put("endDate", endDate);
-		}
+		String startDate = convertDateToString(task.getInterval().getStartDate());
+		timeInterval.put("startDate", startDate);
+		String endDate = convertDateToString(task.getInterval().getEndDate());
+		timeInterval.put("endDate", endDate);
 		
 		return timeInterval;
 	}
@@ -169,8 +156,15 @@ public class Converter {
 	*/
 	
 	public static String convertDateToString(Date date) {
-			String dateString = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
+		String dateString;
+		if(date.equals(Constant.FLOATING_START_DATE)||
+			date.equals(Constant.FLOATING_END_DATE) ||
+			date.equals(Constant.DEADLINE_START_DATE)) {
+			dateString = "-"; 
+		} else {
+			dateString = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
 					Locale.ENGLISH).format(date);	
+		}
 		return dateString;
 	}
 	
