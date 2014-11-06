@@ -137,7 +137,7 @@ public class MainViewController extends GridPane implements HotKeyListener{
 		}
 	}
 	
-	//@author A0119379R
+	//@author A0119447Y
 	private void loadFxml() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainView.fxml"));
 		fxmlLoader.setRoot(this);

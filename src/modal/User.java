@@ -98,26 +98,25 @@ public class User {
 		return isSuccessful;
 	}
 	
-	//@author A0119447Y
 	/**
-	 * delete 
-	 * deletes the task with the index from the task list.
+	 * delete
 	 * 
-	 * @param normalIndex
-	 * @param willSave
-	 * @throws CommandFailedException
+	 * 
+	 * @param index
+	 * @param listName where the task is delete from
+	 * @return
+	 * @throws CommandFailedException 
 	 */
-	public boolean delete(int normalIndex, boolean willUpdateUndo) throws CommandFailedException {
-		if (!this.isValidNormalIndex(normalIndex)) {
-			throw new CommandFailedException(String.format(Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
-		} else {
-			if (willUpdateUndo) {
-				this.updateUndoable();
-			}
-			Task removedTask = cloner.deepClone(this.currentTasks.getNormalTasks().remove(normalIndex));
-			removedTask.setStatus(Constant.TASK_STATUS_TRASHED);
-			this.currentTasks.getTrashedTasks().add(removedTask);
-			return DataStore.save(this.currentTasks);
+	public boolean delete(int index, String listName) throws CommandFailedException {
+		switch (listName) {
+			case Constant.TASK_LIST_TODO :
+				return this.deleteNormal(index, true);
+			
+			case Constant.TASK_LIST_FINISHED :
+				return this.deleteFinished(index, true);
+				
+			default :
+				throw new CommandFailedException(Constant.PROMPT_MESSAGE_INVALID_TASK_LISE);
 		}
 	}
 	
@@ -128,12 +127,17 @@ public class User {
 	 * 
 	 * @throws CommandFailedException
 	 */
-	public boolean deleteAll() throws CommandFailedException {
-		this.updateUndoable();
-		for (int i = this.currentTasks.getNormalTasks().size() - 1; i >= 0; i--) {
-			this.delete(i, false);
+	public boolean deleteAll(String listName) throws CommandFailedException {
+		switch (listName) {
+			case Constant.TASK_LIST_TODO :
+				return this.deleteAllNormal();
+			
+			case Constant.TASK_LIST_FINISHED :
+				return this.deleteAllFinished();
+				
+			default :
+				throw new CommandFailedException(Constant.PROMPT_MESSAGE_INVALID_TASK_LISE);
 		}
-		return DataStore.save(this.currentTasks);
 	}
 
 	//@author A0119447Y
@@ -402,6 +406,82 @@ public class User {
 	 * ==================================================================================================
 	 */
 	
+	//@author A0119447Y
+	/**
+	 * deleteNormal
+	 * deletes the task with the index from the normal task list.
+	 * 
+	 * @param normalIndex
+	 * @param willSave
+	 * @throws CommandFailedException
+	 */
+	private boolean deleteNormal(int normalIndex, boolean willUpdateUndo) throws CommandFailedException {
+		if (!this.isValidNormalIndex(normalIndex)) {
+			throw new CommandFailedException(String.format(Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
+		} else {
+			if (willUpdateUndo) {
+				this.updateUndoable();
+			}
+			Task removedTask = cloner.deepClone(this.currentTasks.getNormalTasks().remove(normalIndex));
+			removedTask.setStatus(Constant.TASK_STATUS_TRASHED);
+			this.currentTasks.getTrashedTasks().add(removedTask);
+			return DataStore.save(this.currentTasks);
+		}
+	}
+	
+	//@author A0119447Y
+	/**
+	 * deleteFinished
+	 * deletes the task with the index from the finished task list.
+	 * 
+	 * @param finishedIndex
+	 * @param willSave
+	 * @throws CommandFailedException
+	 */
+	private boolean deleteFinished(int finishedIndex, boolean willUpdateUndo) throws CommandFailedException {
+		if (!this.isValidFinishedIndex(finishedIndex)) {
+			throw new CommandFailedException(String.format(Constant.INVALID_INDEX_ERROR_MESSAGE, finishedIndex));
+		} else {
+			if (willUpdateUndo) {
+				this.updateUndoable();
+			}
+			Task removedTask = cloner.deepClone(this.currentTasks.getFinishedTasks().remove(finishedIndex));
+			removedTask.setStatus(Constant.TASK_STATUS_TRASHED);
+			this.currentTasks.getTrashedTasks().add(removedTask);
+			return DataStore.save(this.currentTasks);
+		}
+	}
+	
+	//@author A0119447Y
+	/**
+	 * deleteAllNormal
+	 * deletes all current tasks
+	 * 
+	 * @throws CommandFailedException
+	 */
+	public boolean deleteAllNormal() throws CommandFailedException {
+		this.updateUndoable();
+		for (int i = this.currentTasks.getNormalTasks().size() - 1; i >= 0; i--) {
+			this.deleteNormal(i, false);
+		}
+		return DataStore.save(this.currentTasks);
+	}
+	
+	//@author A0119447Y
+	/**
+	 * deleteAllFinished
+	 * deletes all finished tasks
+	 * 
+	 * @throws CommandFailedException
+	 */
+	public boolean deleteAllFinished() throws CommandFailedException {
+		this.updateUndoable();
+		for (int i = this.currentTasks.getFinishedTasks().size() - 1; i >= 0; i--) {
+			this.deleteFinished(i, false);
+		}
+		return DataStore.save(this.currentTasks);
+	}
+		
 	//@author A0119447Y
 	/**
 	 * updateUndoable this method should be called BEFORE every operation
