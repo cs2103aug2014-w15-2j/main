@@ -41,7 +41,7 @@ public class Converter {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes") 
-	public static Task getTask(LinkedHashMap task) throws Exception {
+	public static Task convertMapToTask(LinkedHashMap task) throws Exception {
 		String description = (String) task.get("description");
 		String status = (String) task.get("status");
 		int priority = convertPriorityStringToInt((String) task.get("priority"));

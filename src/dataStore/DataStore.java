@@ -109,7 +109,7 @@ public abstract class DataStore {
 		if(allTasks != null) {
 			for(int i=0; i<allTasks.size(); i++) {
 				task = (LinkedHashMap) allTasks.get(i);
-				Task newTask = Converter.getTask(task);
+				Task newTask = Converter.convertMapToTask(task);
 				switch(newTask.getStatus()) {
 					case Constant.TASK_STATUS_NORMAL :
 						tasksList.getNormalTasks().add(newTask);
