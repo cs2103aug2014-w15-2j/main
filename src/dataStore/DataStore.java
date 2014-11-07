@@ -2,7 +2,6 @@
 
 package dataStore;
 
-import infrastructure.Constant;
 import infrastructure.Converter;
 
 import java.io.File;
@@ -110,19 +109,13 @@ public abstract class DataStore {
 			for(int i=0; i<allTasks.size(); i++) {
 				task = (LinkedHashMap) allTasks.get(i);
 				Task newTask = Converter.convertMapToTask(task);
-				switch(newTask.getStatus()) {
-					case Constant.TASK_STATUS_NORMAL :
-						tasksList.getNormalTasks().add(newTask);
-						break;
-					case Constant.TASK_STATUS_DONE :
-						tasksList.getFinishedTasks().add(newTask);
-						break;
-					case Constant.TASK_STATUS_TRASHED :
-						tasksList.getTrashedTasks().add(newTask);
-						break;
-					default :
-						tasksList.getNormalTasks().add(newTask);
-						break;
+				if(newTask.isDone()) {
+					tasksList.getFinishedTasks().add(newTask);
+				} else if(newTask.isTrashed()) {
+					tasksList.getTrashedTasks().add(newTask);
+				} else {
+					//default: ongoing todo tasks
+					tasksList.getNormalTasks().add(newTask);
 				}
 			}
 		}
