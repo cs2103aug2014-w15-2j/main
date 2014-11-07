@@ -28,8 +28,10 @@ public class Converter {
 		}
 		taskMap.put("tags", tags);
 	
-		taskMap.put("priority", convertPriorityIntToString(task.getPriority()));
-		taskMap.put("time-interval", convertTimeIntervalToString(task.getInterval()));
+		taskMap.put("priority", 
+					convertPriorityIntToString(task.getPriority()));
+		taskMap.put("time-interval",
+					convertTimeIntervalToString(task.getInterval()));
 		
 		return taskMap;
 	}
@@ -44,7 +46,8 @@ public class Converter {
 	public static Task convertMapToTask(LinkedHashMap task) throws Exception {
 		String description = (String) task.get("description");
 		String status = (String) task.get("status");
-		int priority = convertPriorityStringToInt((String) task.get("priority"));
+		int priority = convertPriorityStringToInt
+						((String) task.get("priority"));
 		
 		ArrayList tags = (ArrayList) task.get("tags");
 		ArrayList<String> tag = new ArrayList<String>();
@@ -97,13 +100,16 @@ public class Converter {
 	private static TimeInterval convertStringToTimeInterval
 								(LinkedHashMap intervalObj) 
 								throws ParseException, CommandFailedException {
-		Date startDate = convertDateStringToDate((String)intervalObj.get("startDate")); 
-		Date endDate = convertDateStringToDate((String) intervalObj.get("endDate"));
+		Date startDate = convertDateStringToDate
+						((String)intervalObj.get("startDate")); 
+		Date endDate = convertDateStringToDate
+						((String) intervalObj.get("endDate"));
 		return new TimeInterval(startDate, endDate);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static LinkedHashMap convertTimeIntervalToString(TimeInterval time) {
+	private static LinkedHashMap convertTimeIntervalToString
+											(TimeInterval time) {
 		LinkedHashMap timeInterval = new LinkedHashMap();
 		
 		String startDate = convertDateToString(time.getStartDate());
@@ -127,7 +133,8 @@ public class Converter {
 		return dateString;
 	}
 	
-	private static Date convertDateStringToDate(String dateString) throws ParseException {
+	private static Date convertDateStringToDate(String dateString)
+												throws ParseException {
 		if(dateString.trim().equals("-")) {
 			return null;
 		}

@@ -56,6 +56,18 @@ public abstract class DataStore {
 			return false;
 		}				
 	}
+
+	/**
+	 * check whether the task-list exists
+	 * @return true if exists, no otherwise
+	 */
+	private static boolean isFileExisting() {
+		File fileData = new File(DATA_FILEPATH);
+		if (fileData.exists()) {
+			return true;
+		}
+		return false;
+	}
 	
 	/**
 	 * create a new data file
@@ -73,19 +85,6 @@ public abstract class DataStore {
 		} catch (IOException e) {
 			return false;
 		}
-	}
-
-	
-	/**
-	 * check whether the task-list exists
-	 * @return true if exists, no otherwise
-	 */
-	private static boolean isFileExisting() {
-		File fileData = new File(DATA_FILEPATH);
-		if (fileData.exists()) {
-			return true;
-		}
-		return false;
 	}
 	
 	/**
