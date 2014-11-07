@@ -114,7 +114,7 @@ public abstract class DataStore {
 				} else if(newTask.isTrashed()) {
 					tasksList.getTrashedTasks().add(newTask);
 				} else {
-					//default: ongoing todo tasks
+					//default: ongoing to do tasks
 					tasksList.getNormalTasks().add(newTask);
 				}
 			}
@@ -137,15 +137,18 @@ public abstract class DataStore {
 		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
 		if( tasks != null) {
 			for(int i = 0; i < tasks.getNormalTasks().size(); i++) {
-				LinkedHashMap task = Converter.convertTaskToMap(tasks.getNormalTasks().get(i));
+				LinkedHashMap task = Converter.convertTaskToMap
+									(tasks.getNormalTasks().get(i));
 				tasksList.add(task);
 			}
 			for(int i = 0; i < tasks.getFinishedTasks().size(); i++) {
-				LinkedHashMap task = Converter.convertTaskToMap(tasks.getFinishedTasks().get(i));
+				LinkedHashMap task = Converter.convertTaskToMap
+									(tasks.getFinishedTasks().get(i));
 				tasksList.add(task);
 			}
 			for(int i = 0; i < tasks.getTrashedTasks().size(); i++) {
-				LinkedHashMap task = Converter.convertTaskToMap(tasks.getTrashedTasks().get(i));
+				LinkedHashMap task = Converter.convertTaskToMap
+									(tasks.getTrashedTasks().get(i));
 				tasksList.add(task);
 			}
 		}
