@@ -8,7 +8,7 @@ import edu.stanford.nlp.ie.crf.CRFClassifier;
 import edu.stanford.nlp.ling.CoreLabel;
 
 
-public class NERTestPickingDate {
+public class NerTestPickingDate {
 	static final String TERMINATOR = "\n";
 	static AbstractSequenceClassifier<CoreLabel> classifierOverall = CRFClassifier.getClassifierNoExceptions("src/NLPTraining/overall-ner-model.ser.gz");
 	static AbstractSequenceClassifier<CoreLabel> classifierTag = CRFClassifier.getClassifierNoExceptions("NLPTraining/tag-ner-model.ser.gz");

@@ -16,7 +16,7 @@ import modal.TimeInterval;
 
 import org.junit.Test;
 
-public class NERTestDate {
+public class NerTestDate {
 	static final String TERMINATOR = "\n";
 	static NERParser nerParser = new NERParser();
 	static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.ENGLISH);
