@@ -1,7 +1,6 @@
 package test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import infrastructure.Constant;
 import infrastructure.NERParser;
 
@@ -16,7 +15,8 @@ import modal.TimeInterval;
 
 import org.junit.Test;
 
-public class NerTestDate {
+public class NerDateParsingTest {
+
 	static final String TERMINATOR = "\n";
 	static NERParser nerParser = new NERParser();
 	static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.ENGLISH);
@@ -156,6 +156,4 @@ public class NerTestDate {
 			e.printStackTrace();
 		}
 	}
-	
-	
 }
