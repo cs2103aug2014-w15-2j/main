@@ -16,8 +16,6 @@ import modal.TimeInterval;
 import org.junit.Test;
 
 public class NerDateParsingTest {
-
-	static final String TERMINATOR = "\n";
 	static NerParser nerParser = new NerParser();
 	static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.ENGLISH);
 	
@@ -95,9 +93,16 @@ public class NerDateParsingTest {
 	@Test
 	public void testDate8() {
 		ArrayList<String> dateList= new ArrayList<String>();
-		dateList.add("2014 Oct 18");
+		dateList.add("2014 oct 18");
 		dateList.add("14:00 - 18:00");	
 		this.testTimed(dateList, "2014-10-18 14:00", "2014-10-18 18:00");
+	}
+	
+	@Test
+	public void testDate9() {
+		ArrayList<String> dateList= new ArrayList<String>();
+		dateList.add("oct 18");
+		this.testTimed(dateList, "2014-10-18 00:00", "2014-10-18 23:59");
 	}
 	
 	
@@ -108,14 +113,14 @@ public class NerDateParsingTest {
 	 */
 	
 	@Test
-	public void testDate9() {
+	public void testDate2_1() {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("2014 Oct 18 09:00");
 		this.testDeadline(dateList, "2014-10-18 09:00");
 	}
 	
 	@Test
-	public void testDate10() {
+	public void testDate2_2() {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("today 09:00");
 		this.testDeadline(dateList, "2014-11-08 09:00");
@@ -136,8 +141,8 @@ public class NerDateParsingTest {
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		} catch (CommandFailedException e) {
-			fail();
 			e.printStackTrace();
+			fail();
 		}
 	}
 	
@@ -152,8 +157,8 @@ public class NerDateParsingTest {
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		} catch (CommandFailedException e) {
-			fail();
 			e.printStackTrace();
+			fail();
 		}
 	}
 }

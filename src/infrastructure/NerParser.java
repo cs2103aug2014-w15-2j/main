@@ -126,6 +126,7 @@ public class NerParser {
 	 */
 	public COMMAND_TYPE pickCommand(String userInputString) throws CommandFailedException {
 		
+		userInputString = userInputString.toLowerCase();
 		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_COMMAND);
 		
 		String directParseCommand = NerParser.pickTheTagged(userInputString,
@@ -137,7 +138,7 @@ public class NerParser {
 		} else {
 			String xmlStr = classifierCommandPicker.classifyToString(
 					userInputString, "inlineXML", false);
-			System.err.println("XML STRING - pickCommand: " + xmlStr);
+			//System.err.println("XML STRING - pickCommand: " + xmlStr);
 			HashMap<String, ArrayList<String>> result = NerParser
 					.parseToMap(xmlStr);
 			commandList = result.get("COMMAND");
@@ -160,6 +161,7 @@ public class NerParser {
 	 * @throws CommandFailedException
 	 */
 	public TimeInterval pickTimeInterval(String userInputString) throws CommandFailedException {
+		
 		this.isTimeChanged = false;
 		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_TIME);
 
@@ -169,7 +171,7 @@ public class NerParser {
 			this.isTimeChanged = true;
 			ArrayList<String> results = new ArrayList<String>(Arrays.asList(directParseTime.split(",")));
 			TimeInterval returningInterval = parseTimeInterval(results);
-			if (isDeadlineTask(userInputString) || returningInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
+			if (isDeadlineTask(results) || returningInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 				Calendar c = UtilityMethod.dateToCalendar(returningInterval.getEndDate());
 				if (c.get(Calendar.HOUR_OF_DAY) == 0 && c.get(Calendar.MINUTE) == 0) {
 					c.set(Calendar.HOUR_OF_DAY, 23);
@@ -186,7 +188,7 @@ public class NerParser {
 		ArrayList<String> resultList = new ArrayList<String>();
 		String xmlStr = classifierTimePicker.classifyToString(userInputString,
 				"inlineXML", false);
-		System.err.println("XML STRING - pickDate: " + xmlStr);
+		//System.err.println("XML STRING - pickDate: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
 		resultList = result.get("DATE");
@@ -196,7 +198,7 @@ public class NerParser {
 		} else {
 			this.isTimeChanged = true;
 			TimeInterval returningInterval = parseTimeInterval(resultList);
-			if (isDeadlineTask(userInputString) || returningInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
+			if (isDeadlineTask(resultList) || returningInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 				Calendar c = UtilityMethod.dateToCalendar(returningInterval.getEndDate());
 				if (c.get(Calendar.HOUR_OF_DAY) == 0 && c.get(Calendar.MINUTE) == 0) {
 					c.set(Calendar.HOUR_OF_DAY, 23);
@@ -233,7 +235,7 @@ public class NerParser {
 
 		String xmlStr = classifierDescriptionPicker.classifyToString(
 				userInputString, "inlineXML", false);
-		System.err.println("XML STRING - pickDescription: " + xmlStr);
+		//System.err.println("XML STRING - pickDescription: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
 		ArrayList<String> resultList = result.get("DESCRIPTION");
@@ -254,6 +256,7 @@ public class NerParser {
 	 */
 	public ArrayList<Integer> pickIndex(String userInputString) throws CommandFailedException {
 
+		userInputString = userInputString.toLowerCase();
 		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_INDEX);
 		String directParseIndex = NerParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_INDEX);
@@ -266,7 +269,7 @@ public class NerParser {
 
 			String xmlStr = classifierIndexPicker.classifyToString(
 					userInputString, "inlineXML", false);
-			System.err.println("XML STRING - pickIndex: " + xmlStr);
+			//System.err.println("XML STRING - pickIndex: " + xmlStr);
 			HashMap<String, ArrayList<String>> result = NerParser
 					.parseToMap(xmlStr);
 			ArrayList<String> resultList = result.get("INDEX");
@@ -279,7 +282,7 @@ public class NerParser {
 		} catch (Exception e) {
 			String xmlStr = classifierIndexPicker.classifyToString(
 					userInputString, "inlineXML", false);
-			System.err.println("XML STRING - pickIndex: " + xmlStr);
+			//System.err.println("XML STRING - pickIndex: " + xmlStr);
 			HashMap<String, ArrayList<String>> result = NerParser
 					.parseToMap(xmlStr);
 			ArrayList<String> resultList = result.get("INDEX");
@@ -316,7 +319,7 @@ public class NerParser {
 
 		String xmlStr = classifierTagPicker.classifyToString(userInputString,
 				"inlineXML", false);
-		System.err.println("XML STRING - pickTag: " + xmlStr);
+		//System.err.println("XML STRING - pickTag: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
 		ArrayList<String> resultList = result.get("TAG");
@@ -335,6 +338,8 @@ public class NerParser {
 	 * @return
 	 */
 	public int pickPriority(String userInputString) {
+		
+		userInputString = userInputString.toLowerCase();
 		this.isPriorityChanged = false;
 		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_PRIORITY);
 		String directParsePriority = NerParser.pickTheTagged(userInputString,
@@ -346,7 +351,7 @@ public class NerParser {
 
 		String xmlStr = classifierPriorityPicker.classifyToString(
 				userInputString, "inlineXML", false);
-		System.err.println("XML STRING - pickPriority: " + xmlStr);
+		//System.err.println("XML STRING - pickPriority: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
 		ArrayList<String> resultList = result.get("PRIORITY");
@@ -375,13 +380,9 @@ public class NerParser {
 	public static String pickTheTagged(String inputString, String type) {
 		String prefix = "<" + type + ">";
 		String postfix = "</" + type + ">";
-		
 		int prefixIndex = inputString.indexOf(prefix);
 		int postfixIndex = inputString.indexOf(postfix);
-
-		System.err.println("INPUTSTRING: pickTheTagged: " + inputString);
-		System.err.println("PREFIX: pickTheTagged: " + prefix);
-		System.err.println("POSTFIX: pickTheTagged: " + postfix);
+		
 		if (prefixIndex == -1 || postfixIndex == -1) {
 			return null;
 		} else {
@@ -401,7 +402,6 @@ public class NerParser {
 		                  Constant.XML_TAG_PRIORITY, Constant.XML_TAG_INDEX, Constant.XML_TAG_COMMAND};
 		for (String type : types) {
 			if (!type.equals(t)) {
-				System.err.println(inputString);
 				String prefix = "<" + type + ">";
 				String postfix = "</" + type + ">";
 				int prefixIndex = inputString.indexOf(prefix);
@@ -551,8 +551,7 @@ public class NerParser {
 			} else if (currentWord.contains("<") && currentWord.contains(">")
 					&& currentWord.indexOf(">") > currentWord.indexOf("<")) {
 				if (!currentKey.equals(Constant.XML_TAG_DEFAULT)) {
-					System.err
-							.println("interpretXML: currentKey != defaultKey ----- one word can only have a single tag");
+					//System.err.println("interpretXML: currentKey != defaultKey ----- one word can only have a single tag");
 					return null;
 				}
 				currentKey = currentWord.substring(
@@ -598,9 +597,7 @@ public class NerParser {
 	}
 	
 	private static String tokenize(String xmlString) {
-		String[] symbols = {",", "\\.", ":", ";", 
-				"\"", "'", "@", "!", "&", "\\^", "~", "`", 
-				"#", "%", "-"};
+		String[] symbols = {",", "\\."};
 		
 		xmlString = xmlString.replaceAll("<", " <");
 		xmlString = xmlString.replaceAll(">", "> ");
@@ -635,7 +632,7 @@ public class NerParser {
 		}
 		bw.newLine();
 		
-		System.err.println("Finish writting!");
+		//System.err.println("Finish writting!");
 
 		bw.flush();
 		bw.close();
@@ -649,7 +646,7 @@ public class NerParser {
 	 * @throws IOException
 	 */
 	public static void updateTsvFile(String xmlString) throws IOException {
-		System.err.println("INPUT - updateTsvFile: " + xmlString);
+		//System.err.println("INPUT - updateTsvFile: " + xmlString);
 		HashMap<String, ArrayList<Pair<String, String>>> listMap = demux(interpretXML(xmlString));
 		ArrayList<Pair<String, String>> timeList = listMap
 				.get(Constant.XML_TAG_TIME);
@@ -665,33 +662,33 @@ public class NerParser {
 				.get(Constant.XML_TAG_COMMAND);
 		
 		if (isTimeModelUpdate) {
-			System.err.println("time list is not empty");
+			//System.err.println("time list is not empty");
 			updateTsvFile(timeList, Constant.FILE_PATH_TIME_PICKER_USER);
 		}
 
 		if (isDescriptionModelUpdate) {
-			System.err.println("description List is not empty");
+			//System.err.println("description List is not empty");
 			updateTsvFile(descriptionList,
 					Constant.FILE_PATH_DESCRIPTION_PICKER_USER);
 		}
 
 		if (isTagModelUpdate) {
-			System.err.println("tag List is not empty");
+			//System.err.println("tag List is not empty");
 			updateTsvFile(tagList, Constant.FILE_PATH_TAG_PICKER_USER);
 		}
 
 		if (isIndexModelUpdate) {
-			System.err.println("index List is not empty");
+			//System.err.println("index List is not empty");
 			updateTsvFile(indexList, Constant.FILE_PATH_INDEX_PICKER_USER);
 		}
 
 		if (isPriorityModelUpdate) {
-			System.err.println("priorityList is not empty");
+			//System.err.println("priorityList is not empty");
 			updateTsvFile(priorityList, Constant.FILE_PATH_PRIORITY_PICKER_USER);
 		}
 		
 		if (isCommandModelUpdate) {
-			System.err.println("commandList is not empty");
+			//System.err.println("commandList is not empty");
 			updateTsvFile(commandList, Constant.FILE_PATH_COMMAND_PICKER_USER);
 		}
 	}
@@ -794,25 +791,22 @@ public class NerParser {
 		HashMap<String, Object> updateAttributes = new HashMap<String, Object>();
 
 		if (this.isTimeChanged) {
-			System.err.println("getUpdatedTaskMap: time updated to "
-					+ timeInterval);
+			//System.err.println("getUpdatedTaskMap: time updated to " + timeInterval);
 			updateAttributes.put("time_interval", timeInterval);
 		}
 
 		if (this.isTagChanged) {
-			System.err.println("getUpdatedTaskMap: tag updated to " + tag);
+			//System.err.println("getUpdatedTaskMap: tag updated to " + tag);
 			updateAttributes.put("tag", tag);
 		}
 
 		if (this.isDescriptionChanged) {
-			System.err.println("getUpdatedTaskMap: description updated to "
-					+ description);
+			//System.err.println("getUpdatedTaskMap: description updated to " + description);
 			updateAttributes.put("description", description);
 		}
 
 		if (this.isPriorityChanged) {
-			System.err.println("getUpdatedTaskMap: priority updated to "
-					+ priority);
+			//System.err.println("getUpdatedTaskMap: priority updated to " + priority);
 			updateAttributes.put("priority", priority);
 		}
 
@@ -830,7 +824,7 @@ public class NerParser {
 		try {
 			timeInterval = this.pickTimeInterval(userInputString);
 			String keyword = "";
-			System.err.println("timeInterval - getConstraint: " + timeInterval.toString());
+			//System.err.println("timeInterval - getConstraint: " + timeInterval.toString());
 			if (timeInterval.equals(new TimeInterval())) {
 				keyword = UtilityMethod.removeFirstWord(userInputString);
 			}
@@ -872,7 +866,6 @@ public class NerParser {
 		String stringForToday = format.format(Calendar.getInstance().getTime());
 
 		for (String text : userInputStrings) {
-			System.err.println("INPUT TIME STRING - parseTimeToDate: " + text);
 			Annotation annotation = new Annotation(text);
 			annotation.set(CoreAnnotations.DocDateAnnotation.class,
 					stringForToday);
@@ -885,11 +878,9 @@ public class NerParser {
 						.toString();
 				Date d = parseStringToDate(interpretedTimeString);
 				Calendar c = UtilityMethod.dateToCalendar(d);
-				System.err.println("PARSED DATE - parseTimeToDate: "
-						+ c.get(Calendar.SECOND));
 				if (d != null) {
 					if (c.get(Calendar.SECOND) == Constant.CALENDAR_WEEK_IN_SECOND) {
-						System.err.println("parsing weeks");
+						//System.err.println("parsing weeks");
 						Date d1 = c.getTime();
 						c.add(Calendar.WEEK_OF_YEAR, 1);
 						c.add(Calendar.DATE, -1);
@@ -921,8 +912,7 @@ public class NerParser {
 		// 2014-02
 		// 2014
 
-		System.err.println("INPUT TIME STRING - parseStringToDate: "
-				+ timeString);
+		//System.err.println("INPUT TIME STRING - parseStringToDate: " + timeString);
 
 		Date date = null;
 		try {
@@ -942,7 +932,7 @@ public class NerParser {
 				Calendar c = UtilityMethod.dateToCalendar(date);
 				c.set(Calendar.SECOND, Constant.CALENDAR_WEEK_IN_SECOND);
 				date = c.getTime();
-				System.err.println("Parsing week: " + date);
+				//System.err.println("Parsing week: " + date);
 			} else if (timeString.length() == 16) {
 				if (timeString.charAt(10) == 'T') {
 					timeString = timeString.replace("T", " ");
@@ -1131,8 +1121,7 @@ public class NerParser {
 		}
 
 		if (results.size() >= 1) {
-			System.err.println("PARSED CMD - parseCommand: "
-					+ results.get(0).toLowerCase());
+			//System.err.println("PARSED CMD - parseCommand: " + results.get(0).toLowerCase());
 			return Parser.determineCommandType(results.get(0).toLowerCase());
 		} else {
 			return COMMAND_TYPE.ADD;
@@ -1178,12 +1167,17 @@ public class NerParser {
 	 * @param userInputString
 	 * @return
 	 */
-	private static boolean isDeadlineTask(String userInputString) {
-		userInputString = userInputString.toLowerCase();
-		return userInputString.contains("by") 
-				|| userInputString.contains("until") 
-				|| userInputString.contains("till") 
-				|| userInputString.contains("before");
+	private static boolean isDeadlineTask(ArrayList<String> inputStringList) {
+		for (String userInputString : inputStringList) {
+			userInputString = userInputString.toLowerCase();
+			if (userInputString.contains("by") 
+					|| userInputString.contains("until") 
+					|| userInputString.contains("till") 
+					|| userInputString.contains("before")) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	
@@ -1197,11 +1191,10 @@ public class NerParser {
 		assert (xmlString != null);
 		assert (xmlString.length() > 5);
 		if (xmlString == null || xmlString.length() <= 5) {
-			System.err.println("Invalid input");
+			//System.err.println("Invalid input");
 			return new HashMap<String, ArrayList<String>>();
 		}
-
-		System.err.println("INPUT XML STRING - parseToMap: " + xmlString);
+		
 		HashMap<String, ArrayList<String>> taskMap = new HashMap<String, ArrayList<String>>();
 		taskMap.put("COMMAND", new ArrayList<String>());
 		// get rid of the first and last character

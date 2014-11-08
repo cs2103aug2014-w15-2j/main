@@ -31,7 +31,7 @@ public class TimeInterval {
 			endDate = Constant.FLOATING_END_DATE;
 		}
 		
-		System.err.println(startDate + " - " + endDate);
+//		System.err.println(startDate + " - " + endDate);
 		
 		if (!isValid(startDate, endDate)) {
 			throw new CommandFailedException("invalid time interval");
