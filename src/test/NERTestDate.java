@@ -1,32 +1,40 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import infrastructure.NERParser;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import modal.CommandFailedException;
+import modal.TimeInterval;
 
 import org.junit.Test;
 
 public class NERTestDate {
 	static final String TERMINATOR = "\n";
 	static NERParser nerParser = new NERParser();
+	static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.ENGLISH);
 	
 	@Test
 	public void testDate1() {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("tomorrow");
-		String results;
-		String expected = "\n\t from 22/October/2014 00:01 to 22/October/2014 23:59;";
-		System.out.println("testDate1:");
-		System.out.println("expects: " + expected);
+		TimeInterval results;
 		try {
-			results = nerParser.parseTimeInterval(dateList).toString();
-			System.out.println("results: " + results);
-			assertEquals(expected + TERMINATOR, results);
+			Date startDate = formatter.parse("2014-11-09 00:00");
+			Date endDate = formatter.parse("2014-11-09 23:59");
+			TimeInterval expected = new TimeInterval(startDate, endDate);
+			results = nerParser.parseTimeInterval(dateList);
+			assertEquals(expected.toString(), results.toString());
+		} catch (ParseException e1) {
+			e1.printStackTrace();
 		} catch (CommandFailedException e) {
-			// TODO Auto-generated catch block
+			fail();
 			e.printStackTrace();
 		}
 	}
@@ -35,16 +43,17 @@ public class NERTestDate {
 	public void testDate2() {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("today");
-		String results;
-		String expected = "\n\t from 21/October/2014 00:01 to 21/October/2014 23:59;";
-		System.out.println("testDate2:");
-		System.out.println("expects: " + expected);
+		TimeInterval results;
 		try {
-			results = nerParser.parseTimeInterval(dateList).toString();
-			System.out.println("results: " + results);
-			assertEquals(expected + TERMINATOR, results);
+			Date startDate = formatter.parse("2014-11-08 00:00");
+			Date endDate = formatter.parse("2014-11-08 23:59");
+			TimeInterval expected = new TimeInterval(startDate, endDate);
+			results = nerParser.parseTimeInterval(dateList);
+			assertEquals(expected.toString(), results.toString());
+		} catch (ParseException e1) {
+			e1.printStackTrace();
 		} catch (CommandFailedException e) {
-			// TODO Auto-generated catch block
+			fail();
 			e.printStackTrace();
 		}
 	}
@@ -52,17 +61,18 @@ public class NERTestDate {
 	@Test
 	public void testDate3() {
 		ArrayList<String> dateList= new ArrayList<String>();
-		dateList.add("this Friday");
-		String results;
-		String expected = "\n\t from 24/October/2014 00:01 to 24/October/2014 23:59;";
-		System.out.println("testDate3:");
-		System.out.println("expects: " + expected);
+		dateList.add("next Friday");
+		TimeInterval results;
 		try {
-			results = nerParser.parseTimeInterval(dateList).toString();
-			System.out.println("results: " + results);
-			assertEquals(expected + TERMINATOR, results);
+			Date startDate = formatter.parse("2014-11-14 00:00");
+			Date endDate = formatter.parse("2014-11-14 23:59");
+			TimeInterval expected = new TimeInterval(startDate, endDate);
+			results = nerParser.parseTimeInterval(dateList);
+			assertEquals(expected.toString(), results.toString());
+		} catch (ParseException e1) {
+			e1.printStackTrace();
 		} catch (CommandFailedException e) {
-			// TODO Auto-generated catch block
+			fail();
 			e.printStackTrace();
 		}
 	}
@@ -71,16 +81,17 @@ public class NERTestDate {
 	public void testDate4() {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("1 Nov");
-		String results;
-		String expected = "\n\t from 01/November/2014 00:01 to 01/November/2014 23:59;";
-		System.out.println("testDate4:");
-		System.out.println("expects: " + expected);
+		TimeInterval results;
 		try {
-			results = nerParser.parseTimeInterval(dateList).toString();
-			System.out.println("results: " + results);
-			assertEquals(expected + TERMINATOR, results);
+			Date startDate = formatter.parse("2014-11-01 00:00");
+			Date endDate = formatter.parse("2014-11-01 23:59");
+			TimeInterval expected = new TimeInterval(startDate, endDate);
+			results = nerParser.parseTimeInterval(dateList);
+			assertEquals(expected.toString(), results.toString());
+		} catch (ParseException e1) {
+			e1.printStackTrace();
 		} catch (CommandFailedException e) {
-			// TODO Auto-generated catch block
+			fail();
 			e.printStackTrace();
 		}
 	}
@@ -90,16 +101,17 @@ public class NERTestDate {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("next Friday");
 		dateList.add("from 14:00 to 18:00");
-		String results;
-		String expected = "\n\t from 31/October/2014 14:00 to 31/October/2014 18:00;";
-		System.out.println("testDate5:");
-		System.out.println("expects: " + expected);
+		TimeInterval results;
 		try {
-			results = nerParser.parseTimeInterval(dateList).toString();
-			System.out.println("results: " + results);
-			assertEquals(expected + TERMINATOR, results);
+			Date startDate = formatter.parse("2014-11-14 14:00");
+			Date endDate = formatter.parse("2014-11-14 18:00");
+			TimeInterval expected = new TimeInterval(startDate, endDate);
+			results = nerParser.parseTimeInterval(dateList);
+			assertEquals(expected.toString(), results.toString());
+		} catch (ParseException e1) {
+			e1.printStackTrace();
 		} catch (CommandFailedException e) {
-			// TODO Auto-generated catch block
+			fail();
 			e.printStackTrace();
 		}
 	}
@@ -109,16 +121,17 @@ public class NERTestDate {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("next Friday");
 		dateList.add("14:00 - 18:00");
-		String results;
-		String expected = "\n\t from 31/October/2014 14:00 to 31/October/2014 18:00;";
-		System.out.println("testDate6:");
-		System.out.println("expects: " + expected);
+		TimeInterval results;
 		try {
-			results = nerParser.parseTimeInterval(dateList).toString();
-			System.out.println("results: " + results);
-			assertEquals(expected + TERMINATOR, results);
+			Date startDate = formatter.parse("2014-11-14 14:00");
+			Date endDate = formatter.parse("2014-11-14 18:00");
+			TimeInterval expected = new TimeInterval(startDate, endDate);
+			results = nerParser.parseTimeInterval(dateList);
+			assertEquals(expected.toString(), results.toString());
+		} catch (ParseException e1) {
+			e1.printStackTrace();
 		} catch (CommandFailedException e) {
-			// TODO Auto-generated catch block
+			fail();
 			e.printStackTrace();
 		}
 	}
