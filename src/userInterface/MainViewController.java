@@ -55,7 +55,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	private ScrollPane displayScrollPane;
 	public ScrollPane previewScrollPane;
 
-	private Parser parser;
+	private NerParser parser;
 	private static PrintStream err = System.err;
 	// a property to store the current user
 	private User user;
@@ -160,7 +160,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			@Override
 			public void run() {
 				instance.updateTextField("NLP MODEL LOADING");
-				instance.parser = new Parser();
+				instance.parser = new NerParser();
 				instance.updateTextField("");
 				instance.updatePreviewLater();
 			}
@@ -529,7 +529,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 				return;
 			}
 
-			thisCommand = this.parser.nerParser.pickCommand(userInput
+			thisCommand = this.parser.pickCommand(userInput
 					.toLowerCase());
 			System.err.println("CMD - executeNER: " + thisCommand);
 
@@ -631,7 +631,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 				return "";
 			}
 
-			COMMAND_TYPE thisCommand = this.parser.nerParser
+			COMMAND_TYPE thisCommand = this.parser
 					.pickCommand(userInput.toLowerCase());
 			System.err.println("CMD - getPreview: " + thisCommand);
 
@@ -760,7 +760,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 				return "Command: done \n\n" + "Move the task out of 'TRASHED' section first to finish it";
 			}
 			
-			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
+			ArrayList<Integer> indices = parser.pickIndex(userInput);
 			String returnValue = "Command: done \n\n";
 
 			for (int index : indices) {
@@ -775,7 +775,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	//@author A0119379R
 	private String getSearchPreview(String userInput) {
-		Constraint thisConstraint = parser.nerParser.getConstraint(userInput);
+		Constraint thisConstraint = parser.getConstraint(userInput);
 		return "Command: search \n\n" + thisConstraint.toString();
 	}
 
@@ -786,9 +786,9 @@ public class MainViewController extends GridPane implements HotKeyListener {
 				return "Command: update \n\n" + "You can only update the task in 'TODO' section";
 			}
 			
-			int index = parser.nerParser.pickIndex(userInput).get(0);
+			int index = parser.pickIndex(userInput).get(0);
 			Task taskToUpdate = this.user.getUpdatePreview(index - 1,
-					parser.nerParser.getUpdatedTaskMap(userInput));
+					parser.getUpdatedTaskMap(userInput));
 			return "Command: update \n\n"
 					+ taskToUpdate.toStringForDisplaying();
 		} catch (CommandFailedException e) {
@@ -805,7 +805,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 				return "Command: delete \n\n" + "All tasks in 'TRASHED' section have been trashed already.";
 			}
 			
-			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
+			ArrayList<Integer> indices = parser.pickIndex(userInput);
 			String returnValue = "Command: delete \n\n";
 
 			for (int index : indices) {
@@ -820,7 +820,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	//@author A0119379R
 	private String getAddPreview(String userInput) {
-		Task taskToAdd = parser.nerParser.getTask(userInput);
+		Task taskToAdd = parser.getTask(userInput);
 		return "Command: create \n\n" + taskToAdd.toStringForDisplaying();
 	}
 
@@ -829,7 +829,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	 */
 	//@author A0119379R
 	private String add(String userInput) {
-		Task taskToAdd = parser.nerParser.getTask(userInput);
+		Task taskToAdd = parser.getTask(userInput);
 		assert (taskToAdd != null);
 		return (this.user.add(taskToAdd)) ? Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY
 				: Constant.PROMPT_MESSAGE_ADD_TASK_FAILED;
@@ -838,7 +838,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	//@author A0119379R
 	private String delete(String userInput) {
 		try {
-			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
+			ArrayList<Integer> indices = parser.pickIndex(userInput);
 			Collections.sort(indices);
 			int offset = 0;
 			boolean isAllSucceeded = true;
@@ -869,9 +869,9 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	//@author A0119379R
 	private String update(String userInput) {
 		try {
-			int index = parser.nerParser.pickIndex(userInput).get(0);
+			int index = parser.pickIndex(userInput).get(0);
 			this.user.update(index - 1,
-					parser.nerParser.getUpdatedTaskMap(userInput));
+					parser.getUpdatedTaskMap(userInput));
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
 			return Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
@@ -884,7 +884,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	private ArrayList<Task> search(String userInput) {
 		Constraint thisConstraint;
 		try {
-			thisConstraint = parser.nerParser.getConstraint(userInput);
+			thisConstraint = parser.getConstraint(userInput);
 			ArrayList<Task> queryResult = this.user.find(thisConstraint, this.getCurrentListName());
 			if (queryResult.isEmpty()) {
 				setPreviewText(Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED);
@@ -1016,14 +1016,14 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	//@author A0119379R
 	private String reloadNLPModel() {
 		NerParser.updateModal();
-		this.parser = new Parser();
+		this.parser = new NerParser();
 		return "Model reloaded!";
 	}
 
 	//@author A0119379R
 	private String done(String userInput) {
 		try {
-			ArrayList<Integer> indices = parser.nerParser.pickIndex(userInput);
+			ArrayList<Integer> indices = parser.pickIndex(userInput);
 			Collections.sort(indices);
 			int offset = 0;
 			boolean isAllSucceeded = true;
