@@ -516,7 +516,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 		if (!userInput.equals("")) {
 			try {
-				NERParser.updateTsvFile(userInput);
+				NerParser.updateTsvFile(userInput);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -578,7 +578,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 					
 				case EXIT:
 					System.setErr(err); 
-					NERParser.updateModal();
+					NerParser.updateModal();
 					User.exit();
 					break;
 					
@@ -1015,7 +1015,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	//@author A0119379R
 	private String reloadNLPModel() {
-		NERParser.updateModal();
+		NerParser.updateModal();
 		this.parser = new Parser();
 		return "Model reloaded!";
 	}

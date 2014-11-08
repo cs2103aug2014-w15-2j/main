@@ -2,7 +2,7 @@ package test;
 
 import static org.junit.Assert.*;
 import infrastructure.Constant;
-import infrastructure.NERParser;
+import infrastructure.NerParser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,7 +18,7 @@ import org.junit.Test;
 public class NerDateParsingTest {
 
 	static final String TERMINATOR = "\n";
-	static NERParser nerParser = new NERParser();
+	static NerParser nerParser = new NerParser();
 	static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.ENGLISH);
 	
 	

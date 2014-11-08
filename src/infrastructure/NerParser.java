@@ -33,7 +33,7 @@ import java.util.logging.Level;
 
 import modal.*;
 
-public class NERParser {
+public class NerParser {
 	private AbstractSequenceClassifier<CoreLabel> classifierTag;
 	private AbstractSequenceClassifier<CoreLabel> classifierCommand;
 	private AbstractSequenceClassifier<CoreLabel> classifierTime;
@@ -68,7 +68,7 @@ public class NERParser {
  *  Constructor and Initialization
  * ==========================================================================================================================
  */
-	public NERParser() {
+	public NerParser() {
 		loadNerModels();
 		loadTimeParser();
 	}
@@ -128,7 +128,7 @@ public class NERParser {
 		
 		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_COMMAND);
 		
-		String directParseCommand = NERParser.pickTheTagged(userInputString,
+		String directParseCommand = NerParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_COMMAND);
 		
 		ArrayList<String> commandList = new ArrayList<String>();
@@ -138,7 +138,7 @@ public class NERParser {
 			String xmlStr = classifierCommandPicker.classifyToString(
 					userInputString, "inlineXML", false);
 			System.err.println("XML STRING - pickCommand: " + xmlStr);
-			HashMap<String, ArrayList<String>> result = NERParser
+			HashMap<String, ArrayList<String>> result = NerParser
 					.parseToMap(xmlStr);
 			commandList = result.get("COMMAND");
 		}
@@ -163,7 +163,7 @@ public class NERParser {
 		this.isTimeChanged = false;
 		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_TIME);
 
-		String directParseTime = NERParser.pickTheTagged(userInputString,
+		String directParseTime = NerParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_TIME);
 		if (directParseTime != null) {
 			this.isTimeChanged = true;
@@ -187,7 +187,7 @@ public class NERParser {
 		String xmlStr = classifierTimePicker.classifyToString(userInputString,
 				"inlineXML", false);
 		System.err.println("XML STRING - pickDate: " + xmlStr);
-		HashMap<String, ArrayList<String>> result = NERParser
+		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
 		resultList = result.get("DATE");
 
@@ -224,7 +224,7 @@ public class NERParser {
 		this.isDescriptionChanged = false;
 		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_DESCRIPTION);
 		
-		String directParseDescription = NERParser.pickTheTagged(userInputString,
+		String directParseDescription = NerParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_DESCRIPTION);
 		if (directParseDescription != null) {
 			this.isDescriptionChanged = true;
@@ -234,7 +234,7 @@ public class NERParser {
 		String xmlStr = classifierDescriptionPicker.classifyToString(
 				userInputString, "inlineXML", false);
 		System.err.println("XML STRING - pickDescription: " + xmlStr);
-		HashMap<String, ArrayList<String>> result = NERParser
+		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
 		ArrayList<String> resultList = result.get("DESCRIPTION");
 		if (resultList == null || resultList.size() == 0) {
@@ -255,7 +255,7 @@ public class NERParser {
 	public ArrayList<Integer> pickIndex(String userInputString) throws CommandFailedException {
 
 		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_INDEX);
-		String directParseIndex = NERParser.pickTheTagged(userInputString,
+		String directParseIndex = NerParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_INDEX);
 		try {
 			if (directParseIndex != null) {
@@ -267,7 +267,7 @@ public class NERParser {
 			String xmlStr = classifierIndexPicker.classifyToString(
 					userInputString, "inlineXML", false);
 			System.err.println("XML STRING - pickIndex: " + xmlStr);
-			HashMap<String, ArrayList<String>> result = NERParser
+			HashMap<String, ArrayList<String>> result = NerParser
 					.parseToMap(xmlStr);
 			ArrayList<String> resultList = result.get("INDEX");
 			if (resultList == null || resultList.size() == 0) {
@@ -280,7 +280,7 @@ public class NERParser {
 			String xmlStr = classifierIndexPicker.classifyToString(
 					userInputString, "inlineXML", false);
 			System.err.println("XML STRING - pickIndex: " + xmlStr);
-			HashMap<String, ArrayList<String>> result = NERParser
+			HashMap<String, ArrayList<String>> result = NerParser
 					.parseToMap(xmlStr);
 			ArrayList<String> resultList = result.get("INDEX");
 			if (resultList == null || resultList.size() == 0) {
@@ -300,7 +300,7 @@ public class NERParser {
 	public ArrayList<String> pickTag(String userInputString) {
 		this.isTagChanged = false;
 		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_TAG);
-		String directParseTag = NERParser.pickTheTagged(userInputString,
+		String directParseTag = NerParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_TAG);
 		if (directParseTag != null) {
 			this.isTagChanged = true;
@@ -317,7 +317,7 @@ public class NERParser {
 		String xmlStr = classifierTagPicker.classifyToString(userInputString,
 				"inlineXML", false);
 		System.err.println("XML STRING - pickTag: " + xmlStr);
-		HashMap<String, ArrayList<String>> result = NERParser
+		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
 		ArrayList<String> resultList = result.get("TAG");
 		if (resultList == null || resultList.size() == 0) {
@@ -337,7 +337,7 @@ public class NERParser {
 	public int pickPriority(String userInputString) {
 		this.isPriorityChanged = false;
 		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_PRIORITY);
-		String directParsePriority = NERParser.pickTheTagged(userInputString,
+		String directParsePriority = NerParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_PRIORITY);
 		if (directParsePriority != null) {
 			this.isPriorityChanged = true;
@@ -347,7 +347,7 @@ public class NERParser {
 		String xmlStr = classifierPriorityPicker.classifyToString(
 				userInputString, "inlineXML", false);
 		System.err.println("XML STRING - pickPriority: " + xmlStr);
-		HashMap<String, ArrayList<String>> result = NERParser
+		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
 		ArrayList<String> resultList = result.get("PRIORITY");
 		if (resultList == null || resultList.size() == 0) {

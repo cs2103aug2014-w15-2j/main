@@ -17,10 +17,10 @@ import modal.TimeInterval;
 
 public class Parser {
 	
-	public NERParser nerParser;
+	public NerParser nerParser;
 	
 	public Parser() {
-		nerParser = new NERParser();
+		nerParser = new NerParser();
 	}
 	
 	public static COMMAND_TYPE determineCommandType(String commandTypeString) {
@@ -247,7 +247,7 @@ public class Parser {
 	}
 	
 	public TimeInterval parseTimeInterval(String parameter) throws Exception {
-		HashMap<String, ArrayList<String>> map = NERParser.parseToMap(nerParser.parseTimeToXML(parameter));
+		HashMap<String, ArrayList<String>> map = NerParser.parseToMap(nerParser.parseTimeToXML(parameter));
 		ArrayList<String> dateList = map.get("DATE");
 		return nerParser.parseTimeInterval(dateList);
 	}
