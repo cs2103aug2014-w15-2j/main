@@ -1110,7 +1110,7 @@ public class NerParser {
 		int result = Constant.PRIORITY_INVALID;
 		for (String command : cmdMap.keySet()) {
 			if (!command.equals("COMMAND")) {
-				result = Parser.parsePriority(command);
+				result = parsePriorityFromFormattedString(command);
 			}
 		}
 
@@ -1120,6 +1120,18 @@ public class NerParser {
 			return result;
 		}
 
+	}
+	
+	public static int parsePriorityFromFormattedString(String parameter) {
+		if (parameter.equalsIgnoreCase("high")) {
+			return Constant.PRIORITY_HIGH;
+		} else if (parameter.equalsIgnoreCase("medium")) {
+			return Constant.PRIORITY_MEDIUM;
+		} else if (parameter.equalsIgnoreCase("low")) {
+			return Constant.PRIORITY_LOW;
+		} else {
+			return Constant.PRIORITY_INVALID;
+		}
 	}
 
 	/**
@@ -1147,7 +1159,7 @@ public class NerParser {
 
 		if (results.size() >= 1) {
 			//System.err.println("PARSED CMD - parseCommand: " + results.get(0).toLowerCase());
-			return Parser.determineCommandType(results.get(0).toLowerCase());
+			return determineCommandType(results.get(0).toLowerCase());
 		} else {
 			return COMMAND_TYPE.ADD;
 		}
@@ -1254,4 +1266,75 @@ public class NerParser {
 		return taskMap;
 	}
 
+
+	
+	public static COMMAND_TYPE determineCommandType(String commandTypeString) {
+		switch (commandTypeString) {
+			case Constant.COMMAND_STRING_LOG_IN:
+				return COMMAND_TYPE.LOG_IN;
+			
+			case Constant.COMMAND_STRING_LOG_OUT:
+				return COMMAND_TYPE.LOG_OUT;
+				
+			case Constant.COMMAND_STRING_CREATE_ACCOUNT:
+				return COMMAND_TYPE.CREATE_ACCOUNT;
+				
+			case Constant.COMMAND_STRING_DELETE_ACCOUNT:
+				return COMMAND_TYPE.DELETE_ACCOUNT;
+				
+			case Constant.COMMAND_STRING_HELP:
+				return COMMAND_TYPE.HELP;
+				
+			case Constant.COMMAND_STRING_EXIT:
+				return COMMAND_TYPE.EXIT;
+				
+			case Constant.COMMAND_STRING_ADD:
+				return COMMAND_TYPE.ADD;
+				
+			case Constant.COMMAND_STRING_UPDATE:
+				return COMMAND_TYPE.UPDATE;
+				
+			case Constant.COMMAND_STRING_DELETE:
+				return COMMAND_TYPE.DELETE;
+				
+			case Constant.COMMAND_STRING_DISPLAY:
+				return COMMAND_TYPE.DISPLAY;
+
+			case Constant.COMMAND_STRING_SEARCH:
+				return COMMAND_TYPE.SEARCH;
+				
+			case Constant.COMMAND_STRING_UNDO:
+				return COMMAND_TYPE.UNDO;
+				
+			case Constant.COMMAND_STRING_REDO:
+				return COMMAND_TYPE.REDO;
+	
+			case Constant.COMMAND_STRING_CLEAR:
+				return COMMAND_TYPE.CLEAR;	
+	
+			case Constant.COMMAND_STRING_LOG_IN_ALT:
+				return COMMAND_TYPE.LOG_IN;
+				
+			case Constant.COMMAND_STRING_LOG_OUT_ALT:
+				return COMMAND_TYPE.LOG_OUT;
+				
+			case Constant.COMMAND_STRING_NLP:
+				return COMMAND_TYPE.NLP;
+				
+			case Constant.COMMAND_STRING_EMPTY_TRASH:
+				return COMMAND_TYPE.EMPTY_TRASH;
+				
+			case Constant.COMMAND_STRING_RELOAD:
+				return COMMAND_TYPE.RELOAD;
+				
+			case Constant.COMMAND_STRING_DONE:
+				return COMMAND_TYPE.DONE;
+				
+			case Constant.COMMAND_STRING_RECOVER:
+				return COMMAND_TYPE.RECOVER;
+				
+			default:
+				return COMMAND_TYPE.HELP;
+		}
+	}
 }
