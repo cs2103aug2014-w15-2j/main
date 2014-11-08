@@ -77,9 +77,8 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	/**
 	 * ========================================================================
-	 * ================= Constructor
-	 * ============================================
-	 * =============================================
+	 * Constructor
+	 * ========================================================================
 	 */
 	//@author A0119447Y
 	public MainViewController(Stage stage) {
@@ -106,10 +105,8 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	/**
 	 * ========================================================================
-	 * ================ Methods which might be called during initialization (in
-	 * constructor)
-	 * ==============================================================
-	 * ==========================
+	 * Methods which might be called during initialization (in constructor)
+	 * ========================================================================
 	 */
 	//@author A0119379R
 	private void loadFont() {
@@ -245,9 +242,11 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		setPreviewPane(
 				"Welcome to List of Xiao Ming. \nPlease wait for the NLP model loading...",
 				this.getCurrentListName());
-		displayScrollPane.setStyle("-fx-font: 12px \"Monaco\";");
-		this.setDisplayText("HELP:" + "\n\n"
-				+ Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
+		displayScrollPane.setStyle("-fx-font: 12px \"Monaco\";"
+				+ "-fx-padding: 10 10 10 10;"
+				+ "-fx-background-color: rgba(244,244,244,1);");
+		this.help();
+		this.refresh(Constant.TASK_LIST_HELP);
 	}
 
 	private void addTextFieldListener() {
@@ -310,9 +309,9 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		consoleTextLabel = new Label(textToDisplay);
 		consoleTextLabel.setStyle("-fx-font: 12px \"Monaco\";"
 				+ "-fx-text-fill: white;");
-		parsingFeedbackBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8);"
+		parsingFeedbackBox.setStyle("-fx-background-color: rgba(80, 80, 80, 1);"
 				+ "-fx-padding: 8 8 8 8;" 
-				+ Constant.CSS_STYLE_SHADOW);
+				+ "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 5, 3)");
 		parsingFeedbackBox.getChildren().add(consoleTextLabel);
 
 		VBox listIndicatorBox = new VBox();
@@ -325,22 +324,26 @@ public class MainViewController extends GridPane implements HotKeyListener {
 				+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 3, 1);");
 		
 		if (listName.equalsIgnoreCase(Constant.TASK_LIST_TODO)) {
-			listIndicatorBox.setStyle("-fx-background-color: rgba(251, 235, 178, 1);"
+			listIndicatorBox.setStyle("-fx-background-color: rgba(250, 230, 155, 1);"
 					+ "-fx-padding: 8 16 8 8;"
 					+ Constant.CSS_STYLE_SHADOW);
 		} else if (listName.equalsIgnoreCase(Constant.TASK_LIST_TRASHED)) {
 			listIndicatorBox.setStyle("-fx-background-color: rgba(150, 150, 150, 1);"
 					+ "-fx-padding: 8 16 8 8;"
-					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
+					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 10, 0, 5, 3);");
 		} else if (listName.equalsIgnoreCase(Constant.TASK_LIST_FINISHED)){
 			listIndicatorBox.setStyle("-fx-background-color: rgba(222, 236, 147, 1);"
 					+ "-fx-padding: 8 16 8 8;"
-					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
-		} else {
-			listIndicatorBox.setStyle("-fx-background-color: rgba(21, 107, 182, 1);"
+					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 10, 0, 5, 3);");
+		} else if (listName.equals("search")){
+			listIndicatorBox.setStyle("-fx-background-color: rgba(100, 138, 173, 1);"
 					+ "-fx-padding: 8 16 8 8;"
-					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 1, 1);");
+					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 10, 0, 5, 3);");
 
+		} else {
+			listIndicatorBox.setStyle("-fx-background-color: rgba(240, 115, 136, 1);"
+					+ "-fx-padding: 8 16 8 8;"
+					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 10, 0, 5, 3);");
 		}
 
 		listIndicatorBox.getChildren().add(listLabel);
@@ -583,7 +586,8 @@ public class MainViewController extends GridPane implements HotKeyListener {
 					break;
 					
 				case HELP:
-					setDisplayText(this.help());
+					this.help();
+					refresh(Constant.TASK_LIST_HELP);
 					break;
 					
 				case EMPTY_TRASH:
@@ -975,9 +979,9 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	}
 
 	//@author A0119379R
-	private String help() {
-		return Constant.GUI_MESSAGE_WELCOME + "\n"
-				+ Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION;
+	private void help() {
+		VBox helpBox = LayoutManager.getHelpBox();
+		this.displayScrollPane.setContent(helpBox);
 	}
 
 	//@author A0119379R
@@ -1251,8 +1255,11 @@ public class MainViewController extends GridPane implements HotKeyListener {
 				this.setDisplayPane(this.displayTrashed());
 				break;
 				
-			default:
+			case Constant.TASK_LIST_SEARCH:
 				this.setPreviewPane(this.consoleTextLabel.getText(), Constant.TASK_LIST_SEARCH);
+				
+			default:
+				this.setPreviewPane(this.consoleTextLabel.getText(), Constant.TASK_LIST_HELP);
 		}
 	}
 	

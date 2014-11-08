@@ -1,5 +1,3 @@
-
-
 package userInterface;
 
 import infrastructure.Constant;
@@ -21,6 +19,28 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
 public class LayoutManager {
+	
+	public static VBox getHelpBox() {
+		VBox overallBox = new VBox();
+		HBox emptyRow = new HBox();
+		emptyRow.setPrefHeight(5);
+		HBox rowContainer = new HBox();
+		rowContainer.setAlignment(Pos.CENTER);
+		VBox emptyColumn = new VBox();
+		emptyColumn.setPrefWidth(5);
+		VBox helpBox = new VBox();
+		helpBox.setStyle("-fx-background-color: white; "
+				+ "-fx-padding: 10 10 10 10;"
+				+ Constant.CSS_STYLE_SHADOW);
+		helpBox.setPrefSize(935, 430);
+		helpBox.setAlignment(Pos.CENTER);
+		Label l = new Label(Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
+		helpBox.getChildren().add(l);
+		
+		rowContainer.getChildren().addAll(emptyColumn, helpBox);
+		overallBox.getChildren().addAll(emptyRow, rowContainer);
+		return overallBox;
+	}
 
 	//@author A0119379R
 	public static GridPane getTagPaneForTask(Task task) {
