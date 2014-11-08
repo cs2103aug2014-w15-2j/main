@@ -324,7 +324,9 @@ public abstract class Constant {
 	public static final int REPEATED_PERIOD_MONTHLY = 4;
 
 	public static final int CALENDAR_WEEK_IN_SECOND = 37;
-
+	public static final int CALENDAR_MONTH_IN_SECOND = 39;
+	public static final int CALENDAR_YEAR_IN_SECOND = 41;
+	
 	// Logic
 	public static final String TRASHED_TAG = "trashed";
 	public static final String NO_REDOABLE_ERROR_MESSAGE = "nothing available for redoing";

@@ -3,9 +3,11 @@ package test;
 import static org.junit.Assert.*;
 import infrastructure.Constant;
 import infrastructure.NerParser;
+import infrastructure.UtilityMethod;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -17,16 +19,20 @@ import org.junit.Test;
 
 public class NerDatePickerTest {
 	
-	private static final String DATE_TODAY = "2014-11-08";
-	private static final String DATE_TOMORROW = "2014-11-09";
-	private static final String[] thisWeek = {"2014-11-03", "2014-11-04", "2014-11-05", "2014-11-06", "2014-11-07", "2014-11-08", "2014-11-09"};
-	private static final String[] nextWeek = {"2014-11-10", "2014-11-11", "2014-11-12", "2014-11-13", "2014-11-14", "2014-11-15", "2014-11-16"};
-	private static final String[] weekFromNow = {"2014-11-10", "2014-11-11", "2014-11-05", "2014-11-06", "2014-11-07", "2014-11-08", "2014-11-09"};
+	private static String DATE_TODAY;
+	private static  String DATE_TOMORROW;
+	private static  String[] thisWeek = {"2014-11-03", "2014-11-04", "2014-11-05", "2014-11-06", "2014-11-07", "2014-11-08", "2014-11-09"};
+	private static  String[] nextWeek = {"2014-11-10", "2014-11-11", "2014-11-12", "2014-11-13", "2014-11-14", "2014-11-15", "2014-11-16"};
 	static NerParser nerParser = new NerParser();
 	static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.ENGLISH);
-	
+
 	@Before
 	public void setUp() throws Exception {
+		SimpleDateFormat setUpFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+		Calendar c = UtilityMethod.dateToCalendar(new Date());
+		DATE_TODAY = setUpFormatter.format(c.getTime());
+		c.add(Calendar.DAY_OF_MONTH, 1);
+		DATE_TOMORROW = setUpFormatter.format(c.getTime());		
 	}
 
 	@Test
@@ -54,6 +60,7 @@ public class NerDatePickerTest {
 			this.testTimeIntervalEqual("add task till " + expression, "DEADLINE", DATE_TOMORROW + " 23:59");
 		}
 	}
+	
 	
 	
 	@Test
@@ -92,33 +99,50 @@ public class NerDatePickerTest {
 						}
 					}
 					break;
-					
-				case "":
-					for (String[] week : weeks) {
-						for (int i = 0; i < 7; i ++) {
-							System.out.println(modifier + " " + week[i]);
-							this.testTimeIntervalEqual("add task " + week[i], weekFromNow[i] + " 00:00", weekFromNow[i] + " 23:59");
-							this.testTimeIntervalEqual("add task by " + week[i], "DEADLINE", weekFromNow[i] + " 23:59");
-							this.testTimeIntervalEqual("add task before " + week[i], "DEADLINE", weekFromNow[i] + " 23:59");
-							this.testTimeIntervalEqual("add task until " + week[i], "DEADLINE", weekFromNow[i] + " 23:59");
-							this.testTimeIntervalEqual("add task till " + week[i], "DEADLINE", weekFromNow[i] + " 23:59");
-						}
-					}
-					break;
 			}
 		}
 	}
 	
 	
+	
 	@Test
-	public void test() {
-		this.testTimeIntervalEqual("Go to my grandma's today", "2014-11-08 00:00", "2014-11-08 23:59");
-		this.testTimeIntervalEqual("Swim today", "2014-11-08 00:00", "2014-11-08 23:59");
-		this.testTimeIntervalEqual("Buy a book today", "2014-11-08 00:00", "2014-11-08 23:59");
-		this.testTimeIntervalEqual("Reading the instruction of LSM assignment 3 today", "2014-11-08 00:00", "2014-11-08 23:59");
-		this.testTimeIntervalEqual("Buy a drink before attend the computer networking lectures today", "2014-11-08 00:00", "2014-11-08 23:59");
+	public void testSpecificDay() {
+		String[] expressions = {"Oct 28", "28 Oct", "2014 Oct 28", "2014-10-28", "2014 Oct 28"};
+		
+		for (String expression : expressions) {
+			this.testTimeIntervalEqual("add task " + expression, "2014-10-28" + " 00:00", "2014-10-28" + " 23:59");
+			this.testTimeIntervalEqual("add task by " + expression, "DEADLINE", "2014-10-28" + " 23:59");
+			this.testTimeIntervalEqual("add task before " + expression, "DEADLINE", "2014-10-28" + " 23:59");
+			this.testTimeIntervalEqual("add task until " + expression, "DEADLINE", "2014-10-28" + " 23:59");
+			this.testTimeIntervalEqual("add task till " + expression, "DEADLINE", "2014-10-28" + " 23:59");
+		}
 	}
 	
+	@Test
+	public void testWeek() {
+		//Monday is considered as the first day of a week
+		this.testTimeIntervalEqual("add task this week", thisWeek[0] + " 00:00", thisWeek[6] + " 23:59");
+		this.testTimeIntervalEqual("add task next week", nextWeek[0] + " 00:00", nextWeek[6] + " 23:59");
+	}
+	
+	@Test
+	public void testMonth() {
+		//Monday is considered as the first day of a week
+		this.testTimeIntervalEqual("add task this month", "2014-11-01 00:00", "2014-11-30 23:59");
+		this.testTimeIntervalEqual("add task next month", "2014-12-01 00:00", "2014-12-31 23:59");
+	}
+	
+	@Test
+	public void testYear() {
+		//Monday is considered as the first day of a week
+		this.testTimeIntervalEqual("add task this year", "2014-01-01 00:00", "2014-12-31 23:59");
+		this.testTimeIntervalEqual("add task next year", "2015-01-01 00:00", "2015-12-31 23:59");
+	}
+	
+	@Test
+	public void testExploratory() {
+		
+	}
 	
 	private void testTimeIntervalEqual(String userInputString, String startDateString, String endDateString) {
 		TimeInterval results;
@@ -135,6 +159,7 @@ public class NerDatePickerTest {
 			assertEquals(expected.toString(), results.toString());
 		} catch (ParseException e1) {
 			e1.printStackTrace();
+			fail();
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
 			fail();

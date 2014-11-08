@@ -30,14 +30,14 @@ public class NerDateParsingTest {
 	public void testDate1() {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("tomorrow");
-		this.testTimed(dateList, "2014-11-09 00:00", "2014-11-09 23:59");
+		this.testTimed(dateList, "2014-11-10 00:00", "2014-11-10 23:59");
 	}
 	
 	@Test
 	public void testDate2() {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("today");
-		this.testTimed(dateList, "2014-11-08 00:00", "2014-11-08 23:59");
+		this.testTimed(dateList, "2014-11-09 00:00", "2014-11-09 23:59");
 	}
 	
 	@Test
@@ -105,7 +105,61 @@ public class NerDateParsingTest {
 		this.testTimed(dateList, "2014-10-18 00:00", "2014-10-18 23:59");
 	}
 	
+	@Test
+	public void testDate10() {
+		ArrayList<String> dateList= new ArrayList<String>();
+		dateList.add("Oct 18, 2015");
+		this.testTimed(dateList, "2015-10-18 00:00", "2015-10-18 23:59");
+	}
 	
+	@Test
+	public void testDate11() {
+		ArrayList<String> dateList= new ArrayList<String>();
+		dateList.add("2015 Oct 18");
+		this.testTimed(dateList, "2015-10-18 00:00", "2015-10-18 23:59");
+	}
+	
+	@Test
+	public void testDate12() {
+		ArrayList<String> dateList= new ArrayList<String>();
+		dateList.add("this week");
+		this.testTimed(dateList, "2014-11-03 00:00", "2014-11-09 23:59");
+	}
+	
+	@Test
+	public void testDate13() {
+		ArrayList<String> dateList= new ArrayList<String>();
+		dateList.add("next week");
+		this.testTimed(dateList, "2014-11-10 00:00", "2014-11-16 23:59");
+	}
+	
+	@Test
+	public void testDate14() {
+		ArrayList<String> dateList= new ArrayList<String>();
+		dateList.add("this month");
+		this.testTimed(dateList, "2014-11-01 00:00", "2014-11-30 23:59");
+	}
+	
+	@Test
+	public void testDate15() {
+		ArrayList<String> dateList= new ArrayList<String>();
+		dateList.add("next month");
+		this.testTimed(dateList, "2014-12-01 00:00", "2014-12-31 23:59");
+	}
+	
+	@Test
+	public void testDate16() {
+		ArrayList<String> dateList= new ArrayList<String>();
+		dateList.add("this year");
+		this.testTimed(dateList, "2014-01-01 00:00", "2014-12-31 23:59");
+	}
+	
+	@Test
+	public void testDate17() {
+		ArrayList<String> dateList= new ArrayList<String>();
+		dateList.add("next year");
+		this.testTimed(dateList, "2015-01-01 00:00", "2015-12-31 23:59");
+	}
 	/**
 	 * ====================================================================
 	 * test cases for a deadline
@@ -123,7 +177,7 @@ public class NerDateParsingTest {
 	public void testDate2_2() {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("today 09:00");
-		this.testDeadline(dateList, "2014-11-08 09:00");
+		this.testDeadline(dateList, "2014-11-09 09:00");
 	}
 	
 	
@@ -140,6 +194,7 @@ public class NerDateParsingTest {
 			assertEquals(expected.toString(), results.toString());
 		} catch (ParseException e1) {
 			e1.printStackTrace();
+			fail();
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
 			fail();
@@ -156,6 +211,7 @@ public class NerDateParsingTest {
 			assertEquals(expected.toString(), results.toString());
 		} catch (ParseException e1) {
 			e1.printStackTrace();
+			fail();
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
 			fail();

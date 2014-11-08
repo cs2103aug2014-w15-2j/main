@@ -188,7 +188,7 @@ public class NerParser {
 		ArrayList<String> resultList = new ArrayList<String>();
 		String xmlStr = classifierTimePicker.classifyToString(userInputString,
 				"inlineXML", false);
-		//System.err.println("XML STRING - pickDate: " + xmlStr);
+		System.err.println("XML STRING - pickDate: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
 		resultList = result.get("DATE");
@@ -881,6 +881,7 @@ public class NerParser {
 				if (d != null) {
 					if (c.get(Calendar.SECOND) == Constant.CALENDAR_WEEK_IN_SECOND) {
 						//System.err.println("parsing weeks");
+						c.add(Calendar.DATE, 1);
 						Date d1 = c.getTime();
 						c.add(Calendar.WEEK_OF_YEAR, 1);
 						c.add(Calendar.DATE, -1);
@@ -889,8 +890,26 @@ public class NerParser {
 						Date d2 = c.getTime();
 						results.add(d1);
 						results.add(d2);
+					} else if (c.get(Calendar.SECOND) == Constant.CALENDAR_MONTH_IN_SECOND){
+						Date d1 = c.getTime();
+						c.add(Calendar.MONTH, 1);
+						c.add(Calendar.DATE, -1);
+						c.set(Calendar.HOUR_OF_DAY, 23);
+						c.set(Calendar.MINUTE, 59);
+						Date d2 = c.getTime();
+						results.add(d1);
+						results.add(d2);
+					} else if (c.get(Calendar.SECOND) == Constant.CALENDAR_YEAR_IN_SECOND){
+						Date d1 = c.getTime();
+						c.add(Calendar.YEAR, 1);
+						c.add(Calendar.DATE, -1);
+						c.set(Calendar.HOUR_OF_DAY, 23);
+						c.set(Calendar.MINUTE, 59);
+						Date d2 = c.getTime();
+						results.add(d1);
+						results.add(d2);
 					} else {
-						results.add(d);
+						results.add(c.getTime());
 					}
 				}
 			}
@@ -912,16 +931,22 @@ public class NerParser {
 		// 2014-02
 		// 2014
 
-		//System.err.println("INPUT TIME STRING - parseStringToDate: " + timeString);
+		System.err.println("INPUT TIME STRING - parseStringToDate: " + timeString);
 
 		Date date = null;
 		try {
 			if (timeString.length() == 4) {
 				date = new SimpleDateFormat("yyyy", Locale.ENGLISH)
 						.parse(timeString);
+				Calendar c = UtilityMethod.dateToCalendar(date);
+				c.set(Calendar.SECOND, Constant.CALENDAR_YEAR_IN_SECOND);
+				date = c.getTime();
 			} else if (timeString.length() == 7) {
 				date = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH)
 						.parse(timeString);
+				Calendar c = UtilityMethod.dateToCalendar(date);
+				c.set(Calendar.SECOND, Constant.CALENDAR_MONTH_IN_SECOND);
+				date = c.getTime();
 			} else if (timeString.length() == 10) {
 				date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
 						.parse(timeString);
