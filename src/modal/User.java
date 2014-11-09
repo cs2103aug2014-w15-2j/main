@@ -412,7 +412,7 @@ public class User {
 	 * return the normal tasks
 	 */
 	public ArrayList<Task> getNormalTaskList() {
-		return this.currentTasks.normalTasks;
+		return this.currentTasks.getNormalTasks();
 	}
 
 	//@author A0119447Y
@@ -422,7 +422,7 @@ public class User {
 	 * return the normal tasks
 	 */
 	public ArrayList<Task> getTrashedTaskList() {
-		return this.currentTasks.trashedTasks;
+		return this.currentTasks.getTrashedTasks();
 	}
 
 	//@author A0119447Y
@@ -432,7 +432,7 @@ public class User {
 	 * return the normal tasks
 	 */
 	public ArrayList<Task> getFinishedTaskList() {
-		return this.currentTasks.finishedTasks;
+		return this.currentTasks.getFinishedTasks();
 	}
 
 	/**

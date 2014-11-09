@@ -938,7 +938,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		try {
 			queryResult = this.user.getTrashedTaskList();
 			System.out.println("displayTrashed queryResult length: "
-					+ this.user.currentTasks.trashedTasks.size());
+					+ this.user.currentTasks.getTrashedTasks().size());
 			if (queryResult.isEmpty()) {
 				setDisplayText(Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK);
 				// TODO: create a box for empty list

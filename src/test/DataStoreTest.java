@@ -2,18 +2,20 @@
 
 package test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import modal.CommandFailedException;
 import modal.Task;
 import modal.TaskBox;
 import modal.TimeInterval;
+import dataStore.DataStore;
+import infrastructure.Constant;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import dataStore.DataStore;
-import infrastructure.Constant;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -30,20 +32,30 @@ import java.util.Locale;
 
 public class DataStoreTest {
 	
+	//Formatting in the saved file
 	private static final String FORMAT_OPEN_ARRAY = "[";
 	private static final String FORMAT_CLOSE_ARRAY = "]";
 	private static final String FORMAT_OPEN_OBJECT = "{";
 	private static final String FORMAT_CLOSE_OBJECT = "}";
-	private static final String FORMAT_DESCRIPTION = "\"" + Constant.SAVE_DESCRIPTION + "\":\"%s\",";
-	private static final String FORMAT_STATUS = "\"" + Constant.SAVE_STATUS + "\":\"%s\",";
-	private static final String FORMAT_TAGS = "\"" + Constant.SAVE_TAGS + "\":[";
-	private static final String FORMAT_PRIORITY = "\"" + Constant.SAVE_PRIORITY + "\":\"%s\","; 
-	private static final String FORMAT_TIME_INTERVAL = "\"" + Constant.SAVE_TIME_INTERVAL + "\":{";
-	private static final String FORMAT_STARTDATE = "\"" + Constant.SAVE_STARTDATE + "\":\"%s\",";
-	private static final String FORMAT_ENDDATE = "\"" + Constant.SAVE_ENDDATE + "\":\"%s\"";
+	private static final String FORMAT_DESCRIPTION = "\"" +
+								Constant.SAVE_DESCRIPTION + "\":\"%s\",";
+	private static final String FORMAT_STATUS = "\"" +
+								Constant.SAVE_STATUS + "\":\"%s\",";
+	private static final String FORMAT_TAGS = "\"" +
+								Constant.SAVE_TAGS + "\":[";
+	private static final String FORMAT_PRIORITY = "\"" +
+								Constant.SAVE_PRIORITY + "\":\"%s\","; 
+	private static final String FORMAT_TIME_INTERVAL = "\"" +
+								Constant.SAVE_TIME_INTERVAL + "\":{";
+	private static final String FORMAT_STARTDATE = "\"" +
+								Constant.SAVE_STARTDATE + "\":\"%s\",";
+	private static final String FORMAT_ENDDATE = "\"" +
+								Constant.SAVE_ENDDATE + "\":\"%s\"";
 	
+	//error message
 	private static final String MESSAGE_FAILED_TESTING = "failed in testing";
 	
+	//file path and data for data-testing and original data
 	private static final String DATA_FILEPATH = 
 								"List-of-Xiao-Ming/task-list.xiaoming";
 	private static final String DATA_FILEPATH_TEMP= 
@@ -52,12 +64,15 @@ public class DataStoreTest {
 	static File fileData = new File(DATA_FILEPATH);
 	static File fileTemp = new File(DATA_FILEPATH_TEMP);
 	
+	/**
+	 * move the original data to temporary file
+	 * create a new file for testing
+	 */
 	@Before
 	public void setTestEnvironment() { 
 		if(fileData.exists()) {
 			fileData.renameTo(fileTemp);
 		}
-		
 		try {
 			fileData.createNewFile();
 		} catch (IOException e) {
@@ -65,14 +80,22 @@ public class DataStoreTest {
 		}
 	}
 	
+	/**
+	 * delete testing file
+	 * move back the original data
+	 */
 	@After
 	public void setBackOriginalData() {
 		fileData.delete();
 		fileTemp.renameTo(fileData);
 	}
 	
+	/**
+	 * test save an empty tasks-list
+	 */
 	@Test
 	public void testSaveNull() {
+		//failed saving if file does not exist
 		if(fileData.exists()) {
 			fileData.delete();
 		}
@@ -81,6 +104,7 @@ public class DataStoreTest {
 		try {
 			fileData.createNewFile();
 			assertTrue(DataStore.save(null));
+			
 			BufferedReader br = new BufferedReader(new FileReader(fileData));
 			assertEquals(FORMAT_OPEN_ARRAY, br.readLine().trim());
 			br.readLine();
@@ -94,31 +118,36 @@ public class DataStoreTest {
 	@Test
 	public void testSave() {
 		try {
-			ArrayList<String> tags = new ArrayList<String>();
-			tags.add("tag1");
-			tags.add("tag2");
-			Date startDate = new SimpleDateFormat(Constant.FORMAT_DATE,
-					Locale.ENGLISH).parse("29-Nov-2014 10:00");
-			Date endDate = new SimpleDateFormat(Constant.FORMAT_DATE,
-					Locale.ENGLISH).parse("29-Nov-2014 12:00");
-			TimeInterval time = new TimeInterval(startDate, endDate);
-			Task task1 = new Task("task1", Constant.PRIORITY_HIGH, tags, time);
-			task1.setStatus(Constant.TASK_STATUS_NORMAL);
-			Task task2 = new Task("task2", Constant.PRIORITY_LOW, tags, time);
-			task2.setStatus(Constant.TASK_STATUS_DONE);
-			Task task3 = new Task("task3", Constant.PRIORITY_MEDIUM, tags, time);
-			task3.setStatus(Constant.TASK_STATUS_TRASHED);
-			
-			TaskBox tasks = new TaskBox();
-			tasks.getNormalTasks().add(task1);
-			tasks.getFinishedTasks().add(task2);
-			tasks.getTrashedTasks().add(task3);
-			
+			TaskBox tasks = setTCsave1();
 			assertTrue(DataStore.save(tasks));
-			checkDataFileTC2();
+			checkDataFileTCsave1();
 		} catch (ParseException | CommandFailedException | IOException e) {
 			System.out.println(MESSAGE_FAILED_TESTING);
 		}
+	}
+
+	private TaskBox setTCsave1() throws ParseException, CommandFailedException {
+		ArrayList<String> tags = new ArrayList<String>();
+		tags.add("tag1");
+		tags.add("tag2");
+		Date startDate = new SimpleDateFormat(Constant.FORMAT_DATE,
+				Locale.ENGLISH).parse("29-Nov-2014 10:00");
+		Date endDate = new SimpleDateFormat(Constant.FORMAT_DATE,
+				Locale.ENGLISH).parse("29-Nov-2014 12:00");
+		TimeInterval time = new TimeInterval(startDate, endDate);
+		Task task1 = new Task("task1", Constant.PRIORITY_HIGH, tags, time);
+		task1.setStatus(Constant.TASK_STATUS_NORMAL);
+		Task task2 = new Task("task2", Constant.PRIORITY_LOW, tags, time);
+		task2.setStatus(Constant.TASK_STATUS_DONE);
+		Task task3 = new Task("task3", Constant.PRIORITY_MEDIUM,
+							tags, time);
+		task3.setStatus(Constant.TASK_STATUS_TRASHED);
+		
+		TaskBox tasks = new TaskBox();
+		tasks.getNormalTasks().add(task1);
+		tasks.getFinishedTasks().add(task2);
+		tasks.getTrashedTasks().add(task3);
+		return tasks;
 	}
 	
 	@Test
@@ -126,7 +155,7 @@ public class DataStoreTest {
 		fileData.delete();
 		try {
 			TaskBox tasks = new TaskBox();
-			assertEquals(tasks.getNormalTasks(), DataStore.loadFileData().getNormalTasks());
+			assertEquals(tasks, DataStore.loadFileData());
 		} catch (Exception e) {
 			System.out.println(MESSAGE_FAILED_TESTING);
 		}
@@ -222,7 +251,7 @@ public class DataStoreTest {
 		bw.close();
 	}
 	
-	private void checkDataFileTC2()
+	private void checkDataFileTCsave1()
 			throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(fileData));
 		
