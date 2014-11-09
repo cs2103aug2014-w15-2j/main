@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import modal.Task;
-import modal.TimeInterval;
+import model.Task;
+import model.TimeInterval;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -24,12 +24,12 @@ import javafx.scene.text.FontWeight;
 public class LayoutManager {
 	
 	public static VBox getHelpBox() {
-		String[] shortcuts = {"", "Ctrl + 1", "Ctrl + 2", "Ctrl + 3", 
+		String[] shortcuts = {"", "Ctrl + 1", "Ctrl + 2", "Ctrl + 3", "Ctrl + 4",
 				"", "Ctrl + C", "Ctrl + R", "Ctrl + U", "Ctrl + D", "Ctrl + F", "Ctrl + M",
 				"", "Alt + A", "Alt + C", "Alt + D", "Alt + I", "Alt + P", "Alt + T",
 				""};
-		String[] descriptions = {"", "Switch to \"TODO\" list", "Switch to \"FINISHED\" list", "Switch to \"TRASHED\" list", 
-				"", "Insert command: add", "Insert command: display", "Insert command: update", "Insert command: delete", "Insert command: search", "Insert command: reload modal",
+		String[] descriptions = {"", "Switch to \"TODO\" page", "Switch to \"FINISHED\" page", "Switch to \"TRASHED\" page", "Switch to \"HELP\" page",
+				"", "Insert command: add", "Insert command: display", "Insert command: update", "Insert command: delete", "Insert command: search", "Insert command: reload model",
 				"", "Insert tag: <DATE> or </DATE>", "Insert tag: <COMMAND> or </COMMAND>", "Insert tag: <DESCRIPTION> or </DESCRIPTION>", "Insert tag: <INDEX> or </INDEX>", "Insert tag: <PRIORITY> or </PRIORITY>", "Insert tag: <TAG> or </TAG>",
 				""}; 
 		
@@ -67,12 +67,15 @@ public class LayoutManager {
 
 	private static VBox getHelpTitleBox(String title) {
 		VBox row = new VBox();
+		row.setStyle("-fx-background-color:white;");
+		row.setPrefWidth(885);
 		Label titleLabel = new Label(title);
 		
-		titleLabel.setStyle("-fx-font: 30px \"Akagi SemiBold\";"
-				+ "-fx-padding: 40 10 10 0");
+		titleLabel.setStyle("-fx-font: 30px \"Akagi\";"
+				+ "-fx-padding: 60 10 10 0;"
+				+ "-fx-background-color: white;");
 		HBox line = new HBox();
-		line.setPrefWidth(875);
+		line.setPrefWidth(855);
 		line.setPrefHeight(1);
 		line.setStyle("-fx-background-color: black;");
 		row.getChildren().addAll(titleLabel, line);
@@ -82,7 +85,8 @@ public class LayoutManager {
 	private static HBox getHelpRow(String shortcut, String description) {
 		HBox row = new HBox();
 		row.setPrefHeight(30);
-		row.setStyle("-fx-padding: 0 10 0 5");
+		row.setStyle("-fx-padding: 0 10 0 5;"
+				+ "-fx-background-color: white;");
 		VBox leftBox = new VBox();
 		leftBox.setAlignment(Pos.CENTER_LEFT);
 		leftBox.setStyle("-fx-padding: 0 50 0 0;");
@@ -96,7 +100,7 @@ public class LayoutManager {
 		VBox rightBox = new VBox();
 		Label rightLabel = new Label(description);
 		rightBox.setAlignment(Pos.CENTER_LEFT);
-		rightLabel.setStyle("-fx-font: 18px \"Akagi SemiBold\"");
+		rightLabel.setStyle("-fx-font: 18px \"Akagi\"");
 		rightBox.getChildren().add(rightLabel);
 		
 		row.getChildren().addAll(leftBox, rightBox);
