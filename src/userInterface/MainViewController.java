@@ -244,9 +244,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		setPreviewPane(
 				"Welcome to List of Xiao Ming. \nPlease wait for the NLP model loading...",
 				this.getCurrentListName());
-		displayScrollPane.setStyle("-fx-font: 12px \"Courier New\";"
-				+ "-fx-padding: 10 10 10 10;"
-				+ "-fx-background-color: rgba(244,244,244,1);");
+		displayScrollPane.getStyleClass().add("mylistview"); 
 		this.help();
 		this.refresh(Constant.TASK_LIST_HELP);
 	}
@@ -301,19 +299,19 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	//@author A0119379R
 	public void setPreviewPane(String textToDisplay, String listName) {
 		GridPane previewContentPane = new GridPane();
-		previewContentPane.setStyle("-fx-padding: 8 8 8 8;");
+		previewContentPane.setStyle("-fx-padding: 10 8 8 8;");
 		previewContentPane.setHgap(15);
 
 		VBox parsingFeedbackBox = new VBox();
 		parsingFeedbackBox.setPrefWidth(650);
-		parsingFeedbackBox.setPrefHeight(138);
+		parsingFeedbackBox.setPrefHeight(134);
 
 		consoleTextLabel = new Label(textToDisplay);
 		consoleTextLabel.setStyle("-fx-font: 12px \"Courier New\";"
 				+ "-fx-text-fill: white;");
 		parsingFeedbackBox.setStyle("-fx-background-color: rgba(80, 80, 80, 1);"
 				+ "-fx-padding: 8 8 8 8;" 
-				+ "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 5, 3)");
+				+ Constant.CSS_STYLE_SHADOW);
 		parsingFeedbackBox.getChildren().add(consoleTextLabel);
 
 		VBox listIndicatorBox = new VBox();
@@ -332,20 +330,20 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		} else if (listName.equalsIgnoreCase(Constant.TASK_LIST_TRASHED)) {
 			listIndicatorBox.setStyle("-fx-background-color: rgba(150, 150, 150, 1);"
 					+ "-fx-padding: 8 16 8 8;"
-					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 10, 0, 5, 3);");
+					+ Constant.CSS_STYLE_SHADOW);
 		} else if (listName.equalsIgnoreCase(Constant.TASK_LIST_FINISHED)){
 			listIndicatorBox.setStyle("-fx-background-color: rgba(222, 236, 147, 1);"
 					+ "-fx-padding: 8 16 8 8;"
-					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 10, 0, 5, 3);");
+					+ Constant.CSS_STYLE_SHADOW);
 		} else if (listName.equals("search")){
 			listIndicatorBox.setStyle("-fx-background-color: rgba(100, 138, 173, 1);"
 					+ "-fx-padding: 8 16 8 8;"
-					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 10, 0, 5, 3);");
+					+ Constant.CSS_STYLE_SHADOW);
 
 		} else {
 			listIndicatorBox.setStyle("-fx-background-color: rgba(240, 115, 136, 1);"
 					+ "-fx-padding: 8 16 8 8;"
-					+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 10, 0, 5, 3);");
+					+ Constant.CSS_STYLE_SHADOW);
 		}
 
 		listIndicatorBox.getChildren().add(listLabel);
@@ -371,10 +369,12 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	//@author A0119447Y
 	public void setDisplayPane(ArrayList<Task> taskList) {
+		setDisplayScrollbarStyle();
 		if (taskList != null && taskList.isEmpty()) {
 			this.loadPreview();
 		} else {
 			VBox displayContent = new VBox();
+			displayContent.setStyle("-fx-padding: 10 0 0 0;");
 			displayContent.setAlignment(Pos.CENTER);
 			GridPane taskPane = LayoutManager.getTaskPane(taskList, getWidth());
 
@@ -982,8 +982,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	//@author A0119379R
 	private void help() {
-		Image image = new Image(getClass().getResourceAsStream("/resource/shortcut.png"), 895, 900, true, true);
-		VBox helpBox = LayoutManager.getHelpBox(image);
+		VBox helpBox = LayoutManager.getHelpBox();
 		this.displayScrollPane.setContent(helpBox);
 	}
 

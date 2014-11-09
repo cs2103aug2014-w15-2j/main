@@ -377,8 +377,9 @@ public abstract class Constant {
 			+ "-fx-background-color: %s";
 	public static final String CSS_STYLE_PRIVIEW_CONTENT_BOX = "-fx-font: 12px \"Akagi-SemiBold\";"
 			+ "-fx-background-color: rgba(0, 200, 255, 1)";
-	public static final String CSS_STYLE_PREVIEW_SCROLL_PANE = "-fx-padding:8 8 8 8;"
-			+ "-fx-background-color: rgb(244, 244, 244)";
+	public static final String CSS_STYLE_PREVIEW_SCROLL_PANE = "-fx-padding:8 8 8 10;"
+			+ "-fx-background-color: rgb(244, 244, 244);"
+			+ "-fx-effect: innershadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 0);";
 	public static final String CSS_STYLE_DEADLINE_LABEL = "-fx-font: 38px \"Ticking Timebomb BB\";"
 			+ "-fx-padding:5 0 0 0;" + "-fx-text-fill: white;";
 	public static final String CSS_STYLE_TIME_LABEL = "-fx-text-fill: white;"
@@ -391,7 +392,6 @@ public abstract class Constant {
 			+ "-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );";
 	public static final String CSS_STYLE_DESCRIPTION_LABEL = "-fx-font: 17px \"Akagi-SemiBold\";"
 			+ "-fx-padding:0 0 5 0;";
-//			+ "-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , z, 0.0 , 0 , 1 );";
 	public static final String CSS_STYLE_TIME_BOX = "-fx-font: 12px \"Akagi-SemiBold\";"
 			+ "-fx-background-color: rgba(0, 0, 0, 0.5);"
 			+ "-fx-padding: 5 0 0 5;"
@@ -402,7 +402,7 @@ public abstract class Constant {
 			+ "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 1);"
 			+ "-fx-text-fill: white;";
 	public static final String CSS_STYLE_EMPTY_PANE = "-fx-background-color: rgba(0, 0, 0, 0);";
-	public static final String CSS_STYLE_SHADOW = "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 5, 3);";
+	public static final String CSS_STYLE_SHADOW = "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);";
 
 	// CSS colors
 	public static final String COLOR_BANNER_DEFAULT = "rgba(222, 222, 222, 1)";

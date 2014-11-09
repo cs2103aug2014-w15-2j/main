@@ -13,7 +13,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -24,7 +23,7 @@ import javafx.scene.text.FontWeight;
 
 public class LayoutManager {
 	
-	public static VBox getHelpBox(Image image) {
+	public static VBox getHelpBox() {
 		String[] shortcuts = {"", "Ctrl + 1", "Ctrl + 2", "Ctrl + 3", 
 				"", "Ctrl + C", "Ctrl + R", "Ctrl + U", "Ctrl + D", "Ctrl + F", "Ctrl + M",
 				"", "Alt + A", "Alt + C", "Alt + D", "Alt + I", "Alt + P", "Alt + T",
@@ -37,7 +36,7 @@ public class LayoutManager {
 		
 		VBox overallBox = new VBox();
 		HBox emptyRow = new HBox();
-		emptyRow.setPrefHeight(5);
+		emptyRow.setPrefHeight(17);
 		HBox rowContainer = new HBox();
 		rowContainer.setAlignment(Pos.CENTER);
 		VBox emptyColumn = new VBox();
@@ -45,6 +44,7 @@ public class LayoutManager {
 		ScrollPane helpPane = new ScrollPane();
 		VBox helpBox = new VBox();
 		helpBox.setAlignment(Pos.CENTER);
+		helpPane.getStyleClass().add("helpScrollView");
 		
 		helpPane.setStyle("-fx-background-color: white;"
 				+ "-fx-padding: 0 10 0 30;"
