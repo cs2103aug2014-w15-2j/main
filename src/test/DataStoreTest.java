@@ -30,6 +30,8 @@ import java.util.Locale;
 
 public class DataStoreTest {
 	
+	private static final String MESSAGE_FAILED_TESTING = "failed in testing";
+	
 	private static final String DATA_FILEPATH = 
 								"List-of-Xiao-Ming/task-list.xiaoming";
 	private static final String DATA_FILEPATH_TEMP= 
@@ -47,7 +49,7 @@ public class DataStoreTest {
 		try {
 			fileData.createNewFile();
 		} catch (IOException e) {
-			System.out.println("failed to create a test-file");
+			System.out.println(MESSAGE_FAILED_TESTING);
 		}
 	}
 	
@@ -73,7 +75,7 @@ public class DataStoreTest {
 			assertEquals("]", br.readLine().trim());
 			br.close();
 		} catch (IOException e) {
-			System.out.println("failed in generating the test-save-file");
+			System.out.println(MESSAGE_FAILED_TESTING);
 		}
 	}
 	
@@ -103,7 +105,7 @@ public class DataStoreTest {
 			assertTrue(DataStore.save(tasks));
 			checkDataFileTC2();
 		} catch (ParseException | CommandFailedException | IOException e) {
-			System.out.println("failed in testing");
+			System.out.println(MESSAGE_FAILED_TESTING);
 		}
 	}
 
@@ -114,7 +116,7 @@ public class DataStoreTest {
 			TaskBox tasks = new TaskBox();
 			assertEquals(tasks.getNormalTasks(), DataStore.loadFileData().getNormalTasks());
 		} catch (Exception e) {
-			System.out.println("failed in loading data");
+			System.out.println(MESSAGE_FAILED_TESTING);
 		}
 	}
 	
@@ -154,7 +156,7 @@ public class DataStoreTest {
 			assertEquals(endDate, tasks.getTrashedTasks().get(0).getInterval().getEndDate());
 			
 		} catch (Exception e) {
-			System.out.println("failed in testing");
+			System.out.println(MESSAGE_FAILED_TESTING);
 		}
 	}
 
