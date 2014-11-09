@@ -30,6 +30,12 @@ import java.util.Locale;
 
 public class DataStoreTest {
 	
+	private static final String FORMAT_OPEN_ARRAY = "[";
+	private static final String FORMAT_CLOSE_ARRAY = "]";
+	private static final String FORMAT_OPEN_OBJECT = "{";
+	private static final String FORMAT_CLOSE_OBJECT = "}";
+	private static final String FORMAT_DESCRIPTION = "[";
+	
 	private static final String MESSAGE_FAILED_TESTING = "failed in testing";
 	
 	private static final String DATA_FILEPATH = 
@@ -70,9 +76,9 @@ public class DataStoreTest {
 			fileData.createNewFile();
 			assertTrue(DataStore.save(null));
 			BufferedReader br = new BufferedReader(new FileReader(fileData));
-			assertEquals("[", br.readLine().trim());
+			assertEquals(FORMAT_OPEN_ARRAY, br.readLine().trim());
 			br.readLine();
-			assertEquals("]", br.readLine().trim());
+			assertEquals(FORMAT_CLOSE_ARRAY, br.readLine().trim());
 			br.close();
 		} catch (IOException e) {
 			System.out.println(MESSAGE_FAILED_TESTING);
@@ -162,10 +168,8 @@ public class DataStoreTest {
 
 	private void writeDataTC1() throws IOException {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(fileData));
-		bw.write("[");
-		bw.newLine();
-		bw.write("{");
-		bw.newLine();
+		bw.write(FORMAT_OPEN_ARRAY + "\n");
+		bw.write(FORMAT_OPEN_OBJECT + "\n");
 		bw.write("\"description\":\"task1\",");
 		bw.newLine();
 		bw.write("\"status\":\"normal\",");
@@ -176,8 +180,7 @@ public class DataStoreTest {
 		bw.newLine();
 		bw.write("\"tag2\"");
 		bw.newLine();
-		bw.write("],");
-		bw.newLine();
+		bw.write(FORMAT_CLOSE_ARRAY + ",\n");
 		bw.write("\"priority\":\"high\",");
 		bw.newLine();
 		bw.write("\"time-interval\":{");
@@ -186,13 +189,10 @@ public class DataStoreTest {
 		bw.newLine();
 		bw.write("\"endDate\":\"29-November-2014 12:00\"");
 		bw.newLine();
-		bw.write("}");
-		bw.newLine();
-		bw.write("},");
-		bw.newLine();
+		bw.write(FORMAT_CLOSE_OBJECT + "\n");
+		bw.write(FORMAT_CLOSE_OBJECT + ",\n");
 		
-		bw.write("{");
-		bw.newLine();
+		bw.write(FORMAT_OPEN_OBJECT + "\n");
 		bw.write("\"description\":\"task2\",");
 		bw.newLine();
 		bw.write("\"status\":\"done\",");
@@ -203,8 +203,7 @@ public class DataStoreTest {
 		bw.newLine();
 		bw.write("\"tag2\"");
 		bw.newLine();
-		bw.write("],");
-		bw.newLine();
+		bw.write(FORMAT_CLOSE_ARRAY + ",\n");
 		bw.write("\"priority\":\"low\",");
 		bw.newLine();
 		bw.write("\"time-interval\":{");
@@ -213,10 +212,8 @@ public class DataStoreTest {
 		bw.newLine();
 		bw.write("\"endDate\":\"29-November-2014 12:00\"");
 		bw.newLine();
-		bw.write("}");
-		bw.newLine();
-		bw.write("},");
-		bw.newLine();
+		bw.write(FORMAT_CLOSE_OBJECT + "\n");
+		bw.write(FORMAT_CLOSE_OBJECT + ",\n");
 		
 		bw.write("{");
 		bw.newLine();
@@ -230,8 +227,7 @@ public class DataStoreTest {
 		bw.newLine();
 		bw.write("\"tag2\"");
 		bw.newLine();
-		bw.write("],");
-		bw.newLine();
+		bw.write(FORMAT_CLOSE_ARRAY + ",\n");
 		bw.write("\"priority\":\"medium\",");
 		bw.newLine();
 		bw.write("\"time-interval\":{");
@@ -240,61 +236,59 @@ public class DataStoreTest {
 		bw.newLine();
 		bw.write("\"endDate\":\"29-November-2014 12:00\"");
 		bw.newLine();
-		bw.write("}");
-		bw.newLine();
-		bw.write("}");
-		bw.newLine();
+		bw.write(FORMAT_CLOSE_OBJECT + "\n");
+		bw.write(FORMAT_CLOSE_OBJECT + "\n");
 		
-		bw.write("]");
+		bw.write(FORMAT_CLOSE_ARRAY);
 		bw.close();
 	}
 	
 	private void checkDataFileTC2()
 			throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(fileData));
-		assertEquals("[", br.readLine());
-		assertEquals("{", br.readLine().trim());
+		assertEquals(FORMAT_OPEN_ARRAY, br.readLine());
+		assertEquals(FORMAT_OPEN_OBJECT, br.readLine().trim());
 		assertEquals("\"description\":\"task1\",", br.readLine().trim());
 		assertEquals("\"status\":\"normal\",", br.readLine().trim());
 		assertEquals("\"tags\":[", br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());
 		assertEquals("\"tag2\"", br.readLine().trim());
-		assertEquals("],", br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_ARRAY + ",", br.readLine().trim());
 		assertEquals("\"priority\":\"high\",", br.readLine().trim());
 		assertEquals("\"time-interval\":{", br.readLine().trim());
 		assertEquals("\"startDate\":\"29-November-2014 10:00\",", br.readLine().trim());
 		assertEquals("\"endDate\":\"29-November-2014 12:00\"", br.readLine().trim());
-		assertEquals("}", br.readLine().trim());
-		assertEquals("},", br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_OBJECT, br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_OBJECT + ",", br.readLine().trim());
 		
-		assertEquals("{", br.readLine().trim());
+		assertEquals(FORMAT_OPEN_OBJECT, br.readLine().trim());
 		assertEquals("\"description\":\"task2\",", br.readLine().trim());
 		assertEquals("\"status\":\"done\",", br.readLine().trim());
 		assertEquals("\"tags\":[", br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());
 		assertEquals("\"tag2\"", br.readLine().trim());
-		assertEquals("],", br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_ARRAY + ",", br.readLine().trim());
 		assertEquals("\"priority\":\"low\",", br.readLine().trim());
 		assertEquals("\"time-interval\":{", br.readLine().trim());
 		assertEquals("\"startDate\":\"29-November-2014 10:00\",", br.readLine().trim());
 		assertEquals("\"endDate\":\"29-November-2014 12:00\"", br.readLine().trim());
-		assertEquals("}", br.readLine().trim());
-		assertEquals("},", br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_OBJECT, br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_OBJECT + ",", br.readLine().trim());
 
-		assertEquals("{", br.readLine().trim());
+		assertEquals(FORMAT_OPEN_OBJECT, br.readLine().trim());
 		assertEquals("\"description\":\"task3\",", br.readLine().trim());
 		assertEquals("\"status\":\"trashed\",", br.readLine().trim());
 		assertEquals("\"tags\":[", br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());
 		assertEquals("\"tag2\"", br.readLine().trim());
-		assertEquals("],", br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_ARRAY + ",", br.readLine().trim());
 		assertEquals("\"priority\":\"medium\",", br.readLine().trim());
 		assertEquals("\"time-interval\":{", br.readLine().trim());
 		assertEquals("\"startDate\":\"29-November-2014 10:00\",", br.readLine().trim());
 		assertEquals("\"endDate\":\"29-November-2014 12:00\"", br.readLine().trim());
-		assertEquals("}", br.readLine().trim());
-		assertEquals("}", br.readLine().trim());
-		assertEquals("]", br.readLine());
+		assertEquals(FORMAT_CLOSE_OBJECT, br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_OBJECT, br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_ARRAY, br.readLine());
 		br.close();
 	}
 }
