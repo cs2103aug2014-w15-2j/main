@@ -264,12 +264,19 @@ public class NerParser {
 				}
 			}
 		} catch (Exception e1) {
+			if (results.size() != 0) {
+				return results;
+			} 
+			
 			try {
 				String[] indices = indexString.split(",");
 				for (String thisIndex : indices) {
 					results.add(Integer.parseInt(thisIndex.trim()));
 				}
 			} catch (Exception e2) {
+				if (results.size() != 0) {
+					return results;
+				}
 				throw new CommandFailedException("index not parsable");
 			}
 		}
