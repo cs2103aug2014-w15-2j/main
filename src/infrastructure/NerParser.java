@@ -364,13 +364,13 @@ public class NerParser {
 	 */
 	public int pickPriority(String userInputString) {
 		
-		userInputString = userInputString.toLowerCase();
 		this.isPriorityChanged = false;
 		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_PRIORITY);
 		String directParsePriority = NerParser.pickTheTagged(userInputString,
 				Constant.XML_TAG_PRIORITY);
 		if (directParsePriority != null) {
 			this.isPriorityChanged = true;
+			System.err.println("DIRECT_PARSE_PRIORITY - pickPriority: " + directParsePriority);
 			return parsePriority(directParsePriority);
 		}
 
@@ -403,8 +403,12 @@ public class NerParser {
 	 * @return
 	 */
 	public static String pickTheTagged(String inputString, String type) {
+		System.out.println("pickTheTagged: inputString: " + inputString);
+		System.out.println("pickTheTagged: type: " + type);
 		String prefix = "<" + type + ">";
 		String postfix = "</" + type + ">";
+		System.out.println("pickTheTagged: prefix: " + prefix);
+		System.out.println("pickTheTagged: postfix: " + postfix);
 		int prefixIndex = inputString.indexOf(prefix);
 		int postfixIndex = inputString.indexOf(postfix);
 		
