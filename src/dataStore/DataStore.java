@@ -44,6 +44,7 @@ public abstract class DataStore {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static boolean save(TaskBox tasks) {
+		assert(isFileExisting());
 		if (!isFileExisting()) {
 			return false;
 		}
@@ -78,6 +79,7 @@ public abstract class DataStore {
 	 * @return true if succeed, false otherwise
 	 */
 	private static boolean createTaskFile() {
+		assert(!isFileExisting());
 		if (isFileExisting()) {
 			return false;
 		}
@@ -97,6 +99,7 @@ public abstract class DataStore {
 	 */
 	@SuppressWarnings("rawtypes")
 	private static TaskBox getCurrentTasks() throws Exception {
+		assert(isFileExisting());
 		TaskBox tasksList = new TaskBox();
 		
 		FileReader user = new FileReader(DATA_FILEPATH);
