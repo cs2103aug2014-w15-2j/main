@@ -55,7 +55,8 @@ public class Converter {
 			tag.add((String)tags.get(i));
 		}
 		
-		LinkedHashMap intervalObj = (LinkedHashMap) task.get(Constant.SAVE_TIME_INTERVAL);
+		LinkedHashMap intervalObj = (LinkedHashMap) 
+									task.get(Constant.SAVE_TIME_INTERVAL);
 		TimeInterval interval = convertStringToTimeInterval(intervalObj);
 		
 		Task newTask = new Task(description, priority, tag, interval);
@@ -101,9 +102,9 @@ public class Converter {
 								(LinkedHashMap intervalObj) 
 								throws ParseException, CommandFailedException {
 		Date startDate = convertDateStringToDate
-						((String)intervalObj.get(Constant.SAVE_STARTDATE)); 
+						( (String) intervalObj.get(Constant.SAVE_STARTDATE)); 
 		Date endDate = convertDateStringToDate
-						((String) intervalObj.get(Constant.SAVE_ENDDATE));
+						( (String) intervalObj.get(Constant.SAVE_ENDDATE));
 		return new TimeInterval(startDate, endDate);
 	}
 	
@@ -122,9 +123,9 @@ public class Converter {
 	
 	private static String convertDateToString(Date date) {
 		String dateString;
-		if(date.equals(Constant.FLOATING_START_DATE)||
+		if( date.equals(Constant.FLOATING_START_DATE) ||
 			date.equals(Constant.FLOATING_END_DATE) ||
-			date.equals(Constant.DEADLINE_START_DATE)) {
+			date.equals(Constant.DEADLINE_START_DATE) ) {
 			dateString = Constant.SAVE_FORMAT_NO_DATE; 
 		} else {
 			dateString = new SimpleDateFormat(Constant.FORMAT_DATE,
@@ -183,5 +184,4 @@ public class Converter {
 		return repeatedPeriod;
 	}
 	*/
-	
 }
