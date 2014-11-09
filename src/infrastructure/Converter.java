@@ -78,19 +78,19 @@ public class Converter {
 	}
 	
 	private static String convertPriorityIntToString(int priorityInt) {
-		String priority = "medium";
+		String priority;
 		switch(priorityInt) {
 			case Constant.PRIORITY_HIGH:
-				priority = "high";
+				priority = Constant.PRIORITY_STRING_HIGH;
 				break;
 			case Constant.PRIORITY_MEDIUM:
-				priority = "medium";
+				priority = Constant.PRIORITY_STRING_MEDIUM;
 				break;
 			case Constant.PRIORITY_LOW:
-				priority = "low";
+				priority = Constant.PRIORITY_STRING_LOW;
 				break;
 			default:
-				priority = "invalid";
+				priority = Constant.PRIORITY_STRING_MEDIUM;
 				break;
 		}
 		return priority;

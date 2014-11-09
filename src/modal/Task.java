@@ -223,9 +223,9 @@ public class Task {
 	
 	//@author A0113029U
 	public void setStatus(String state) {
-		if ((state == null) || state == "") {
+		if ((state == null) || (state == "")) {
 			this.status = Constant.TASK_STATUS_NORMAL;
-			return ;
+			return;
 		}
 		switch(state.toLowerCase()) {
 			case Constant.TASK_STATUS_NORMAL:
@@ -240,7 +240,7 @@ public class Task {
 				this.status = Constant.TASK_STATUS_TRASHED;
 				break;
 				
-			default :
+			default:
 				this.status = Constant.TASK_STATUS_NORMAL;
 				break;
 		}

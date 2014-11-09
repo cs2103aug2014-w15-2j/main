@@ -315,6 +315,11 @@ public abstract class Constant {
 	public static final int PRIORITY_HIGH = 1;
 	public static final int PRIORITY_MEDIUM = 2;
 	public static final int PRIORITY_LOW = 3;
+	
+	public static final String PRIORITY_STRING_HIGH = "high";
+	public static final String PRIORITY_STRING_MEDIUM = "medium";
+	public static final String PRIORITY_STRING_LOW = "low";
+	public static final String PRIORITY_STRING_INVALID = "invalid";
 
 	public static final int REPEATED_PERIOD_DEFAULT = 1;
 	public static final int REPEATED_PERIOD_INVALID = 0;

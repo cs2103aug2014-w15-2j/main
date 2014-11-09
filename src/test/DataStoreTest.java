@@ -34,7 +34,14 @@ public class DataStoreTest {
 	private static final String FORMAT_CLOSE_ARRAY = "]";
 	private static final String FORMAT_OPEN_OBJECT = "{";
 	private static final String FORMAT_CLOSE_OBJECT = "}";
-	private static final String FORMAT_DESCRIPTION = "[";
+	private static final String FORMAT_DESCRIPTION = "\"description\":\"%s\",";
+	private static final String FORMAT_STATUS = "\"status\":\"%s\",";
+	private static final String FORMAT_TAGS = "\"tags\":[";
+	private static final String FORMAT_PRIORITY = "\"priority\":\"%s\","; 
+	private static final String FORMAT_TIME_INTERVAL = "\"time-interval\":{";
+	private static final String FORMAT_STARTDATE = "\"startDate\":\"%s\",";
+	private static final String FORMAT_ENDDATE = "\"endDate\":\"%s\"";
+	private static final String FORMAT_DATE = "dd-MMMM-yyyy HH:mm";
 	
 	private static final String MESSAGE_FAILED_TESTING = "failed in testing";
 	
@@ -84,24 +91,24 @@ public class DataStoreTest {
 			System.out.println(MESSAGE_FAILED_TESTING);
 		}
 	}
-	
+
 	@Test
 	public void testSave() {
 		try {
 			ArrayList<String> tags = new ArrayList<String>();
 			tags.add("tag1");
 			tags.add("tag2");
-			Date startDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
+			Date startDate = new SimpleDateFormat(FORMAT_DATE,
 					Locale.ENGLISH).parse("29-Nov-2014 10:00");
-			Date endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
+			Date endDate = new SimpleDateFormat(FORMAT_DATE,
 					Locale.ENGLISH).parse("29-Nov-2014 12:00");
 			TimeInterval time = new TimeInterval(startDate, endDate);
 			Task task1 = new Task("task1", Constant.PRIORITY_HIGH, tags, time);
-			task1.setStatus("normal");
+			task1.setStatus(Constant.TASK_STATUS_NORMAL);
 			Task task2 = new Task("task2", Constant.PRIORITY_LOW, tags, time);
-			task2.setStatus("done");
+			task2.setStatus(Constant.TASK_STATUS_DONE);
 			Task task3 = new Task("task3", Constant.PRIORITY_MEDIUM, tags, time);
-			task3.setStatus("trashed");
+			task3.setStatus(Constant.TASK_STATUS_TRASHED);
 			
 			TaskBox tasks = new TaskBox();
 			tasks.getNormalTasks().add(task1);
@@ -114,7 +121,7 @@ public class DataStoreTest {
 			System.out.println(MESSAGE_FAILED_TESTING);
 		}
 	}
-
+	
 	@Test
 	public void testLoadFileNotExist() {
 		fileData.delete();
@@ -132,9 +139,9 @@ public class DataStoreTest {
 			writeDataTC1();
 			TaskBox tasks = DataStore.loadFileData();
 			
-			Date startDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
+			Date startDate = new SimpleDateFormat(FORMAT_DATE,
 					Locale.ENGLISH).parse("29-Nov-2014 10:00");
-			Date endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
+			Date endDate = new SimpleDateFormat(FORMAT_DATE,
 					Locale.ENGLISH).parse("29-Nov-2014 12:00");
 			
 			assertEquals("task1", tasks.getNormalTasks().get(0).getDescription());
@@ -169,73 +176,46 @@ public class DataStoreTest {
 	private void writeDataTC1() throws IOException {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(fileData));
 		bw.write(FORMAT_OPEN_ARRAY + "\n");
+		
 		bw.write(FORMAT_OPEN_OBJECT + "\n");
-		bw.write("\"description\":\"task1\",");
-		bw.newLine();
-		bw.write("\"status\":\"normal\",");
-		bw.newLine();
-		bw.write("\"tags\":[");
-		bw.newLine();
-		bw.write("\"tag1\",");
-		bw.newLine();
-		bw.write("\"tag2\"");
-		bw.newLine();
+		bw.write(String.format(FORMAT_DESCRIPTION, "task1") + "\n");
+		bw.write(String.format(FORMAT_STATUS, Constant.TASK_STATUS_NORMAL) + "\n");
+		bw.write(FORMAT_TAGS + "\n");
+		bw.write("\"tag1\",\n");
+		bw.write("\"tag2\"\n");
 		bw.write(FORMAT_CLOSE_ARRAY + ",\n");
-		bw.write("\"priority\":\"high\",");
-		bw.newLine();
-		bw.write("\"time-interval\":{");
-		bw.newLine();
-		bw.write("\"startDate\":\"29-November-2014 10:00\",");
-		bw.newLine();
-		bw.write("\"endDate\":\"29-November-2014 12:00\"");
-		bw.newLine();
+		bw.write(String.format(FORMAT_PRIORITY, Constant.PRIORITY_STRING_HIGH) + "\n");
+		bw.write(FORMAT_TIME_INTERVAL + "\n");
+		bw.write(String.format(FORMAT_STARTDATE, "29-November-2014 10:00") + "\n");
+		bw.write(String.format(FORMAT_ENDDATE, "29-November-2014 12:00") + "\n");
 		bw.write(FORMAT_CLOSE_OBJECT + "\n");
 		bw.write(FORMAT_CLOSE_OBJECT + ",\n");
 		
 		bw.write(FORMAT_OPEN_OBJECT + "\n");
-		bw.write("\"description\":\"task2\",");
-		bw.newLine();
-		bw.write("\"status\":\"done\",");
-		bw.newLine();
-		bw.write("\"tags\":[");
-		bw.newLine();
-		bw.write("\"tag1\",");
-		bw.newLine();
-		bw.write("\"tag2\"");
-		bw.newLine();
+		bw.write(String.format(FORMAT_DESCRIPTION, "task2") + "\n");
+		bw.write(String.format(FORMAT_STATUS, Constant.TASK_STATUS_DONE) + "\n");
+		bw.write(FORMAT_TAGS + "\n");
+		bw.write("\"tag1\",\n");
+		bw.write("\"tag2\"\n");
 		bw.write(FORMAT_CLOSE_ARRAY + ",\n");
-		bw.write("\"priority\":\"low\",");
-		bw.newLine();
-		bw.write("\"time-interval\":{");
-		bw.newLine();
-		bw.write("\"startDate\":\"29-November-2014 10:00\",");
-		bw.newLine();
-		bw.write("\"endDate\":\"29-November-2014 12:00\"");
-		bw.newLine();
+		bw.write(String.format(FORMAT_PRIORITY, Constant.PRIORITY_STRING_LOW) + "\n");
+		bw.write(FORMAT_TIME_INTERVAL + "\n");
+		bw.write(String.format(FORMAT_STARTDATE, "29-November-2014 10:00") + "\n");
+		bw.write(String.format(FORMAT_ENDDATE, "29-November-2014 12:00") + "\n");
 		bw.write(FORMAT_CLOSE_OBJECT + "\n");
 		bw.write(FORMAT_CLOSE_OBJECT + ",\n");
 		
-		bw.write("{");
-		bw.newLine();
-		bw.write("\"description\":\"task3\",");
-		bw.newLine();
-		bw.write("\"status\":\"trashed\",");
-		bw.newLine();
-		bw.write("\"tags\":[");
-		bw.newLine();
-		bw.write("\"tag1\",");
-		bw.newLine();
-		bw.write("\"tag2\"");
-		bw.newLine();
+		bw.write(FORMAT_OPEN_OBJECT + "\n");
+		bw.write(String.format(FORMAT_DESCRIPTION, "task3") + "\n");
+		bw.write(String.format(FORMAT_STATUS, Constant.TASK_STATUS_TRASHED) + "\n");
+		bw.write(FORMAT_TAGS +"\n");
+		bw.write("\"tag1\",\n");
+		bw.write("\"tag2\"\n");
 		bw.write(FORMAT_CLOSE_ARRAY + ",\n");
-		bw.write("\"priority\":\"medium\",");
-		bw.newLine();
-		bw.write("\"time-interval\":{");
-		bw.newLine();
-		bw.write("\"startDate\":\"29-November-2014 10:00\",");
-		bw.newLine();
-		bw.write("\"endDate\":\"29-November-2014 12:00\"");
-		bw.newLine();
+		bw.write(String.format(FORMAT_PRIORITY, Constant.PRIORITY_STRING_MEDIUM) + "\n");
+		bw.write(FORMAT_TIME_INTERVAL + "\n");
+		bw.write(String.format(FORMAT_STARTDATE, "29-November-2014 10:00") + "\n");
+		bw.write(String.format(FORMAT_ENDDATE, "29-November-2014 12:00") + "\n");
 		bw.write(FORMAT_CLOSE_OBJECT + "\n");
 		bw.write(FORMAT_CLOSE_OBJECT + "\n");
 		
@@ -246,49 +226,51 @@ public class DataStoreTest {
 	private void checkDataFileTC2()
 			throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(fileData));
+		
 		assertEquals(FORMAT_OPEN_ARRAY, br.readLine());
 		assertEquals(FORMAT_OPEN_OBJECT, br.readLine().trim());
-		assertEquals("\"description\":\"task1\",", br.readLine().trim());
-		assertEquals("\"status\":\"normal\",", br.readLine().trim());
-		assertEquals("\"tags\":[", br.readLine().trim());
+		assertEquals(String.format(FORMAT_DESCRIPTION, "task1"), br.readLine().trim());
+		assertEquals(String.format(FORMAT_STATUS, Constant.TASK_STATUS_NORMAL), br.readLine().trim());
+		assertEquals(FORMAT_TAGS, br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());
 		assertEquals("\"tag2\"", br.readLine().trim());
 		assertEquals(FORMAT_CLOSE_ARRAY + ",", br.readLine().trim());
-		assertEquals("\"priority\":\"high\",", br.readLine().trim());
-		assertEquals("\"time-interval\":{", br.readLine().trim());
-		assertEquals("\"startDate\":\"29-November-2014 10:00\",", br.readLine().trim());
-		assertEquals("\"endDate\":\"29-November-2014 12:00\"", br.readLine().trim());
+		assertEquals(String.format(FORMAT_PRIORITY, Constant.PRIORITY_STRING_HIGH), br.readLine().trim());
+		assertEquals(FORMAT_TIME_INTERVAL, br.readLine().trim());
+		assertEquals(String.format(FORMAT_STARTDATE, "29-November-2014 10:00"), br.readLine().trim());
+		assertEquals(String.format(FORMAT_ENDDATE, "29-November-2014 12:00"), br.readLine().trim());
 		assertEquals(FORMAT_CLOSE_OBJECT, br.readLine().trim());
 		assertEquals(FORMAT_CLOSE_OBJECT + ",", br.readLine().trim());
 		
 		assertEquals(FORMAT_OPEN_OBJECT, br.readLine().trim());
-		assertEquals("\"description\":\"task2\",", br.readLine().trim());
-		assertEquals("\"status\":\"done\",", br.readLine().trim());
-		assertEquals("\"tags\":[", br.readLine().trim());
+		assertEquals(String.format(FORMAT_DESCRIPTION, "task2"), br.readLine().trim());
+		assertEquals(String.format(FORMAT_STATUS, Constant.TASK_STATUS_DONE), br.readLine().trim());
+		assertEquals(FORMAT_TAGS, br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());
 		assertEquals("\"tag2\"", br.readLine().trim());
 		assertEquals(FORMAT_CLOSE_ARRAY + ",", br.readLine().trim());
-		assertEquals("\"priority\":\"low\",", br.readLine().trim());
-		assertEquals("\"time-interval\":{", br.readLine().trim());
-		assertEquals("\"startDate\":\"29-November-2014 10:00\",", br.readLine().trim());
-		assertEquals("\"endDate\":\"29-November-2014 12:00\"", br.readLine().trim());
+		assertEquals(String.format(FORMAT_PRIORITY, Constant.PRIORITY_STRING_LOW), br.readLine().trim());
+		assertEquals(FORMAT_TIME_INTERVAL, br.readLine().trim());
+		assertEquals(String.format(FORMAT_STARTDATE, "29-November-2014 10:00"), br.readLine().trim());
+		assertEquals(String.format(FORMAT_ENDDATE, "29-November-2014 12:00"), br.readLine().trim());
 		assertEquals(FORMAT_CLOSE_OBJECT, br.readLine().trim());
 		assertEquals(FORMAT_CLOSE_OBJECT + ",", br.readLine().trim());
 
 		assertEquals(FORMAT_OPEN_OBJECT, br.readLine().trim());
-		assertEquals("\"description\":\"task3\",", br.readLine().trim());
-		assertEquals("\"status\":\"trashed\",", br.readLine().trim());
-		assertEquals("\"tags\":[", br.readLine().trim());
+		assertEquals(String.format(FORMAT_DESCRIPTION, "task3"), br.readLine().trim());
+		assertEquals(String.format(FORMAT_STATUS, Constant.TASK_STATUS_TRASHED), br.readLine().trim());
+		assertEquals(FORMAT_TAGS, br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());
 		assertEquals("\"tag2\"", br.readLine().trim());
 		assertEquals(FORMAT_CLOSE_ARRAY + ",", br.readLine().trim());
-		assertEquals("\"priority\":\"medium\",", br.readLine().trim());
-		assertEquals("\"time-interval\":{", br.readLine().trim());
-		assertEquals("\"startDate\":\"29-November-2014 10:00\",", br.readLine().trim());
-		assertEquals("\"endDate\":\"29-November-2014 12:00\"", br.readLine().trim());
+		assertEquals(String.format(FORMAT_PRIORITY, Constant.PRIORITY_STRING_MEDIUM), br.readLine().trim());
+		assertEquals(FORMAT_TIME_INTERVAL, br.readLine().trim());
+		assertEquals(String.format(FORMAT_STARTDATE, "29-November-2014 10:00"), br.readLine().trim());
+		assertEquals(String.format(FORMAT_ENDDATE, "29-November-2014 12:00"), br.readLine().trim());
 		assertEquals(FORMAT_CLOSE_OBJECT, br.readLine().trim());
 		assertEquals(FORMAT_CLOSE_OBJECT, br.readLine().trim());
 		assertEquals(FORMAT_CLOSE_ARRAY, br.readLine());
+		
 		br.close();
 	}
 }
