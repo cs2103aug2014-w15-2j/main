@@ -376,7 +376,7 @@ public class NerParser {
 
 		String xmlStr = classifierPriorityPicker.classifyToString(
 				userInputString, "inlineXML", false);
-		//System.err.println("XML STRING - pickPriority: " + xmlStr);
+		System.err.println("XML STRING - pickPriority: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
 		ArrayList<String> resultList = result.get("PRIORITY");

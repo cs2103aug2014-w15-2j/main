@@ -3,9 +3,6 @@
 package dataStore;
 
 import infrastructure.Converter;
-import modal.Task;
-import modal.TaskBox;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -16,13 +13,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-<<<<<<< HEAD
 import model.Task;
 import model.TaskBox;
-
-=======
->>>>>>> FETCH_HEAD
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
