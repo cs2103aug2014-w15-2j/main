@@ -4,7 +4,7 @@ List of Xiao Ming
 
 Supervisor: 	Christopher Chak Hanrui
 
-Extra Feature: 	Power Cooperative Tasks
+Extra Feature: 	Learnable Natural Language Processing
 
 
 Build A User Model
