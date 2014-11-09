@@ -322,8 +322,7 @@ public abstract class Constant {
 	public static final int CALENDAR_MONTH_IN_SECOND = 39;
 	public static final int CALENDAR_YEAR_IN_SECOND = 41;
 	
-	//DataStore
-	public static final String FORMAT_DATE = "dd-MMMM-yyyy HH:mm";
+	// DataStore
 	public static final String SAVE_DESCRIPTION = "description";
 	public static final String SAVE_STATUS = "status";
 	public static final String SAVE_TAGS = "tags";
@@ -332,6 +331,7 @@ public abstract class Constant {
 	public static final String SAVE_STARTDATE = "startDate";
 	public static final String SAVE_ENDDATE = "endDate";
 	
+	public static final String FORMAT_DATE = "dd-MMMM-yyyy HH:mm";
 	public static final String SAVE_FORMAT_NO_DATE = "-";
 	
 	// Logic
