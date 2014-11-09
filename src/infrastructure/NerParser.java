@@ -370,13 +370,13 @@ public class NerParser {
 				Constant.XML_TAG_PRIORITY);
 		if (directParsePriority != null) {
 			this.isPriorityChanged = true;
-			System.err.println("DIRECT_PARSE_PRIORITY - pickPriority: " + directParsePriority);
+//			System.err.println("DIRECT_PARSE_PRIORITY - pickPriority: " + directParsePriority);
 			return parsePriority(directParsePriority);
 		}
 
 		String xmlStr = classifierPriorityPicker.classifyToString(
 				userInputString, "inlineXML", false);
-		System.err.println("XML STRING - pickPriority: " + xmlStr);
+//		System.err.println("XML STRING - pickPriority: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
 		ArrayList<String> resultList = result.get("PRIORITY");
@@ -403,12 +403,12 @@ public class NerParser {
 	 * @return
 	 */
 	public static String pickTheTagged(String inputString, String type) {
-		System.out.println("pickTheTagged: inputString: " + inputString);
-		System.out.println("pickTheTagged: type: " + type);
+//		System.out.println("pickTheTagged: inputString: " + inputString);
+//		System.out.println("pickTheTagged: type: " + type);
 		String prefix = "<" + type + ">";
 		String postfix = "</" + type + ">";
-		System.out.println("pickTheTagged: prefix: " + prefix);
-		System.out.println("pickTheTagged: postfix: " + postfix);
+//		System.out.println("pickTheTagged: prefix: " + prefix);
+//		System.out.println("pickTheTagged: postfix: " + postfix);
 		int prefixIndex = inputString.indexOf(prefix);
 		int postfixIndex = inputString.indexOf(postfix);
 		
