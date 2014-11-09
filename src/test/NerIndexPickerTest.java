@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import infrastructure.NerParser;
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class NerIndexPickerTest {
