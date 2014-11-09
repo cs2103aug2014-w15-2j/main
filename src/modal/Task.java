@@ -246,6 +246,20 @@ public class Task {
 		}
 	}
 	
+	//@author A0113029U
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || obj.getClass()!=this.getClass()){
+			return false;
+		}
+		Task task = (Task) obj;
+		return (this.getDescription().equals(task.getDescription())) &&
+				(this.getStatus().equals(task.getStatus())) &&
+				(this.getPriority() == task.getPriority()) &&
+				(this.getInterval().equals(task.getInterval())) &&
+				(this.getTag().equals(task.getTag()));
+	}
+	
 	// check validity of attributes	
 	//@author A0119444E
 	/**

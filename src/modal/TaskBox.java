@@ -33,9 +33,9 @@ public class TaskBox {
 			return false;
 		}
 		TaskBox tb = (TaskBox) obj; 
-		return this.getNormalTasks().equals(tb.getNormalTasks()) &&
-				this.getFinishedTasks().equals(tb.getFinishedTasks()) &&
-				this.getTrashedTasks().equals(tb.getTrashedTasks());
+		return (this.getNormalTasks().equals(tb.getNormalTasks())) &&
+				(this.getFinishedTasks().equals(tb.getFinishedTasks())) &&
+				(this.getTrashedTasks().equals(tb.getTrashedTasks()));
 	}
 	
 }
