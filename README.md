@@ -16,7 +16,7 @@ java -cp stanford-ner.jar edu.stanford.nlp.ie.crf.CRFClassifier -prop propery_fi
 
 Screenshot
 -------------
-<img src='screenshots/screenshot.png'alt='Logo' height=759px width = 1026px/>
+<img src='screenshots/screenshot.png'alt='Logo' height=659px width = 1026px/>
 
 User Guide
 -------------
