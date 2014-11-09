@@ -227,7 +227,7 @@ public class Task {
 			this.status = Constant.TASK_STATUS_NORMAL;
 			return;
 		}
-		switch(state.toLowerCase()) {
+		switch(state.toLowerCase().trim()) {
 			case Constant.TASK_STATUS_NORMAL:
 				this.status = Constant.TASK_STATUS_NORMAL;
 				break;

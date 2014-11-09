@@ -19,18 +19,18 @@ public class Converter {
 	public static LinkedHashMap convertTaskToMap(Task task) {
 		LinkedHashMap taskMap = new LinkedHashMap();
 		
-		taskMap.put("description", task.getDescription());
-		taskMap.put("status", task.getStatus());
+		taskMap.put(Constant.SAVE_DESCRIPTION, task.getDescription());
+		taskMap.put(Constant.SAVE_STATUS, task.getStatus());
 		
 		ArrayList<String> tags = new ArrayList<String>();
 		for(int i = 0; i < task.getTag().size(); i++) {
 			tags.add(task.getTag().get(i));
 		}
-		taskMap.put("tags", tags);
+		taskMap.put(Constant.SAVE_TAGS, tags);
 	
-		taskMap.put("priority", 
+		taskMap.put(Constant.SAVE_PRIORITY, 
 					convertPriorityIntToString(task.getPriority()));
-		taskMap.put("time-interval",
+		taskMap.put(Constant.SAVE_TIME_INTERVAL,
 					convertTimeIntervalToString(task.getInterval()));
 		
 		return taskMap;
@@ -44,18 +44,18 @@ public class Converter {
 	 */
 	@SuppressWarnings("rawtypes") 
 	public static Task convertMapToTask(LinkedHashMap task) throws Exception {
-		String description = (String) task.get("description");
-		String status = (String) task.get("status");
+		String description = (String) task.get(Constant.SAVE_DESCRIPTION);
+		String status = (String) task.get(Constant.SAVE_STATUS);
 		int priority = convertPriorityStringToInt
-						((String) task.get("priority"));
+						((String) task.get(Constant.SAVE_PRIORITY));
 		
-		ArrayList tags = (ArrayList) task.get("tags");
+		ArrayList tags = (ArrayList) task.get(Constant.SAVE_TAGS);
 		ArrayList<String> tag = new ArrayList<String>();
 		for(int i = 0; i < tags.size(); i++) { 
 			tag.add((String)tags.get(i));
 		}
 		
-		LinkedHashMap intervalObj = (LinkedHashMap) task.get("time-interval");
+		LinkedHashMap intervalObj = (LinkedHashMap) task.get(Constant.SAVE_TIME_INTERVAL);
 		TimeInterval interval = convertStringToTimeInterval(intervalObj);
 		
 		Task newTask = new Task(description, priority, tag, interval);
@@ -67,11 +67,11 @@ public class Converter {
 	private static int convertPriorityStringToInt(String priorityString) {
 		priorityString = priorityString.toLowerCase().trim();
 		int priority = Constant.PRIORITY_DEFAULT;
-		if(priorityString.equals("high")) {
+		if(priorityString.equals(Constant.PRIORITY_STRING_HIGH)) {
 			priority = Constant.PRIORITY_HIGH;
-		} else if(priorityString.equals("medium")) {
+		} else if(priorityString.equals(Constant.PRIORITY_STRING_MEDIUM)) {
 			priority = Constant.PRIORITY_MEDIUM;
-		} else if(priorityString.equals("low")) {
+		} else if(priorityString.equals(Constant.PRIORITY_STRING_LOW)) {
 			priority = Constant.PRIORITY_LOW;
 		}
 		return priority;
@@ -101,9 +101,9 @@ public class Converter {
 								(LinkedHashMap intervalObj) 
 								throws ParseException, CommandFailedException {
 		Date startDate = convertDateStringToDate
-						((String)intervalObj.get("startDate")); 
+						((String)intervalObj.get(Constant.SAVE_STARTDATE)); 
 		Date endDate = convertDateStringToDate
-						((String) intervalObj.get("endDate"));
+						((String) intervalObj.get(Constant.SAVE_ENDDATE));
 		return new TimeInterval(startDate, endDate);
 	}
 	
@@ -113,9 +113,9 @@ public class Converter {
 		LinkedHashMap timeInterval = new LinkedHashMap();
 		
 		String startDate = convertDateToString(time.getStartDate());
-		timeInterval.put("startDate", startDate);
+		timeInterval.put(Constant.SAVE_STARTDATE, startDate);
 		String endDate = convertDateToString(time.getEndDate());
-		timeInterval.put("endDate", endDate);
+		timeInterval.put(Constant.SAVE_ENDDATE, endDate);
 		
 		return timeInterval;
 	}
@@ -125,9 +125,9 @@ public class Converter {
 		if(date.equals(Constant.FLOATING_START_DATE)||
 			date.equals(Constant.FLOATING_END_DATE) ||
 			date.equals(Constant.DEADLINE_START_DATE)) {
-			dateString = "-"; 
+			dateString = Constant.SAVE_FORMAT_NO_DATE; 
 		} else {
-			dateString = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
+			dateString = new SimpleDateFormat(Constant.FORMAT_DATE,
 					Locale.ENGLISH).format(date);	
 		}
 		return dateString;
@@ -135,10 +135,10 @@ public class Converter {
 	
 	private static Date convertDateStringToDate(String dateString)
 												throws ParseException {
-		if(dateString.trim().equals("-")) {
+		if(dateString.trim().equals(Constant.SAVE_FORMAT_NO_DATE)) {
 			return null;
 		}
-		return new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
+		return new SimpleDateFormat(Constant.FORMAT_DATE,
 				Locale.ENGLISH).parse(dateString);
 	}
 	

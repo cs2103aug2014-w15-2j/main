@@ -34,9 +34,9 @@ public class DataStoreTest {
 	private static final String FORMAT_CLOSE_ARRAY = "]";
 	private static final String FORMAT_OPEN_OBJECT = "{";
 	private static final String FORMAT_CLOSE_OBJECT = "}";
-	private static final String FORMAT_DESCRIPTION = "\"description\":\"%s\",";
-	private static final String FORMAT_STATUS = "\"status\":\"%s\",";
-	private static final String FORMAT_TAGS = "\"tags\":[";
+	private static final String FORMAT_DESCRIPTION = "\"" + Constant.SAVE_DESCRIPTION + "\":\"%s\",";
+	private static final String FORMAT_STATUS = "\"" + Constant.SAVE_STATUS + "\":\"%s\",";
+	private static final String FORMAT_TAGS = "\"" + Constant.SAVE_TAGS + "\":[";
 	private static final String FORMAT_PRIORITY = "\"priority\":\"%s\","; 
 	private static final String FORMAT_TIME_INTERVAL = "\"time-interval\":{";
 	private static final String FORMAT_STARTDATE = "\"startDate\":\"%s\",";

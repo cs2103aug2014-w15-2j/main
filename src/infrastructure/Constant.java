@@ -319,7 +319,6 @@ public abstract class Constant {
 	public static final String PRIORITY_STRING_HIGH = "high";
 	public static final String PRIORITY_STRING_MEDIUM = "medium";
 	public static final String PRIORITY_STRING_LOW = "low";
-	public static final String PRIORITY_STRING_INVALID = "invalid";
 
 	public static final int REPEATED_PERIOD_DEFAULT = 1;
 	public static final int REPEATED_PERIOD_INVALID = 0;
@@ -331,6 +330,18 @@ public abstract class Constant {
 	public static final int CALENDAR_WEEK_IN_SECOND = 37;
 	public static final int CALENDAR_MONTH_IN_SECOND = 39;
 	public static final int CALENDAR_YEAR_IN_SECOND = 41;
+	
+	//DataStore
+	public static final String FORMAT_DATE = "dd-MMMM-yyyy HH:mm";
+	public static final String SAVE_DESCRIPTION = "description";
+	public static final String SAVE_STATUS = "status";
+	public static final String SAVE_TAGS = "tags";
+	public static final String SAVE_PRIORITY = "priority";
+	public static final String SAVE_TIME_INTERVAL = "time-interval";
+	public static final String SAVE_STARTDATE = "startDate";
+	public static final String SAVE_ENDDATE = "endDate";
+	
+	public static final String SAVE_FORMAT_NO_DATE = "-";
 	
 	// Logic
 	public static final String TRASHED_TAG = "trashed";
