@@ -214,3 +214,60 @@ low	PRIORITY
 tag	O
 with	O
 water	O
+
+
+add	O
+task	O
+priority	PRIORITY
+h	PRIORITY
+
+
+reload	O
+
+
+add	O
+task	O
+priority	O
+h	O
+
+
+reload	O
+
+
+add	O
+task	O
+priority	PRIORITY
+h	PRIORITY
+
+
+reload	O
+
+
+add	O
+task	O
+priority	PRIORITY
+h	PRIORITY
+
+
+reload	O
+
+
+add	O
+task	O
+priority	PRIORITY
+hi	PRIORITY
+
+
+reload	O
+
+
+add	O
+task	O
+priority	PRIORITY
+hi	PRIORITY
+
+
+reload	O
+
+
+exit	O

@@ -549,3 +549,29 @@ nov	DATE
 
 
 reload	O
+
+
+add	O
+task	O
+monday	DATE
+
+
+reload	O
+
+
+add	O
+task	O
+fri	DATE
+
+
+reload	O
+
+
+add	O
+task	O
+before	DATE
+this	DATE
+monday	DATE
+
+
+reload	O
