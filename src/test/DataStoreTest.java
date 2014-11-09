@@ -37,11 +37,10 @@ public class DataStoreTest {
 	private static final String FORMAT_DESCRIPTION = "\"" + Constant.SAVE_DESCRIPTION + "\":\"%s\",";
 	private static final String FORMAT_STATUS = "\"" + Constant.SAVE_STATUS + "\":\"%s\",";
 	private static final String FORMAT_TAGS = "\"" + Constant.SAVE_TAGS + "\":[";
-	private static final String FORMAT_PRIORITY = "\"priority\":\"%s\","; 
-	private static final String FORMAT_TIME_INTERVAL = "\"time-interval\":{";
-	private static final String FORMAT_STARTDATE = "\"startDate\":\"%s\",";
-	private static final String FORMAT_ENDDATE = "\"endDate\":\"%s\"";
-	private static final String FORMAT_DATE = "dd-MMMM-yyyy HH:mm";
+	private static final String FORMAT_PRIORITY = "\"" + Constant.SAVE_PRIORITY + "\":\"%s\","; 
+	private static final String FORMAT_TIME_INTERVAL = "\"" + Constant.SAVE_TIME_INTERVAL + "\":{";
+	private static final String FORMAT_STARTDATE = "\"" + Constant.SAVE_STARTDATE + "\":\"%s\",";
+	private static final String FORMAT_ENDDATE = "\"" + Constant.SAVE_ENDDATE + "\":\"%s\"";
 	
 	private static final String MESSAGE_FAILED_TESTING = "failed in testing";
 	
@@ -98,9 +97,9 @@ public class DataStoreTest {
 			ArrayList<String> tags = new ArrayList<String>();
 			tags.add("tag1");
 			tags.add("tag2");
-			Date startDate = new SimpleDateFormat(FORMAT_DATE,
+			Date startDate = new SimpleDateFormat(Constant.FORMAT_DATE,
 					Locale.ENGLISH).parse("29-Nov-2014 10:00");
-			Date endDate = new SimpleDateFormat(FORMAT_DATE,
+			Date endDate = new SimpleDateFormat(Constant.FORMAT_DATE,
 					Locale.ENGLISH).parse("29-Nov-2014 12:00");
 			TimeInterval time = new TimeInterval(startDate, endDate);
 			Task task1 = new Task("task1", Constant.PRIORITY_HIGH, tags, time);
@@ -139,9 +138,9 @@ public class DataStoreTest {
 			writeDataTC1();
 			TaskBox tasks = DataStore.loadFileData();
 			
-			Date startDate = new SimpleDateFormat(FORMAT_DATE,
+			Date startDate = new SimpleDateFormat(Constant.FORMAT_DATE,
 					Locale.ENGLISH).parse("29-Nov-2014 10:00");
-			Date endDate = new SimpleDateFormat(FORMAT_DATE,
+			Date endDate = new SimpleDateFormat(Constant.FORMAT_DATE,
 					Locale.ENGLISH).parse("29-Nov-2014 12:00");
 			
 			assertEquals("task1", tasks.getNormalTasks().get(0).getDescription());

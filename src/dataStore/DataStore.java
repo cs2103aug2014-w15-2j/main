@@ -3,35 +3,39 @@
 package dataStore;
 
 import infrastructure.Converter;
+import modal.Task;
+import modal.TaskBox;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import modal.Task;
-import modal.TaskBox;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 
 public abstract class DataStore {
-	
+
 	private static final String DATA_FILEPATH = 
 								"List-of-Xiao-Ming/task-list.xiaoming";
 	
+	/**
+	 * get the tasks list from the file data
+	 * make a new file data if does not exist
+	 * @return TaskBox for the tasks list
+	 */
 	public static TaskBox loadFileData() throws Exception {
 		if(!isFileExisting()) {
 			createTaskFile();
 		}
-		File fileData = new File(DATA_FILEPATH);
-		return getCurrentTasks(fileData);
+		return getCurrentTasks();
 	}
 	
 	/**
@@ -44,8 +48,8 @@ public abstract class DataStore {
 			return false;
 		}
 		try {
-			FileWriter fw = new FileWriter(DATA_FILEPATH);
 			ArrayList tasksList = getContent(tasks);
+			FileWriter fw = new FileWriter(DATA_FILEPATH);
 			Writer writer = new JSonWriter();
 			JSONArray.writeJSONString(tasksList, writer);
 			fw.write(writer.toString());
@@ -58,7 +62,7 @@ public abstract class DataStore {
 	}
 
 	/**
-	 * check whether the task-list exists
+	 * check whether the file-data exists
 	 * @return true if exists, no otherwise
 	 */
 	private static boolean isFileExisting() {
@@ -89,23 +93,20 @@ public abstract class DataStore {
 	
 	/**
 	 * read file and get user current tasks
-	 * 
-	 * @param file
 	 * @return user current tasks
-	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
-	private static TaskBox getCurrentTasks(File userFile)
-													throws Exception {
-		FileReader user = new FileReader(userFile);
+	private static TaskBox getCurrentTasks() throws Exception {
 		TaskBox tasksList = new TaskBox();
+		
+		FileReader user = new FileReader(DATA_FILEPATH);
 		JSONParser parser = new JSONParser();
 		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
 		ArrayList allTasks = (ArrayList) parser.parse(user, orderedKeyFactory);
 		
 		LinkedHashMap task;
 		if(allTasks != null) {
-			for(int i=0; i<allTasks.size(); i++) {
+			for(int i = 0; i < allTasks.size(); i++) {
 				task = (LinkedHashMap) allTasks.get(i);
 				Task newTask = Converter.convertMapToTask(task);
 				if(newTask.isDone()) {
@@ -113,7 +114,7 @@ public abstract class DataStore {
 				} else if(newTask.isTrashed()) {
 					tasksList.getTrashedTasks().add(newTask);
 				} else {
-					//default: ongoing to do tasks
+					//default: ongoing normal tasks
 					tasksList.getNormalTasks().add(newTask);
 				}
 			}
@@ -124,16 +125,13 @@ public abstract class DataStore {
 	}
 	
 	/**
-	 * return the content of the file to be written(password and list of tasks)
-	 * @param password
-	 * @param tasks
-	 * @return
+	 * @return the content of the file to be written
 	 */
-
 	@SuppressWarnings({ "rawtypes" })
 	private static ArrayList getContent(TaskBox tasks) {
-		//list all tasks
+		//list of all tasks
 		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
+		
 		if( tasks != null) {
 			for(int i = 0; i < tasks.getNormalTasks().size(); i++) {
 				LinkedHashMap task = Converter.convertTaskToMap
@@ -156,7 +154,7 @@ public abstract class DataStore {
 	}
 	
 	/**
-	 * return an ordered key factory (maintain the ordering from the file)
+	 * @return an ordered key factory (maintain the ordering from the file)
 	 */
 	@SuppressWarnings("rawtypes")
 	private static ContainerFactory setOrderedKeyFactory() {
