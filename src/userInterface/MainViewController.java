@@ -116,6 +116,8 @@ public class MainViewController extends GridPane implements HotKeyListener {
 				.toExternalForm(), 10);
 		Font.loadFont(getClass().getResource(Constant.FONT_FILE_TIME)
 				.toExternalForm(), 10);
+		Font.loadFont(getClass().getResource(Constant.FONT_FILE_FEEDBACK)
+				.toExternalForm(), 10);
 	}
 
 	//@author A0119379R
@@ -242,7 +244,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		setPreviewPane(
 				"Welcome to List of Xiao Ming. \nPlease wait for the NLP model loading...",
 				this.getCurrentListName());
-		displayScrollPane.setStyle("-fx-font: 12px \"Monaco\";"
+		displayScrollPane.setStyle("-fx-font: 12px \"Courier New\";"
 				+ "-fx-padding: 10 10 10 10;"
 				+ "-fx-background-color: rgba(244,244,244,1);");
 		this.help();
@@ -251,7 +253,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	private void addTextFieldListener() {
 		final MainViewController instance = this;
-
+ 
 		this.input.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable,
@@ -307,7 +309,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		parsingFeedbackBox.setPrefHeight(138);
 
 		consoleTextLabel = new Label(textToDisplay);
-		consoleTextLabel.setStyle("-fx-font: 12px \"Monaco\";"
+		consoleTextLabel.setStyle("-fx-font: 12px \"Courier New\";"
 				+ "-fx-text-fill: white;");
 		parsingFeedbackBox.setStyle("-fx-background-color: rgba(80, 80, 80, 1);"
 				+ "-fx-padding: 8 8 8 8;" 
@@ -980,7 +982,8 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	//@author A0119379R
 	private void help() {
-		VBox helpBox = LayoutManager.getHelpBox();
+		Image image = new Image(getClass().getResourceAsStream("/resource/shortcut.png"), 895, 900, true, true);
+		VBox helpBox = LayoutManager.getHelpBox(image);
 		this.displayScrollPane.setContent(helpBox);
 	}
 

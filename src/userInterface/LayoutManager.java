@@ -12,15 +12,29 @@ import modal.TimeInterval;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class LayoutManager {
 	
-	public static VBox getHelpBox() {
+	public static VBox getHelpBox(Image image) {
+		String[] shortcuts = {"", "Ctrl + 1", "Ctrl + 2", "Ctrl + 3", 
+				"", "Ctrl + C", "Ctrl + R", "Ctrl + U", "Ctrl + D", "Ctrl + F", "Ctrl + M",
+				"", "Alt + A", "Alt + C", "Alt + D", "Alt + I", "Alt + P", "Alt + T",
+				""};
+		String[] descriptions = {"", "Switch to \"TODO\" list", "Switch to \"FINISHED\" list", "Switch to \"TRASHED\" list", 
+				"", "Insert command: add", "Insert command: display", "Insert command: update", "Insert command: delete", "Insert command: search", "Insert command: reload modal",
+				"", "Insert tag: <DATE> or </DATE>", "Insert tag: <COMMAND> or </COMMAND>", "Insert tag: <DESCRIPTION> or </DESCRIPTION>", "Insert tag: <INDEX> or </INDEX>", "Insert tag: <PRIORITY> or </PRIORITY>", "Insert tag: <TAG> or </TAG>",
+				""}; 
+		
+		
 		VBox overallBox = new VBox();
 		HBox emptyRow = new HBox();
 		emptyRow.setPrefHeight(5);
@@ -28,20 +42,67 @@ public class LayoutManager {
 		rowContainer.setAlignment(Pos.CENTER);
 		VBox emptyColumn = new VBox();
 		emptyColumn.setPrefWidth(5);
+		ScrollPane helpPane = new ScrollPane();
 		VBox helpBox = new VBox();
-		helpBox.setStyle("-fx-background-color: white; "
-				+ "-fx-padding: 10 10 10 10;"
-				+ Constant.CSS_STYLE_SHADOW);
-		helpBox.setPrefSize(935, 430);
 		helpBox.setAlignment(Pos.CENTER);
-		Label l = new Label(Constant.GUI_MESSAGE_SHORTCUT_INSTRUCTION);
-		helpBox.getChildren().add(l);
 		
-		rowContainer.getChildren().addAll(emptyColumn, helpBox);
+		helpPane.setStyle("-fx-background-color: white;"
+				+ "-fx-padding: 0 10 0 30;"
+				+ Constant.CSS_STYLE_SHADOW);
+		helpPane.setPrefSize(935, 430);
+		helpBox.getChildren().add(getHelpTitleBox("Shortcuts"));
+		
+		assert(shortcuts.length == descriptions.length);
+		for (int i = 0; i < shortcuts.length; i++) {
+			helpBox.getChildren().add(getHelpRow(shortcuts[i], descriptions[i]));
+		}
+		
+//		helpBox.getChildren().add(getHelpTitleBox("Sample Commands"));
+		
+		helpPane.setContent(helpBox);
+		rowContainer.getChildren().addAll(emptyColumn, helpPane);
 		overallBox.getChildren().addAll(emptyRow, rowContainer);
 		return overallBox;
 	}
 
+	private static VBox getHelpTitleBox(String title) {
+		VBox row = new VBox();
+		Label titleLabel = new Label(title);
+		
+		titleLabel.setStyle("-fx-font: 30px \"Akagi SemiBold\";"
+				+ "-fx-padding: 40 10 10 0");
+		HBox line = new HBox();
+		line.setPrefWidth(875);
+		line.setPrefHeight(1);
+		line.setStyle("-fx-background-color: black;");
+		row.getChildren().addAll(titleLabel, line);
+		return row;
+	}
+	
+	private static HBox getHelpRow(String shortcut, String description) {
+		HBox row = new HBox();
+		row.setPrefHeight(30);
+		row.setStyle("-fx-padding: 0 10 0 5");
+		VBox leftBox = new VBox();
+		leftBox.setAlignment(Pos.CENTER_LEFT);
+		leftBox.setStyle("-fx-padding: 0 50 0 0;");
+		leftBox.setPrefWidth(150);
+		Label leftLabel = new Label(shortcut);
+		leftLabel.setFont(Font.font("Courier New", FontWeight.BOLD, 18));
+		leftLabel.setStyle(""
+				+ "-fx-text-fill: #005587");
+		leftBox.getChildren().add(leftLabel);
+		
+		VBox rightBox = new VBox();
+		Label rightLabel = new Label(description);
+		rightBox.setAlignment(Pos.CENTER_LEFT);
+		rightLabel.setStyle("-fx-font: 18px \"Akagi SemiBold\"");
+		rightBox.getChildren().add(rightLabel);
+		
+		row.getChildren().addAll(leftBox, rightBox);
+		return row;
+	}
+	
 	//@author A0119379R
 	public static GridPane getTagPaneForTask(Task task) {
 		GridPane tagPane = new GridPane();
