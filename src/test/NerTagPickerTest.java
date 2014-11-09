@@ -28,16 +28,16 @@ public class NerTagPickerTest {
 	
 	@Test
 	public void testUpdate() {
-		compareStringArray("update tag with aa", new String[] {"aa"});
-		compareStringArray("update tag with aa,", new String[] {"aa"});
-		compareStringArray("update tag with aa, bb", new String[] {"aa", "bb"});
-		compareStringArray("update tag with aa and bb", new String[] {"aa", "bb"});
-		compareStringArray("update tag with aa, bb, cc", new String[] {"aa", "bb", "cc"});
-		compareStringArray("update tag with aa, bb and cc", new String[] {"aa", "bb", "cc"});
-		compareStringArray("update tag with aa, bb, cc, dd", new String[] {"aa", "bb", "cc", "dd"});
-		compareStringArray("update tag with aa, bb, cc and dd", new String[] {"aa", "bb", "cc", "dd"});
-		compareStringArray("update tag with aa, bb, cc, dd, ee", new String[] {"aa", "bb", "cc", "dd", "ee"});
-		compareStringArray("update tag with aa, bb, cc, dd and ee", new String[] {"aa", "bb", "cc", "dd", "ee"});
+		compareStringArray("update 1 tag with aa", new String[] {"aa"});
+		compareStringArray("update 1 tag with aa,", new String[] {"aa"});
+		compareStringArray("update 1 tag with aa, bb", new String[] {"aa", "bb"});
+		compareStringArray("update 1 tag with aa and bb", new String[] {"aa", "bb"});
+		compareStringArray("update 1 tag with aa, bb, cc", new String[] {"aa", "bb", "cc"});
+		compareStringArray("update 1 tag with aa, bb and cc", new String[] {"aa", "bb", "cc"});
+		compareStringArray("update 1 tag with aa, bb, cc, dd", new String[] {"aa", "bb", "cc", "dd"});
+		compareStringArray("update 1 tag with aa, bb, cc and dd", new String[] {"aa", "bb", "cc", "dd"});
+		compareStringArray("update 1 tag with aa, bb, cc, dd, ee", new String[] {"aa", "bb", "cc", "dd", "ee"});
+		compareStringArray("update 1 tag with aa, bb, cc, dd and ee", new String[] {"aa", "bb", "cc", "dd", "ee"});
 	}
 	
 	private void compareStringArray(String userInputString, String[] strArray) {
