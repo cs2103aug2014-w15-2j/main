@@ -31,6 +31,16 @@ public class NerIndexPickerTest {
 		compareIntegerArray("done 1, 2, 3, 4, 5,", new int[]{1,2,3,4,5});
 		compareIntegerArray("done 1, 2, 3, 4, 5, ", new int[]{1,2,3,4,5});
 	}
+	
+	@Test
+	public void testRecover() {
+		compareIntegerArray("recover 1 2 3 4 5", new int[]{1,2,3,4,5});
+		compareIntegerArray("recover 1,2,3,4,5", new int[]{1,2,3,4,5});
+		compareIntegerArray("recover 1,2,3,4,5,", new int[]{1,2,3,4,5});
+		compareIntegerArray("recover 1, 2, 3, 4, 5", new int[]{1,2,3,4,5});
+		compareIntegerArray("recover 1, 2, 3, 4, 5,", new int[]{1,2,3,4,5});
+		compareIntegerArray("recover 1, 2, 3, 4, 5, ", new int[]{1,2,3,4,5});
+	}
 
 	private void compareIntegerArray(String userInputString, int[] intArray) {
 		try {
