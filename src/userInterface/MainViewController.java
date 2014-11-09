@@ -602,7 +602,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 					break;
 					
 				case RECOVER:
-					setConsoleText(this.recover());
+					setConsoleText(this.recover(userInput));
 					refresh(Constant.TASK_LIST_TODO);
 					break;
 					
@@ -677,7 +677,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 					return getExitPreview();
 					
 				case RECOVER:
-					return getRecoverPreview();
+					return getRecoverPreview(userInput);
 					
 				default:
 					return getDefaultPreview();
@@ -702,8 +702,29 @@ public class MainViewController extends GridPane implements HotKeyListener {
  */
 	
 	//@author A0119379R
-	private String getRecoverPreview() {
-		return "Command: recover";
+	private String getRecoverPreview(String userInput) {
+		try {
+			if (this.getCurrentListName().equals(Constant.TASK_LIST_TODO)) {
+				return "Command: done \n\n" + "All Tasks here are already in \"TODO\" list";
+			}
+			
+			ArrayList<Integer> indices = parser.pickIndex(userInput);
+			String returnValue = "Command: recover \n\n";
+
+			for (int index : indices) {
+				if (this.getCurrentListName().equals(Constant.TASK_LIST_FINISHED)) {
+					Task taskToFinish = this.user.retrieveFromFinishedList(index - 1);
+					returnValue += (index + ": " + taskToFinish.getDescription() + "\n");
+				} else if (this.getCurrentListName().equals(Constant.TASK_LIST_TRASHED)) {
+					Task taskToFinish = this.user.retrieveFromTrashedList(index - 1);
+					returnValue += (index + ": " + taskToFinish.getDescription() + "\n");
+				}
+			}
+			return returnValue;
+		} catch (CommandFailedException de) {
+			de.printStackTrace();
+			return "Command: recover \n\n" + "No Task Specified";
+		}
 	}
 	
 	//@author A0119379R
@@ -1049,8 +1070,32 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	}
 
 	//@author A0119379R
-	private String recover() {
-		return this.user.recover(this.getCurrentListName());
+	private String recover(String userInput) {
+		try {
+			ArrayList<Integer> indices = parser.pickIndex(userInput);
+			Collections.sort(indices);
+			int offset = 0;
+			boolean isAllSucceeded = true;
+			String returnValue = "";
+			for (int index : indices) {
+				try {
+					boolean isThisSucceeded = this.user.recover(index - offset - 1, this.getCurrentListName());
+					if (!isThisSucceeded) {
+						returnValue += (Constant.PROMPT_MESSAGE_DONE_TASK_FAILED + " for task " + index);
+					}
+					isAllSucceeded &= isThisSucceeded;
+					offset++;
+				} catch (CommandFailedException cfe) {
+					return cfe.toString();
+				}
+
+			}
+
+			return isAllSucceeded ? Constant.PROMPT_MESSAGE_DONE_TASK_SUCCESSFULLY
+					: returnValue;
+		} catch (CommandFailedException e) {
+			return e.toString();
+		}
 	}
 
 
