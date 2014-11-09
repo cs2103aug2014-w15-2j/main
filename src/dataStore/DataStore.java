@@ -14,8 +14,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import modal.Task;
-import modal.TaskBox;
+import model.Task;
+import model.TaskBox;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ContainerFactory;

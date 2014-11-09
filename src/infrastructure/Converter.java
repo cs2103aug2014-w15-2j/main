@@ -9,9 +9,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.LinkedHashMap;
 
-import modal.CommandFailedException;
-import modal.Task;
-import modal.TimeInterval;
+import model.CommandFailedException;
+import model.Task;
+import model.TimeInterval;
 
 public class Converter {
 	

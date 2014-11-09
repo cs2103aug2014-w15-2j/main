@@ -1,6 +1,6 @@
 //@author A0119379R-unused
 //
-//package infrastructure;
+package infrastructure;
 //
 //import infrastructure.Constant.COMMAND_TYPE;
 //
@@ -15,7 +15,7 @@
 //
 //
 //
-//public class Parser {
+public class Parser {
 //	
 //	public NerParser nerParser;
 //	
@@ -263,4 +263,4 @@
 //		return nerParser.parseTimeInterval(dateList);
 //	}
 //	
-//}
+}

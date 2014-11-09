@@ -422,7 +422,7 @@ public abstract class Constant {
 	public static final String FONT_FILE_BASE = "/resource/Akagi-SB.ttf";
 	public static final String FONT_FILE_BASE_BOLD = "/resource/Akagi-EB.ttf";
 	public static final String FONT_FILE_TIME = "/resource/TickingTimebombBB.ttf";
-	public static final String FONT_FILE_FEEDBACK = "/resource/monaco.ttf";
+	public static final String FONT_FILE_FEEDBACK = "/resource/monaco.TTF";
 
 	// shortcuts
 	public static final String HOT_KEY_ADD_DESCRIPTION_TAG = "alt D";
@@ -440,8 +440,9 @@ public abstract class Constant {
 	public static final String HOT_KEY_RELOAD = "control M";
 
 	public static final String HOT_KEY_TO_DO = "control 1";
-	public static final String HOT_KEY_TRASHED = "control 3";
 	public static final String HOT_KEY_DONE = "control 2";
+	public static final String HOT_KEY_TRASHED = "control 3";
+	public static final String HOT_KEY_HELP = "control 4";
 
 	public static final String HOT_KEY_LAST_COMMAND = "UP";
 	public static final String HOT_KEY_NEXT_COMMAND = "DOWN";

@@ -11,8 +11,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import modal.CommandFailedException;
-import modal.TimeInterval;
+import model.CommandFailedException;
+import model.TimeInterval;
 
 import org.junit.Before;
 import org.junit.Test;

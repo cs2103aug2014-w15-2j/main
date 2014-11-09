@@ -31,19 +31,17 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import modal.*;
+import model.*;
 
 public class NerParser {
 	private AbstractSequenceClassifier<CoreLabel> classifierTag;
 	private AbstractSequenceClassifier<CoreLabel> classifierCommand;
 	private AbstractSequenceClassifier<CoreLabel> classifierTime;
 	private AbstractSequenceClassifier<CoreLabel> classifierPriority;
-	private AbstractSequenceClassifier<CoreLabel> classifierIndex;
 
 	private AbstractSequenceClassifier<CoreLabel> classifierTimePicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierCommandPicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierDescriptionPicker;
-	private AbstractSequenceClassifier<CoreLabel> classifierIndexPicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierTagPicker;
 	private AbstractSequenceClassifier<CoreLabel> classifierPriorityPicker;
 
@@ -101,12 +99,12 @@ public class NerParser {
 		classifierDescriptionPicker = classifiers.get(1);
 		classifierTagPicker = classifiers.get(2);
 		classifierPriorityPicker = classifiers.get(3);
-		classifierIndexPicker = classifiers.get(4);
+//		classifierIndexPicker = classifiers.get(4);
 		classifierCommandPicker = classifiers.get(5);
 		classifierTime = classifiers.get(6);
 		classifierTag = classifiers.get(7);
 		classifierPriority = classifiers.get(8);
-		classifierIndex = classifiers.get(9);
+//		classifierIndex = classifiers.get(9);
 		classifierCommand = classifiers.get(10);
 	}
 
@@ -246,7 +244,7 @@ public class NerParser {
 			return resultList.get(0);
 		}
 	}
-
+	
 	/**
 	 * pick out the index segment and translate it to integer
 	 * 
@@ -255,44 +253,71 @@ public class NerParser {
 	 * @throws CommandFailedException
 	 */
 	public ArrayList<Integer> pickIndex(String userInputString) throws CommandFailedException {
-
-		userInputString = userInputString.toLowerCase();
-		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_INDEX);
-		String directParseIndex = NerParser.pickTheTagged(userInputString,
-				Constant.XML_TAG_INDEX);
+		String indexString = UtilityMethod.removeFirstWord(userInputString);
+		ArrayList<Integer> results = new ArrayList<Integer>();
 		try {
-			if (directParseIndex != null) {
-				ArrayList<String> results = new ArrayList<String>();
-				results.add(directParseIndex);
-				return parseIndex(results);
+			String[] indices = indexString.split(" ");
+			for (String thisIndex : indices) {
+				Integer index = new Integer(Integer.parseInt(thisIndex.trim()));
+				if (!results.contains(index)) {
+					results.add(index);
+				}
 			}
-
-			String xmlStr = classifierIndexPicker.classifyToString(
-					userInputString, "inlineXML", false);
-			//System.err.println("XML STRING - pickIndex: " + xmlStr);
-			HashMap<String, ArrayList<String>> result = NerParser
-					.parseToMap(xmlStr);
-			ArrayList<String> resultList = result.get("INDEX");
-			if (resultList == null || resultList.size() == 0) {
-				throw new CommandFailedException("No index found!");
-			} else {
-				return parseIndex(resultList);
-			}
-
-		} catch (Exception e) {
-			String xmlStr = classifierIndexPicker.classifyToString(
-					userInputString, "inlineXML", false);
-			//System.err.println("XML STRING - pickIndex: " + xmlStr);
-			HashMap<String, ArrayList<String>> result = NerParser
-					.parseToMap(xmlStr);
-			ArrayList<String> resultList = result.get("INDEX");
-			if (resultList == null || resultList.size() == 0) {
-				throw new CommandFailedException("No index found!");
-			} else {
-				return parseIndex(resultList);
+		} catch (Exception e1) {
+			try {
+				String[] indices = indexString.split(",");
+				for (String thisIndex : indices) {
+					results.add(Integer.parseInt(thisIndex.trim()));
+				}
+			} catch (Exception e2) {
+				throw new CommandFailedException("index not parsable");
 			}
 		}
+		return results;
 	}
+	
+
+//@author A0119379-unused
+//
+//	public ArrayList<Integer> pickIndex(String userInputString, String a) throws CommandFailedException {
+//
+//		userInputString = userInputString.toLowerCase();
+//		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_INDEX);
+//		String directParseIndex = NerParser.pickTheTagged(userInputString,
+//				Constant.XML_TAG_INDEX);
+//		try {
+//			if (directParseIndex != null) {
+//				ArrayList<String> results = new ArrayList<String>();
+//				results.add(directParseIndex);
+//				return parseIndex(results);
+//			}
+//
+//			String xmlStr = classifierIndexPicker.classifyToString(
+//					userInputString, "inlineXML", false);
+//			System.err.println("XML STRING - pickIndex: " + xmlStr);
+//			HashMap<String, ArrayList<String>> result = NerParser
+//					.parseToMap(xmlStr);
+//			ArrayList<String> resultList = result.get("INDEX");
+//			if (resultList == null || resultList.size() == 0) {
+//				throw new CommandFailedException("No index found!");
+//			} else {
+//				return parseIndex(resultList);
+//			}
+//
+//		} catch (Exception e) {
+//			String xmlStr = classifierIndexPicker.classifyToString(
+//					userInputString, "inlineXML", false);
+//			//System.err.println("XML STRING - pickIndex: " + xmlStr);
+//			HashMap<String, ArrayList<String>> result = NerParser
+//					.parseToMap(xmlStr);
+//			ArrayList<String> resultList = result.get("INDEX");
+//			if (resultList == null || resultList.size() == 0) {
+//				throw new CommandFailedException("No index found!");
+//			} else {
+//				return parseIndex(resultList);
+//			}
+//		}
+//	}
 
 	/**
 	 * pick out the tag segments
@@ -1164,33 +1189,35 @@ public class NerParser {
 			return COMMAND_TYPE.ADD;
 		}
 	}
-
-	/**
-	 * Return a list of Integer representing the picked out index
-	 * @param indexMines
-	 * @return
-	 * @throws CommandFailedException
-	 */
-	private ArrayList<Integer> parseIndex (ArrayList<String> indexMines) throws CommandFailedException {
-		try {
-			ArrayList<Integer> results = new ArrayList<Integer>();
-			for (String indexMine : indexMines) {
-				String parsedIndexString = classifierIndex.classifyToString(indexMine,
-						"inlineXML", false);
-				HashMap<String, ArrayList<String>> indexMap = parseToMap(parsedIndexString);
-				ArrayList<String> indexList = indexMap.get("INDEX");
-				if (indexList != null) {
-					for (String indexString : indexList) {
-						results.add(Integer.parseInt(indexString));
-					}
-				}
-			}
-
-			return results;
-		} catch (Exception e) {
-			throw new CommandFailedException("Unparsable Integer");
-		}
-	}
+	
+	
+//@author A0119379R-unused
+//	/**
+//	 * Return a list of Integer representing the picked out index
+//	 * @param indexMines
+//	 * @return
+//	 * @throws CommandFailedException
+//	 */
+//	private ArrayList<Integer> parseIndex (ArrayList<String> indexMines) throws CommandFailedException {
+//		try {
+//			ArrayList<Integer> results = new ArrayList<Integer>();
+//			for (String indexMine : indexMines) {
+//				String parsedIndexString = classifierIndex.classifyToString(indexMine,
+//						"inlineXML", false);
+//				HashMap<String, ArrayList<String>> indexMap = parseToMap(parsedIndexString);
+//				ArrayList<String> indexList = indexMap.get("INDEX");
+//				if (indexList != null) {
+//					for (String indexString : indexList) {
+//						results.add(Integer.parseInt(indexString));
+//					}
+//				}
+//			}
+//
+//			return results;
+//		} catch (Exception e) {
+//			throw new CommandFailedException("Unparsable Integer");
+//		}
+//	}
 	
 	
 /**

@@ -5,8 +5,8 @@ import infrastructure.Constant;
 
 import java.util.ArrayList;
 
-import modal.Task;
-import modal.TimeInterval;
+import model.Task;
+import model.TimeInterval;
 
 import org.junit.Test;
 

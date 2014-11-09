@@ -1,4 +1,4 @@
-package modal;
+package model;
 
 import infrastructure.Constant;
 import infrastructure.UtilityMethod;

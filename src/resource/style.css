@@ -59,7 +59,7 @@
 
 
 .helpScrollView {
-	
+	-fx-background-color:rgb(255, 255, 255);
 }
 
 .helpScrollView .scroll-bar:vertical .thumb {

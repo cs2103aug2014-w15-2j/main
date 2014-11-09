@@ -3,10 +3,10 @@
 package test;
 
 import static org.junit.Assert.*;
-import modal.CommandFailedException;
-import modal.Task;
-import modal.TaskBox;
-import modal.TimeInterval;
+import model.CommandFailedException;
+import model.Task;
+import model.TaskBox;
+import model.TimeInterval;
 
 import org.junit.After;
 import org.junit.Before;
