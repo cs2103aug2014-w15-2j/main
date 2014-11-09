@@ -1148,11 +1148,11 @@ public class NerParser {
 	}
 	
 	public static int parsePriorityFromFormattedString(String parameter) {
-		if (parameter.equalsIgnoreCase("high")) {
+		if (parameter.equalsIgnoreCase(Constant.PRIORITY_STRING_HIGH)) {
 			return Constant.PRIORITY_HIGH;
-		} else if (parameter.equalsIgnoreCase("medium")) {
+		} else if (parameter.equalsIgnoreCase(Constant.PRIORITY_STRING_MEDIUM)) {
 			return Constant.PRIORITY_MEDIUM;
-		} else if (parameter.equalsIgnoreCase("low")) {
+		} else if (parameter.equalsIgnoreCase(Constant.PRIORITY_STRING_LOW)) {
 			return Constant.PRIORITY_LOW;
 		} else {
 			return Constant.PRIORITY_INVALID;
