@@ -15,6 +15,69 @@ import static org.junit.Assert.assertEquals;
 public class UserTest {
 	
 	/**
+	 * test for redo method in User
+	 * @throws Exception
+	 */
+	@Test
+	//author A0119444E
+	public void testRedo() throws Exception {
+		User user = new User();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+		Task task = new Task("testtask", 2, tag, interval);
+		ArrayList<Task> normalTasks;
+		
+		//test add
+		user.add(task);
+		normalTasks = user.getOngoingTaskList();
+		user.undo();
+		user.redo();
+		testRedo("test add", normalTasks, user.getOngoingTaskList());
+		user.undo();
+		
+		//test delete
+		if (!user.getOngoingTaskList().isEmpty()){
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			normalTasks = user.getOngoingTaskList();
+			user.undo();
+			user.redo();
+			testRedo("test delete", normalTasks, user.getOngoingTaskList());
+			user.undo();
+		} else {
+			user.add(task);
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			normalTasks = user.getOngoingTaskList();
+			user.undo();
+			user.redo();
+			testRedo("test delete", normalTasks, user.getOngoingTaskList());
+			user.undo();
+			user.undo();
+		}
+		
+		//test deleteAll
+		if (!user.getOngoingTaskList().isEmpty()){
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			normalTasks = user.getOngoingTaskList();
+			user.undo();
+			user.redo();
+			testRedo("test delete", normalTasks, user.getOngoingTaskList());
+			user.undo();
+		} else {
+			user.add(task);
+			user.add(task);
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			normalTasks = user.getOngoingTaskList();
+			user.undo();
+			user.redo();
+			testRedo("test delete", normalTasks, user.getOngoingTaskList());
+			user.undo();
+			user.undo();
+			user.undo();
+		}
+		System.out.println("all redo tests are passed");
+	}
+	
+	/**
 	 * test for undo method in User
 	 * @throws Exception
 	 */
@@ -34,13 +97,13 @@ public class UserTest {
 		
 		//test delete
 		if (!user.getOngoingTaskList().isEmpty()){
-			user.delete(0, Constant.TASK_LIST_TODO);
+			user.delete(0, Constant.TASK_LIST_ONGOING);
 			user.undo();
 			testUndo("test delete", normalTasks, user.getOngoingTaskList());
 		} else {
 			user.add(task);
 			normalTasks = user.getOngoingTaskList();
-			user.delete(0, Constant.TASK_LIST_TODO);
+			user.delete(0, Constant.TASK_LIST_ONGOING);
 			user.undo();
 			testUndo("test delete", normalTasks, user.getOngoingTaskList());
 			user.undo();
@@ -48,7 +111,7 @@ public class UserTest {
 		
 		//test deleteAll
 		if (!user.getOngoingTaskList().isEmpty()){
-			user.deleteAll(Constant.TASK_LIST_TODO);
+			user.deleteAll(Constant.TASK_LIST_ONGOING);
 			user.undo();
 			testUndo("test deleteAll", normalTasks, user.getOngoingTaskList());
 		} else {
@@ -56,7 +119,7 @@ public class UserTest {
 			user.add(task);
 			user.add(task);
 			normalTasks = user.getOngoingTaskList();
-			user.deleteAll(Constant.TASK_LIST_TODO);
+			user.deleteAll(Constant.TASK_LIST_ONGOING);
 			user.undo();
 			testUndo("test deleteAll", normalTasks, user.getOngoingTaskList());
 			user.undo();
@@ -77,7 +140,7 @@ public class UserTest {
 //		int testSize = 10;
 //
 //		User user = new User();
-//		int initialSize = user.getNormalTaskList().size();
+//		int initialSize = user.getOngoingTaskList().size();
 //		System.out.println("user normal task size: " + initialSize);
 //
 //		ArrayList<String> tag = new ArrayList<String>();
@@ -87,13 +150,13 @@ public class UserTest {
 //			Task task = new Task("task" + i, 2, tag, interval);
 //			user.add(task);
 //		}
-//		int currentSize = user.getNormalTaskList().size();
+//		int currentSize = user.getOngoingTaskList().size();
 //		int p = 1;
 //		for (int i = currentSize - testSize; i < currentSize - 1; i++) {
 //			testAdd("test add for task: " + i, "task" + p++, user, i);
 //		}
 //		for (int i = currentSize - testSize; i < currentSize; i++) {
-//			user.delete(currentSize - testSize, Constant.TASK_LIST_TODO);
+//			user.delete(currentSize - testSize, Constant.TASK_LIST_ONGOING);
 //		}
 //		System.out.println("all add tests are passed");
 //	}
@@ -115,11 +178,11 @@ public class UserTest {
 //			Task task = new Task("task" + i, 2, tag, interval);
 //			user.add(task);
 //		}
-//		int currentSize = user.getNormalTaskList().size();
+//		int currentSize = user.getOngoingTaskList().size();
 //		int p = 1;
 //		for (int i = currentSize - testSize; i < currentSize; i++) {
 //			testDelete("test delete for task: " + i, "task" + p++, user, currentSize - testSize);
-//			user.delete(currentSize - testSize, Constant.TASK_LIST_TODO);
+//			user.delete(currentSize - testSize, Constant.TASK_LIST_ONGOING);
 //		}
 //		System.out.println("all delete tests are passed");		
 //	}
@@ -133,11 +196,57 @@ public class UserTest {
 //	public void testDeleteAll() throws Exception {
 //		User user = new User();
 //		user.deleteAll(Constant.TASK_LIST_TODO);
-//		testDeleteAll("test deleteAll method", 0, user.getNormalTaskList().size());
+//		testDeleteAll("test deleteAll method", 0, user.getOngoingTaskList().size());
 //		user.undo();
 //		System.out.println("all deleteAll tests are passed");
 //	}
-//	
+	
+	//@author A0119444E
+	@Test
+	public void testPutBack() throws Exception {
+		User user = new User();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+		Task task = new Task("testtask", 2, tag, interval);
+		
+		ArrayList<Task> tasks = user.getOngoingTaskList();
+		if (!tasks.isEmpty()){
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			user.putBack(user.getTrashedTaskList().size() - 1);
+			testPutBack("test putBack", tasks, user.getOngoingTaskList());
+		} else {
+			user.add(task);
+			tasks = user.getOngoingTaskList();
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			user.putBack(0);
+			testPutBack("test putBack", tasks, user.getOngoingTaskList());
+		}
+		System.out.println("all putBack tests are passed");
+	}
+	
+	//@author A0119447Y
+	@Test
+	public void testUndone() throws Exception {
+		User user = new User();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+		Task task = new Task("another test task", 2, tag, interval);
+		
+		ArrayList<Task> tasks = user.getOngoingTaskList();
+		if (!tasks.isEmpty()){
+			user.done(0);
+			user.unDone(user.getFinishedTaskList().size() - 1);
+			testUndone("test undone", tasks, user.getOngoingTaskList());
+		} else {
+			user.add(task);
+			tasks = user.getOngoingTaskList();
+			user.done(0);
+			user.unDone(user.getFinishedTaskList().size() - 1);
+			testUndone("test putBack", tasks, user.getOngoingTaskList());
+		}
+		System.out.println("all undone tests are passed");
+	}
+	
 	/**
 	 * test method for testing undo method
 	 * @param description
@@ -146,6 +255,21 @@ public class UserTest {
 	 */
 	//author A0119444E
 	private void testUndo(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
+		try {
+			assert(expected.equals(actual));
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	/**
+	 * test method for testing redo method
+	 * @param description
+	 * @param expected
+	 * @param actual
+	 */
+	//author A0119444E
+	private void testRedo(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
 		try {
 			assert(expected.equals(actual));
 		} catch (Exception e) {
@@ -198,6 +322,37 @@ public class UserTest {
 	private void testDeleteAll(String description, int expected, int actualString) {
 		try {
 			assertEquals(description, expected, actualString);
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	/**
+	 * test method for testing putBack method
+	 * @param description
+	 * @param expected
+	 * @param actualString
+	 */
+	//author A0119444E
+	private void testPutBack(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
+		try {
+			assert(expected.equals(actual));
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	
+	//author A0119447Y
+	/**
+	 * test method for testing unDone method
+	 * @param description
+	 * @param expected
+	 * @param actualString
+	 */
+	private void testUndone(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
+		try {
+			assert(expected.equals(actual));
 		} catch (Exception e) {
 			
 		}
