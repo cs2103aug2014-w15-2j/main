@@ -15,6 +15,12 @@ import model.TimeInterval;
 
 public class Converter {
 
+	/**
+	 * convert a Task to LinkedHashMap needed for JSON format
+	 * 
+	 * @param task - a task
+	 * @return LinkedHashMap of a task with the properties
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static LinkedHashMap convertTaskToMap(Task task) {
 		LinkedHashMap taskMap = new LinkedHashMap();
@@ -37,11 +43,12 @@ public class Converter {
 	}
 
 	/**
-	 * convert map to task
+	 * convert map to task specify all the information into corresponding
+	 * properties
 	 * 
-	 * @param task
-	 * @return
-	 * @throws Exception
+	 * @param task - Map contains all the properties of a specified task
+	 * @return Task object with the specified properties
+	 * @throws Exception - failed in parsing time intervals
 	 */
 	@SuppressWarnings("rawtypes")
 	public static Task convertMapToTask(LinkedHashMap task) throws Exception {
@@ -98,6 +105,14 @@ public class Converter {
 		return priority;
 	}
 
+	/**
+	 * convert the given string into a time interval
+	 * 
+	 * @param intervalObj - containing the time information
+	 * @return a time interval with start and end date
+	 * @throws ParseException - failed in parsing dates
+	 * @throws CommandFailedException - invalid time interval
+	 */
 	@SuppressWarnings("rawtypes")
 	private static TimeInterval convertStringToTimeInterval(
 			LinkedHashMap intervalObj) throws ParseException,
@@ -134,6 +149,13 @@ public class Converter {
 		return dateString;
 	}
 
+	/**
+	 * convert a string contains date information to a Date object
+	 * 
+	 * @param dateString - a string with the specified date format
+	 * @return Date corresponding to the string
+	 * @throws ParseException - failed in parsing dates
+	 */
 	private static Date convertDateStringToDate(String dateString)
 			throws ParseException {
 		if (dateString.trim().equals(Constant.SAVE_FORMAT_NO_DATE)) {
