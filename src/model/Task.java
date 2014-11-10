@@ -29,7 +29,7 @@ public class Task {
 		this.priority = priority;
 		this.tag = tag;
 		this.interval = interval;
-		this.status = Constant.TASK_STATUS_NORMAL;
+		this.status = Constant.TASK_STATUS_ONGOING;
 	}
 
 	
@@ -226,12 +226,12 @@ public class Task {
 	//@author A0113029U
 	public void setStatus(String state) {
 		if ((state == null) || (state == "")) {
-			this.status = Constant.TASK_STATUS_NORMAL;
+			this.status = Constant.TASK_STATUS_ONGOING;
 			return;
 		}
 		switch(state.toLowerCase().trim()) {
-			case Constant.TASK_STATUS_NORMAL:
-				this.status = Constant.TASK_STATUS_NORMAL;
+			case Constant.TASK_STATUS_ONGOING:
+				this.status = Constant.TASK_STATUS_ONGOING;
 				break;
 				
 			case Constant.TASK_STATUS_DONE:
@@ -243,7 +243,7 @@ public class Task {
 				break;
 				
 			default:
-				this.status = Constant.TASK_STATUS_NORMAL;
+				this.status = Constant.TASK_STATUS_ONGOING;
 				break;
 		}
 	}
@@ -361,12 +361,12 @@ public class Task {
 	
 	//@author A0119447
 	/**
-	 * isNormal
-	 * check whether a task is normal
+	 * isOngoing
+	 * check whether a task is ongoing
 	 * @return boolean
 	 */
-	public boolean isNormal() {
-		if (this.status.equals(Constant.TASK_STATUS_NORMAL)) {
+	public boolean isOngoing() {
+		if (this.status.equals(Constant.TASK_STATUS_ONGOING)) {
 			return true;
 		} else {
 			return false;

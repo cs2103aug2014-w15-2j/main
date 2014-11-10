@@ -134,7 +134,7 @@ public abstract class DataStore {
 					tasksList.getTrashedTasks().add(newTask);
 				} else {
 					// default: ongoing normal tasks
-					tasksList.getNormalTasks().add(newTask);
+					tasksList.getOngoingTasks().add(newTask);
 				}
 			}
 		}
@@ -155,9 +155,9 @@ public abstract class DataStore {
 		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
 
 		if (tasks != null) {
-			for (int i = 0; i < tasks.getNormalTasks().size(); i++) {
+			for (int i = 0; i < tasks.getOngoingTasks().size(); i++) {
 				LinkedHashMap task = Converter.convertTaskToMap(tasks
-						.getNormalTasks().get(i));
+						.getOngoingTasks().get(i));
 				tasksList.add(task);
 			}
 			for (int i = 0; i < tasks.getFinishedTasks().size(); i++) {

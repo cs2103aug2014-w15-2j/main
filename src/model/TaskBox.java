@@ -4,18 +4,18 @@ import java.util.ArrayList;
 
 //@author A0119447Y
 public class TaskBox {
-	private ArrayList<Task> normalTasks;
+	private ArrayList<Task> ongoingTasks;
 	private ArrayList<Task> finishedTasks;
 	private ArrayList<Task> trashedTasks;
 	
 	public TaskBox() {
-		this.normalTasks = new ArrayList<Task>();
+		this.ongoingTasks = new ArrayList<Task>();
 		this.finishedTasks = new ArrayList<Task>();
 		this.trashedTasks = new ArrayList<Task>();
 	}
 	
-	public ArrayList<Task> getNormalTasks() {
-		return normalTasks;
+	public ArrayList<Task> getOngoingTasks() {
+		return ongoingTasks;
 	}
 	
 	public ArrayList<Task> getFinishedTasks() {
@@ -33,7 +33,7 @@ public class TaskBox {
 			return false;
 		}
 		TaskBox tb = (TaskBox) obj; 
-		return (this.getNormalTasks().equals(tb.getNormalTasks())) &&
+		return (this.getOngoingTasks().equals(tb.getOngoingTasks())) &&
 				(this.getFinishedTasks().equals(tb.getFinishedTasks())) &&
 				(this.getTrashedTasks().equals(tb.getTrashedTasks()));
 	}

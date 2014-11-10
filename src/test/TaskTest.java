@@ -41,7 +41,7 @@ public class TaskTest {
 			if (i % 3 == 0){
 				task.setStatus(Constant.TASK_STATUS_DONE);
 			} else if (i % 3 == 1) {
-				task.setStatus(Constant.TASK_STATUS_NORMAL);
+				task.setStatus(Constant.TASK_STATUS_ONGOING);
 			} else {
 				task.setStatus(Constant.TASK_STATUS_TRASHED);
 			}
@@ -52,7 +52,7 @@ public class TaskTest {
 			if (i % 3 == 0){
 				testStatus("test task" + i, Constant.TASK_STATUS_DONE, tasks.get(i));
 			} else if (i % 3 == 1) {
-				testStatus("test task" + i, Constant.TASK_STATUS_NORMAL, tasks.get(i));
+				testStatus("test task" + i, Constant.TASK_STATUS_ONGOING, tasks.get(i));
 			} else {
 				testStatus("test task" + i, Constant.TASK_STATUS_TRASHED, tasks.get(i));
 			}

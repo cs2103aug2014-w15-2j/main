@@ -269,7 +269,8 @@ public abstract class Constant {
 	public static final String PROMPT_MESSAGE_REDO_FAILED = "Unable to redo";
 	public static final String PROMPT_MESSAGE_SEARCH_TIME_INTERVAL = "Searching for tasks within time Interval: %1$s";
 	public static final String PROMPT_MESSAGE_SEARCH_KEYWORD = "Searching for tasks containing keywords: %1$s";
-	public static final String PROMPT_MESSAGE_NO_TASK_FOUNDED = "No task found";
+	public static final String PROMPT_MESSAGE_NO_TASK_FOUND = "No task found";
+	public static final String PROMPT_MESSAGE_NO_TASK_FOUND_IN_LIST = "There is no list found with name: %1$s";
 	public static final String PROMPT_MESSAGE_DONE_TASK_SUCCESSFULLY = "Tasks are marked done";
 	public static final String PROMPT_MESSAGE_DONE_TASK_FAILED = "Task is failed to finished";
 	public static final String PROMPT_MESSAGE_TRASH_EMPTIED = "Trash emptied";
@@ -356,7 +357,7 @@ public abstract class Constant {
 	}
 
 	// task status
-	public static final String TASK_STATUS_NORMAL = "normal";
+	public static final String TASK_STATUS_ONGOING = "normal";
 	public static final String TASK_STATUS_DONE = "done";
 	public static final String TASK_STATUS_TRASHED = "trashed";
 

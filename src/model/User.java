@@ -22,7 +22,7 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * constructor for class User
+	 * Constructor for class User
 	 * 
 	 * @throws Exception
 	 */
@@ -34,20 +34,20 @@ public class User {
 
 	/**
 	 * ========================================================================
-	 * ========================== Functionality methods: CRUD, undo, redo,
-	 * search
-	 * ====================================================================
-	 * ==============================
+	 * Functionality methods: CRUD, undo, redo, search
+	 * ========================================================================
 	 */
 
 	//@author A0119447Y
 	/**
-	 * undo resets the current task list to one step backwards.
+	 * Reset the current task list to one step backwards.
 	 * 
+	 * @return whether the task has been undone successfully
 	 * @throws CommandFailedException
 	 */
 	public void undo() throws CommandFailedException {
 		if (this.undoable.empty()) {
+			// no archived task list in the history
 			throw new CommandFailedException(Constant.NO_UNDOABLE_ERROR_MESSAGE);
 		} else {
 			this.redoable.push(cloner.deepClone(this.currentTasks));
@@ -56,6 +56,7 @@ public class User {
 				this.redoable.remove(0);
 			}
 
+			// reload current task list 
 			this.currentTasks = cloner.deepClone(this.undoable.pop());
 
 			DataStore.save(this.currentTasks);
@@ -64,12 +65,14 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * redo resets the current task list to one step forwards.
+	 * Reset the current task list to one step forwards.
 	 * 
+	 * @return whether the task has been redone successfully
 	 * @throws CommandFailedException
 	 */
 	public void redo() throws CommandFailedException {
 		if (this.redoable.empty()) {
+			// no archived task list in the history
 			throw new CommandFailedException(Constant.NO_REDOABLE_ERROR_MESSAGE);
 		} else {
 			this.undoable.push(cloner.deepClone(this.currentTasks));
@@ -78,6 +81,7 @@ public class User {
 				this.undoable.remove(0);
 			}
 
+			// reload current task list 
 			this.currentTasks = cloner.deepClone(this.redoable.pop());
 
 			DataStore.save(this.currentTasks);
@@ -86,32 +90,32 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * add adds a task into the current task list.
+	 * Add a task into the current task list.
 	 * 
-	 * @param task
+	 * @param task 	task the task to be added
+	 * @return		whether the task has been added successfully
 	 */
 	public boolean add(Task task) {
 		this.updateUndoable();
-		this.currentTasks.getNormalTasks().add(task);
+		this.currentTasks.getOngoingTasks().add(task);
 		boolean isSuccessful = DataStore.save(this.currentTasks);
 		return isSuccessful;
 	}
 
+	//@author A0119447Y
 	/**
-	 * delete
+	 * Delete given index from the specified list name 
 	 * 
-	 * 
-	 * @param index
-	 * @param listName
-	 *            where the task is delete from
-	 * @return
+	 * @param index		index of the task in the corresponding list
+	 * @param listName	listName where the task is delete from
+	 * @return			whether the task has been deleted successfully
 	 * @throws CommandFailedException
 	 */
 	public boolean delete(int index, String listName)
 			throws CommandFailedException {
 		switch (listName) {
 		case Constant.TASK_LIST_TODO:
-			return this.deleteNormal(index, true);
+			return this.deleteOngoing(index, true);
 
 		case Constant.TASK_LIST_FINISHED:
 			return this.deleteFinished(index, true);
@@ -124,14 +128,16 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * deleteAll deletes all current tasks
+	 * Deletes all tasks from the corresponding list
 	 * 
+	 * @param listName	listName where the task is delete from
+	 * @return			whether the tasks have been deleted successfully
 	 * @throws CommandFailedException
 	 */
 	public boolean deleteAll(String listName) throws CommandFailedException {
 		switch (listName) {
 		case Constant.TASK_LIST_TODO:
-			return this.deleteAllNormal();
+			return this.deleteAllOngoing();
 
 		case Constant.TASK_LIST_FINISHED:
 			return this.deleteAllFinished();
@@ -144,11 +150,10 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * putBack put the trashed tasks back to normal task list
+	 * Put the trashed tasks back to ongoing task list
 	 * 
-	 * @param trashedIndex
-	 *            index in trashed list
-	 * @return
+	 * @param trashedIndex	index of task in trashed list
+	 * @return				whether the tasks have been deleted successfully
 	 * @throws CommandFailedException
 	 */
 	public boolean putBack(int trashedIndex) throws CommandFailedException {
@@ -157,10 +162,12 @@ public class User {
 					Constant.INVALID_INDEX_ERROR_MESSAGE, trashedIndex));
 		} else {
 			this.updateUndoable();
+			// the task list to be put back
 			Task putBackTask = cloner.deepClone(this.currentTasks
 					.getTrashedTasks().remove(trashedIndex));
-			putBackTask.setStatus(Constant.TASK_STATUS_NORMAL);
-			this.currentTasks.getNormalTasks().add(putBackTask);
+			putBackTask.setStatus(Constant.TASK_STATUS_ONGOING);
+			this.currentTasks.getOngoingTasks().add(putBackTask);
+			
 			return DataStore.save(this.currentTasks);
 		}
 	}
@@ -169,11 +176,11 @@ public class User {
 	@SuppressWarnings("unchecked")
 	public Task getUpdatePreview(int index, HashMap<String, Object> toBeUpdated)
 			throws CommandFailedException {
-		if (!this.isValidNormalIndex(index)) {
+		if (!this.isValidOngoingIndex(index)) {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
 		} else {
-			Task task = cloner.deepClone(this.currentTasks.getNormalTasks()
+			Task task = cloner.deepClone(this.currentTasks.getOngoingTasks()
 					.get(index));
 			if (task.isTrashed()) {
 				throw new CommandFailedException("Task is trashed");
@@ -207,20 +214,20 @@ public class User {
 	 * update updates the task with the index according to the key-value pairs
 	 * in toBeUpdated.
 	 * 
-	 * @param normalIndex
+	 * @param ongoingIndex
 	 * @param toBeUpdated
 	 *            attributes to be updated
 	 * @throws CommandFailedException
 	 */
 	@SuppressWarnings("unchecked")
-	public void update(int normalIndex, HashMap<String, Object> toBeUpdated)
+	public void update(int ongoingIndex, HashMap<String, Object> toBeUpdated)
 			throws CommandFailedException {
-		if (!this.isValidNormalIndex(normalIndex)) {
+		if (!this.isValidOngoingIndex(ongoingIndex)) {
 			throw new CommandFailedException(String.format(
-					Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
+					Constant.INVALID_INDEX_ERROR_MESSAGE, ongoingIndex));
 		} else {
 			this.updateUndoable();
-			Task task = this.currentTasks.getNormalTasks().get(normalIndex);
+			Task task = this.currentTasks.getOngoingTasks().get(ongoingIndex);
 			Iterator<String> attributes = toBeUpdated.keySet().iterator();
 			while (attributes.hasNext()) {
 				String currentAttribute = attributes.next();
@@ -247,18 +254,19 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * done mark a task as done
+	 * Mark a ongoing task as done
 	 * 
-	 * @param normalIndex
+	 * @param normalIndex	the index in the ongoing task list
+	 * @return				whether the tasks have been marked as done successfully
 	 * @throws CommandFailedException
 	 */
 	public boolean done(int normalIndex) throws CommandFailedException {
-		if (!this.isValidNormalIndex(normalIndex)) {
+		if (!this.isValidOngoingIndex(normalIndex)) {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
 		} else {
 			this.updateUndoable();
-			Task doneTask = cloner.deepClone(this.currentTasks.getNormalTasks()
+			Task doneTask = cloner.deepClone(this.currentTasks.getOngoingTasks()
 					.remove(normalIndex));
 			doneTask.setStatus(Constant.TASK_STATUS_DONE);
 			this.currentTasks.getFinishedTasks().add(doneTask);
@@ -268,28 +276,31 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * done mark a task as done
+	 * Mark a finished task as ongoing
 	 * 
-	 * @param normalIndex
+	 * @param finishedIndex		the index in the finished task list
+	 * @return					whether the tasks have been marked as ongoing successfully
 	 * @throws CommandFailedException
 	 */
-	public boolean unDone(int normalIndex) throws CommandFailedException {
-		if (!this.isValidNormalIndex(normalIndex)) {
+	public boolean unDone(int finishedIndex) throws CommandFailedException {
+		if (!this.isValidFinishedIndex(finishedIndex)) {
 			throw new CommandFailedException(String.format(
-					Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
+					Constant.INVALID_INDEX_ERROR_MESSAGE, finishedIndex));
 		} else {
 			this.updateUndoable();
-			Task doneTask = cloner.deepClone(this.currentTasks.getNormalTasks()
-					.remove(normalIndex));
-			doneTask.setStatus(Constant.TASK_STATUS_NORMAL);
-			this.currentTasks.getFinishedTasks().add(doneTask);
+			Task doneTask = cloner.deepClone(this.currentTasks.getFinishedTasks()
+					.remove(finishedIndex));
+			doneTask.setStatus(Constant.TASK_STATUS_ONGOING);
+			this.currentTasks.getOngoingTasks().add(doneTask);
 			return DataStore.save(this.currentTasks);
 		}
 	}
 
 	//@author A0119447Y
 	/**
-	 * emptyTrash clear all the trashed task
+	 * Clear all the trashed task list
+	 * 
+	 * @return 	whether the trashed tasks have been cleared successfully
 	 */
 	public boolean emptyTrash() {
 		this.updateUndoable();
@@ -326,11 +337,11 @@ public class User {
 	 */
 	public Task retrieveFromNormalList(int normalIndex)
 			throws CommandFailedException {
-		if (!this.isValidNormalIndex(normalIndex)) {
+		if (!this.isValidOngoingIndex(normalIndex)) {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
 		} else {
-			return this.currentTasks.getNormalTasks().get(normalIndex);
+			return this.currentTasks.getOngoingTasks().get(normalIndex);
 		}
 	}
 
@@ -372,18 +383,18 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * find gets the list of tasks that meet the constraint.
+	 * Retrieve the list of tasks that meet the constraint.
 	 * 
-	 * @param constraint
-	 * @param listName
-	 * @return
+	 * @param constraint	constraint the constraint to be searched
+	 * @param listName		listName the list where the tasks are to be searched
+	 * @return				array list of results that match the constraint
 	 * @throws Exception
 	 */
 	public ArrayList<Task> find(Constraint constraint, String listName)
 			throws Exception {
 		switch (listName) {
 		case Constant.TASK_LIST_TODO:
-			return this.findNormal(constraint);
+			return this.findOngoing(constraint);
 
 		case Constant.TASK_LIST_FINISHED:
 			return this.findFinished(constraint);
@@ -392,27 +403,24 @@ public class User {
 			return this.findTrashed(constraint);
 
 		default:
-			// TODO: extract to constant
-			throw new CommandFailedException(
-					"There is no list found with name: " + listName);
+			throw new CommandFailedException(String.format(Constant.PROMPT_MESSAGE_NO_TASK_FOUND_IN_LIST, listName));
 		}
 	}
 
 	/**
 	 * ========================================================================
-	 * ========================== Auxiliary methods
-	 * ==============================
-	 * ====================================================================
+	 * Auxiliary methods
+	 * ========================================================================
 	 */
 
 	//@author A0119447Y
 	/**
-	 * getNormalTaskList
+	 * Retrieve the ongoing task list
 	 * 
-	 * return the normal tasks
+	 * @return 	array list of all the ongoing tasks
 	 */
-	public ArrayList<Task> getNormalTaskList() {
-		return this.currentTasks.getNormalTasks();
+	public ArrayList<Task> getOngoingTaskList() {
+		return this.currentTasks.getOngoingTasks();
 	}
 
 	//@author A0119447Y
@@ -446,21 +454,21 @@ public class User {
 	/**
 	 * deleteNormal deletes the task with the index from the normal task list.
 	 * 
-	 * @param normalIndex
+	 * @param ongoingIndex
 	 * @param willSave
 	 * @throws CommandFailedException
 	 */
-	private boolean deleteNormal(int normalIndex, boolean willUpdateUndo)
+	private boolean deleteOngoing(int ongoingIndex, boolean willUpdateUndo)
 			throws CommandFailedException {
-		if (!this.isValidNormalIndex(normalIndex)) {
+		if (!this.isValidOngoingIndex(ongoingIndex)) {
 			throw new CommandFailedException(String.format(
-					Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
+					Constant.INVALID_INDEX_ERROR_MESSAGE, ongoingIndex));
 		} else {
 			if (willUpdateUndo) {
 				this.updateUndoable();
 			}
 			Task removedTask = cloner.deepClone(this.currentTasks
-					.getNormalTasks().remove(normalIndex));
+					.getOngoingTasks().remove(ongoingIndex));
 			removedTask.setStatus(Constant.TASK_STATUS_TRASHED);
 			this.currentTasks.getTrashedTasks().add(removedTask);
 			return DataStore.save(this.currentTasks);
@@ -495,14 +503,14 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * deleteAllNormal deletes all current tasks
+	 * deleteAllOngoing deletes all current tasks
 	 * 
 	 * @throws CommandFailedException
 	 */
-	public boolean deleteAllNormal() throws CommandFailedException {
+	public boolean deleteAllOngoing() throws CommandFailedException {
 		this.updateUndoable();
-		for (int i = this.currentTasks.getNormalTasks().size() - 1; i >= 0; i--) {
-			this.deleteNormal(i, false);
+		for (int i = this.currentTasks.getOngoingTasks().size() - 1; i >= 0; i--) {
+			this.deleteOngoing(i, false);
 		}
 		return DataStore.save(this.currentTasks);
 	}
@@ -529,8 +537,8 @@ public class User {
 	 * @return
 	 * @throws Exception
 	 */
-	private ArrayList<Task> findNormal(Constraint constraint) throws Exception {
-		Iterator<Task> taskIterator = this.currentTasks.getNormalTasks()
+	private ArrayList<Task> findOngoing(Constraint constraint) throws Exception {
+		Iterator<Task> taskIterator = this.currentTasks.getOngoingTasks()
 				.iterator();
 		ArrayList<Task> matchedTasks = new ArrayList<Task>();
 		while (taskIterator.hasNext()) {
@@ -600,13 +608,13 @@ public class User {
 
 	//@author A0119444E
 	/**
-	 * isValidNormalIndex
+	 * isValidOngoingIndex
 	 * 
 	 * @param index
 	 * @return
 	 */
-	private boolean isValidNormalIndex(int index) {
-		if ((index < 0) || (index > this.currentTasks.getNormalTasks().size())) {
+	private boolean isValidOngoingIndex(int index) {
+		if ((index < 0) || (index > this.currentTasks.getOngoingTasks().size())) {
 			return false;
 		} else {
 			return true;
