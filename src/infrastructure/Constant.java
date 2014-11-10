@@ -6,13 +6,22 @@ public abstract class Constant {
 
 	public final static boolean ERROR_PRINT_ON = true;
 
+/**
+ * ===================================================================================================
+ * Exception Messages
+ * ===================================================================================================
+ */
+	
 	
 	static final String EXCEPTION_MESSAGE_INVALID_TIME_INTERVAL_ARGUMENT = "parseTimeInterval: more than three date recieved";
 	static final String EXCEPTION_MESSAGE_INDEX_NOT_PARSABLE = "index not parsable";
+	public static final String EXCEPTION_MESSAGE_PARSING_FAIL = "Failure in Parsing The Task";
 	
-	/**
-	 * training data path
-	 */
+/**
+ * ===================================================================================================
+ * NerParser
+ * ===================================================================================================
+ */
 
 	// directory
 	public static final String FILE_PATH_ROOT = "List-of-Xiao-Ming";
@@ -223,72 +232,73 @@ public abstract class Constant {
 	public static final String XML_TAG_PRIORITY = "PRIORITY";
 	public static final String XML_TAG_COMMAND = "COMMAND";
 	
-	static final String MAP_KEY_PRIORITY = "PRIORITY";
-	static final String MAP_KEY_TAG = "TAG";
-	static final String MAP_KEY_DESCRIPTION = "DESCRIPTION";
-	static final String MAP_KEY_DATE = "DATE";
-	static final String MAP_KEY_COMMAND = "COMMAND";
+	public static final String MAP_KEY_PRIORITY = "PRIORITY";
+	public static final String MAP_KEY_TAG = "TAG";
+	public static final String MAP_KEY_DESCRIPTION = "DESCRIPTION";
+	public static final String MAP_KEY_DATE = "DATE";
+	public static final String MAP_KEY_COMMAND = "COMMAND";
 	
-	static final String DEADLINE_INDICATOR_BEFORE = "before";
-	static final String DEADLINE_INDICATOR_TILL = "till";
-	static final String DEADLINE_INDICATOR_UNTIL = "until";
-	static final String DEADLINE_INDICATOR_BY = "by";
+	public static final String DEADLINE_INDICATOR_BEFORE = "before";
+	public static final String DEADLINE_INDICATOR_TILL = "till";
+	public static final String DEADLINE_INDICATOR_UNTIL = "until";
+	public static final String DEADLINE_INDICATOR_BY = "by";
 	
-	static final int XML_STRING_MIN_LENGTH = 5;
-	static final int DATE_SIZE_THREE = 3;
-	static final int DATE_SIZE_TWO = 2;
-	static final int DATE_SIZE_ONE = 1;
+	public static final int XML_STRING_MIN_LENGTH = 5;
+	public static final int DATE_SIZE_THREE = 3;
+	public static final int DATE_SIZE_TWO = 2;
+	public static final int DATE_SIZE_ONE = 1;
 	
-	static final int DATE_SPECIAL_CHAR_T_INDEX = 10;
-	static final char DATE_SPECIAL_CHAR_T = 'T';
-	static final String DATE_SPECIAL_CHAR_T_STRING = "T";
-	static final String DATE_SPECIAL_CHAR_W = "W";
+	public static final int DATE_SPECIAL_CHAR_T_INDEX = 10;
+	public static final char DATE_SPECIAL_CHAR_T = 'T';
+	public static final String DATE_SPECIAL_CHAR_T_STRING = "T";
+	public static final String DATE_SPECIAL_CHAR_W = "W";
 	
-	static final int DATE_STRING_LENGTH_MINUTE = 16;
-	static final int DATE_STRING_LENGTH_WEEK = 11;
-	static final int DATE_STRING_LENGTH_BASE = 10;
-	static final int DATE_STRING_LENGTH_MONTH = 7;
-	static final int DATE_STRING_LENGTH_YEAR = 4;
+	public static final int DATE_STRING_LENGTH_MINUTE = 16;
+	public static final int DATE_STRING_LENGTH_WEEK = 11;
+	public static final int DATE_STRING_LENGTH_BASE = 10;
+	public static final int DATE_STRING_LENGTH_MONTH = 7;
+	public static final int DATE_STRING_LENGTH_YEAR = 4;
 	
-	static final String DATE_FORMAT_MINUTE = "yyyy-MM-dd HH:mm";
-	static final String DATE_FORMAT_WEEK = "yyyy-MM-ww";
-	static final String DATE_FORMAT_YEAR_MONTH = "yyyy-MM";
-	static final String DATE_FORMAT_YEAR = "yyyy";
-	static final String DATE_FORMAT_BASE = "yyyy-MM-dd";
+	public static final String DATE_FORMAT_MINUTE = "yyyy-MM-dd HH:mm";
+	public static final String DATE_FORMAT_WEEK = "yyyy-MM-ww";
+	public static final String DATE_FORMAT_YEAR_MONTH = "yyyy-MM";
+	public static final String DATE_FORMAT_YEAR = "yyyy";
+	public static final String DATE_FORMAT_BASE = "yyyy-MM-dd";
 	
-	static final int CALENDAR_INCREMENT_ONE = 1;
-	static final int CALENDAR_WEEK_START_DAY_OFFSET = 1;
-	static final int CALENDAR_END_MINUTE = 59;
-	static final int CALENDAR_END_HOUR = 23;
-	static final int CALENDAR_START_MINUTE = 0;
-	static final int CALENDAR_START_HOUR = 0;
+	public static final int CALENDAR_INCREMENT_ONE = 1;
+	public static final int CALENDAR_WEEK_START_DAY_OFFSET = 1;
+	public static final int CALENDAR_END_MINUTE = 59;
+	public static final int CALENDAR_END_HOUR = 23;
+	public static final int CALENDAR_START_MINUTE = 0;
+	public static final int CALENDAR_START_HOUR = 0;
 	
-	static final String TASK_TAG_DEFAULT = "ongoing";
-	static final String EMPTY_STRING = "";
-	static final String SPLITOR_TAB = "\t";
-	static final String SPLITOR_DOT = "\\.";
-	static final String TAG_OPEN_LATTER = "</";
-	static final String TAG_OPEN_FORMER_SPACE = " <";
-	static final String TAG_CLOSE = ">";
-	static final String TAG_CLOSE_SPACE = "> ";
-	static final String TAG_OPEN_FORMER = "<";
+	public static final String TASK_TAG_DEFAULT = "ongoing";
+	public static final String EMPTY_STRING = "";
+	public static final String SPLITOR_TAB = "\t";
+	public static final String SPLITOR_DOT = "\\.";
+	public static final String TAG_OPEN_LATTER = "</";
+	public static final String TAG_OPEN_FORMER_SPACE = " <";
+	public static final String TAG_CLOSE = ">";
+	public static final String TAG_CLOSE_SPACE = "> ";
+	public static final String TAG_OPEN_FORMER = "<";
 	
-	static final int LIST_SIZE_EMPTY = 0;
-	static final int LIST_INDEX_FIRST = 0;
-	static final int LIST_INDEX_NOT_EXISTING = -1;
+	public static final int LIST_SIZE_EMPTY = 0;
+	public static final int LIST_INDEX_FIRST = 0;
+	public static final int LIST_INDEX_NOT_EXISTING = -1;
 	
-	static final String SPLITOR_SPACE = " ";
-	static final String SPLITOR_COMMA = ",";
+	public static final String SPLITOR_SPACE = " ";
+	public static final String SPLITOR_COMMA = ",";
 
-	static final String PARSING_STYLE_INLINE_XML = "inlineXML";
-	static final String TIME_PARSER_KEY_SUTIME = "sutime";
-	static final String TIME_PARSER_FILE_PATH = "NLPTraining/defs.sutime.txt, NLPTraining/english.holidays.sutime.txt, NLPTraining/english.sutime.txt";
-	static final String TIME_PARSER_ARGUMENT_2 = "0";
-	static final String TIME_PARSER_SUTIME_RULES = "sutime.rules";
-	static final String TIME_PARSER_SUTIME_BINDERS = "sutime.binders";
+	public static final String PARSING_STYLE_INLINE_XML = "inlineXML";
+	public static final String TIME_PARSER_KEY_SUTIME = "sutime";
+	public static final String TIME_PARSER_FILE_PATH = "NLPTraining/defs.sutime.txt, NLPTraining/english.holidays.sutime.txt, NLPTraining/english.sutime.txt";
+	public static final String TIME_PARSER_ARGUMENT_2 = "0";
+	public static final String TIME_PARSER_SUTIME_RULES = "sutime.rules";
+	public static final String TIME_PARSER_SUTIME_BINDERS = "sutime.binders";
 
 	// GUI messages that will be shown to users
-	public static final String GUI_MESSAGE_WELCOME = "Welcome to 小鸣的清单(List of Xiao Ming)";
+	public static final String GUI_MESSAGE_WELCOME = "Welcome to List of Xiao Ming. \nPlease wait for the NLP model loading...";
+	public static final String GUI_MESSAGE_PARSER_LOADING = "NLP MODEL LOADING";
 	public static final String GUI_MESSAGE_SHORTCUT_INSTRUCTION = "ALT + A:\t <DATE> \t </DATE>\n"
 			+ "ALT + C:\t <COMMAND> \t </COMMAND>\n"
 			+ "ALT + D:\t <DESCRIPTION> \t </DESCRIPTION>\n"
@@ -303,8 +313,9 @@ public abstract class Constant {
 			+ "CTRL + M:\t reload model\n";
 	public static final String GUI_PREVIEW_MESSAGE_DELETE = "Command: delete \n\n"
 			+ "No Task Specified";
-
-	// prompt messages that will be printed for users
+	public static final String GUI_MESSAGE_PREVIEW_DEFAULT = "The expected result will be shown here";
+	
+	// CMD messages that will be shown for users
 	public static final String PROMPT_MESSAGE_WELCOME = "\n\nWelcome to 小鸣的清单(List of Xiao Ming)";
 	public static final String PROMPT_MESSAGE_INSTRUCTION = "You can type in 'log in', 'create account', 'help' or 'exit'.";
 	public static final String PROMPT_MESSAGE_NOT_LOG_IN = "you have not logged in yet";
@@ -392,7 +403,12 @@ public abstract class Constant {
 	public static final int CALENDAR_MONTH_IN_SECOND = 39;
 	public static final int CALENDAR_YEAR_IN_SECOND = 41;
 	
-	// DataStore
+/**
+ * ===================================================================================================
+ * DataStore
+ * ===================================================================================================
+ */
+
 	public static final String SAVE_DESCRIPTION = "description";
 	public static final String SAVE_STATUS = "status";
 	public static final String SAVE_TAGS = "tags";
@@ -432,11 +448,16 @@ public abstract class Constant {
 
 	public static String TIME_MESSAGE_FLOATING = "";
 
-	/**
-	 * MainViewController
-	 */
+	
+	
+/**
+ * ===================================================================================================
+ * MainViewController
+ * ===================================================================================================
+ **/
 
 	// CSS styles
+	
 	public static final String CSS_STYLE_TAG_LABEL = "-fx-font: 10px \"Akagi-SemiBold\";"
 			+ "-fx-padding: 5 10 5 10;"
 			+ "-fx-background-color: %s;"
@@ -491,6 +512,31 @@ public abstract class Constant {
 			"rgba(59, 175, 218, 0.7)", "rgba(55, 188, 155, 0.7)",
 			"rgba(246, 187, 66, 0.7)", "rgba(140, 193, 82, 0.7)",
 			"rgba(233, 87, 63, 0.7)", "rgba(218, 68, 84, 0.7)" };
+	public static final String CSS_STYLE_FEEDBACK_BOX = "-fx-background-color: rgba(80, 80, 80, 1);"
+			+ "-fx-padding: 8 8 8 8;" 
+			+ CSS_STYLE_SHADOW;
+	public static final String CSS_STYLE_CONSOLE_TEXT_LABEL = "-fx-text-fill: white;";
+	public static final String CSS_STYLE_PREVIEW_PANE_BASE = "-fx-padding: 10 8 8 8;";
+	public static final String CSS_CLASS_NAME = "mylistview";
+	public static final String CSS_STYLE_LIST_LABEL = CSS_STYLE_CONSOLE_TEXT_LABEL
+			+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 3, 1);";
+	public static final String CSS_STYLE_TASK_LIST_DEFAULT = "-fx-background-color: rgba(240, 115, 136, 1);"
+	+ "-fx-padding: 8 16 8 8;"
+	+ CSS_STYLE_SHADOW;
+	public static final String CSS_STYLE_DISPLAY_CONTENT_BOX = "-fx-padding: 10 0 0 0;";
+	public static final String CSS_STYLE_TASK_LIST_SEARCH = "-fx-background-color: rgba(100, 138, 173, 1);"
+	+ "-fx-padding: 8 16 8 8;"
+	+ CSS_STYLE_SHADOW;
+	public static final String CSS_STYLE_TASK_LIST_FINISHED = "-fx-background-color: rgba(222, 236, 147, 1);"
+	+ "-fx-padding: 8 16 8 8;"
+	+ CSS_STYLE_SHADOW;
+	public static final String CSS_STYLE_TASK_LIST_TRASHED = "-fx-background-color: rgba(150, 150, 150, 1);"
+	+ "-fx-padding: 8 16 8 8;"
+	+ CSS_STYLE_SHADOW;
+	public static final String CSS_STYLE_TASK_LIST_ONGOING = "-fx-background-color: rgba(250, 230, 155, 1);"
+	+ "-fx-padding: 8 16 8 8;"
+	+ CSS_STYLE_SHADOW;
+
 
 	// fonts
 	public static final String FONT_FILE_BASE = "/resource/Akagi-SB.ttf";
@@ -512,25 +558,80 @@ public abstract class Constant {
 	public static final String HOT_KEY_DELETE = "control D";
 	public static final String HOT_KEY_SEARCH = "control F";
 	public static final String HOT_KEY_RELOAD = "control M";
-
 	public static final String HOT_KEY_TO_DO = "control 1";
 	public static final String HOT_KEY_DONE = "control 2";
 	public static final String HOT_KEY_TRASHED = "control 3";
 	public static final String HOT_KEY_HELP = "control 4";
-
 	public static final String HOT_KEY_LAST_COMMAND = "UP";
 	public static final String HOT_KEY_NEXT_COMMAND = "DOWN";
-
-	public static final double GRID_ROW_HEIGHT = 30.0;
-
 	public static final int MODIFIER_ALT = 520;
-
 	public static final int MODIFIER_CTRL = 130;
+	
+	
+	//task list names
 	public static final String TASK_LIST_FINISHED = "finished";
 	public static final String TASK_LIST_TRASHED = "trashed";
 	public static final String TASK_LIST_ONGOING = "ongoing";
 	public static final String TASK_LIST_SEARCH = "search";
 	public static final String TASK_LIST_HELP = "help";
+
+	//texts that shortcuts will add in
+	public static final String TEXT_INSERTED_RELOAD_MODEL = "reload model ";
+	public static final String TEXT_INSERTED_SEARCH = "search ";
+	public static final String TEXT_INSERTED_DELETE = "delete ";
+	public static final String TEXT_INSERTED_UPDATE = "update ";
+	public static final String TEXT_INSERTED_DISPLAY = "display ";
+	public static final String TEXT_INSERTED_ADD = "add ";
+
+	//preview messages
+	public static final String PREVIEW_MESSAGE_COMMAND_READY = "We're ready for your commands!";
+	public static final String PREVIEW_MESSAGE_MODEL_RELOADED = "Model reloaded!";
+	public static final String PREVIEW_MESSAGE_TASK_ALL_TRASHED = "All tasks trashed";
+	public static final String PREVIEW_MESSAGE_SEARCH_ERROR = "SEARCH ERROR";
+	public static final String PREVIEW_MESSAGE_ADD_INITIAL_VALUE = "Command: create \n\n";
+	public static final String PREVIEW_MESSAGE_DELETE_INITIAL_VALUE = "Command: delete \n\n";
+	public static final String PREVIEW_MESSAGE_DELETE_NO_TASK_SPECIFIED = PREVIEW_MESSAGE_DELETE_INITIAL_VALUE + "No Task Specified";
+	public static final String PREVIEW_MESSAGE_DELETE_ALREADY_TRASHED = PREVIEW_MESSAGE_DELETE_INITIAL_VALUE + "All tasks in 'TRASHED' section have been trashed already.";
+	public static final String PREVIEW_MESSAGE_SEARCH_INITIAL_VALUE = "Command: search \n\n";
+	public static final String PREVIEW_MESSAGE_SEARCH_NOT_ALLOWED = "You can only perform search operations under \"ONGOING\", \"FINISHED\" or \"TRASHED\" page";
+	public static final String PREVIEW_MESSAGE_INITIAL_VALUE = "Command: done \n\n";
+	public static final String PREVIEW_MESSAGE_DONE_NO_TASK_SPECIFIED = PREVIEW_MESSAGE_INITIAL_VALUE + "No Task Specified";
+	public static final String PREVIEW_MESSAGE_DONE_TRASHED = PREVIEW_MESSAGE_INITIAL_VALUE + "Move the task out of 'TRASHED' section first to finish it";
+	public static final String PREVIEW_MESSAGE_DONE_FINISHED_ALREADY = PREVIEW_MESSAGE_INITIAL_VALUE + "All tasks in 'FINISHED' section have been finished already";
+	public static final String PREVIEW_MESSAGE_DISPLAY = "Command: display";
+	public static final String PREVIEW_MESSAGE_UNDO = "Command: undo";
+	public static final String PREVIEW_MESSAGE_REDO = "Command: redo";
+	public static final String PREVIEW_MESSAGE_CLEAR = "Command: clear";
+	public static final String PREVIEW_MESSAGE_EXIT = "Command: exit";
+	public static final String PREVIEW_MESSAGE_HELP = "Command: help";
+	public static final String PREVIEW_MESSAGE_EMPTY_TRASH = "Command: empty trash";
+	public static final String PREVIEW_MESSAGE_RELOAD_MODEL = "Command: reload model";
+	public static final String PREVIEW_MESSAGE_DEFAULT = "Command not recognized";
+	public static final String PREVIEW_MESSAGE_RECOVER_INITIAL_VALUE = "Command: recover \n\n";
+	public static final String PREVIEW_MESSAGE_RECOVER_NO_TASK_SPECIFIED = PREVIEW_MESSAGE_RECOVER_INITIAL_VALUE + "No Task Specified";
+	public static final String PREVIEW_MESSAGE_RECOVER_ALREADY_IN_LIST = PREVIEW_MESSAGE_INITIAL_VALUE + "All Tasks here are already in \"ONGOING\" list";
 	
+	//indices
+	public static final int COLUMN_INDEX_LIST_INDICATOR_BOX = 0;
+	public static final int ROW_INDEX_LIST_INDICATOR_BOX = 1;
+	public static final int COLUMN_INDEX_FEEDBACK_BOX = 0;
+	public static final int ROW_INDEX_FEEDBACK_BOX = 0;
+
+	//fonts
+	public static final int FONT_LOAD_SIZE = 10;
+	public static final int FONT_SIZE_LIST_LABEL = 50;
+	public static final int FONT_SIZE_CONSOLE_TEXT_LABEL = 12;
+	public static final String FONT_LIST_LABEL = "Akagi";
+	public static final String FONT_CONSOLE_TEXT_LABEL = "Courier New";
+
+	//width and heights
+	public static final double GRID_ROW_HEIGHT = 30.0;
+	public static final int PREF_WIDTH_OFFSET_LIST_INDICATOR_BOX = 720;
+	public static final int PREF_HEIGHT_FEEDBACK_BOX = 134;
+	public static final int PREF_WIDTH_FEEDBACK_BOX = 650;
+	public static final int PREVIEW_PANE_INNER_GAP = 15;
 	
+	//resources
+	public static final String RESOURCE_FXML = "MainView.fxml";
+	public static final String RESOURCE_EMPTY_IMAGE = "/resource/empty.png";
 }
