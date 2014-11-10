@@ -830,7 +830,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	//@author A0119379R
 	private String getSearchPreview(String userInput) {
 		if (this.getCurrentListName() != Constant.TASK_LIST_FINISHED &&
-				this.getCurrentListName() != Constant.TASK_LIST_TODO &&
+				this.getCurrentListName() != Constant.TASK_LIST_ONGOING &&
 				this.getCurrentListName() != Constant.TASK_LIST_TRASHED) {
 			return "You can only perform search operations under \"TODO\", \"FINISHED\" or \"TRASHED\" page";
 		}
@@ -972,7 +972,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		Constraint thisConstraint;
 		try {
 			if (this.getCurrentListName() != Constant.TASK_LIST_FINISHED &&
-					this.getCurrentListName() != Constant.TASK_LIST_TODO &&
+					this.getCurrentListName() != Constant.TASK_LIST_ONGOING &&
 					this.getCurrentListName() != Constant.TASK_LIST_TRASHED) {
 				setConsoleText("You can only perform search operation under \"TODO\", \"FINISHED\" or \"TRASHED\" page");
 				return null;
