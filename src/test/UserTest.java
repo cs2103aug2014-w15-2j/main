@@ -131,75 +131,75 @@ public class UserTest {
 	}
 	
 	//@author A0119444E
-//	/**
-//	 * test for add method in User
-//	 * @throws Exception
-//	 */
-//	@Test
-//	public void testAdd() throws Exception {
-//		int testSize = 10;
-//
-//		User user = new User();
-//		int initialSize = user.getOngoingTaskList().size();
-//		System.out.println("user normal task size: " + initialSize);
-//
-//		ArrayList<String> tag = new ArrayList<String>();
-//		TimeInterval interval = new TimeInterval();
-//
-//		for (int i = 1; i < testSize + 1; i++) {
-//			Task task = new Task("task" + i, 2, tag, interval);
-//			user.add(task);
-//		}
-//		int currentSize = user.getOngoingTaskList().size();
-//		int p = 1;
-//		for (int i = currentSize - testSize; i < currentSize - 1; i++) {
-//			testAdd("test add for task: " + i, "task" + p++, user, i);
-//		}
-//		for (int i = currentSize - testSize; i < currentSize; i++) {
-//			user.delete(currentSize - testSize, Constant.TASK_LIST_ONGOING);
-//		}
-//		System.out.println("all add tests are passed");
-//	}
+	/**
+	 * test for add method in User
+	 * @throws Exception
+	 */
+	@Test
+	public void testAdd() throws Exception {
+		int testSize = 10;
+
+		User user = new User();
+		int initialSize = user.getOngoingTaskList().size();
+		System.out.println("user normal task size: " + initialSize);
+
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+
+		for (int i = 1; i < testSize + 1; i++) {
+			Task task = new Task("task" + i, 2, tag, interval);
+			user.add(task);
+		}
+		int currentSize = user.getOngoingTaskList().size();
+		int p = 1;
+		for (int i = currentSize - testSize; i < currentSize - 1; i++) {
+			testAdd("test add for task: " + i, "task" + p++, user, i);
+		}
+		for (int i = currentSize - testSize; i < currentSize; i++) {
+			user.delete(currentSize - testSize, Constant.TASK_LIST_ONGOING);
+		}
+		System.out.println("all add tests are passed");
+	}
 	
-//	//@author A0119444E
-//	/**
-//	 * test for delete method in User
-//	 * @throws Exception
-//	 */
-//	@Test	
-//	public void testDelete() throws Exception {
-//		int testSize = 10;
-//
-//		User user = new User();
-//		ArrayList<String> tag = new ArrayList<String>();
-//		TimeInterval interval = new TimeInterval();
-//
-//		for (int i = 1; i < testSize + 1; i++) {
-//			Task task = new Task("task" + i, 2, tag, interval);
-//			user.add(task);
-//		}
-//		int currentSize = user.getOngoingTaskList().size();
-//		int p = 1;
-//		for (int i = currentSize - testSize; i < currentSize; i++) {
-//			testDelete("test delete for task: " + i, "task" + p++, user, currentSize - testSize);
-//			user.delete(currentSize - testSize, Constant.TASK_LIST_ONGOING);
-//		}
-//		System.out.println("all delete tests are passed");		
-//	}
-//	
-//	/**
-//	 * test for deleteAll method in User
-//	 * @throws Exception
-//	 */
-//	@Test
-//	//@author A0119444E
-//	public void testDeleteAll() throws Exception {
-//		User user = new User();
-//		user.deleteAll(Constant.TASK_LIST_TODO);
-//		testDeleteAll("test deleteAll method", 0, user.getOngoingTaskList().size());
-//		user.undo();
-//		System.out.println("all deleteAll tests are passed");
-//	}
+	//@author A0119444E
+	/**
+	 * test for delete method in User
+	 * @throws Exception
+	 */
+	@Test	
+	public void testDelete() throws Exception {
+		int testSize = 10;
+
+		User user = new User();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+
+		for (int i = 1; i < testSize + 1; i++) {
+			Task task = new Task("task" + i, 2, tag, interval);
+			user.add(task);
+		}
+		int currentSize = user.getOngoingTaskList().size();
+		int p = 1;
+		for (int i = currentSize - testSize; i < currentSize; i++) {
+			testDelete("test delete for task: " + i, "task" + p++, user, currentSize - testSize);
+			user.delete(currentSize - testSize, Constant.TASK_LIST_ONGOING);
+		}
+		System.out.println("all delete tests are passed");		
+	}
+	
+	/**
+	 * test for deleteAll method in User
+	 * @throws Exception
+	 */
+	@Test
+	//@author A0119444E
+	public void testDeleteAll() throws Exception {
+		User user = new User();
+		user.deleteAll(Constant.TASK_LIST_ONGOING);
+		testDeleteAll("test deleteAll method", 0, user.getOngoingTaskList().size());
+		user.undo();
+		System.out.println("all deleteAll tests are passed");
+	}
 
 	//@author A0119444E
 	/**
