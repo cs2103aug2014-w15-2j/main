@@ -288,7 +288,6 @@ public abstract class Constant {
 	public static final String TIME_PARSER_SUTIME_BINDERS = "sutime.binders";
 
 	// GUI messages that will be shown to users
-	public static final String GUI_MESSAGE_WELCOME = "Welcome to 小鸣的清单(List of Xiao Ming)";
 	public static final String GUI_MESSAGE_SHORTCUT_INSTRUCTION = "ALT + A:\t <DATE> \t </DATE>\n"
 			+ "ALT + C:\t <COMMAND> \t </COMMAND>\n"
 			+ "ALT + D:\t <DESCRIPTION> \t </DESCRIPTION>\n"
@@ -531,6 +530,205 @@ public abstract class Constant {
 	public static final String TASK_LIST_ONGOING = "ongoing";
 	public static final String TASK_LIST_SEARCH = "search";
 	public static final String TASK_LIST_HELP = "help";
+
+
+	public static final String PREVIEW_MESSAGE_COMMAND_READY = "We're ready for your commands!";
+
+
+	public static final String TEXT_INSERTED_RELOAD_MODEL = "reload model ";
+
+
+	public static final String TEXT_INSERTED_SEARCH = "search ";
+
+
+	public static final String TEXT_INSERTED_DELETE = "delete ";
+
+
+	public static final String TEXT_INSERTED_UPDATE = "update ";
+
+
+	public static final String TEXT_INSERTED_DISPLAY = "display ";
+
+
+	public static final String TEXT_INSERTED_ADD = "add ";
+
+
+	public static final String PREVIEW_MESSAGE_MODEL_RELOADED = "Model reloaded!";
+
+
+	public static final String PREVIEW_MESSAGE_TASK_ALL_TRASHED = "All tasks trashed";
+
+
+	public static final String PREVIEW_MESSAGE_SEARCH_ERROR = "SEARCH ERROR";
+
+
+	public static final String PREVIEW_MESSAGE_ADD_INITIAL_VALUE = "Command: create \n\n";
+
+
+	public static final String PREVIEW_MESSAGE_DELETE_INITIAL_VALUE = "Command: delete \n\n";
+
+
+	public static final String PREVIEW_MESSAGE_DELETE_NO_TASK_SPECIFIED = PREVIEW_MESSAGE_DELETE_INITIAL_VALUE + "No Task Specified";
+
+
+	public static final String PREVIEW_MESSAGE_DELETE_ALREADY_TRASHED = PREVIEW_MESSAGE_DELETE_INITIAL_VALUE + "All tasks in 'TRASHED' section have been trashed already.";
+
+
+	public static final String PREVIEW_MESSAGE_SEARCH_INITIAL_VALUE = "Command: search \n\n";
+
+
+	public static final String PREVIEW_MESSAGE_SEARCH_NOT_ALLOWED = "You can only perform search operations under \"ONGOING\", \"FINISHED\" or \"TRASHED\" page";
+
+
+	public static final String PREVIEW_MESSAGE_INITIAL_VALUE = "Command: done \n\n";
+
+
+	public static final String PREVIEW_MESSAGE_DONE_NO_TASK_SPECIFIED = PREVIEW_MESSAGE_INITIAL_VALUE + "No Task Specified";
+
+
+	public static final String PREVIEW_MESSAGE_DONE_TRASHED = PREVIEW_MESSAGE_INITIAL_VALUE + "Move the task out of 'TRASHED' section first to finish it";
+
+
+	public static final String PREVIEW_MESSAGE_DONE_FINISHED_ALREADY = PREVIEW_MESSAGE_INITIAL_VALUE + "All tasks in 'FINISHED' section have been finished already";
+
+
+	public static final String PREVIEW_MESSAGE_DISPLAY = "Command: display";
+
+
+	public static final String PREVIEW_MESSAGE_UNDO = "Command: undo";
+
+
+	public static final String PREVIEW_MESSAGE_REDO = "Command: redo";
+
+
+	public static final String PREVIEW_MESSAGE_CLEAR = "Command: clear";
+
+
+	public static final String PREVIEW_MESSAGE_EXIT = "Command: exit";
+
+
+	public static final String PREVIEW_MESSAGE_HELP = "Command: help";
+
+
+	public static final String PREVIEW_MESSAGE_EMPTY_TRASH = "Command: empty trash";
+
+
+	public static final String PREVIEW_MESSAGE_RELOAD_MODEL = "Command: reload model";
+
+
+	public static final String PREVIEW_MESSAGE_DEFAULT = "Command not recognized";
+
+
+	public static final String PREVIEW_MESSAGE_RECOVER_INITIAL_VALUE = "Command: recover \n\n";
+
+
+	public static final String PREVIEW_MESSAGE_RECOVER_NO_TASK_SPECIFIED = PREVIEW_MESSAGE_RECOVER_INITIAL_VALUE + "No Task Specified";
+
+
+	public static final String PREVIEW_MESSAGE_RECOVER_ALREADY_IN_LIST = PREVIEW_MESSAGE_INITIAL_VALUE + "All Tasks here are already in \"ONGOING\" list";
+
+
+	public static final String EXCEPTION_MESSAGE_PARSING_FAIL = "Failure in Parsing The Task";
+
+
+	public static final String GUI_MESSAGE_PREVIEW_DEFAULT = "The expected result will be shown here";
+
+
+	public static final String RESOURCE_EMPTY_IMAGE = "/resource/empty.png";
+
+
+	public static final String CSS_STYLE_DISPLAY_CONTENT_BOX = "-fx-padding: 10 0 0 0;";
+
+
+	public static final int COLUMN_INDEX_LIST_INDICATOR_BOX = 0;
+
+
+	public static final int ROW_INDEX_LIST_INDICATOR_BOX = 1;
+
+
+	public static final int COLUMN_INDEX_FEEDBACK_BOX = 0;
+
+
+	public static final int ROW_INDEX_FEEDBACK_BOX = 0;
+
+
+	public static final String CSS_STYLE_TASK_LIST_DEFAULT = "-fx-background-color: rgba(240, 115, 136, 1);"
+	+ "-fx-padding: 8 16 8 8;"
+	+ CSS_STYLE_SHADOW;
+
+
+	public static final String CSS_STYLE_TASK_LIST_SEARCH = "-fx-background-color: rgba(100, 138, 173, 1);"
+	+ "-fx-padding: 8 16 8 8;"
+	+ CSS_STYLE_SHADOW;
+
+
+	public static final String CSS_STYLE_TASK_LIST_FINISHED = "-fx-background-color: rgba(222, 236, 147, 1);"
+	+ "-fx-padding: 8 16 8 8;"
+	+ CSS_STYLE_SHADOW;
+
+
+	public static final String CSS_STYLE_TASK_LIST_TRASHED = "-fx-background-color: rgba(150, 150, 150, 1);"
+	+ "-fx-padding: 8 16 8 8;"
+	+ CSS_STYLE_SHADOW;
+
+
+	public static final String CSS_STYLE_TASK_LIST_ONGOING = "-fx-background-color: rgba(250, 230, 155, 1);"
+	+ "-fx-padding: 8 16 8 8;"
+	+ CSS_STYLE_SHADOW;
+
+
+	public static final int FONT_SIZE_LIST_LABEL = 50;
+
+
+	public static final String FONT_LIST_LABEL = "Akagi";
+
+
+	public static final int PREF_WIDTH_OFFSET_LIST_INDICATOR_BOX = 720;
+
+
+	public static final int FONT_SIZE_CONSOLE_TEXT_LABEL = 12;
+
+
+	public static final String CSS_STYLE_FEEDBACK_BOX = "-fx-background-color: rgba(80, 80, 80, 1);"
+	+ "-fx-padding: 8 8 8 8;" 
+	+ CSS_STYLE_SHADOW;
+
+
+	public static final String CSS_STYLE_CONSOLE_TEXT_LABEL = "-fx-text-fill: white;";
+
+
+	public static final String CSS_STYLE_LIST_LABEL = CSS_STYLE_CONSOLE_TEXT_LABEL
+	+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 3, 1);";
+
+
+	public static final String FONT_CONSOLE_TEXT_LABEL = "Courier New";
+
+
+	public static final int PREF_HEIGHT_FEEDBACK_BOX = 134;
+
+
+	public static final int PREF_WIDTH_FEEDBACK_BOX = 650;
+
+
+	public static final int PREVIEW_PANE_INNER_GAP = 15;
+
+
+	public static final String CSS_STYLE_PREVIEW_PANE_BASE = "-fx-padding: 10 8 8 8;";
+
+
+	public static final String CSS_CLASS_NAME = "mylistview";
+
+
+	public static final String GUI_MESSAGE_WELCOME = "Welcome to List of Xiao Ming. \nPlease wait for the NLP model loading...";
+
+
+	public static final String GUI_MESSAGE_PARSER_LOADING = "NLP MODEL LOADING";
+
+
+	public static final String RESOURCE_FXML = "MainView.fxml";
+
+
+	public static final int FONT_LOAD_SIZE = 10;
 	
 	
 }
