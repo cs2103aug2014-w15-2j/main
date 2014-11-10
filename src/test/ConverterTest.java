@@ -1,6 +1,8 @@
-package infrastructure;
+package test;
 
 import static org.junit.Assert.assertEquals;
+import infrastructure.Constant;
+import infrastructure.Converter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
