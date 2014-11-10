@@ -220,7 +220,10 @@ public class User {
 					Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
 		} else {
 			this.updateUndoable();
+			
+			//get the task that users want to update
 			Task task = this.currentTasks.getNormalTasks().get(normalIndex);
+			
 			Iterator<String> attributes = toBeUpdated.keySet().iterator();
 			while (attributes.hasNext()) {
 				String currentAttribute = attributes.next();
@@ -400,9 +403,8 @@ public class User {
 
 	/**
 	 * ========================================================================
-	 * ========================== Auxiliary methods
-	 * ==============================
-	 * ====================================================================
+	 * ========================== Auxiliary methods ===========================
+	 * ========================================================================
 	 */
 
 	//@author A0119447Y
@@ -437,9 +439,8 @@ public class User {
 
 	/**
 	 * ========================================================================
-	 * ========================== Private methods
-	 * ================================
-	 * ==================================================================
+	 * ========================== Private methods =============================
+	 * ========================================================================
 	 */
 
 	//@author A0119447Y
@@ -526,7 +527,7 @@ public class User {
 	 * find gets the list of tasks that meet the constraint.
 	 * 
 	 * @param constraint
-	 * @return
+	 * @return normal tasks that meet the constraint
 	 * @throws Exception
 	 */
 	private ArrayList<Task> findNormal(Constraint constraint) throws Exception {
@@ -547,7 +548,7 @@ public class User {
 	 * findTrashed gets the list of trashed tasks that meet the constraint.
 	 * 
 	 * @param constraint
-	 * @return
+	 * @return trashed tasks that meet the constraint
 	 * @throws Exception
 	 */
 	private ArrayList<Task> findTrashed(Constraint constraint) throws Exception {
@@ -568,7 +569,7 @@ public class User {
 	 * findFinished gets the list of finished tasks that meet the constraint.
 	 * 
 	 * @param constraint
-	 * @return
+	 * @return finished tasks that meet the constraint
 	 * @throws Exception
 	 */
 	private ArrayList<Task> findFinished(Constraint constraint)
@@ -603,7 +604,7 @@ public class User {
 	 * isValidNormalIndex
 	 * 
 	 * @param index
-	 * @return
+	 * @return boolean
 	 */
 	private boolean isValidNormalIndex(int index) {
 		if ((index < 0) || (index > this.currentTasks.getNormalTasks().size())) {
@@ -618,7 +619,7 @@ public class User {
 	 * isValidTrashedIndex
 	 * 
 	 * @param index
-	 * @return
+	 * @return boolean
 	 */
 	private boolean isValidTrashedIndex(int index) {
 		if ((index < 0) || (index > this.currentTasks.getTrashedTasks().size())) {
@@ -633,7 +634,7 @@ public class User {
 	 * isValidFinishedIndex
 	 * 
 	 * @param index
-	 * @return
+	 * @return boolean
 	 */
 	private boolean isValidFinishedIndex(int index) {
 		if ((index < 0)
@@ -645,11 +646,9 @@ public class User {
 	}
 
 	/**
-	 * ========================================================================
-	 * ========================== System level static methods
-	 * ====================
-	 * ======================================================
-	 * ========================
+	 * =================================================================================
+	 * ========================== System level static methods ==========================
+	 * =================================================================================
 	 */
 	//@author A0119447Y
 	/**
@@ -662,9 +661,8 @@ public class User {
 
 	/**
 	 * ========================================================================
-	 * ========================== Unused methods
-	 * ================================
-	 * ==================================================================
+	 * ========================== Unused methods ==============================
+	 * ========================================================================
 	 */
 
 	//@author A0119444E-unused
