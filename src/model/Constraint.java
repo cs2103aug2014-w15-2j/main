@@ -38,7 +38,7 @@ public class Constraint {
 	}
 
 	/**
-	 * isMeeted
+	 * isMeeted checks whether a task can meet the given constraint.	
 	 * 
 	 * @param task
 	 * @return boolean
@@ -53,25 +53,25 @@ public class Constraint {
 		boolean isSearchingDeadline = false;
 		boolean isSearchingFloating = false;
 		
-		// if constraint's time interval is a deadline
+		//if constraint's time interval is a deadline
 		if (this.interval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 			isSearchingDeadline = true;
 		}
-
+		//if constraint's time is a floating time 
 		if (this.interval.getStartDate().equals(Constant.FLOATING_START_DATE)) {
 			isSearchingFloating = true;
 		}
 		
-		// test interval
+		//test interval
 		if (isSearchingDeadline) {
 			if (this.interval.getEndDate().after(
 					task.getInterval().getEndDate())) {
 				isIntervalMatched = true;
 			}
-			// search for a interval
+		//search for a interval
 		} else if (!isSearchingFloating) {
 			if (task.isFloating()) {
-				// never return floating tasks when search for a time
+			// never return floating tasks when search for a time
 			} else if (task.isDeadline()
 					&& TimeInterval.isOverlapped(this.interval, task
 							.getInterval().getEndDate())) {
@@ -84,7 +84,7 @@ public class Constraint {
 
 			}
 		} else {
-			// search floating
+			// search for a keyword
 		}
 		
 		if (this.keywords != null) {
@@ -94,15 +94,13 @@ public class Constraint {
 					if (task.getDescription().toLowerCase().contains(keyword)) {
 						isKeywordMatched = true;
 						break;
-					}
-					
+					}					
 					// test priority
 					if (UtilityMethod.priorityToString(task.getPriority()).equals(
 							keyword)) {
 						isPriorityMatched = true;
 						break;
-					}
-					
+					}					
 					// test tag
 					Iterator<String> tagIterator = task.getTag().iterator();
 					while (tagIterator.hasNext()) {
