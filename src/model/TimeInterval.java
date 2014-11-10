@@ -66,6 +66,12 @@ public class TimeInterval {
 		return this.endDate;
 	}
 	
+	/**
+	 * check whether a time interval is valid
+	 * @param startDate
+	 * @param endDate
+	 * @return boolean
+	 */
 	//@author A0119444E
 	public static boolean isValid(Date startDate, Date endDate){
 		if (startDate.after(endDate)) {
@@ -96,7 +102,6 @@ public class TimeInterval {
 	 * @param deadline
 	 * @return
 	 */
-
 	//@author A0119444E
 	public static boolean isOverlapped(TimeInterval interval, Date deadline) {
 		if (interval.startDate.before(deadline) && (interval.endDate.after(deadline) || interval.endDate.equals(deadline))) {
