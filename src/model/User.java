@@ -432,7 +432,9 @@ public class User {
 			throw new CommandFailedException(String.format(
 					Constant.INVALID_INDEX_ERROR_MESSAGE, ongoingIndex));
 		} else {
-			return this.getOngoingTaskList().get(ongoingIndex).removeTag(tag);
+			this.updateUndoable();
+			this.getOngoingTaskList().get(ongoingIndex).removeTag(tag);
+			return DataStore.save(this.currentTasks);
 		}
 	}
 

@@ -125,7 +125,7 @@ public class Constraint {
 		if (this.interval != null
 				&& !this.interval.toString().equals(
 						Constant.TIME_MESSAGE_FLOATING)) {
-			result += "Time: " + this.interval.toString() + "\n";
+			result += this.interval.toString() + "\n";
 		}
 
 		if (this.keywords != null && !this.keywords.equals("")) {

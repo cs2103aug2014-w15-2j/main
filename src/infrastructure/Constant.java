@@ -593,7 +593,7 @@ public abstract class Constant {
 	public static final String PREVIEW_MESSAGE_SEARCH_ERROR = "SEARCH ERROR";
 	public static final String PREVIEW_MESSAGE_ADD_INITIAL_VALUE = "Command: create \n\n";
 	public static final String PREVIEW_MESSAGE_DELETE_INITIAL_VALUE = "Command: delete \n\n";
-	public static final String PREVIEW_MESSAGE_UNTAG_INITIAL_VALUE = "Command: untag %1$s tags: \n\n";
+	public static final String PREVIEW_MESSAGE_UNTAG_INITIAL_VALUE = "Command: untag %1$s \n\nTags: ";
 	public static final String PREVIEW_MESSAGE_DELETE_NO_TASK_SPECIFIED = PREVIEW_MESSAGE_DELETE_INITIAL_VALUE + "No Task Specified";
 	public static final String PREVIEW_MESSAGE_DELETE_ALREADY_TRASHED = PREVIEW_MESSAGE_DELETE_INITIAL_VALUE + "All tasks in 'TRASHED' section have been trashed already.";
 	public static final String PREVIEW_MESSAGE_SEARCH_INITIAL_VALUE = "Command: search \n\n";

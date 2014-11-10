@@ -930,7 +930,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 			for (String tag : tags) {
 				System.out.println(tag);
-				returnValue += tag + ",";
+				returnValue += tag + " ";
 			}
 			return returnValue;
 			
