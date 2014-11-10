@@ -66,23 +66,35 @@ public class NerParser {
  *  Constructor and Initialization
  * ==========================================================================================================================
  */
+	/**
+	 * Constructor
+	 * 
+	 * In the constructor, NER models and Time parser will be loaded for subsequence use.
+	 */
 	public NerParser() {
 		loadNerModels();
 		loadTimeParser();
 	}
 
+	/**
+	 * loadTimeParser:
+	 * load the NLP time parser into the parser.
+	 */
 	private void loadTimeParser() {
 		// Time parsers
 		props = new Properties();
 		props.put("sutime.binders", "0");
-		props.put(
-				"sutime.rules",
-				"NLPTraining/defs.sutime.txt, NLPTraining/english.holidays.sutime.txt, NLPTraining/english.sutime.txt");
+		props.put("sutime.rules", "NLPTraining/defs.sutime.txt, NLPTraining/english.holidays.sutime.txt, NLPTraining/english.sutime.txt");
 		pipeline = new AnnotationPipeline();
 		pipeline.addAnnotator(new TokenizerAnnotator(false));
 		pipeline.addAnnotator(new TimeAnnotator("sutime", props));
 	}
 
+	
+	/**
+	 * loadNerModels
+	 * load the user's customized natural language model into the system
+	 */
 	private void loadNerModels() {
 		ArrayList<AbstractSequenceClassifier<CoreLabel>> classifiers = new ArrayList<AbstractSequenceClassifier<CoreLabel>>();
 		
@@ -95,16 +107,18 @@ public class NerParser {
 			}
 		}
 		
+		
+		//get the corresponding classifier
+		//NOTE: classifier.get(4) and classifier.get(9) are for NLP index parsing,
+		//		however, the NLP index parser is finally taken out of the system.
 		classifierTimePicker = classifiers.get(0);
 		classifierDescriptionPicker = classifiers.get(1);
 		classifierTagPicker = classifiers.get(2);
 		classifierPriorityPicker = classifiers.get(3);
-//		classifierIndexPicker = classifiers.get(4);
 		classifierCommandPicker = classifiers.get(5);
 		classifierTime = classifiers.get(6);
 		classifierTag = classifiers.get(7);
 		classifierPriority = classifiers.get(8);
-//		classifierIndex = classifiers.get(9);
 		classifierCommand = classifiers.get(10);
 	}
 
@@ -116,11 +130,12 @@ public class NerParser {
  */
 
 	/**
-	 * pick out the cmd fragments and translate to the enum
+	 * pickCommand:
+	 * pick out the command fragments and translate to the COMMAND_TYPE enumeration
 	 * 
-	 * @param userInputString
-	 * @return
-	 * @throws CommandFailedException
+	 * @param userInputString			the String that user directly input to the system
+	 * @return							the COMMAND_TYPE enumeration representation of the user command
+	 * @throws CommandFailedException	CommandFailedException thrown when the subsequent parseCommand method goes wrong
 	 */
 	public COMMAND_TYPE pickCommand(String userInputString) throws CommandFailedException {
 		
@@ -132,6 +147,7 @@ public class NerParser {
 		
 		ArrayList<String> commandList = new ArrayList<String>();
 		if (directParseCommand != null) {
+			//this means the user has input a sentence with <COMMAND> </COMMAND> tags to force the system to learn
 			commandList.add(directParseCommand);
 		} else {
 			String xmlStr = classifierCommandPicker.classifyToString(
@@ -151,12 +167,13 @@ public class NerParser {
 	}
 
 	/**
-	 * pick out the date fragments from an unparsed input string and translate
-	 * to TimeInterval
+	 * pickTimeInterval:
+	 * pick out the date fragments from an unparsed input string and 
+	 * translate to a TimeInterval object
 	 * 
-	 * @param userInputString
-	 * @return
-	 * @throws CommandFailedException
+//	 * @param userInputString			the String that user directly input to the system
+	 * @return							a TimeInterval object representing the time of this task
+	 * @throws CommandFailedException	CommandFailedException thrown when the subsequent time parsing or TimeInterval constructing goes wrong.
 	 */
 	public TimeInterval pickTimeInterval(String userInputString) throws CommandFailedException {
 		
@@ -213,11 +230,11 @@ public class NerParser {
 
 
 	/**
-	 * pick out the description segments
+	 * pickDescription:
+	 * pick out the description segments from an unparsed user input String
 	 * 
-	 * @param userInputString
-	 * @return
-	 * @throws CommandFailedException
+	 * @param userInputString	the String that user directly input to the system
+	 * @return					a String representing the task description
 	 */
 	public String pickDescription(String userInputString)
 			throws CommandFailedException {
@@ -246,11 +263,13 @@ public class NerParser {
 	}
 	
 	/**
+	 * pickIndex:
 	 * pick out the index segment and translate it to integer
+	 * no NLP involved in this method
 	 * 
-	 * @param userInputString
-	 * @return
-	 * @throws CommandFailedException
+	 * @param userInputString			the String that user directly input to the system
+	 * @return							a list of integers representing the indices contained in the input string
+	 * @throws CommandFailedException	CommandFailedException thrown when the index couldn't be interpreted.
 	 */
 	public ArrayList<Integer> pickIndex(String userInputString) throws CommandFailedException {
 		String indexString = UtilityMethod.removeFirstWord(userInputString);
@@ -285,7 +304,18 @@ public class NerParser {
 	
 
 //@author A0119379-unused
+//This method is aborted for the unreliable performance. 
+//We decided to limit the flexibility to some extend to unsure the reliability.
 //
+//
+//	/**
+//	 * pick out the index segment and translate it to integer
+//	 * NLP involved in this method
+//	 * 
+//	 * @param userInputString			the String that user directly input to the system
+//	 * @return							a list of integers representing the indices contained in the input string
+//	 * @throws CommandFailedException	CommandFailedException thrown when the index couldn't be interpreted.
+//	 */
 //	public ArrayList<Integer> pickIndex(String userInputString, String a) throws CommandFailedException {
 //
 //		userInputString = userInputString.toLowerCase();
@@ -326,11 +356,13 @@ public class NerParser {
 //		}
 //	}
 
+	
 	/**
-	 * pick out the tag segments
+	 * pickTag:
+	 * pick out the tag segments from an unparsed user input string
 	 * 
-	 * @param userInputString
-	 * @return
+	 * @param userInputString	the String that user directly input to the system
+	 * @return					a list of String representing the tags contains in the user input string
 	 */
 	public ArrayList<String> pickTag(String userInputString) {
 		this.isTagChanged = false;
@@ -341,11 +373,6 @@ public class NerParser {
 			this.isTagChanged = true;
 			ArrayList<String> results = new ArrayList<String>();
 			results.add(directParseTag);
-//			String[] stringArrayNoSpace = directParseTag.split(" ");
-//			for (String s : stringArrayNoSpace) {
-//				results.add(s.trim());
-//			}
-			
 			return parseTag(results);
 		}
 
@@ -363,11 +390,13 @@ public class NerParser {
 		}
 	}
 
+	
 	/**
-	 * pick out the priority segments
+	 * pickPriority:
+	 * pick out the priority segments from the unparsed user input string
 	 * 
-	 * @param userInputString
-	 * @return
+	 * @param userInputString	the String that user directly input to the system
+	 * @return					an integer representing the priority for the task
 	 */
 	public int pickPriority(String userInputString) {
 		
@@ -403,19 +432,17 @@ public class NerParser {
  */
 	
 	/**
+	 * pickTheTagged:
 	 * pick out the String segment that is tagged by a user 
 	 * (which the user want to force the system to interpreted the given string as the give type)
-	 * @param inputString
-	 * @param type
-	 * @return
+	 * 
+	 * @param inputString	the String that user directly input to the system
+	 * @param type			the String indicates the tag (<type> and </type>)
+	 * @return				the String segment wrapped between the two tag
 	 */
 	public static String pickTheTagged(String inputString, String type) {
-//		System.out.println("pickTheTagged: inputString: " + inputString);
-//		System.out.println("pickTheTagged: type: " + type);
 		String prefix = "<" + type + ">";
 		String postfix = "</" + type + ">";
-//		System.out.println("pickTheTagged: prefix: " + prefix);
-//		System.out.println("pickTheTagged: postfix: " + postfix);
 		int prefixIndex = inputString.indexOf(prefix);
 		int postfixIndex = inputString.indexOf(postfix);
 		
@@ -429,9 +456,12 @@ public class NerParser {
 	}
 
 	/**
-	 * remove the tagged segment to exclude it from the subsequent NER parsing.
-	 * @param inputString, t
-	 * @return
+	 * removeTheTagged:
+	 * remove the segment wrapped in a pair of tags, the tags will be removed as well 
+	 * 
+	 * @param inputString	the String that user directly input to the system
+	 * @param t			the String indicates the tag (<t> and </t>)
+	 * @return				the String segment wrapped between the two tag
 	 */
 	public static String removeTheTagged (String inputString, String t) {
 		String[] types = {Constant.XML_TAG_DESCRIPTION, Constant.XML_TAG_TIME, Constant.XML_TAG_TAG,
@@ -453,8 +483,11 @@ public class NerParser {
 
 	/**
 	 * translate a mixed list to a map containing a list with single tags
-	 * @param wordPairs
-	 * @return
+	 * e.g	[["task", "DESCRIPTION"], ["today", "DATE"]] will be translated to
+	 * 		[["task", "DESCRIPTION"], ["today", "O"]] and [["task", "O"], ["today", "DATE"]]
+	 * 
+	 * @param wordPairs		a list of pair, whose head is a tag and tail is the tagged word
+	 * @return				a map containing a serious of ArrayList, in which only a specific tag exists.
 	 */
 	public static HashMap<String, ArrayList<Pair<String, String>>> demux(ArrayList<Pair<String, String>> wordPairs) {
 		HashMap<String, ArrayList<Pair<String, String>>> listMap = new HashMap<String, ArrayList<Pair<String, String>>>();
@@ -468,6 +501,7 @@ public class NerParser {
 		for (Pair<String, String> p : wordPairs) {
 			switch (p.tail) {
 			case Constant.XML_TAG_TIME:
+				//a trivial pair is a pair whose tail is XML_TAG_DEFAULT: "O"
 				Pair<String, String> trivialPair1 = new Pair<String, String>(p.head, Constant.XML_TAG_DEFAULT);
 				timeList.add(p);
 				tagList.add(trivialPair1);
@@ -561,12 +595,13 @@ public class NerParser {
 	}
 	
 	/**
-	 * interpret the XML string to the required training data format
+	 * interpretXml
+	 * interpret the XML string to a list of pair, whose head is a word and tail is the corresponding tag
 	 * 
-	 * @param xmlString
-	 * @return
+	 * @param xmlString		a well tagged XML string
+	 * @return				an ArrayList of pairs [word, tag];
 	 */
-	public static ArrayList<Pair<String, String>> interpretXML(String xmlString) {
+	public static ArrayList<Pair<String, String>> interpretXml(String xmlString) {
 		
 		System.out.println("\n\n original: " + xmlString);
 		xmlString = tokenize(xmlString);
@@ -593,7 +628,7 @@ public class NerParser {
 				currentKey = currentWord.substring(
 						currentWord.indexOf("<") + 1, currentWord.indexOf(">"))
 						.trim();
-				setIsUpdate(currentKey);
+				setTrueModelUpdateIndicator(currentKey);
 			} else if (!currentWord.equals("")) {
 				wordPairs.add(new Pair<String, String>(currentWord.trim(),
 						currentKey.trim()));
@@ -603,7 +638,13 @@ public class NerParser {
 		return wordPairs;
 	}
 
-	private static void setIsUpdate(String currentKey) {
+	/**
+	 * setTrueModelUpdateIndicator:
+	 * set corresponding model update indicator to true
+	 * 
+	 * @param currentKey 	a string indicating the model update indicator
+	 */
+	private static void setTrueModelUpdateIndicator(String currentKey) {
 		System.out.println(currentKey);
 		switch (currentKey) {
 		case Constant.XML_TAG_COMMAND:
@@ -632,25 +673,33 @@ public class NerParser {
 		}
 	}
 	
-	private static String tokenize(String xmlString) {
+	/**
+	 * tokenize:
+	 * Tokenize a given string by insert spaces before or after some specific characters
+	 * 
+	 * @param userInputString	a string input by users
+	 * @return
+	 */
+	private static String tokenize(String userInputString) {
 		String[] symbols = {",", "\\."};
 		
-		xmlString = xmlString.replaceAll("<", " <");
-		xmlString = xmlString.replaceAll(">", "> ");
+		userInputString = userInputString.replaceAll("<", " <");
+		userInputString = userInputString.replaceAll(">", "> ");
 		
 		for (String s : symbols) {
-			xmlString = xmlString.replaceAll(s, " " + s + " ");
+			userInputString = userInputString.replaceAll(s, " " + s + " ");
 		}
 		
-		return xmlString;
+		return userInputString;
 	}
 	
 	/**
-	 * update the specific file
-	 * @param list
-	 * @param filePath
-	 * @return
-	 * @throws IOException
+	 * updateTsvFile
+	 * update a specific tsv file
+	 * 
+	 * @param list				a list contains the content to write 
+	 * @param filePath			a filePath to write
+	 * @throws IOException		IOException thrown is there are problems occurring during the IO process
 	 */
 	public static void updateTsvFile(ArrayList<Pair<String, String>> list,
 			String filePath) throws IOException {
@@ -676,14 +725,15 @@ public class NerParser {
 	}
 	
 	/**
+	 * updateTsvFile
 	 * update all the training data files relevant to the given xmlString
 	 * 
-	 * @param xmlString
-	 * @throws IOException
+	 * @param xmlString		update the tsv files with the content of a well tagged XML string
+	 * @throws IOException	IOException thrown when problems occur during the IO process
 	 */
 	public static void updateTsvFile(String xmlString) throws IOException {
 		//System.err.println("INPUT - updateTsvFile: " + xmlString);
-		HashMap<String, ArrayList<Pair<String, String>>> listMap = demux(interpretXML(xmlString));
+		HashMap<String, ArrayList<Pair<String, String>>> listMap = demux(interpretXml(xmlString));
 		ArrayList<Pair<String, String>> timeList = listMap
 				.get(Constant.XML_TAG_TIME);
 		ArrayList<Pair<String, String>> descriptionList = listMap
@@ -730,9 +780,12 @@ public class NerParser {
 	}
 	
 	/**
-	 * regenerate the NLP model(*.gz file) with the property file
-	 * @param propFilePath
-	 * @return
+	 * updateModal
+	 * Regenerate the NLP model(*.gz file) with the property file
+	 * This method will call the main method of CRFClassifier
+	 * 
+	 * @param propFilePath	the path of the property file
+	 * @return				a boolean indicates whether the process is finished successfully
 	 */
 	public static boolean updateModal(String propFilePath) {
 		try {
@@ -748,6 +801,7 @@ public class NerParser {
 	}
 	
 	/**
+	 * updateModal:
 	 * update all the NLP models (*.gz files)
 	 */
 	public static void updateModal() {
@@ -767,9 +821,11 @@ public class NerParser {
 	
 	/**
 	 * ADD: parse a task from the given string used when adding an task
-	 * @param userInputString
-	 * @return
-	 * @throws CommandFailedException
+	 * this method will by called when executing an add operation
+	 * 
+	 * @param userInputString			a string directly input by the user
+	 * @return							a Task object specified by the given input string
+	 * @throws CommandFailedException	CommandFailedException thrown if the subsequent parsing actions go wrong
 	 */
 
 	public Task getTask(String userInputString) {
@@ -801,10 +857,11 @@ public class NerParser {
 
 	/**
 	 * UPDATE: get updated keys and values
+	 * this method will by called when executing an update operation
 	 * 
-	 * @param userInputStirng
-	 * @return
-	 * @throws CommandFailedException
+	 * @param userInputStirng			a string directly input by the user
+	 * @return							a HashMap, whose entries specific the key to update and the new value
+	 * @throws CommandFailedException	CommandFailedException thrown if the subsequent parsing actions go wrong 
 	 */
 	public HashMap<String, Object> getUpdatedTaskMap(String userInputString) {
 
@@ -851,9 +908,11 @@ public class NerParser {
 	
 	/**
 	 * SEARCH: parse a search constraint used when searching for tasks
-	 * @param userIntputStirng
-	 * @return
-	 * @throws CommandFailedException
+	 * this method will by called when executing an search operation
+	 * 
+	 * @param userIntputStirng			a string directly input by the user
+	 * @return							a constraint specified by the given string
+	 * @throws CommandFailedException	CommandFailedException thrown if the subsequent parsing actions go wrong
 	 */
 	public Constraint getConstraint(String userInputString) {
 		TimeInterval timeInterval;
@@ -882,26 +941,30 @@ public class NerParser {
 	//time parsing
 	
 	/**
+	 * parseTimeStringToXML
 	 * Break the given String and remove irrelevant words.
-	 * @param content
-	 * @return
+	 * 
+	 * @param timeString	a string containing the picked-out time segment
+	 * @return				a XML string with tags (<DATE> and </DATE>)
 	 */
-	public String parseTimeToXML(String content) {
-		return classifierTime.classifyToString(content, "inlineXML", false);
+	public String parseTimeStringToXML(String timeString) {
+		return classifierTime.classifyToString(timeString, "inlineXML", false);
 	}
 	
 	/**
+	 * parseTimeListToDate
 	 * Using the natural language processor to translate the picked out time input fragments to date
-	 * @param userInputStrings
-	 * @return
+	 * 
+	 * @param timeList	a list of time strings
+	 * @return			a list of Date objects interpreted from the corresponding time strings
 	 */
-	public ArrayList<Date> parseTimeToDate(ArrayList<String> userInputStrings) {
+	public ArrayList<Date> parseTimeListToDate(ArrayList<String> timeList) {
 
 		ArrayList<Date> results = new ArrayList<Date>();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String stringForToday = format.format(Calendar.getInstance().getTime());
 
-		for (String text : userInputStrings) {
+		for (String text : timeList) {
 			Annotation annotation = new Annotation(text);
 			annotation.set(CoreAnnotations.DocDateAnnotation.class,
 					stringForToday);
@@ -912,7 +975,7 @@ public class NerParser {
 				String interpretedTimeString = cm
 						.get(TimeExpression.Annotation.class).getTemporal()
 						.toString();
-				Date d = parseStringToDate(interpretedTimeString);
+				Date d = parseTimeStringToDate(interpretedTimeString);
 				Calendar c = UtilityMethod.dateToCalendar(d);
 				if (d != null) {
 					if (c.get(Calendar.SECOND) == Constant.CALENDAR_WEEK_IN_SECOND) {
@@ -954,13 +1017,14 @@ public class NerParser {
 	}
 	
 	/**
-	 * Parse a time string to a Date Object (called by parseTimeToDate)
+	 * parseTimeStringToDate
+	 * Parse a time string to a Date Object (called by parseTimeListToDate)
 	 * 
-	 * @param timeString
-	 * @return
+	 * @param timeString	a string specified a time
+	 * @return				a Date object create with the time
 	 */
-	private Date parseStringToDate(String timeString) {
-		// the four possible format:
+	private Date parseTimeStringToDate(String timeString) {
+		// possible formats:
 		// 2014-10-15T14:00
 		// 2014-10-24-WXX-5
 		// 2014-10-24
@@ -1019,13 +1083,15 @@ public class NerParser {
 	}
 	
 	/**
-	 * Get a TimeInterval object from a list of date strings
-	 * @param userInputStrings
-	 * @return
-	 * @throws CommandFailedException
+	 * parseTimeInterval
+	 * Get a TimeInterval object from a list of time strings
+	 * 
+	 * @param timeStringList			a list of time strings
+	 * @return							a TimeInterval object specified by the list of strings
+	 * @throws CommandFailedException	CommandFailedException thrown if the process goes wrong
 	 */
-	public TimeInterval parseTimeInterval(ArrayList<String> userInputStrings) throws CommandFailedException {
-		ArrayList<Date> dates = parseTimeToDate(userInputStrings);
+	public TimeInterval parseTimeInterval(ArrayList<String> timeStringList) throws CommandFailedException {
+		ArrayList<Date> dates = parseTimeListToDate(timeStringList);
 		assert (dates != null);
 		TimeInterval interval = new TimeInterval();
 
@@ -1104,16 +1170,17 @@ public class NerParser {
 	//others
 	
 	/**
+	 * parseTag
 	 * Return a list of tags given list of string
 	 * 
-	 * @param tagMines
-	 * @return
+	 * @param tagStringlist		a list of tag strings
+	 * @return					a list of tags
 	 */
-	private ArrayList<String> parseTag(ArrayList<String> tagMines) {
+	private ArrayList<String> parseTag(ArrayList<String> tagStringlist) {
 
 		ArrayList<String> results = new ArrayList<String>();
 
-		for (String tagMine : tagMines) {
+		for (String tagMine : tagStringlist) {
 			if (tagMine.indexOf(" ") == -1) {
 				results.add(tagMine);
 			} else {
@@ -1133,15 +1200,16 @@ public class NerParser {
 	}
 
 	/**
+	 * parsePriority
 	 * Return a priority value given a priority string
 	 * 
-	 * @param priorityMines
-	 * @return
+	 * @param priorityString	a string potentially contains the priority
+	 * @return					a integer that represents the priority
 	 */
-	private int parsePriority(String priorityMines) {
+	private int parsePriority(String priorityString) {
 
 		String parsedPriorityString = classifierPriority.classifyToString(
-				priorityMines, "inlineXML", false);
+				priorityString, "inlineXML", false);
 		HashMap<String, ArrayList<String>> cmdMap = parseToMap(parsedPriorityString);
 		int result = Constant.PRIORITY_INVALID;
 		for (String command : cmdMap.keySet()) {
@@ -1158,12 +1226,19 @@ public class NerParser {
 
 	}
 	
-	public static int parsePriorityFromFormattedString(String parameter) {
-		if (parameter.equalsIgnoreCase(Constant.PRIORITY_STRING_HIGH)) {
+	/**
+	 * parsePriorityFromFormattedString
+	 * parse priority from a formatted tag to a integer
+	 * 
+	 * @param formattedPriorityTag 		a formatted priority tag
+	 * @return							a integer represents the priority, PRIORITY_INVALID if no formatted tag found
+	 */
+	public static int parsePriorityFromFormattedString(String formattedPriorityTag) {
+		if (formattedPriorityTag.equalsIgnoreCase(Constant.PRIORITY_STRING_HIGH)) {
 			return Constant.PRIORITY_HIGH;
-		} else if (parameter.equalsIgnoreCase(Constant.PRIORITY_STRING_MEDIUM)) {
+		} else if (formattedPriorityTag.equalsIgnoreCase(Constant.PRIORITY_STRING_MEDIUM)) {
 			return Constant.PRIORITY_MEDIUM;
-		} else if (parameter.equalsIgnoreCase(Constant.PRIORITY_STRING_LOW)) {
+		} else if (formattedPriorityTag.equalsIgnoreCase(Constant.PRIORITY_STRING_LOW)) {
 			return Constant.PRIORITY_LOW;
 		} else {
 			return Constant.PRIORITY_INVALID;
@@ -1171,18 +1246,18 @@ public class NerParser {
 	}
 
 	/**
+	 * parseCommand
 	 * Return a COMMAND_TYPE enumeration given a list of commands string
 	 * when there are more than one commands in the list, only first one will be accepted
-	 * @param commands
-	 * @return
-	 * @throws CommandFailedException
+	 * 
+	 * @param commandList				a list of string that potentially contains the commands 
+	 * @return							the first valid result of the list
 	 */
-	private COMMAND_TYPE parseCommand(ArrayList<String> commands)
-			throws CommandFailedException {
+	private COMMAND_TYPE parseCommand(ArrayList<String> commandList) {
 
 		ArrayList<String> results = new ArrayList<String>();
 
-		for (String cmd : commands) {
+		for (String cmd : commandList) {
 			String parsedTagString = classifierCommand.classifyToString(cmd,
 					"inlineXML", false);
 			HashMap<String, ArrayList<String>> cmdMap = parseToMap(parsedTagString);
@@ -1203,6 +1278,8 @@ public class NerParser {
 	
 	
 //@author A0119379R-unused
+//the NLP index parser, discarded for its unreliable performance.
+//
 //	/**
 //	 * Return a list of Integer representing the picked out index
 //	 * @param indexMines
@@ -1238,12 +1315,14 @@ public class NerParser {
  */
 	
 	/**
+	 * isDeadlineTask
 	 * check if a given string contains a deadline task
-	 * @param userInputString
-	 * @return
+	 * 
+	 * @param timeStringList	a list of time string
+	 * @return					a boolean to indicate if the time represents a deadline
 	 */
-	private static boolean isDeadlineTask(ArrayList<String> inputStringList) {
-		for (String userInputString : inputStringList) {
+	private static boolean isDeadlineTask(ArrayList<String> timeStringList) {
+		for (String userInputString : timeStringList) {
 			userInputString = userInputString.toLowerCase();
 			if (userInputString.contains("by") 
 					|| userInputString.contains("until") 
@@ -1257,10 +1336,11 @@ public class NerParser {
 	
 	
 	/**
+	 * parseToMap
 	 * return the key-value map tagged in the xmlString
 	 * 
-	 * @param xmlString
-	 * @return
+	 * @param xmlString		a well tagged XML string
+	 * @return				return the key-value map tagged in the xmlString
 	 */
 	public static HashMap<String, ArrayList<String>> parseToMap(String xmlString) {
 		assert (xmlString != null);
@@ -1304,8 +1384,13 @@ public class NerParser {
 		return taskMap;
 	}
 
-
 	
+	/**
+	 * determine the command type with the given string
+	 * 
+	 * @param commandTypeString		a string that might contain the user command
+	 * @return						an COMMAND_TYPE enumeration representing the corresponding command
+	 */
 	public static COMMAND_TYPE determineCommandType(String commandTypeString) {
 		switch (commandTypeString) {
 			case Constant.COMMAND_STRING_LOG_IN:

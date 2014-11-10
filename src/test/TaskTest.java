@@ -64,7 +64,13 @@ public class TaskTest {
 		
 		System.out.println("all status tests are passed");
 	}	
-
+	
+	/**
+	 * test method for tagToString
+	 * @param description
+	 * @param expected
+	 * @param task
+	 */
 	private void testTagToString(String description, String expected, Task task) {
 		try {
 			assertEquals(description, expected, task.tagToString()); 
@@ -73,6 +79,12 @@ public class TaskTest {
 		}
 	}
 	
+	/**
+	 * test method for status
+	 * @param description
+	 * @param expected
+	 * @param task
+	 */
 	private void testStatus(String description, String expected, Task task) {
 		try {
 			assertEquals(description, expected, task.getStatus());
