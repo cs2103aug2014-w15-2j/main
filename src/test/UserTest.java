@@ -390,7 +390,8 @@ public class UserTest {
 		} catch (Exception e) {
 			
 		}
-
+	}
+	
 	//@author A0119447Y
 	/**
 	 * test method for testing unDone method
