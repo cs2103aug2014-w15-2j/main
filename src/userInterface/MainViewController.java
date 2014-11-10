@@ -776,6 +776,8 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		if (queryList != null) {
 			setDisplayPane(queryList);
 			changeViewTo(Constant.TASK_LIST_SEARCH);
+		} else {
+			this.loadEmptyImage();
 		}
 	}
 	
@@ -1098,7 +1100,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		try {
 			queryResult = this.user.getTrashedTaskList();
 			if (queryResult.isEmpty()) {
-				setDisplayText(Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK);
+				this.loadEmptyImage();
 				// TODO: create a box for empty list
 				return null;
 			} else {
@@ -1116,7 +1118,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		try {
 			queryResult = this.user.getFinishedTaskList();
 			if (queryResult.isEmpty()) {
-				setDisplayText(Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK);
+				this.loadEmptyImage();
 				// TODO: create a box for empty list
 				return null;
 			} else {

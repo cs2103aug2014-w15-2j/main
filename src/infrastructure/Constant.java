@@ -335,7 +335,6 @@ public abstract class Constant {
 	public static final String PROMPT_MESSAGE_DELETE_TASK_FAILED = "Failed to delete task";
 	public static final String PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY = "Task updated";
 	public static final String PROMPT_MESSAGE_UPDATE_TASK_FAILED = "Failed to update task";
-	public static final String PROMPT_MESSAGE_DISPLAY_EMPTY_TASK = "No task in the list";
 	public static final String PROMPT_MESSAGE_DISPLAY_ERROR = "display error";
 	public static final String PROMPT_MESSAGE_CLEAR_CACHE_FAILED = "Failed to clear cache";
 	public static final String PROMPT_MESSAGE_UNDO_SUCCESSFULLY = "Undo successfully";
