@@ -1,0 +1,1463 @@
+//@author: a0119444e
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Constraint.java
+	 */
+
+	public boolean isMeeted(Task task) throws Exception {
+		boolean isKeywordMatched = false;
+		boolean isIntervalMatched = false;
+		boolean isPriorityMatched = false;
+		boolean isSearchingDeadline = false;
+		boolean isSearchingFloating = false;
+		
+		//if constraint's time interval is a deadline
+		if (this.interval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
+			isSearchingDeadline = true;
+		}
+		//if constraint's time is a floating time 
+		if (this.interval.getStartDate().equals(Constant.FLOATING_START_DATE)) {
+			isSearchingFloating = true;
+		}
+		
+		//test interval
+		if (isSearchingDeadline) {
+			if (this.interval.getEndDate().after(
+					task.getInterval().getEndDate())) {
+				isIntervalMatched = true;
+			}
+		//search for a interval
+		} else if (!isSearchingFloating) {
+			if (task.isFloating()) {
+			// never return floating tasks when search for a time
+			} else if (task.isDeadline()
+					&& TimeInterval.isOverlapped(this.interval, task
+							.getInterval().getEndDate())) {
+				return true;
+			} else if (task.isTimed()
+					&& TimeInterval.isOverlapped(this.interval,
+							task.getInterval())) {
+				return true;
+			} else {
+
+			}
+		} else {
+			// search for a keyword
+		}
+		
+		if (this.keywords != null) {
+			for (String keyword : keywords) {
+				if (!keyword.equals("")) {
+					// test description
+					if (task.getDescription().toLowerCase().contains(keyword)) {
+						isKeywordMatched = true;
+						break;
+					}					
+					// test priority
+					if (UtilityMethod.priorityToString(task.getPriority()).equals(
+							keyword)) {
+						isPriorityMatched = true;
+						break;
+					}					
+					// test tag
+					Iterator<String> tagIterator = task.getTag().iterator();
+					while (tagIterator.hasNext()) {
+						String tag = tagIterator.next();
+						if (tag.toLowerCase().contains(keyword)) {
+							isKeywordMatched = true;
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		boolean result = (isIntervalMatched || isKeywordMatched || isPriorityMatched);
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		String result = "";
+
+		if (this.interval != null
+				&& !this.interval.toString().equals(
+						Constant.TIME_MESSAGE_FLOATING)) {
+			result += "Time: " + this.interval.toString() + "\n";
+		}
+
+		if (this.keywords != null && !this.keywords.equals("")) {
+			result += "Keyword: \n\t";
+			
+			boolean isFirstLine = true;
+			for (String keyword : this.keywords) {
+				if (isFirstLine) {
+					isFirstLine = false;
+				} else {
+					result += ", ";
+				}
+				result += keyword;
+			}
+		}
+
+		return result.equals("") ? "[No Specific Constraint]" : result;
+	}
+
+}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Constraint.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * tagToString convert the tag list to a string.
+	 * 
+	 * @return tags string
+	 */
+	public String tagToString() {
+		String tags = new String();
+		if (tag.isEmpty()) {
+			tags = "";
+		} else {
+			for (String aTag : tag) {
+				tags = tags + aTag + ",";
+			}
+			// to remove the last comma
+			tags = tags.substring(0, tags.length() - REDUCE_CHAR);
+			assert tags.charAt(tags.length()-1) != ',';
+		}
+		return tags;
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * getDescription gets the task description
+	 * 
+	 * @return String description
+	 */
+	public String getDescription() {
+		return this.description;
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * setDescription sets the task description to given newDescription.
+	 * 
+	 * @param newDescription
+	 */
+	public void setDescription(String newDescription) {
+		try {
+			if (isValidDescription(newDescription)){
+				this.description = newDescription;
+			} else {
+				throw new CommandFailedException(Constant.PROMPT_MESSAGE_INVALID_DESCRIPTION);
+			}
+		} catch (Exception e) {
+			
+		}
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * getPriority getter of the priority attribute
+	 * 
+	 * @return int priority
+	 */	
+	public int getPriority() {
+		return this.priority;
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * setPriority setter of the priority attribute
+	 * 
+	 * @param newPriority
+	 */
+	public void setPriority(int newPriority) {
+		try {
+			if (isValidPriority(newPriority)){
+				this.priority = newPriority;
+			} else {
+				throw new CommandFailedException(Constant.PROMPT_MESSAGE_INVALID_PRIORITY);
+			}
+		} catch (Exception e) {
+
+		}
+	}	
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * getTag getter of the tag attribute
+	 * 
+	 * @return ArrayList<String> tag list
+	 */
+	public ArrayList<String> getTag() {
+		return this.tag;
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * setTag setter of the tag attribute
+	 * 
+	 * @param newTag 
+	 */
+	public void setTag(ArrayList<String> newTag) {
+		try {
+			if(isValidTag(newTag)) {
+				this.tag = newTag;
+			} else {
+				throw new CommandFailedException(Constant.PROMPT_MESSAGE_INVALID_TAG);
+			}			
+		} catch (Exception e) {
+
+		}
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * @override getInterval
+	 * @return interval
+	 * 
+	 */
+	public TimeInterval getInterval() {
+		return this.interval;
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * setInterval setter of the interval attribute
+	 * 
+	 * @param newInterval
+	 */
+	public void setInterval(TimeInterval newInterval) {
+		try {
+			if(isValidInterval(newInterval)) {
+				this.interval = newInterval;
+			} else {
+				throw new CommandFailedException(Constant.PROMPT_MESSAGE_INVALID_TIME_INTERVAL);
+			}
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * check whether a description is valid
+	 * 
+	 * @param description
+	 * @return boolean
+	 */
+	private boolean isValidDescription(String description){
+		if (description.equals(null) || description.equals("")) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * check whether a priority is valid
+	 * 
+	 * @param priority
+	 * @return boolean
+	 */
+	private boolean isValidPriority(int priority){
+		if (priority < 1 || priority > 3) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * check whether a list of tag is valid
+	 * 
+	 * @param tag
+	 * @return boolean
+	 */
+	private boolean isValidTag(ArrayList<String> tag){
+		if (tag.equals(null) || tag.contains(null) || tag.contains("")) {
+			return false;
+		} else if (!isValidOneTag(tag)) {
+			return false;
+		}	else {	
+			return true;
+		}
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * check whether all tags in a tag list are valid
+	 * 
+	 * @param tags
+	 * @return boolean
+	 */
+	private boolean isValidOneTag(ArrayList<String> tags){
+		for(String tag : tags){
+			if (tag.contains(" ")){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * check whether a interval is valid
+	 * 
+	 * @param interval
+	 * @return boolean
+	 */
+	private boolean isValidInterval(TimeInterval interval){
+		if (interval == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}	
+	
+	// check task type
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+//	/**
+//	 * check whether a repeated period is valid
+//	 * 
+//	 * @param repeatedPeriod
+//	 * @return boolean
+//	 */
+//	private boolean isValidRepeatedPeriod(int repeatedPeriod){
+//		if (repeatedPeriod < 1 || repeatedPeriod > 4) {
+//			return false;
+//		} else {
+//			return true;
+//		}
+//	}
+}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\TimeInterval.java
+	 */
+
+	public static boolean isValid(Date startDate, Date endDate){
+		if (startDate.after(endDate)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\TimeInterval.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\TimeInterval.java
+	 */
+
+	public static boolean isOverlapped(TimeInterval interval, Date deadline) {
+		if (interval.startDate.before(deadline) && (interval.endDate.after(deadline) || interval.endDate.equals(deadline))) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * @override
+	 * toString
+	 * 
+	 * @return
+	 */
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\TimeInterval.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	/**
+	 * update updates the task with the index according to the key-value pairs
+	 * in toBeUpdated.
+	 * 
+	 * @param ongoingIndex
+	 * @param toBeUpdated
+	 *            attributes to be updated
+	 * @throws CommandFailedException
+	 */
+	@SuppressWarnings("unchecked")
+	public void update(int ongoingIndex, HashMap<String, Object> toBeUpdated)
+			throws CommandFailedException {
+		if (!this.isValidOngoingIndex(ongoingIndex)) {
+			throw new CommandFailedException(String.format(
+					Constant.INVALID_INDEX_ERROR_MESSAGE, ongoingIndex));
+		} else {
+			this.updateUndoable();
+			//get the task that users want to update
+			Task task = this.currentTasks.getOngoingTasks().get(ongoingIndex);
+			Iterator<String> attributes = toBeUpdated.keySet().iterator();
+			while (attributes.hasNext()) {
+				String currentAttribute = attributes.next();
+				Object currentObject = toBeUpdated.get(currentAttribute);
+
+				if (currentAttribute.equals("description")) {
+					task.setDescription((String) currentObject);
+				} else if (currentAttribute.equals("priority")) {
+					task.setPriority((int) currentObject);
+				} else if (currentAttribute.equals("tag")) {
+					task.setTag((ArrayList<String>) currentObject);
+				} else if (currentAttribute.equals("time_interval")) {
+					System.err.println("USER UPDATE INTERVAL: "
+							+ (TimeInterval) currentObject);
+					task.setInterval((TimeInterval) currentObject);
+				} else {
+					throw new CommandFailedException(
+							Constant.INVALID_UPDATE_MESSAGE);
+				}
+			}
+		}
+		DataStore.save(this.currentTasks);
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	/**
+	 * retrieveFromNormalList
+	 * 
+	 * @param normalIndex
+	 * @return
+	 * @throws CommandFailedException
+	 */
+	public Task retrieveFromNormalList(int normalIndex)
+			throws CommandFailedException {
+		if (!this.isValidOngoingIndex(normalIndex)) {
+			throw new CommandFailedException(String.format(
+					Constant.INVALID_INDEX_ERROR_MESSAGE, normalIndex));
+		} else {
+			return this.currentTasks.getOngoingTasks().get(normalIndex);
+		}
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	/**
+	 * retrieveFromTrashedList
+	 * 
+	 * @param trashedIndex
+	 * @return
+	 * @throws CommandFailedException
+	 */
+	public Task retrieveFromTrashedList(int trashedIndex)
+			throws CommandFailedException {
+		if (!this.isValidTrashedIndex(trashedIndex)) {
+			throw new CommandFailedException(String.format(
+					Constant.INVALID_INDEX_ERROR_MESSAGE, trashedIndex));
+		} else {
+			return this.currentTasks.getTrashedTasks().get(trashedIndex);
+		}
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	/**
+	 * retrieveFromFinishedList
+	 * 
+	 * @param finishedIndex
+	 * @return
+	 * @throws CommandFailedException
+	 */
+	public Task retrieveFromFinishedList(int finishedIndex)
+			throws CommandFailedException {
+		if (!this.isValidFinishedIndex(finishedIndex)) {
+			throw new CommandFailedException(String.format(
+					Constant.INVALID_INDEX_ERROR_MESSAGE, finishedIndex));
+		} else {
+			return this.currentTasks.getFinishedTasks().get(finishedIndex);
+		}
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	/**
+	 * find gets the list of tasks that meet the constraint.
+	 * 
+	 * @param constraint
+	 * @return normal tasks that meet the constraint
+	 * @throws Exception
+	 */
+	private ArrayList<Task> findOngoing(Constraint constraint) throws Exception {
+		Iterator<Task> taskIterator = this.currentTasks.getOngoingTasks()
+				.iterator();
+		ArrayList<Task> matchedTasks = new ArrayList<Task>();
+		while (taskIterator.hasNext()) {
+			Task task = taskIterator.next();
+			if (constraint.isMeeted(task)) {
+				matchedTasks.add(task);
+			}
+		}
+		return matchedTasks;
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	/**
+	 * findTrashed gets the list of trashed tasks that meet the constraint.
+	 * 
+	 * @param constraint
+	 * @return trashed tasks that meet the constraint
+	 * @throws Exception
+	 */
+	private ArrayList<Task> findTrashed(Constraint constraint) throws Exception {
+		Iterator<Task> taskIterator = this.currentTasks.getTrashedTasks()
+				.iterator();
+		ArrayList<Task> matchedTasks = new ArrayList<Task>();
+		while (taskIterator.hasNext()) {
+			Task task = taskIterator.next();
+			if (constraint.isMeeted(task)) {
+				matchedTasks.add(task);
+			}
+		}
+		return matchedTasks;
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	/**
+	 * findFinished gets the list of finished tasks that meet the constraint.
+	 * 
+	 * @param constraint
+	 * @return finished tasks that meet the constraint
+	 * @throws Exception
+	 */
+	private ArrayList<Task> findFinished(Constraint constraint)
+			throws Exception {
+		Iterator<Task> taskIterator = this.currentTasks.getFinishedTasks()
+				.iterator();
+		ArrayList<Task> matchedTasks = new ArrayList<Task>();
+		while (taskIterator.hasNext()) {
+			Task task = taskIterator.next();
+			if (constraint.isMeeted(task)) {
+				matchedTasks.add(task);
+			}
+		}
+		return matchedTasks;
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	/**
+	 * isValidOngoingIndex
+	 * 
+	 * @param index
+	 * @return boolean
+	 */
+	private boolean isValidOngoingIndex(int index) {
+		if ((index < 0) || (index > this.currentTasks.getOngoingTasks().size())) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	/**
+	 * isValidTrashedIndex
+	 * 
+	 * @param index
+	 * @return boolean
+	 */
+	private boolean isValidTrashedIndex(int index) {
+		if ((index < 0) || (index > this.currentTasks.getTrashedTasks().size())) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	/**
+	 * isValidFinishedIndex
+	 * 
+	 * @param index
+	 * @return boolean
+	 */
+	private boolean isValidFinishedIndex(int index) {
+		if ((index < 0)
+				|| (index > this.currentTasks.getFinishedTasks().size())) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * =================================================================================
+	 * ========================== System level static methods ==========================
+	 * =================================================================================
+	 */
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\TaskTest.java
+	 */
+
+	@Test
+	public void testTag() {		
+		ArrayList<String> tag = new ArrayList<String>();
+		tag.add("cs2102");
+		tag.add("cs2103");
+		Task task1 = new Task("task1", 0, tag, null);
+		
+		testTagToString("task1 toString", 
+					   "cs2102,cs2103", 
+					   task1);
+		
+		System.out.println("all tag tests are passed");
+	}
+	
+	/**
+	 * test for status methods in Task
+	 */
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\TaskTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\TaskTest.java
+	 */
+
+	@Test
+	public void testStatus() {
+		ArrayList<Task> tasks = new ArrayList<Task>();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+		
+		for (int i = 0; i < 10; i++) {
+			Task task = new Task("task" + i, 2, tag, interval);
+			if (i % 3 == 0){
+				task.setStatus(Constant.TASK_STATUS_DONE);
+			} else if (i % 3 == 1) {
+				task.setStatus(Constant.TASK_STATUS_ONGOING);
+			} else {
+				task.setStatus(Constant.TASK_STATUS_TRASHED);
+			}
+			tasks.add(task);
+		}
+		
+		for (int i = 0; i < 10; i++) {
+			if (i % 3 == 0){
+				testStatus("test task" + i, Constant.TASK_STATUS_DONE, tasks.get(i));
+			} else if (i % 3 == 1) {
+				testStatus("test task" + i, Constant.TASK_STATUS_ONGOING, tasks.get(i));
+			} else {
+				testStatus("test task" + i, Constant.TASK_STATUS_TRASHED, tasks.get(i));
+			}
+		}	
+		
+		System.out.println("all status tests are passed");
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\TaskTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\TaskTest.java
+	 */
+
+	/**
+	 * test method for tagToString
+	 * @param description
+	 * @param expected
+	 * @param task
+	 */
+	private void testTagToString(String description, String expected, Task task) {
+		try {
+			assertEquals(description, expected, task.tagToString()); 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\TaskTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\TaskTest.java
+	 */
+
+	/**
+	 * test method for status
+	 * @param description
+	 * @param expected
+	 * @param task
+	 */
+	private void testStatus(String description, String expected, Task task) {
+		try {
+			assertEquals(description, expected, task.getStatus());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\TaskTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+	 */
+
+	/**
+	 * test for redo method in User
+	 * @throws Exception
+	 */
+	@Test
+	public void testRedo() throws Exception {
+		User user = new User();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+		Task task = new Task("testtask", 2, tag, interval);
+		ArrayList<Task> normalTasks;
+		
+		//test add
+		user.add(task);
+		normalTasks = user.getOngoingTaskList();
+		user.undo();
+		user.redo();
+		testRedo("test add", normalTasks, user.getOngoingTaskList());
+		user.undo();
+		
+		//test delete
+		if (!user.getOngoingTaskList().isEmpty()){
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			normalTasks = user.getOngoingTaskList();
+			user.undo();
+			user.redo();
+			testRedo("test delete", normalTasks, user.getOngoingTaskList());
+			user.undo();
+		} else {
+			user.add(task);
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			normalTasks = user.getOngoingTaskList();
+			user.undo();
+			user.redo();
+			testRedo("test delete", normalTasks, user.getOngoingTaskList());
+			user.undo();
+			user.undo();
+		}
+		
+		//test deleteAll
+		if (!user.getOngoingTaskList().isEmpty()){
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			normalTasks = user.getOngoingTaskList();
+			user.undo();
+			user.redo();
+			testRedo("test delete", normalTasks, user.getOngoingTaskList());
+			user.undo();
+		} else {
+			user.add(task);
+			user.add(task);
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			normalTasks = user.getOngoingTaskList();
+			user.undo();
+			user.redo();
+			testRedo("test delete", normalTasks, user.getOngoingTaskList());
+			user.undo();
+			user.undo();
+			user.undo();
+		}
+		System.out.println("all redo tests are passed");
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+	 */
+
+	/**
+	 * test for undo method in User
+	 * @throws Exception
+	 */
+	@Test
+	public void testUndo() throws Exception {
+		User user = new User();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+		Task task = new Task("testtask", 2, tag, interval);
+		ArrayList<Task> normalTasks = user.getOngoingTaskList();
+		
+		//test add
+		user.add(task);
+		user.undo();
+		testUndo("test add", normalTasks, user.getOngoingTaskList());
+		
+		//test delete
+		if (!user.getOngoingTaskList().isEmpty()){
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			user.undo();
+			testUndo("test delete", normalTasks, user.getOngoingTaskList());
+		} else {
+			user.add(task);
+			normalTasks = user.getOngoingTaskList();
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			user.undo();
+			testUndo("test delete", normalTasks, user.getOngoingTaskList());
+			user.undo();
+		}	
+		
+		//test deleteAll
+		if (!user.getOngoingTaskList().isEmpty()){
+			user.deleteAll(Constant.TASK_LIST_ONGOING);
+			user.undo();
+			testUndo("test deleteAll", normalTasks, user.getOngoingTaskList());
+		} else {
+			user.add(task);
+			user.add(task);
+			user.add(task);
+			normalTasks = user.getOngoingTaskList();
+			user.deleteAll(Constant.TASK_LIST_ONGOING);
+			user.undo();
+			testUndo("test deleteAll", normalTasks, user.getOngoingTaskList());
+			user.undo();
+			user.undo();
+			user.undo();
+		}		
+		
+		System.out.println("all undo tests are passed");
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+	 */
+
+//	/**
+//	 * test for add method in User
+//	 * @throws Exception
+//	 */
+//	@Test
+//	public void testAdd() throws Exception {
+//		int testSize = 10;
+//
+//		User user = new User();
+//		int initialSize = user.getOngoingTaskList().size();
+//		System.out.println("user normal task size: " + initialSize);
+//
+//		ArrayList<String> tag = new ArrayList<String>();
+//		TimeInterval interval = new TimeInterval();
+//
+//		for (int i = 1; i < testSize + 1; i++) {
+//			Task task = new Task("task" + i, 2, tag, interval);
+//			user.add(task);
+//		}
+//		int currentSize = user.getOngoingTaskList().size();
+//		int p = 1;
+//		for (int i = currentSize - testSize; i < currentSize - 1; i++) {
+//			testAdd("test add for task: " + i, "task" + p++, user, i);
+//		}
+//		for (int i = currentSize - testSize; i < currentSize; i++) {
+//			user.delete(currentSize - testSize, Constant.TASK_LIST_ONGOING);
+//		}
+//		System.out.println("all add tests are passed");
+//	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+	 */
+
+//	/**
+//	 * test for delete method in User
+//	 * @throws Exception
+//	 */
+//	@Test	
+//	public void testDelete() throws Exception {
+//		int testSize = 10;
+//
+//		User user = new User();
+//		ArrayList<String> tag = new ArrayList<String>();
+//		TimeInterval interval = new TimeInterval();
+//
+//		for (int i = 1; i < testSize + 1; i++) {
+//			Task task = new Task("task" + i, 2, tag, interval);
+//			user.add(task);
+//		}
+//		int currentSize = user.getOngoingTaskList().size();
+//		int p = 1;
+//		for (int i = currentSize - testSize; i < currentSize; i++) {
+//			testDelete("test delete for task: " + i, "task" + p++, user, currentSize - testSize);
+//			user.delete(currentSize - testSize, Constant.TASK_LIST_ONGOING);
+//		}
+//		System.out.println("all delete tests are passed");		
+//	}
+//	
+//	/**
+//	 * test for deleteAll method in User
+//	 * @throws Exception
+//	 */
+//	@Test
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+	 */
+
+//	public void testDeleteAll() throws Exception {
+//		User user = new User();
+//		user.deleteAll(Constant.TASK_LIST_TODO);
+//		testDeleteAll("test deleteAll method", 0, user.getOngoingTaskList().size());
+//		user.undo();
+//		System.out.println("all deleteAll tests are passed");
+//	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+	 */
+
+	/**
+	 * test for putBack method in User
+	 * @throws Exception
+	 */
+	@Test
+	public void testPutBack() throws Exception {
+		User user = new User();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+		Task task = new Task("testtask", 2, tag, interval);
+		
+		ArrayList<Task> tasks = user.getOngoingTaskList();
+		if (!tasks.isEmpty()){
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			user.putBack(user.getTrashedTaskList().size() - 1);
+			testPutBack("test putBack", tasks, user.getOngoingTaskList());
+			user.undo();
+		} else {
+			user.add(task);
+			tasks = user.getOngoingTaskList();
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			user.putBack(0);
+			testPutBack("test putBack", tasks, user.getOngoingTaskList());
+			user.undo();
+		}
+		System.out.println("all putBack tests are passed");
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+	 */
+
+	/**
+	 * test for done method in User
+	 * @throws Exception
+	 */
+	@Test
+	public void testDone() throws Exception {
+		User user = new User();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+		Task task = new Task("testtask", 2, tag, interval);
+		ArrayList<Task> tasks = user.getOngoingTaskList();
+		
+		if (!tasks.isEmpty()) {
+			String description = user.getOngoingTaskList().get(0).getDescription();
+			user.done(0);
+			testDone("test done", description, user.getFinishedTaskList().get(user.getFinishedTaskList().size() - 1).getDescription());
+			user.undo();
+		} else {
+			user.add(task);
+			String description = user.getOngoingTaskList().get(0).getDescription();
+			user.done(0);
+			testDone("test done", description, user.getFinishedTaskList().get(user.getFinishedTaskList().size() - 1).getDescription());
+			user.undo();
+			user.undo();
+		}
+		System.out.println("all done tests are passed");
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+	 */
+
+	/**
+	 * test method for testing undo method
+	 * @param description
+	 * @param expected
+	 * @param actual
+	 */
+	private void testUndo(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
+		try {
+			assert(expected.equals(actual));
+		} catch (Exception e) {
+			
+		}
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+	 */
+
+	/**
+	 * test method for testing redo method
+	 * @param description
+	 * @param expected
+	 * @param actual
+	 */
+	private void testRedo(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
+		try {
+			assert(expected.equals(actual));
+		} catch (Exception e) {
+			
+		}
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+	 */
+
+	/**
+	 * test method for testing add method
+	 * @param description
+	 * @param expected
+	 * @param user
+	 * @param i
+	 */
+	private void testAdd(String description, String expected, User user, int i) {
+		try {
+			assertEquals(description, expected, user.retrieveFromNormalList(i)
+					.getDescription());
+		} catch (Exception e) {
+
+		}
+	}	
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+	 */
+
+	/**
+	 * test method for testing delete method
+	 * @param description
+	 * @param expected
+	 * @param user
+	 * @param i
+	 */
+	private void testDelete(String description, String expected, User user,
+			int i) {
+		try {
+			assertEquals(description, expected, user.retrieveFromNormalList(i)
+					.getDescription());
+		} catch (Exception e) {
+
+		}
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+	 */
+
+	/**
+	 * test method for testing deleteAll method
+	 * @param description
+	 * @param expected
+	 * @param actualString
+	 */
+	private void testDeleteAll(String description, int expected, int actualString) {
+		try {
+			assertEquals(description, expected, actualString);
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+	 */
+
+	/**
+	 * test method for testing putBack method
+	 * @param description
+	 * @param expected
+	 * @param actualString
+	 */
+	private void testPutBack(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
+		try {
+			assert(expected.equals(actual));
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+	 */
+
+	/**
+	 * test method for testing done method
+	 * @param description
+	 * @param expected
+	 * @param actualString
+	 */	
+	private void testDone(String description, String expected, String actualString) {
+		try {
+			assertEquals(description, expected, actualString);
+		} catch (Exception e) {
+			
+		}
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\UserTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+	 */
+
+	/**
+	 * only show scroll bar when users scrolling
+	 */
+	private void setDisplayScrollbarStyle() {
+		displayScrollPane.getStyleClass().add(Constant.CSS_CLASS_NAME);
+		displayScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+
+		displayScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
+		displayScrollPane.setOnScrollFinished(new EventHandler<ScrollEvent>() {
+			@Override
+			public void handle(ScrollEvent event) {
+				// TODO Auto-generated method stub
+				displayScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
+			}
+		});
+
+		displayScrollPane.setOnScrollStarted(new EventHandler<ScrollEvent>() {
+			@Override
+			public void handle(ScrollEvent event) {
+				displayScrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+			}
+		});
+	}
+
+/**
+ * ========================================================================
+ * DEMUX methods
+ * ========================================================================
+ */
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+
+
+
+
+

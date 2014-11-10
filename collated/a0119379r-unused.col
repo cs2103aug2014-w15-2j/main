@@ -1,0 +1,202 @@
+//@author: a0119379r-unused
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\infrastructure\NerParser.java
+	 */
+
+//the NLP index parser, discarded for its unreliable performance.
+//
+//	/**
+//	 * Return a list of Integer representing the picked out index
+//	 * @param indexMines
+//	 * @return
+//	 * @throws CommandFailedException
+//	 */
+//	private ArrayList<Integer> parseIndex (ArrayList<String> indexMines) throws CommandFailedException {
+//		try {
+//			ArrayList<Integer> results = new ArrayList<Integer>();
+//			for (String indexMine : indexMines) {
+//				String parsedIndexString = classifierIndex.classifyToString(indexMine,
+//						"inlineXML", false);
+//				HashMap<String, ArrayList<String>> indexMap = parseToMap(parsedIndexString);
+//				ArrayList<String> indexList = indexMap.get("INDEX");
+//				if (indexList != null) {
+//					for (String indexString : indexList) {
+//						results.add(Integer.parseInt(indexString));
+//					}
+//				}
+//			}
+//
+//			return results;
+//		} catch (Exception e) {
+//			throw new CommandFailedException("Unparsable Integer");
+//		}
+//	}
+	
+	
+/**
+ * ==========================================================================================================================
+ *  Other methods used during NER parsing
+ * ==========================================================================================================================
+ */
+	
+	/**
+	 * isDeadlineTask
+	 * check if a given string contains a deadline task
+	 * 
+	 * @param timeStringList	a list of time string
+	 * @return					a boolean to indicate if the time represents a deadline
+	 */
+	private static boolean isDeadlineTask(ArrayList<String> timeStringList) {
+		for (String userInputString : timeStringList) {
+			userInputString = userInputString.toLowerCase();
+			if (userInputString.contains(Constant.DEADLINE_INDICATOR_BY) 
+					|| userInputString.contains(Constant.DEADLINE_INDICATOR_UNTIL) 
+					|| userInputString.contains(Constant.DEADLINE_INDICATOR_TILL) 
+					|| userInputString.contains(Constant.DEADLINE_INDICATOR_BEFORE)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * parseToMap
+	 * return the key-value map tagged in the xmlString
+	 * 
+	 * @param xmlString		a well tagged XML string
+	 * @return				return the key-value map tagged in the xmlString
+	 */
+	public static HashMap<String, ArrayList<String>> parseToMap(String xmlString) {
+		assert (xmlString != null);
+		assert (xmlString.length() > Constant.XML_STRING_MIN_LENGTH);
+		if (xmlString == null || xmlString.length() <= Constant.XML_STRING_MIN_LENGTH) {
+			//System.err.println("Invalid input");
+			return new HashMap<String, ArrayList<String>>();
+		}
+		
+		HashMap<String, ArrayList<String>> taskMap = new HashMap<String, ArrayList<String>>();
+		taskMap.put(Constant.MAP_KEY_COMMAND, new ArrayList<String>());
+		// get rid of the first and last character
+		xmlString = xmlString.substring(1, xmlString.length() - 2);
+		String[] xmlSegments = xmlString.split(Constant.TAG_OPEN_LATTER);
+		// string format: ADD>Add, ADD> <DESCRIPTION> ... , DESCRIPTION>
+		// <DATE>...
+
+		int NumberOfSegments = xmlSegments.length - 1;
+
+		for (int i = 0; i < NumberOfSegments; i++) {
+			String segment = xmlSegments[i];
+			String nextSegment = xmlSegments[i + 1];
+			String key = nextSegment.substring(0, nextSegment.indexOf(Constant.TAG_CLOSE));
+			String temp = segment.replaceFirst(
+					segment.substring(0, segment.indexOf(Constant.TAG_CLOSE) + 1), Constant.EMPTY_STRING);
+
+			String value = null;
+			if (temp.indexOf(Constant.TAG_CLOSE) != Constant.LIST_INDEX_NOT_EXISTING) {
+				value = temp.replaceFirst(
+						temp.substring(0, temp.indexOf(Constant.TAG_CLOSE) + 1), Constant.EMPTY_STRING);
+			} else {
+				value = temp;
+			}
+
+			if (taskMap.get(key) == null) {
+				taskMap.put(key, new ArrayList<String>());
+			}
+			taskMap.get(key).add(value);
+		}
+
+		return taskMap;
+	}
+
+	
+	/**
+	 * determine the command type with the given string
+	 * 
+	 * @param commandTypeString		a string that might contain the user command
+	 * @return						an COMMAND_TYPE enumeration representing the corresponding command
+	 */
+	public static COMMAND_TYPE determineCommandType(String commandTypeString) {
+		System.out.println(commandTypeString);
+		switch (commandTypeString) {
+			case Constant.COMMAND_STRING_LOG_IN:
+				return COMMAND_TYPE.LOG_IN;
+			
+			case Constant.COMMAND_STRING_LOG_OUT:
+				return COMMAND_TYPE.LOG_OUT;
+				
+			case Constant.COMMAND_STRING_CREATE_ACCOUNT:
+				return COMMAND_TYPE.CREATE_ACCOUNT;
+				
+			case Constant.COMMAND_STRING_DELETE_ACCOUNT:
+				return COMMAND_TYPE.DELETE_ACCOUNT;
+				
+			case Constant.COMMAND_STRING_HELP:
+				return COMMAND_TYPE.HELP;
+				
+			case Constant.COMMAND_STRING_EXIT:
+				return COMMAND_TYPE.EXIT;
+				
+			case Constant.COMMAND_STRING_ADD:
+				return COMMAND_TYPE.ADD;
+				
+			case Constant.COMMAND_STRING_UPDATE:
+				return COMMAND_TYPE.UPDATE;
+				
+			case Constant.COMMAND_STRING_DELETE:
+				return COMMAND_TYPE.DELETE;
+				
+			case Constant.COMMAND_STRING_DISPLAY:
+				return COMMAND_TYPE.DISPLAY;
+
+			case Constant.COMMAND_STRING_SEARCH:
+				return COMMAND_TYPE.SEARCH;
+				
+			case Constant.COMMAND_STRING_UNDO:
+				return COMMAND_TYPE.UNDO;
+				
+			case Constant.COMMAND_STRING_REDO:
+				return COMMAND_TYPE.REDO;
+	
+			case Constant.COMMAND_STRING_CLEAR:
+				return COMMAND_TYPE.CLEAR;	
+	
+			case Constant.COMMAND_STRING_LOG_IN_ALT:
+				return COMMAND_TYPE.LOG_IN;
+				
+			case Constant.COMMAND_STRING_LOG_OUT_ALT:
+				return COMMAND_TYPE.LOG_OUT;
+				
+			case Constant.COMMAND_STRING_NLP:
+				return COMMAND_TYPE.NLP;
+				
+			case Constant.COMMAND_STRING_EMPTY_TRASH:
+				return COMMAND_TYPE.EMPTY_TRASH;
+				
+			case Constant.COMMAND_STRING_RELOAD:
+				return COMMAND_TYPE.RELOAD;
+				
+			case Constant.COMMAND_STRING_DONE:
+				return COMMAND_TYPE.DONE;
+				
+			case Constant.COMMAND_STRING_RECOVER:
+				return COMMAND_TYPE.RECOVER;
+				
+			case Constant.COMMAND_STRING_UNTAG:
+				return COMMAND_TYPE.UNTAG;
+				
+			default:
+				return COMMAND_TYPE.HELP;
+		}
+	}
+}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\infrastructure\NerParser.java
+
+
+
+
+

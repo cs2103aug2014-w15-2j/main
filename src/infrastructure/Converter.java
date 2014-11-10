@@ -176,9 +176,8 @@ public class Converter {
 				.parse(dateString);
 	}
 	
+	//@author A0113029U-unused
 	/*
-	 * Unused
-	 * 
 	@SuppressWarnings("rawtypes") 
 	public static int convertRepeatedPeriodStringToInt(LinkedHashMap task) {
 		int repeated_period = Constant.REPEATED_PERIOD_DEFAULT;

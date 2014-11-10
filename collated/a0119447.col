@@ -1,0 +1,27 @@
+//@author: a0119447
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	/**
+	 * Check whether a task is done
+	 *
+	 * @return 	whether a task is done
+	 */
+	public boolean isDone() {
+		if (this.status.equals(Constant.TASK_STATUS_DONE)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+

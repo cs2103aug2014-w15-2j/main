@@ -1,0 +1,1285 @@
+//@author: a0113029u
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\dataStore\DataStore.java
+	 */
+
+
+package dataStore;
+
+import infrastructure.Converter;
+
+import model.Task;
+import model.TaskBox;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.Writer;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.simple.JSONArray;
+import org.json.simple.parser.ContainerFactory;
+import org.json.simple.parser.JSONParser;
+
+import com.sun.media.jfxmedia.logging.Logger;
+
+public abstract class DataStore {
+
+	private static final String DATA_FILEPATH = "List-of-Xiao-Ming/task-list.xiaoming";
+
+	/**
+	 * get the tasks list from the file data
+	 * make a new file data if does not exist
+	 * 
+	 * @return TaskBox for the tasks list
+	 * @throws Exception
+	 * 
+	 */
+	public static TaskBox loadFileData() throws Exception {
+		if (!isFileExisting()) {
+			createTaskFile();
+		}
+		return getCurrentTasks();
+	}
+
+	/**
+	 * save the changes, write all tasks into the account data
+	 * 
+	 * @param tasks - list of tasks need to be saved into the file
+	 * @return true if it is successfully saved, false otherwise
+	 */
+	@SuppressWarnings("rawtypes")
+	public static boolean save(TaskBox tasks) {
+		assert (isFileExisting());
+		if (!isFileExisting()) {
+			return false;
+		}
+		try {
+			ArrayList tasksList = getContent(tasks);
+			FileWriter fw = new FileWriter(DATA_FILEPATH);
+			Writer writer = new JSonWriter();
+			JSONArray.writeJSONString(tasksList, writer);
+			fw.write(writer.toString());
+			writer.close();
+			fw.close();
+			Logger.logMsg(Logger.INFO, "Content saved to file");
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * check whether the file-data exists
+	 * 
+	 * @return true if exists, no otherwise
+	 */
+	private static boolean isFileExisting() {
+		File fileData = new File(DATA_FILEPATH);
+		if (fileData.exists()) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * create a new data file
+	 * 
+	 * @return true if succeed, false otherwise
+	 */
+	private static boolean createTaskFile() {
+		assert (!isFileExisting());
+		if (isFileExisting()) {
+			Logger.logMsg(Logger.INFO, "File already exists");
+			return false;
+		}
+		try {
+			File fileData = new File(DATA_FILEPATH);
+			fileData.createNewFile();
+			save(null);
+			Logger.logMsg(Logger.INFO, "New file created");
+			return true;
+		} catch (IOException e) {
+			Logger.logMsg(Logger.INFO, "Failed in creating a new file");
+			return false;
+		}
+	}
+
+	/**
+	 * read file and get user current tasks
+	 * 
+	 * @return user current tasks
+	 * @throws Exception
+	 *             - when it fails reading from the file, when the file does not
+	 *             exist or when the parsing fails
+	 */
+	@SuppressWarnings("rawtypes")
+	private static TaskBox getCurrentTasks() throws Exception {
+		assert (isFileExisting());
+		TaskBox tasksList = new TaskBox();
+
+		FileReader user = new FileReader(DATA_FILEPATH);
+		JSONParser parser = new JSONParser();
+		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
+		ArrayList allTasks = (ArrayList) parser.parse(user, orderedKeyFactory);
+
+		LinkedHashMap task;
+		if (allTasks != null) {
+			for (int i = 0; i < allTasks.size(); i++) {
+				task = (LinkedHashMap) allTasks.get(i);
+				Task newTask = Converter.convertMapToTask(task);
+				if (newTask.isDone()) {
+					tasksList.getFinishedTasks().add(newTask);
+				} else if (newTask.isTrashed()) {
+					tasksList.getTrashedTasks().add(newTask);
+				} else {
+					// default: ongoing normal tasks
+					tasksList.getOngoingTasks().add(newTask);
+				}
+			}
+		}
+
+		user.close();
+		Logger.logMsg(Logger.INFO, "All tasks loaded");
+		return tasksList;
+	}
+
+	/**
+	 * convert a list of tasks into the available format for the file
+	 * 
+	 * @return the content of the file to be written
+	 */
+	@SuppressWarnings({ "rawtypes" })
+	private static ArrayList getContent(TaskBox tasks) {
+		// list of all tasks
+		ArrayList<LinkedHashMap> tasksList = new ArrayList<LinkedHashMap>();
+
+		if (tasks != null) {
+			for (int i = 0; i < tasks.getOngoingTasks().size(); i++) {
+				LinkedHashMap task = Converter.convertTaskToMap(tasks
+						.getOngoingTasks().get(i));
+				tasksList.add(task);
+			}
+			for (int i = 0; i < tasks.getFinishedTasks().size(); i++) {
+				LinkedHashMap task = Converter.convertTaskToMap(tasks
+						.getFinishedTasks().get(i));
+				tasksList.add(task);
+			}
+			for (int i = 0; i < tasks.getTrashedTasks().size(); i++) {
+				LinkedHashMap task = Converter.convertTaskToMap(tasks
+						.getTrashedTasks().get(i));
+				tasksList.add(task);
+			}
+		}
+
+		Logger.logMsg(Logger.INFO, "All tasks converted to content");
+		return tasksList;
+	}
+
+	/**
+	 * @return an ordered key factory (maintain the ordering from the file)
+	 */
+	@SuppressWarnings("rawtypes")
+	private static ContainerFactory setOrderedKeyFactory() {
+		ContainerFactory orderedKeyFactory = new ContainerFactory() {
+			@Override
+			public List creatArrayContainer() {
+				return new ArrayList();
+			}
+
+			@Override
+			public Map createObjectContainer() {
+				return new LinkedHashMap();
+			}
+		};
+		return orderedKeyFactory;
+	}
+
+}
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\dataStore\DataStore.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\infrastructure\Converter.java
+	 */
+
+
+package infrastructure;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import java.util.LinkedHashMap;
+
+import model.CommandFailedException;
+import model.Task;
+import model.TimeInterval;
+
+public class Converter {
+
+	/**
+	 * convert a Task to LinkedHashMap needed for JSON format
+	 * 
+	 * @param task - a task
+	 * @return LinkedHashMap of a task with the properties
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static LinkedHashMap convertTaskToMap(Task task) {
+		assert(task != null);
+
+		LinkedHashMap taskMap = new LinkedHashMap();
+		
+		if(task == null) {
+			return taskMap;
+		}
+
+		taskMap.put(Constant.SAVE_DESCRIPTION, task.getDescription());
+		taskMap.put(Constant.SAVE_STATUS, task.getStatus());
+
+		ArrayList<String> tags = new ArrayList<String>();
+		for (int i = 0; i < task.getTag().size(); i++) {
+			tags.add(task.getTag().get(i));
+		}
+		taskMap.put(Constant.SAVE_TAGS, tags);
+
+		taskMap.put(Constant.SAVE_PRIORITY,
+				convertPriorityIntToString(task.getPriority()));
+		taskMap.put(Constant.SAVE_TIME_INTERVAL,
+				convertTimeIntervalToString(task.getInterval()));
+
+		return taskMap;
+	}
+
+	/**
+	 * convert map to task specify all the information into corresponding
+	 * properties
+	 * 
+	 * @param task - Map contains all the properties of a specified task
+	 * @return Task object with the specified properties
+	 * @throws Exception - failed in parsing time intervals
+	 */
+	@SuppressWarnings("rawtypes")
+	public static Task convertMapToTask(LinkedHashMap task) throws Exception {
+		assert(task != null);
+		if(task == null) {
+			return null;
+		}
+		
+		String description = (String) task.get(Constant.SAVE_DESCRIPTION);
+		String status = (String) task.get(Constant.SAVE_STATUS);
+		int priority = convertPriorityStringToInt((String) task
+				.get(Constant.SAVE_PRIORITY));
+
+		ArrayList tags = (ArrayList) task.get(Constant.SAVE_TAGS);
+		ArrayList<String> tag = new ArrayList<String>();
+		for (int i = 0; i < tags.size(); i++) {
+			tag.add((String) tags.get(i));
+		}
+
+		LinkedHashMap intervalObj = (LinkedHashMap) task
+				.get(Constant.SAVE_TIME_INTERVAL);
+		TimeInterval interval = convertStringToTimeInterval(intervalObj);
+
+		Task newTask = new Task(description, priority, tag, interval);
+		newTask.setStatus(status);
+
+		return newTask;
+	}
+
+	private static int convertPriorityStringToInt(String priorityString) {
+		priorityString = priorityString.toLowerCase().trim();
+		int priority = Constant.PRIORITY_DEFAULT;
+		if (priorityString.equals(Constant.PRIORITY_STRING_HIGH)) {
+			priority = Constant.PRIORITY_HIGH;
+		} else if (priorityString.equals(Constant.PRIORITY_STRING_MEDIUM)) {
+			priority = Constant.PRIORITY_MEDIUM;
+		} else if (priorityString.equals(Constant.PRIORITY_STRING_LOW)) {
+			priority = Constant.PRIORITY_LOW;
+		}
+		return priority;
+	}
+
+	private static String convertPriorityIntToString(int priorityInt) {
+		String priority;
+		switch (priorityInt) {
+		case Constant.PRIORITY_HIGH:
+			priority = Constant.PRIORITY_STRING_HIGH;
+			break;
+		case Constant.PRIORITY_MEDIUM:
+			priority = Constant.PRIORITY_STRING_MEDIUM;
+			break;
+		case Constant.PRIORITY_LOW:
+			priority = Constant.PRIORITY_STRING_LOW;
+			break;
+		default:
+			priority = Constant.PRIORITY_STRING_MEDIUM;
+			break;
+		}
+		return priority;
+	}
+
+	/**
+	 * convert the given string into a time interval
+	 * 
+	 * @param intervalObj - containing the time information
+	 * @return a time interval with start and end date
+	 * @throws ParseException - failed in parsing dates
+	 * @throws CommandFailedException - invalid time interval
+	 */
+	@SuppressWarnings("rawtypes")
+	private static TimeInterval convertStringToTimeInterval(
+			LinkedHashMap intervalObj) throws ParseException,
+			CommandFailedException {
+		Date startDate = convertDateStringToDate((String) intervalObj
+				.get(Constant.SAVE_STARTDATE));
+		Date endDate = convertDateStringToDate((String) intervalObj
+				.get(Constant.SAVE_ENDDATE));
+		return new TimeInterval(startDate, endDate);
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static LinkedHashMap convertTimeIntervalToString(TimeInterval time) {
+		LinkedHashMap timeInterval = new LinkedHashMap();
+
+		String startDate = convertDateToString(time.getStartDate());
+		timeInterval.put(Constant.SAVE_STARTDATE, startDate);
+		String endDate = convertDateToString(time.getEndDate());
+		timeInterval.put(Constant.SAVE_ENDDATE, endDate);
+
+		return timeInterval;
+	}
+
+	private static String convertDateToString(Date date) {
+		String dateString;
+		if (date.equals(Constant.FLOATING_START_DATE)
+				|| date.equals(Constant.FLOATING_END_DATE)
+				|| date.equals(Constant.DEADLINE_START_DATE)) {
+			dateString = Constant.SAVE_FORMAT_NO_DATE;
+		} else {
+			dateString = new SimpleDateFormat(Constant.FORMAT_DATE,
+					Locale.ENGLISH).format(date);
+		}
+		return dateString;
+	}
+
+	/**
+	 * convert a string contains date information to a Date object
+	 * 
+	 * @param dateString - a string with the specified date format
+	 * @return Date corresponding to the string
+	 * @throws ParseException - failed in parsing dates
+	 */
+	private static Date convertDateStringToDate(String dateString)
+			throws ParseException {
+		if (dateString.trim().equals(Constant.SAVE_FORMAT_NO_DATE)) {
+			return null;
+		}
+		return new SimpleDateFormat(Constant.FORMAT_DATE, Locale.ENGLISH)
+				.parse(dateString);
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\infrastructure\Converter.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	public String getStatus() {
+		return this.status;
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	public void setStatus(String state) {
+		if ((state == null) || (state == "")) {
+			this.status = Constant.TASK_STATUS_ONGOING;
+			return;
+		}
+		switch(state.toLowerCase().trim()) {
+			case Constant.TASK_STATUS_ONGOING:
+				this.status = Constant.TASK_STATUS_ONGOING;
+				break;
+				
+			case Constant.TASK_STATUS_DONE:
+				this.status = Constant.TASK_STATUS_DONE;
+				break;
+				
+			case Constant.TASK_STATUS_TRASHED:
+				this.status = Constant.TASK_STATUS_TRASHED;
+				break;
+				
+			default:
+				this.status = Constant.TASK_STATUS_ONGOING;
+				break;
+		}
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || obj.getClass()!=this.getClass()){
+			return false;
+		}
+		Task task = (Task) obj;
+		return (this.getDescription().equals(task.getDescription())) &&
+				(this.getStatus().equals(task.getStatus())) &&
+				(this.getPriority() == task.getPriority()) &&
+				(this.getInterval().equals(task.getInterval())) &&
+				(this.getTag().equals(task.getTag()));
+	}
+	
+	// check validity of attributes	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\TaskBox.java
+	 */
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || obj.getClass()!=this.getClass()) {
+			return false;
+		}
+		TaskBox tb = (TaskBox) obj; 
+		return (this.getOngoingTasks().equals(tb.getOngoingTasks())) &&
+				(this.getFinishedTasks().equals(tb.getFinishedTasks())) &&
+				(this.getTrashedTasks().equals(tb.getTrashedTasks()));
+	}
+	
+}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\TaskBox.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\ConverterTest.java
+	 */
+
+
+package test;
+
+import static org.junit.Assert.assertEquals;
+import infrastructure.Constant;
+import infrastructure.Converter;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+
+import model.CommandFailedException;
+import model.Task;
+import model.TimeInterval;
+
+import org.junit.Test;
+
+public class ConverterTest {
+
+	private static final String ERROR_TESTING = "failed in testing";
+
+	// These tests are for convertTaskToMap() method from Converter //
+	
+	@SuppressWarnings("rawtypes")
+	@Test
+	public void testConvertTaskToMapNull() {
+		LinkedHashMap taskMap = new LinkedHashMap();
+		assertEquals(taskMap, Converter.convertTaskToMap(null));
+	}
+
+	@Test
+	@SuppressWarnings("rawtypes")
+	public void testConvertTaskToMapFloating() {
+		ArrayList<String> tags = new ArrayList<String>();
+		TimeInterval time;
+		try {
+			time = new TimeInterval(null, null);
+			Task task = new Task("task1", Constant.PRIORITY_MEDIUM, tags, time);
+			LinkedHashMap taskMap = Converter.convertTaskToMap(task);
+			assertEquals(Constant.SAVE_FORMAT_NO_DATE,
+					((LinkedHashMap) taskMap.get(Constant.SAVE_TIME_INTERVAL))
+							.get(Constant.SAVE_STARTDATE));
+			assertEquals(Constant.SAVE_FORMAT_NO_DATE,
+					((LinkedHashMap) taskMap.get(Constant.SAVE_TIME_INTERVAL))
+							.get(Constant.SAVE_ENDDATE));
+		} catch (CommandFailedException e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings("rawtypes")
+	public void testConvertTaskToMapDeadline() {
+		ArrayList<String> tags = new ArrayList<String>();
+		TimeInterval time;
+		try {
+			Date endDate = new SimpleDateFormat(Constant.FORMAT_DATE,
+					Locale.ENGLISH).parse("29-Nov-2014 10:00");
+			time = new TimeInterval(null, endDate);
+			Task task = new Task("task1", Constant.PRIORITY_MEDIUM, tags, time);
+			LinkedHashMap taskMap = Converter.convertTaskToMap(task);
+			assertEquals(Constant.SAVE_FORMAT_NO_DATE,
+					((LinkedHashMap) taskMap.get(Constant.SAVE_TIME_INTERVAL))
+							.get(Constant.SAVE_STARTDATE));
+			assertEquals("29-November-2014 10:00",
+					((LinkedHashMap) taskMap.get(Constant.SAVE_TIME_INTERVAL))
+							.get(Constant.SAVE_ENDDATE));
+		} catch (CommandFailedException | ParseException e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings("rawtypes")
+	public void testConvertTaskToMapPeriod() {
+		ArrayList<String> tags = new ArrayList<String>();
+		TimeInterval time;
+		try {
+			Date startDate = new SimpleDateFormat(Constant.FORMAT_DATE,
+					Locale.ENGLISH).parse("29-Nov-2014 10:00");
+			Date endDate = new SimpleDateFormat(Constant.FORMAT_DATE,
+					Locale.ENGLISH).parse("29-Nov-2014 12:00");
+			time = new TimeInterval(startDate, endDate);
+			Task task = new Task("task1", Constant.PRIORITY_MEDIUM, tags, time);
+			LinkedHashMap taskMap = Converter.convertTaskToMap(task);
+			assertEquals("29-November-2014 10:00",
+					((LinkedHashMap) taskMap.get(Constant.SAVE_TIME_INTERVAL))
+							.get(Constant.SAVE_STARTDATE));
+			assertEquals("29-November-2014 12:00",
+					((LinkedHashMap) taskMap.get(Constant.SAVE_TIME_INTERVAL))
+							.get(Constant.SAVE_ENDDATE));
+		} catch (CommandFailedException | ParseException e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings("rawtypes")
+	public void testConvertTasktoMapPriorityHigh() {
+		ArrayList<String> tags = new ArrayList<String>();
+		TimeInterval time;
+		try {
+			time = new TimeInterval(null, null);
+			Task task = new Task("task1", Constant.PRIORITY_HIGH, tags, time);
+			LinkedHashMap taskMap = Converter.convertTaskToMap(task);
+			assertEquals(Constant.PRIORITY_STRING_HIGH,
+					(taskMap.get(Constant.SAVE_PRIORITY)));
+		} catch (CommandFailedException e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings("rawtypes")
+	public void testConvertTasktoMapPriorityMedium() {
+		ArrayList<String> tags = new ArrayList<String>();
+		TimeInterval time;
+		try {
+			time = new TimeInterval(null, null);
+			Task task = new Task("task1", Constant.PRIORITY_MEDIUM, tags, time);
+			LinkedHashMap taskMap = Converter.convertTaskToMap(task);
+			assertEquals(Constant.PRIORITY_STRING_MEDIUM,
+					(taskMap.get(Constant.SAVE_PRIORITY)));
+		} catch (CommandFailedException e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings("rawtypes")
+	public void testConvertTasktoMapPriorityLow() {
+		ArrayList<String> tags = new ArrayList<String>();
+		TimeInterval time;
+		try {
+			time = new TimeInterval(null, null);
+			Task task = new Task("task1", Constant.PRIORITY_LOW, tags, time);
+			LinkedHashMap taskMap = Converter.convertTaskToMap(task);
+			assertEquals(Constant.PRIORITY_STRING_LOW,
+					(taskMap.get(Constant.SAVE_PRIORITY)));
+		} catch (CommandFailedException e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings("rawtypes")
+	public void testConvertTasktoMapTagEmpty() {
+		ArrayList<String> tags = new ArrayList<String>();
+		TimeInterval time;
+		try {
+			time = new TimeInterval(null, null);
+			Task task = new Task("task1", Constant.PRIORITY_LOW, tags, time);
+			LinkedHashMap taskMap = Converter.convertTaskToMap(task);
+			assertEquals(tags, (taskMap.get(Constant.SAVE_TAGS)));
+		} catch (CommandFailedException e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings("rawtypes")
+	public void testConvertTasktoMapTags() {
+		ArrayList<String> tags = new ArrayList<String>();
+		tags.add("tag1");
+		tags.add("tag2");
+		TimeInterval time;
+		try {
+			time = new TimeInterval(null, null);
+			Task task = new Task("task1", Constant.PRIORITY_LOW, tags, time);
+			LinkedHashMap taskMap = Converter.convertTaskToMap(task);
+			assertEquals(tags, (taskMap.get(Constant.SAVE_TAGS)));
+		} catch (CommandFailedException e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings("rawtypes")
+	public void testConvertTasktoMapDescriptionAndStatus() {
+		ArrayList<String> tags = new ArrayList<String>();
+		TimeInterval time;
+		try {
+			time = new TimeInterval(null, null);
+			Task task = new Task("task1", Constant.PRIORITY_LOW, tags, time);
+			task.setStatus(Constant.TASK_STATUS_DONE);
+			LinkedHashMap taskMap = Converter.convertTaskToMap(task);
+			assertEquals("task1", taskMap.get(Constant.SAVE_DESCRIPTION));
+			assertEquals(Constant.TASK_STATUS_DONE,
+					taskMap.get(Constant.SAVE_STATUS));
+		} catch (CommandFailedException e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	// These tests are for convertTaskToMap() method from Converter //
+	
+	@Test
+	public void testConvertMapToTaskNull() {
+		try {
+			assertEquals(null, Converter.convertMapToTask(null));
+		} catch (Exception e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void testConvertMapToTaskFloating() {
+		try {
+			LinkedHashMap taskMap = new LinkedHashMap();
+			taskMap.put(Constant.SAVE_DESCRIPTION, "task1");
+			taskMap.put(Constant.SAVE_PRIORITY, Constant.PRIORITY_STRING_MEDIUM);
+			taskMap.put(Constant.SAVE_STATUS, Constant.TASK_STATUS_ONGOING);
+			LinkedHashMap timeMap = new LinkedHashMap();
+			timeMap.put(Constant.SAVE_STARTDATE, "-");
+			timeMap.put(Constant.SAVE_ENDDATE, "-");
+			taskMap.put(Constant.SAVE_TIME_INTERVAL, timeMap);
+			ArrayList tags = new ArrayList();
+			taskMap.put(Constant.SAVE_TAGS, tags);
+
+			Task task = Converter.convertMapToTask(taskMap);
+			assertEquals(Constant.FLOATING_START_DATE, task.getInterval()
+					.getStartDate());
+			assertEquals(Constant.FLOATING_END_DATE, task.getInterval()
+					.getEndDate());
+
+		} catch (Exception e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void testConvertMapToTaskDeadline() {
+		try {
+			LinkedHashMap taskMap = new LinkedHashMap();
+			taskMap.put(Constant.SAVE_DESCRIPTION, "task1");
+			taskMap.put(Constant.SAVE_PRIORITY, Constant.PRIORITY_STRING_MEDIUM);
+			taskMap.put(Constant.SAVE_STATUS, Constant.TASK_STATUS_ONGOING);
+			LinkedHashMap timeMap = new LinkedHashMap();
+			timeMap.put(Constant.SAVE_STARTDATE, "-");
+			timeMap.put(Constant.SAVE_ENDDATE, "29-November-2014 12:00");
+			taskMap.put(Constant.SAVE_TIME_INTERVAL, timeMap);
+			ArrayList tags = new ArrayList();
+			taskMap.put(Constant.SAVE_TAGS, tags);
+
+			Date endDate = new SimpleDateFormat(Constant.FORMAT_DATE,
+					Locale.ENGLISH).parse("29-Nov-2014 12:00");
+			Task task = Converter.convertMapToTask(taskMap);
+			assertEquals(Constant.DEADLINE_START_DATE, task.getInterval()
+					.getStartDate());
+			assertEquals(endDate, task.getInterval().getEndDate());
+
+		} catch (Exception e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void testConvertMapToTaskPeriod() {
+		try {
+			LinkedHashMap taskMap = new LinkedHashMap();
+			taskMap.put(Constant.SAVE_DESCRIPTION, "task1");
+			taskMap.put(Constant.SAVE_PRIORITY, Constant.PRIORITY_STRING_MEDIUM);
+			taskMap.put(Constant.SAVE_STATUS, Constant.TASK_STATUS_ONGOING);
+			LinkedHashMap timeMap = new LinkedHashMap();
+			timeMap.put(Constant.SAVE_STARTDATE, "29-November-2014 10:00");
+			timeMap.put(Constant.SAVE_ENDDATE, "29-November-2014 12:00");
+			taskMap.put(Constant.SAVE_TIME_INTERVAL, timeMap);
+			ArrayList tags = new ArrayList();
+			taskMap.put(Constant.SAVE_TAGS, tags);
+
+			Date startDate = new SimpleDateFormat(Constant.FORMAT_DATE,
+					Locale.ENGLISH).parse("29-Nov-2014 10:00");
+			Date endDate = new SimpleDateFormat(Constant.FORMAT_DATE,
+					Locale.ENGLISH).parse("29-Nov-2014 12:00");
+			Task task = Converter.convertMapToTask(taskMap);
+			assertEquals(startDate, task.getInterval().getStartDate());
+			assertEquals(endDate, task.getInterval().getEndDate());
+
+		} catch (Exception e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void testConvertMapToTaskPriorityHigh() {
+		try {
+			LinkedHashMap taskMap = new LinkedHashMap();
+			taskMap.put(Constant.SAVE_DESCRIPTION, "task1");
+			taskMap.put(Constant.SAVE_PRIORITY, Constant.PRIORITY_STRING_HIGH);
+			taskMap.put(Constant.SAVE_STATUS, Constant.TASK_STATUS_ONGOING);
+			LinkedHashMap timeMap = new LinkedHashMap();
+			timeMap.put(Constant.SAVE_STARTDATE, "-");
+			timeMap.put(Constant.SAVE_ENDDATE, "-");
+			taskMap.put(Constant.SAVE_TIME_INTERVAL, timeMap);
+			ArrayList tags = new ArrayList();
+			taskMap.put(Constant.SAVE_TAGS, tags);
+
+			Task task = Converter.convertMapToTask(taskMap);
+			assertEquals(Constant.PRIORITY_HIGH, task.getPriority());
+
+		} catch (Exception e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void testConvertMapToTaskPriorityMedium() {
+		try {
+			LinkedHashMap taskMap = new LinkedHashMap();
+			taskMap.put(Constant.SAVE_DESCRIPTION, "task1");
+			taskMap.put(Constant.SAVE_PRIORITY, Constant.PRIORITY_STRING_MEDIUM);
+			taskMap.put(Constant.SAVE_STATUS, Constant.TASK_STATUS_ONGOING);
+			LinkedHashMap timeMap = new LinkedHashMap();
+			timeMap.put(Constant.SAVE_STARTDATE, "-");
+			timeMap.put(Constant.SAVE_ENDDATE, "-");
+			taskMap.put(Constant.SAVE_TIME_INTERVAL, timeMap);
+			ArrayList tags = new ArrayList();
+			taskMap.put(Constant.SAVE_TAGS, tags);
+
+			Task task = Converter.convertMapToTask(taskMap);
+			assertEquals(Constant.PRIORITY_MEDIUM, task.getPriority());
+
+		} catch (Exception e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void testConvertMapToTaskPriorityLow() {
+		try {
+			LinkedHashMap taskMap = new LinkedHashMap();
+			taskMap.put(Constant.SAVE_DESCRIPTION, "task1");
+			taskMap.put(Constant.SAVE_PRIORITY, Constant.PRIORITY_STRING_LOW);
+			taskMap.put(Constant.SAVE_STATUS, Constant.TASK_STATUS_ONGOING);
+			LinkedHashMap timeMap = new LinkedHashMap();
+			timeMap.put(Constant.SAVE_STARTDATE, "-");
+			timeMap.put(Constant.SAVE_ENDDATE, "-");
+			taskMap.put(Constant.SAVE_TIME_INTERVAL, timeMap);
+			ArrayList tags = new ArrayList();
+			taskMap.put(Constant.SAVE_TAGS, tags);
+
+			Task task = Converter.convertMapToTask(taskMap);
+			assertEquals(Constant.PRIORITY_LOW, task.getPriority());
+
+		} catch (Exception e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void testConvertMapToTaskTagEmpty() {
+		try {
+			LinkedHashMap taskMap = new LinkedHashMap();
+			taskMap.put(Constant.SAVE_DESCRIPTION, "task1");
+			taskMap.put(Constant.SAVE_PRIORITY, Constant.PRIORITY_STRING_LOW);
+			taskMap.put(Constant.SAVE_STATUS, Constant.TASK_STATUS_ONGOING);
+			LinkedHashMap timeMap = new LinkedHashMap();
+			timeMap.put(Constant.SAVE_STARTDATE, "-");
+			timeMap.put(Constant.SAVE_ENDDATE, "-");
+			taskMap.put(Constant.SAVE_TIME_INTERVAL, timeMap);
+			ArrayList tags = new ArrayList();
+			taskMap.put(Constant.SAVE_TAGS, tags);
+
+			Task task = Converter.convertMapToTask(taskMap);
+			assertEquals(new ArrayList<String>(), task.getTag());
+
+		} catch (Exception e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void testConvertMapToTaskTags() {
+		try {
+			LinkedHashMap taskMap = new LinkedHashMap();
+			taskMap.put(Constant.SAVE_DESCRIPTION, "task1");
+			taskMap.put(Constant.SAVE_PRIORITY, Constant.PRIORITY_STRING_LOW);
+			taskMap.put(Constant.SAVE_STATUS, Constant.TASK_STATUS_ONGOING);
+			LinkedHashMap timeMap = new LinkedHashMap();
+			timeMap.put(Constant.SAVE_STARTDATE, "-");
+			timeMap.put(Constant.SAVE_ENDDATE, "-");
+			taskMap.put(Constant.SAVE_TIME_INTERVAL, timeMap);
+			ArrayList tags = new ArrayList();
+			tags.add("tag1");
+			tags.add("tag2");
+			taskMap.put(Constant.SAVE_TAGS, tags);
+
+			ArrayList<String> tag = new ArrayList<String>();
+			tag.add("tag1");
+			tag.add("tag2");
+			Task task = Converter.convertMapToTask(taskMap);
+			assertEquals(tag, task.getTag());
+
+		} catch (Exception e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+	
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void testConvertMapToTaskDecriptionaAndStatus() {
+		try {
+			LinkedHashMap taskMap = new LinkedHashMap();
+			taskMap.put(Constant.SAVE_DESCRIPTION, "task1");
+			taskMap.put(Constant.SAVE_PRIORITY, Constant.PRIORITY_STRING_LOW);
+			taskMap.put(Constant.SAVE_STATUS, Constant.TASK_STATUS_DONE);
+			LinkedHashMap timeMap = new LinkedHashMap();
+			timeMap.put(Constant.SAVE_STARTDATE, "-");
+			timeMap.put(Constant.SAVE_ENDDATE, "-");
+			taskMap.put(Constant.SAVE_TIME_INTERVAL, timeMap);
+			ArrayList tags = new ArrayList();
+			tags.add("tag1");
+			tags.add("tag2");
+			taskMap.put(Constant.SAVE_TAGS, tags);
+
+			Task task = Converter.convertMapToTask(taskMap);
+			assertEquals("task1", task.getDescription());
+			assertEquals(Constant.TASK_STATUS_DONE, task.getStatus());
+
+		} catch (Exception e) {
+			System.out.println(ERROR_TESTING);
+		}
+	}
+
+}
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\ConverterTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\DataStoreTest.java
+	 */
+
+
+package test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import model.CommandFailedException;
+import model.Task;
+import model.TaskBox;
+import model.TimeInterval;
+import dataStore.DataStore;
+import infrastructure.Constant;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+
+public class DataStoreTest {
+	
+	//Formatting in the saved file
+	private static final String FORMAT_OPEN_ARRAY = "[";
+	private static final String FORMAT_CLOSE_ARRAY = "]";
+	private static final String FORMAT_OPEN_OBJECT = "{";
+	private static final String FORMAT_CLOSE_OBJECT = "}";
+	private static final String FORMAT_DESCRIPTION = "\"" +
+								Constant.SAVE_DESCRIPTION + "\":\"%s\",";
+	private static final String FORMAT_STATUS = "\"" +
+								Constant.SAVE_STATUS + "\":\"%s\",";
+	private static final String FORMAT_TAGS = "\"" +
+								Constant.SAVE_TAGS + "\":[";
+	private static final String FORMAT_PRIORITY = "\"" +
+								Constant.SAVE_PRIORITY + "\":\"%s\","; 
+	private static final String FORMAT_TIME_INTERVAL = "\"" +
+								Constant.SAVE_TIME_INTERVAL + "\":{";
+	private static final String FORMAT_STARTDATE = "\"" +
+								Constant.SAVE_STARTDATE + "\":\"%s\",";
+	private static final String FORMAT_ENDDATE = "\"" +
+								Constant.SAVE_ENDDATE + "\":\"%s\"";
+	
+	//error message
+	private static final String MESSAGE_FAILED_TESTING = "failed in testing";
+	
+	//file path and data for data-testing and original data
+	private static final String DATA_FILEPATH = 
+								"List-of-Xiao-Ming/task-list.xiaoming";
+	private static final String DATA_FILEPATH_TEMP= 
+								"List-of-Xiao-Ming/task-list-temp.xiaoming";
+	
+	static File fileData = new File(DATA_FILEPATH);
+	static File fileTemp = new File(DATA_FILEPATH_TEMP);
+	
+	/**
+	 * move the original data to temporary file
+	 * create a new file for testing
+	 */
+	@Before
+	public void setTestEnvironment() { 
+		if(fileData.exists()) {
+			fileData.renameTo(fileTemp);
+		}
+		try {
+			fileData.createNewFile();
+		} catch (IOException e) {
+			System.out.println(MESSAGE_FAILED_TESTING);
+		}
+	}
+	
+	/**
+	 * delete testing file
+	 * move back the original data
+	 */
+	@After
+	public void setBackOriginalData() {
+		fileData.delete();
+		fileTemp.renameTo(fileData);
+	}
+	
+	/**
+	 * test - save an empty tasks-list
+	 */
+	@Test
+	public void testSaveNull() {
+		//failed saving if file does not exist
+		if(fileData.exists()) {
+			fileData.delete();
+		}
+		assertFalse(DataStore.save(null));
+		
+		try {
+			fileData.createNewFile();
+			assertTrue(DataStore.save(null));
+			
+			BufferedReader br = new BufferedReader(new FileReader(fileData));
+			assertEquals(FORMAT_OPEN_ARRAY, br.readLine().trim());
+			br.readLine();
+			assertEquals(FORMAT_CLOSE_ARRAY, br.readLine().trim());
+			br.close();
+		} catch (IOException e) {
+			System.out.println(MESSAGE_FAILED_TESTING);
+		}
+	}
+
+	@Test
+	public void testSave() {
+		try {
+			TaskBox tasks = getTasksTC1();
+			assertTrue(DataStore.save(tasks));
+			checkDataFileTC1();
+		} catch (ParseException | CommandFailedException | IOException e) {
+			System.out.println(MESSAGE_FAILED_TESTING);
+		}
+	}
+	
+	/**
+	 * Test load file when no task-list file exists
+	 */
+	@Test
+	public void testLoadFileNotExist() {
+		fileData.delete();
+		try {
+			TaskBox tasks = new TaskBox();
+			assertEquals(tasks, DataStore.loadFileData());
+		} catch (Exception e) {
+			System.out.println(MESSAGE_FAILED_TESTING);
+		}
+	}
+
+	@Test
+	public void testLoadFile() {
+		try {
+			writeDataFileTC1();
+			assertEquals(getTasksTC1(), DataStore.loadFileData());
+		} catch (Exception e) {
+			System.out.println(MESSAGE_FAILED_TESTING);
+		}
+	}
+	
+	/**
+	 * make a new tasks list for testing and checking
+	 * 
+	 * @return TaskBox for test-case 1
+	 * @throws ParseException - if failed in parsing dates
+	 * @throws CommandFailedException - if invalid time interval
+	 */
+	private TaskBox getTasksTC1() throws ParseException,
+										CommandFailedException {
+		ArrayList<String> tags = new ArrayList<String>();
+		tags.add("tag1");
+		tags.add("tag2");
+		Date startDate = new SimpleDateFormat(Constant.FORMAT_DATE,
+				Locale.ENGLISH).parse("29-Nov-2014 10:00");
+		Date endDate = new SimpleDateFormat(Constant.FORMAT_DATE,
+				Locale.ENGLISH).parse("29-Nov-2014 12:00");
+		
+		//priority - high, period task, status - normal
+		Task task1 = new Task("task1", Constant.PRIORITY_HIGH, tags,
+							new TimeInterval(startDate, endDate));
+		task1.setStatus(Constant.TASK_STATUS_ONGOING);
+		
+		//priority - low, deadline task, status - done 
+		Task task2 = new Task("task2", Constant.PRIORITY_LOW, tags,
+							new TimeInterval(null, endDate));
+		task2.setStatus(Constant.TASK_STATUS_DONE);
+		
+		//priority - medium, floating task, status - trashed
+		Task task3 = new Task("task3", Constant.PRIORITY_MEDIUM,
+							tags, new TimeInterval(null, null));
+		task3.setStatus(Constant.TASK_STATUS_TRASHED);
+		
+		TaskBox tasks = new TaskBox();
+		tasks.getOngoingTasks().add(task1);
+		tasks.getFinishedTasks().add(task2);
+		tasks.getTrashedTasks().add(task3);
+		return tasks;
+	}
+	
+	/**
+	 * write a testing file for test-case 1
+	 * 
+	 * @throws IOException - failed in writing the testing file
+	 */
+	private void writeDataFileTC1() throws IOException {
+		BufferedWriter bw = new BufferedWriter(new FileWriter(fileData));
+		bw.write(FORMAT_OPEN_ARRAY + "\n");
+		
+		//priority - high, period task, status - normal
+		bw.write(FORMAT_OPEN_OBJECT + "\n");
+		bw.write(String.format(FORMAT_DESCRIPTION, "task1") + "\n");
+		bw.write(String.format(FORMAT_STATUS, Constant.TASK_STATUS_ONGOING)
+				+ "\n");
+		bw.write(FORMAT_TAGS + "\n");
+		bw.write("\"tag1\",\n");
+		bw.write("\"tag2\"\n");
+		bw.write(FORMAT_CLOSE_ARRAY + ",\n");
+		bw.write(String.format(FORMAT_PRIORITY, Constant.PRIORITY_STRING_HIGH)
+				+ "\n");
+		bw.write(FORMAT_TIME_INTERVAL + "\n");
+		bw.write(String.format(FORMAT_STARTDATE, "29-November-2014 10:00")
+				+ "\n");
+		bw.write(String.format(FORMAT_ENDDATE, "29-November-2014 12:00")
+				+ "\n");
+		bw.write(FORMAT_CLOSE_OBJECT + "\n");
+		bw.write(FORMAT_CLOSE_OBJECT + ",\n");
+		
+		//priority - low, deadline task, status - done 
+		bw.write(FORMAT_OPEN_OBJECT + "\n");
+		bw.write(String.format(FORMAT_DESCRIPTION, "task2") + "\n");
+		bw.write(String.format(FORMAT_STATUS, Constant.TASK_STATUS_DONE)
+				+ "\n");
+		bw.write(FORMAT_TAGS + "\n");
+		bw.write("\"tag1\",\n");
+		bw.write("\"tag2\"\n");
+		bw.write(FORMAT_CLOSE_ARRAY + ",\n");
+		bw.write(String.format(FORMAT_PRIORITY, Constant.PRIORITY_STRING_LOW)
+				+ "\n");
+		bw.write(FORMAT_TIME_INTERVAL + "\n");
+		bw.write(String.format(FORMAT_STARTDATE, Constant.SAVE_FORMAT_NO_DATE)
+				+ "\n");
+		bw.write(String.format(FORMAT_ENDDATE, "29-November-2014 12:00")
+				+ "\n");
+		bw.write(FORMAT_CLOSE_OBJECT + "\n");
+		bw.write(FORMAT_CLOSE_OBJECT + ",\n");
+		
+		//priority - medium, floating task, status - trashed
+		bw.write(FORMAT_OPEN_OBJECT + "\n");
+		bw.write(String.format(FORMAT_DESCRIPTION, "task3") + "\n");
+		bw.write(String.format(FORMAT_STATUS, Constant.TASK_STATUS_TRASHED)
+				+ "\n");
+		bw.write(FORMAT_TAGS +"\n");
+		bw.write("\"tag1\",\n");
+		bw.write("\"tag2\"\n");
+		bw.write(FORMAT_CLOSE_ARRAY + ",\n");
+		bw.write(String.format(FORMAT_PRIORITY, Constant.PRIORITY_STRING_MEDIUM)
+				+ "\n");
+		bw.write(FORMAT_TIME_INTERVAL + "\n");
+		bw.write(String.format(FORMAT_STARTDATE, Constant.SAVE_FORMAT_NO_DATE)
+				+ "\n");
+		bw.write(String.format(FORMAT_ENDDATE, Constant.SAVE_FORMAT_NO_DATE)
+				+ "\n");
+		bw.write(FORMAT_CLOSE_OBJECT + "\n");
+		bw.write(FORMAT_CLOSE_OBJECT + "\n");
+		
+		bw.write(FORMAT_CLOSE_ARRAY);
+		bw.close();
+	}
+	
+	/**
+	 * compare testing file content with the expected content
+	 * 
+	 * @throws FileNotFoundException - testing file does not exist
+	 * @throws IOException - failed in reading the test file
+	 */
+	private void checkDataFileTC1()
+			throws FileNotFoundException, IOException {
+		BufferedReader br = new BufferedReader(new FileReader(fileData));
+		
+		//priority - high, period task, status - normal
+		assertEquals(FORMAT_OPEN_ARRAY, br.readLine());
+		assertEquals(FORMAT_OPEN_OBJECT, br.readLine().trim());
+		assertEquals(String.format(FORMAT_DESCRIPTION, "task1"),
+					br.readLine().trim());
+		assertEquals(String.format(FORMAT_STATUS, Constant.TASK_STATUS_ONGOING),
+					br.readLine().trim());
+		assertEquals(FORMAT_TAGS, br.readLine().trim());
+		assertEquals("\"tag1\",", br.readLine().trim());
+		assertEquals("\"tag2\"", br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_ARRAY + ",", br.readLine().trim());
+		assertEquals(String.format(FORMAT_PRIORITY,
+					Constant.PRIORITY_STRING_HIGH), br.readLine().trim());
+		assertEquals(FORMAT_TIME_INTERVAL, br.readLine().trim());
+		assertEquals(String.format(FORMAT_STARTDATE, "29-November-2014 10:00"),
+					br.readLine().trim());
+		assertEquals(String.format(FORMAT_ENDDATE, "29-November-2014 12:00"),
+					br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_OBJECT, br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_OBJECT + ",", br.readLine().trim());
+		
+		//priority - low, deadline task, status - done 
+		assertEquals(FORMAT_OPEN_OBJECT, br.readLine().trim());
+		assertEquals(String.format(FORMAT_DESCRIPTION, "task2"),
+					br.readLine().trim());
+		assertEquals(String.format(FORMAT_STATUS, Constant.TASK_STATUS_DONE),
+					br.readLine().trim());
+		assertEquals(FORMAT_TAGS, br.readLine().trim());
+		assertEquals("\"tag1\",", br.readLine().trim());
+		assertEquals("\"tag2\"", br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_ARRAY + ",", br.readLine().trim());
+		assertEquals(String.format(FORMAT_PRIORITY, Constant.PRIORITY_STRING_LOW),
+					br.readLine().trim());
+		assertEquals(FORMAT_TIME_INTERVAL, br.readLine().trim());
+		assertEquals(String.format(FORMAT_STARTDATE, Constant.SAVE_FORMAT_NO_DATE),
+					br.readLine().trim());
+		assertEquals(String.format(FORMAT_ENDDATE, "29-November-2014 12:00"),
+					br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_OBJECT, br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_OBJECT + ",", br.readLine().trim());
+
+		//priority - medium, floating task, status - trashed
+		assertEquals(FORMAT_OPEN_OBJECT, br.readLine().trim());
+		assertEquals(String.format(FORMAT_DESCRIPTION, "task3"),
+					br.readLine().trim());
+		assertEquals(String.format(FORMAT_STATUS, Constant.TASK_STATUS_TRASHED),
+					br.readLine().trim());
+		assertEquals(FORMAT_TAGS, br.readLine().trim());
+		assertEquals("\"tag1\",", br.readLine().trim());
+		assertEquals("\"tag2\"", br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_ARRAY + ",", br.readLine().trim());
+		assertEquals(String.format(FORMAT_PRIORITY, Constant.PRIORITY_STRING_MEDIUM),
+					br.readLine().trim());
+		assertEquals(FORMAT_TIME_INTERVAL, br.readLine().trim());
+		assertEquals(String.format(FORMAT_STARTDATE, Constant.SAVE_FORMAT_NO_DATE),
+					br.readLine().trim());
+		assertEquals(String.format(FORMAT_ENDDATE, Constant.SAVE_FORMAT_NO_DATE),
+					br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_OBJECT, br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_OBJECT, br.readLine().trim());
+		assertEquals(FORMAT_CLOSE_ARRAY, br.readLine());
+		
+		br.close();
+	}
+}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\test\DataStoreTest.java
+
+
+
+
+

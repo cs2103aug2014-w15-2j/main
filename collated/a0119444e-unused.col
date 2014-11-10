@@ -1,0 +1,463 @@
+//@author: a0119444e-unused
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+//	/**
+//	 * toString convert the task information to a string for storage.
+//	 * Json is used to manage DataStore so this method is not needed
+//	 * 
+//	 * @return a task string
+//	 */
+//	public String toString() {
+//		String task = new String();
+//
+//		task = task + getTaskId() + '`';
+//		task = task + getDescription() + '`';
+//		task = task + getCategory() + '`';
+//		task = task + tagToString() + '`';
+//		task = task + Integer.toString(getRepeatedPeriod()) + '`';
+//		task = task + Integer.toString(getPriority()) + '`';
+//		Long start = getInterval().getStartDate().getTime();
+//		task = task + start + '`';
+//		Long end = getInterval().getEndDate().getTime();
+//		task = task + end;
+//
+//		return task;
+//	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+//	/**
+//	 * getDescription getter of the category attribute
+//	 * category is not supported now
+//	 * 
+//	 * @return
+//	 */
+//	public String getCategory() {
+//		return this.category;
+//	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+//	/**
+//	 * setDescription setter of the category attribute
+//	 * category is not supported now
+//	 * 
+//	 * @param newCategory
+//	 */
+//	
+//	public void setCategory(String newCategory) {
+//		try {
+//			isValidCategory(newCategory);
+//			this.category = newCategory;
+//		} catch (Exception e) {
+//
+//		}
+//	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+//	/**
+//	 * getTaskId getter of the task_id attribute
+//	 * 
+//	 * @return String
+//	 * 
+//	 */
+//	public String getTaskId() {
+//		return this.task_id;
+//	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+//	/**
+//	 * getRepeatedPeriod getter of the repeated_period attribute
+//	 * 
+//	 * @return int
+//	 */
+//	public int getRepeatedPeriod() {
+//		return this.repeated_period;
+//	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+//	/**
+//	 * setRepeatedPeriod setter of the repeated_period attribute
+//	 * 
+//	 * @param newRepeatedPeriod
+//	 */
+//	public void setRepeatedPeriod(int newRepeatedPeriod) {
+//		try {
+//			if(isValidRepeatedPeriod(newRepeatedPeriod)){
+//				this.repeated_period = newRepeatedPeriod;
+//			} else {
+//				throw new CommandFailedException();
+//			}
+//		} catch (Exception e) {
+//
+//		}
+//	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+//	/**
+//	 * check whether a category is valid
+//	 * 
+//	 * @param category
+//	 * @return boolean
+//	 */
+//	private boolean isValidCategory(String category){
+//		if (description.equals(null) || description.equals("")) {
+//			return false;
+//		} else {
+//			return true;
+//		}
+//	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+	 */
+
+//	/**
+//	 * check whether a task is trashed
+//	 * @return boolean
+//	 */
+//	public boolean isTrashed() {
+//		if (tag.contains(Constant.TRASHED_TAG)) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	// /**
+	// * add
+	// * adds a task into the task list.
+	// *
+	// * @param task
+	// */
+	//
+	// public boolean add(Task task) {
+	// this.updateUndoable();
+	// if (taskEndIndex == -1 || taskEndIndex == currentTasks.size() - 1) {
+	// this.currentTasks.add(task);
+	// } else {
+	// this.currentTasks.add(task);
+	// moveAddedTask(taskEndIndex);
+	// }
+	// taskEndIndex++;
+	// boolean isSuccessful = DataStore.save(this.currentTasks);
+	// return isSuccessful;
+	// }
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	// /**
+	// * delete deletes the task with the index from the task list.
+	// *
+	// * @param index
+	// * @throws CommandFailedException
+	// */
+	// public boolean delete(int index) throws CommandFailedException {
+	// if (!this.isValidIndex(index)) {
+	// throw new CommandFailedException(String.format(
+	// Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+	// } else {
+	// this.updateUndoable();
+	// boolean isSuccessful = this.currentTasks.get(index).addTag(
+	// Constant.TRASHED_TAG);
+	// moveTrashedTask(index);
+	// taskEndIndex--;
+	// DataStore.save(this.currentTasks);
+	// return isSuccessful;
+	// }
+	// }
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	// /**
+	// * clear all current tasks
+	// */
+	// public void clear() {
+	// this.updateUndoable();
+	// ArrayList<Task> toBeCleared = new ArrayList<Task>();
+	//
+	// for (Task task : currentTasks) {
+	// if (task.isTrashed()) {
+	// toBeCleared.add(task);
+	// }
+	// }
+	//
+	// for (Task task : toBeCleared) {
+	// currentTasks.remove(task);
+	// }
+	// DataStore.save(this.currentTasks);
+	// }
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	// /**
+	// * move new added task to correct position
+	// *
+	// * @param index
+	// */
+	// private void moveAddedTask(int index) {
+	// Task newAddedTask = currentTasks.get(currentTasks.size() - 1);
+	// for (int i = currentTasks.size() - 1; i > index + 1; i--) {
+	// currentTasks.set(i, currentTasks.get(i - 1));
+	// }
+	// currentTasks.set(index + 1, newAddedTask);
+	// }
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	// /**
+	// * move new trashed task to the end of currentTasks
+	// *
+	// * @param index
+	// */
+	// private void moveTrashedTask(int index) {
+	// int lastTaskIndex = currentTasks.size();
+	// Task newTrashedTask = currentTasks.get(index);
+	// currentTasks.add(newTrashedTask);
+	// for (int i = index; i < lastTaskIndex; i++) {
+	// currentTasks.set(i, currentTasks.get(i + 1));
+	// }
+	// currentTasks.remove(lastTaskIndex);
+	// }
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	// /**
+	// * get valid categories from current tasks' categories
+	// * category is not supported now
+	// * @return
+	// */
+	// private ArrayList<String> getValidCategory() {
+	// ArrayList<String> validCategory = new ArrayList<String>();
+	// if (currentTasks.equals(null) || currentTasks.isEmpty()) {
+	//
+	// } else {
+	// for (Task task : currentTasks) {
+	// validCategory.add(task.getCategory());
+	// }
+	// }
+	// return validCategory;
+	// }
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	// /**
+	// * create a new category
+	// * category is not supported now
+	// *
+	// * @param category
+	// * @throws CommandFailedException
+	// */
+	// public void createCategory(String category) throws CommandFailedException
+	// {
+	// if (validCategory.contains(category)) {
+	// throw new CommandFailedException("invalid category");
+	// } else {
+	// validCategory.add(category);
+	// }
+	// }
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+//	 /**
+//	 * deleteCategory
+//	 * delete a category
+//	 * caetgory is not supported now
+//	 * @param category
+//	 * @throws CommandFailedException
+//	 */
+//	 public void deleteCategory(String category) 
+//			 throws CommandFailedException {
+//		 if (!validCategory.contains(category)) {
+//			 throw new CommandFailedException("no such category");
+//		 } else {
+//			 for (Task task : currentTasks) {
+//				 if (task.getCategory().equals(category)) {
+//					 task.setCategory(Constant.DEFAULT_CATEGORY);
+//				 }
+//			 }
+//			 validCategory.remove(category);
+//		 }
+//	 }
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+//	 /**
+//	 * getTaskList
+//	 * gets the list of every non-trashed tasks of the user.
+//	 *
+//	 * @return
+//	 */
+//	 public ArrayList<Task> getTaskList() {
+//	 ArrayList<Task> nonTrashedTasks = new ArrayList<Task>();
+//	 for (Task task : this.currentTasks) {
+//	 if (!task.isTrashed()) {
+//	 nonTrashedTasks.add(task);
+//	 }
+//	 }
+//	 return nonTrashedTasks;
+//	 }
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+//	/**
+//	 * show a joke to user joke is not supported now
+//	 */
+//	public void showJoke() {
+//		System.out
+//				.println("How can you expect a Todo-List software to provide you a joke!");
+//		System.out.println("This function is actually the joke.");
+//		System.out.println("If you really want some, go to jokes.cc.com ");
+//	}
+}
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+

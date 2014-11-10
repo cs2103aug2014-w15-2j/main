@@ -1,0 +1,2090 @@
+//@author: a0119379r
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\infrastructure\NerParser.java
+	 */
+
+
+package infrastructure;
+
+import edu.stanford.nlp.ie.AbstractSequenceClassifier;
+import edu.stanford.nlp.ie.crf.CRFClassifier;
+import edu.stanford.nlp.ling.CoreAnnotations;
+import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.AnnotationPipeline;
+import edu.stanford.nlp.pipeline.TokenizerAnnotator;
+import edu.stanford.nlp.time.TimeAnnotations;
+import edu.stanford.nlp.time.TimeAnnotator;
+import edu.stanford.nlp.time.TimeExpression;
+import edu.stanford.nlp.util.CoreMap;
+import infrastructure.Constant.COMMAND_TYPE;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
+import java.util.logging.Level;
+
+import model.*;
+
+public class NerParser {
+	private AbstractSequenceClassifier<CoreLabel> classifierTag;
+	private AbstractSequenceClassifier<CoreLabel> classifierCommand;
+	private AbstractSequenceClassifier<CoreLabel> classifierTime;
+	private AbstractSequenceClassifier<CoreLabel> classifierPriority;
+
+	private AbstractSequenceClassifier<CoreLabel> classifierTimePicker;
+	private AbstractSequenceClassifier<CoreLabel> classifierCommandPicker;
+	private AbstractSequenceClassifier<CoreLabel> classifierDescriptionPicker;
+	private AbstractSequenceClassifier<CoreLabel> classifierTagPicker;
+	private AbstractSequenceClassifier<CoreLabel> classifierPriorityPicker;
+
+	private Properties props;
+	private AnnotationPipeline pipeline;
+
+	private boolean isTimeChanged = false;
+	private boolean isTagChanged = false;
+	private boolean isDescriptionChanged = false;
+	private boolean isPriorityChanged = false;
+
+	private static boolean isTimeModelUpdate = false;
+	private static boolean isTagModelUpdate = false;
+	private static boolean isDescriptionModelUpdate = false;
+	private static boolean isIndexModelUpdate = false;
+	private static boolean isPriorityModelUpdate = false;
+	private static boolean isCommandModelUpdate = false;
+	
+	
+/**
+ * ==========================================================================================================================
+ *  Constructor and Initialization
+ * ==========================================================================================================================
+ */
+	/**
+	 * Constructor
+	 * 
+	 * In the constructor, NER models and Time parser will be loaded for subsequence use.
+	 */
+	public NerParser() {
+		loadNerModels();
+		loadTimeParser();
+	}
+
+	/**
+	 * loadTimeParser:
+	 * load the NLP time parser into the parser.
+	 */
+	private void loadTimeParser() {
+		// Time parsers
+		props = new Properties();
+		props.put(Constant.TIME_PARSER_SUTIME_BINDERS, Constant.TIME_PARSER_ARGUMENT_2);
+		props.put(Constant.TIME_PARSER_SUTIME_RULES, Constant.TIME_PARSER_FILE_PATH);
+		pipeline = new AnnotationPipeline();
+		pipeline.addAnnotator(new TokenizerAnnotator(false));
+		pipeline.addAnnotator(new TimeAnnotator(Constant.TIME_PARSER_KEY_SUTIME, props));
+	}
+
+	
+	/**
+	 * loadNerModels
+	 * load the user's customized natural language model into the system
+	 */
+	private void loadNerModels() {
+		ArrayList<AbstractSequenceClassifier<CoreLabel>> classifiers = new ArrayList<AbstractSequenceClassifier<CoreLabel>>();
+		
+		for (int i = 0; i < 11; i ++) {
+			try {
+				classifiers.add(CRFClassifier.getClassifierNoExceptions(Constant.GZS_USER[i]));
+			} catch (Exception e) {
+				updateModal(Constant.PROPS_USER[i]);
+				classifiers.add(CRFClassifier.getClassifierNoExceptions(Constant.GZS_USER[i]));
+			}
+		}
+		
+		
+		//get the corresponding classifier
+		//NOTE: classifier.get(4) and classifier.get(9) are for NLP index parsing,
+		//		however, the NLP index parser is finally taken out of the system.
+		classifierTimePicker = classifiers.get(0);
+		classifierDescriptionPicker = classifiers.get(1);
+		classifierTagPicker = classifiers.get(2);
+		classifierPriorityPicker = classifiers.get(3);
+		classifierCommandPicker = classifiers.get(5);
+		classifierTime = classifiers.get(6);
+		classifierTag = classifiers.get(7);
+		classifierPriority = classifiers.get(8);
+		classifierCommand = classifiers.get(10);
+	}
+
+	
+/**
+ * ==========================================================================================================================
+ *  NER pickers
+ * ==========================================================================================================================
+ */
+
+	/**
+	 * pickCommand:
+	 * pick out the command fragments and translate to the COMMAND_TYPE enumeration
+	 * 
+	 * @param userInputString			the String that user directly input to the system
+	 * @return							the COMMAND_TYPE enumeration representation of the user command
+	 * @throws CommandFailedException	CommandFailedException thrown when the subsequent parseCommand method goes wrong
+	 */
+	public COMMAND_TYPE pickCommand(String userInputString) throws CommandFailedException {
+		
+		userInputString = userInputString.toLowerCase();
+		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_COMMAND);
+		
+		String directParseCommand = NerParser.pickTheTagged(userInputString,
+				Constant.XML_TAG_COMMAND);
+		
+		ArrayList<String> commandList = new ArrayList<String>();
+		if (directParseCommand != null) {
+			//this means the user has input a sentence with <COMMAND> </COMMAND> tags to force the system to learn
+			commandList.add(directParseCommand);
+		} else {
+			String xmlStr = classifierCommandPicker.classifyToString(
+					userInputString, Constant.PARSING_STYLE_INLINE_XML, false);
+			//System.err.println("XML STRING - pickCommand: " + xmlStr);
+			HashMap<String, ArrayList<String>> result = NerParser
+					.parseToMap(xmlStr);
+			commandList = result.get(Constant.MAP_KEY_COMMAND);
+		}
+		
+		
+		if (commandList == null || commandList.size() == 0) {
+			return COMMAND_TYPE.ADD;
+		} else {
+			return this.parseCommand(commandList);
+		}
+	}
+
+	/**
+	 * pickTimeInterval:
+	 * pick out the date fragments from an unparsed input string and 
+	 * translate to a TimeInterval object
+	 * 
+	 * @param userInputString			the String that user directly input to the system
+	 * @return							a TimeInterval object representing the time of this task
+	 * @throws CommandFailedException	CommandFailedException thrown when the subsequent time parsing or TimeInterval constructing goes wrong.
+	 */
+	public TimeInterval pickTimeInterval(String userInputString) throws CommandFailedException {
+		
+		this.isTimeChanged = false;
+		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_TIME);
+
+		String directParseTime = NerParser.pickTheTagged(userInputString,
+				Constant.XML_TAG_TIME);
+		if (directParseTime != null) {
+			this.isTimeChanged = true;
+			ArrayList<String> results = new ArrayList<String>(Arrays.asList(directParseTime.split(Constant.SPLITOR_COMMA)));
+			TimeInterval returningInterval = parseTimeInterval(results);
+			if (isDeadlineTask(results) || returningInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
+				Calendar c = UtilityMethod.dateToCalendar(returningInterval.getEndDate());
+				if (c.get(Calendar.HOUR_OF_DAY) == Constant.CALENDAR_START_HOUR && c.get(Calendar.MINUTE) == Constant.CALENDAR_START_MINUTE) {
+					c.set(Calendar.HOUR_OF_DAY, Constant.CALENDAR_END_HOUR);
+					c.set(Calendar.MINUTE, Constant.CALENDAR_END_MINUTE);
+					return new TimeInterval(Constant.DEADLINE_START_DATE, c.getTime());
+				} else {
+					return new TimeInterval(Constant.DEADLINE_START_DATE, returningInterval.getEndDate());	
+				}
+			} else {
+				return returningInterval;
+			}
+		}
+
+		ArrayList<String> resultList = new ArrayList<String>();
+		String xmlStr = classifierTimePicker.classifyToString(userInputString,
+				Constant.PARSING_STYLE_INLINE_XML, false);
+//		System.err.println("XML STRING - pickDate: " + xmlStr);
+		HashMap<String, ArrayList<String>> result = NerParser
+				.parseToMap(xmlStr);
+		resultList = result.get(Constant.MAP_KEY_DATE);
+
+		if (resultList == null) {
+			return new TimeInterval();
+		} else {
+			this.isTimeChanged = true;
+			TimeInterval returningInterval = parseTimeInterval(resultList);
+			if (isDeadlineTask(resultList) || returningInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
+				Calendar c = UtilityMethod.dateToCalendar(returningInterval.getEndDate());
+				if (c.get(Calendar.HOUR_OF_DAY) == Constant.CALENDAR_START_HOUR && c.get(Calendar.MINUTE) == Constant.CALENDAR_START_MINUTE) {
+					c.set(Calendar.HOUR_OF_DAY, Constant.CALENDAR_END_HOUR);
+					c.set(Calendar.MINUTE, Constant.CALENDAR_END_MINUTE);
+					return new TimeInterval(Constant.DEADLINE_START_DATE, c.getTime());
+				} else {
+					return new TimeInterval(Constant.DEADLINE_START_DATE, returningInterval.getEndDate());
+				}
+			} else {
+				return returningInterval;
+			}
+		}
+	}
+
+
+	/**
+	 * pickDescription:
+	 * pick out the description segments from an unparsed user input String
+	 * 
+	 * @param userInputString	the String that user directly input to the system
+	 * @return					a String representing the task description
+	 */
+	public String pickDescription(String userInputString)
+			throws CommandFailedException {
+		this.isDescriptionChanged = false;
+		userInputString = removeTheTagged(userInputString, Constant.XML_TAG_DESCRIPTION);
+		
+		String directParseDescription = NerParser.pickTheTagged(userInputString,
+				Constant.XML_TAG_DESCRIPTION);
+		if (directParseDescription != null) {
+			this.isDescriptionChanged = true;
+			return directParseDescription;
+		}
+
+		String xmlStr = classifierDescriptionPicker.classifyToString(
+				userInputString, Constant.PARSING_STYLE_INLINE_XML, false);
+		//System.err.println("XML STRING - pickDescription: " + xmlStr);
+		HashMap<String, ArrayList<String>> result = NerParser
+				.parseToMap(xmlStr);
+		ArrayList<String> resultList = result.get(Constant.MAP_KEY_DESCRIPTION);
+		if (resultList == null || resultList.size() == Constant.LIST_SIZE_EMPTY) {
+			return Constant.EMPTY_STRING;
+		} else {
+			this.isDescriptionChanged = true;
+			return resultList.get(Constant.LIST_INDEX_FIRST);
+			
+		}
+	}
+	
+	/**
+	 * pickIndex:
+	 * pick out the index segment and translate it to integer
+	 * no NLP involved in this method
+	 * 
+	 * @param userInputString			the String that user directly input to the system
+	 * @return							a list of integers representing the indices contained in the input string
+	 * @throws CommandFailedException	CommandFailedException thrown when the index couldn't be interpreted.
+	 */
+	public ArrayList<Integer> pickIndex(String userInputString) throws CommandFailedException {
+		String indexString = UtilityMethod.removeFirstWord(userInputString);
+		ArrayList<Integer> results = new ArrayList<Integer>();
+		try {
+			String[] indices = indexString.split(Constant.SPLITOR_SPACE);
+			for (String thisIndex : indices) {
+				Integer index = new Integer(Integer.parseInt(thisIndex.trim()));
+				if (!results.contains(index)) {
+					results.add(index);
+				}
+			}
+		} catch (Exception e1) {
+			if (results.size() != Constant.LIST_SIZE_EMPTY) {
+				return results;
+			} 
+			
+			try {
+				String[] indices = indexString.split(Constant.SPLITOR_COMMA);
+				for (String thisIndex : indices) {
+					results.add(Integer.parseInt(thisIndex.trim()));
+				}
+			} catch (Exception e2) {
+				if (results.size() != Constant.LIST_SIZE_EMPTY) {
+					return results;
+				}
+				throw new CommandFailedException(Constant.EXCEPTION_MESSAGE_INDEX_NOT_PARSABLE);
+			}
+		}
+		return results;
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\infrastructure\NerParser.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\infrastructure\UtilityMethod.java
+	 */
+
+
+	public static int selectDifferentDate(Calendar c1, Calendar c2, Calendar c3)
+			throws CommandFailedException {
+		Calendar today = Calendar.getInstance();
+		boolean c1same = c1.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+				&& c1.get(Calendar.DAY_OF_YEAR) == today
+						.get(Calendar.DAY_OF_YEAR);
+		boolean c2same = c2.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+				&& c2.get(Calendar.DAY_OF_YEAR) == today
+						.get(Calendar.DAY_OF_YEAR);
+		boolean c3same = c3.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+				&& c3.get(Calendar.DAY_OF_YEAR) == today
+						.get(Calendar.DAY_OF_YEAR);
+
+		if (c1same && c2same && c2same) {
+			if (c1.get(Calendar.HOUR_OF_DAY) == 0
+					&& c1.get(Calendar.MINUTE) == 0) {
+				return 1;
+			} else if (c2.get(Calendar.HOUR_OF_DAY) == 0
+					&& c2.get(Calendar.MINUTE) == 0) {
+				return 2;
+			} else {
+				return 3;
+			}
+		} else if (!c1same && c2same && c3same) {
+			return 1;
+		} else if (c1same && !c2same && c3same) {
+			return 2;
+		} else if (c1same && c2same && !c3same) {
+			return 3;
+		} else {
+			throw new CommandFailedException(
+					"two dates are different from today");
+		}
+	}
+
+	public static Calendar dateToCalendar(Date date) {
+		if (date == null) {
+			return null;
+		} else {
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			return cal;
+		}
+	}
+
+	public static Date selectEarlierDate(Date d1, Date d2) {
+		return d1.before(d2) ? d1 : d2;
+	}
+
+	public static Date selectLaterDate(Date d1, Date d2) {
+		return d1.before(d2) ? d2 : d1;
+	}
+
+	public static String priorityToString(int priority) {
+		switch (priority) {
+		case Constant.PRIORITY_LOW:
+			return "low";
+		case Constant.PRIORITY_MEDIUM:
+			return "medium";
+		case Constant.PRIORITY_HIGH:
+			return "high";
+		default:
+			return "not sure";
+		}
+	}
+
+	/**
+	 * methods to convert a task list to a string
+	 * 
+	 * @param list
+	 * @return
+	 */
+	public static String taskListToString(ArrayList<Task> list) {
+		String returnValue = "";
+		for (int i = 0; i < list.size(); i++) {
+			if (i == 0) {
+				returnValue = (i + 1) + ". "
+						+ list.get(i).toStringForDisplaying();
+			} else {
+				returnValue = returnValue + "\n\n" + (i + 1) + ". "
+						+ list.get(i).toStringForDisplaying();
+			}
+		}
+
+		return returnValue;
+	}
+
+	/**
+	 * to get the first word of a string
+	 * 
+	 * @param userCommand
+	 * @return
+	 */
+	public static String getFirstWord(String userCommand) {
+		String commandTypeString = userCommand.trim().split("\\s+")[0];
+		return commandTypeString;
+	}
+
+	/**
+	 * to remove the first word of a string
+	 * 
+	 * @param userCommand
+	 * @return
+	 */
+	public static String removeFirstWord(String userCommand) {
+		return userCommand.replaceFirst(getFirstWord(userCommand), "").trim();
+	}
+
+	/**
+	 * print the string
+	 * 
+	 * @param contentsToBeShown
+	 */
+	public static void showToUser(String contentsToBeShown) {
+		System.out.println(contentsToBeShown);
+	}
+
+	public static void copyFile(InputStream in, String d) throws IOException {
+		File dest = new File(d);
+		
+		if (!dest.exists()) {
+			dest.createNewFile();
+			OutputStream out = null;
+			try {
+				out = new FileOutputStream(dest);
+	
+				// Transfer bytes from in to out
+				byte[] buf = new byte[1024];
+				int len;
+				while ((len = in.read(buf)) > 0) {
+					out.write(buf, 0, len);
+				}
+			} finally {
+				if (in != null) {
+					in.close();
+				}
+				if (out != null) {
+					out.close();
+				}
+			}
+		}
+	}
+
+	  
+	public static void copyUserNlpFiles(InputStream[] tsvStreams, InputStream[] propStreams, InputStream[] gzStreams) throws IOException {
+		assert (tsvStreams.length == 11);
+		assert (propStreams.length == 11);
+		
+		System.err.println("initializeUserTrainingModel");
+		File rootDirectory = new File(Constant.FILE_PATH_ROOT);
+		if (!rootDirectory.exists()) {
+			rootDirectory.mkdir();
+		}
+	
+		File nlpRootDirectory = new File(Constant.FILE_PATH_NLP_ROOT);
+		if (!nlpRootDirectory.exists()) {
+			nlpRootDirectory.mkdir();
+		}
+		
+		for (int i = 0; i < 11; i++) {
+			copyFile(tsvStreams[i], Constant.TSVS_USER[i]);
+			copyFile(propStreams[i], Constant.PROPS_USER[i]);
+			copyFile(gzStreams[i], Constant.GZS_USER[i]);
+		}
+	}
+	
+	
+	public static void makeDraggable(final Stage stage, final Node draggedNode) {
+		final Pair<Double, Double> dragDelta = new Pair<Double, Double>();
+		draggedNode.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override 
+			public void handle(MouseEvent mouseEvent) {
+				dragDelta.setHead(stage.getX() - mouseEvent.getScreenX());
+				dragDelta.setTail(stage.getY() - mouseEvent.getScreenY());
+				draggedNode.setCursor(Cursor.MOVE);
+			}
+		});
+		
+		draggedNode.setOnMouseReleased(new EventHandler<MouseEvent>() {
+			@Override 
+			public void handle(MouseEvent mouseEvent) {
+				draggedNode.setCursor(Cursor.HAND);
+			}
+		});
+		
+		draggedNode.setOnMouseDragged(new EventHandler<MouseEvent>() {
+			@Override 
+			public void handle(MouseEvent mouseEvent) {
+				stage.setX(mouseEvent.getScreenX() + dragDelta.head);
+				stage.setY(mouseEvent.getScreenY() + dragDelta.tail);
+			}
+		});
+		
+		draggedNode.setOnMouseEntered(new EventHandler<MouseEvent>() {
+			@Override 
+			public void handle(MouseEvent mouseEvent) {
+				if (!mouseEvent.isPrimaryButtonDown()) {
+					draggedNode.setCursor(Cursor.HAND);
+				}
+			}
+		});
+		
+		draggedNode.setOnMouseExited(new EventHandler<MouseEvent>() {
+			@Override 
+			public void handle(MouseEvent mouseEvent) {
+				if (!mouseEvent.isPrimaryButtonDown()) {
+					draggedNode.setCursor(Cursor.DEFAULT);
+				}
+			}
+		});
+	}
+
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\infrastructure\UtilityMethod.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\infrastructure\UtilityMethod.java
+	 */
+
+	// logger
+	public static Logger logger = Logger.getLogger("ListOfXiaoMing");
+}
+
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\infrastructure\UtilityMethod.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Pair.java
+	 */
+
+	public Object1 head;
+	public Object2 tail;
+	
+	public Pair(Object1 thisHead, Object2 thisTail) {
+		this.head = thisHead;
+		this.tail = thisTail;
+	}
+	
+	/**
+	 * empty constructor
+	 */
+	public Pair() {
+		
+	}
+	
+	public void setHead(Object1 h){
+		this.head = h;
+	}
+	
+	public Object1 getHead(){
+		return this.head;
+	}
+	
+	public void setTail(Object2 t){
+		this.tail = t;
+	}
+	
+	public Object2 getTail(){
+		return this.tail;
+	}
+}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\Pair.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\TimeInterval.java
+	 */
+
+	public String toString() {
+		String text = new String();
+		if (this.getEndDate().equals(Constant.FLOATING_END_DATE)) {
+			text = text + Constant.TIME_MESSAGE_FLOATING;
+		} else if (this.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
+			// deadline task
+			String deadline = new SimpleDateFormat("HH:mm   EEEE dd/MMMM/yyyy", Locale.ENGLISH).format(this.getEndDate());
+			text = text + "\ndeadline: \t" + deadline;
+		} else {
+			String start = new SimpleDateFormat("HH:mm   EEEE dd/MMMM/yyyy", Locale.ENGLISH).format(this.getStartDate());
+			String end = new SimpleDateFormat("HH:mm   EEEE dd/MMMM/yyyy", Locale.ENGLISH).format(this.getEndDate());
+			text = text + "\ntime: \t\tfrom \t" + start + "\n\t\tto \t" + end;
+		}
+		
+		return text;
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\TimeInterval.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	@SuppressWarnings("unchecked")
+	public Task getUpdatePreview(int index, HashMap<String, Object> toBeUpdated)
+			throws CommandFailedException {
+		if (!this.isValidOngoingIndex(index)) {
+			throw new CommandFailedException(String.format(
+					Constant.INVALID_INDEX_ERROR_MESSAGE, index));
+		} else {
+			Task task = cloner.deepClone(this.currentTasks.getOngoingTasks()
+					.get(index));
+			if (task.isTrashed()) {
+				throw new CommandFailedException("Task is trashed");
+			}
+			Iterator<String> attributes = toBeUpdated.keySet().iterator();
+			while (attributes.hasNext()) {
+				String currentAttribute = attributes.next();
+				Object currentObject = toBeUpdated.get(currentAttribute);
+
+				if (currentAttribute.equals("description")) {
+					task.setDescription((String) currentObject);
+				} else if (currentAttribute.equals("priority")) {
+					task.setPriority((int) currentObject);
+				} else if (currentAttribute.equals("tag")) {
+					task.setTag((ArrayList<String>) currentObject);
+				} else if (currentAttribute.equals("time_interval")) {
+					System.err.println("USER UPDATE INTERVAL: "
+							+ (TimeInterval) currentObject);
+					task.setInterval((TimeInterval) currentObject);
+				} else {
+					throw new CommandFailedException(
+							Constant.INVALID_UPDATE_MESSAGE);
+				}
+			}
+			return task;
+		}
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	public boolean recover(int i, String currentListName) throws CommandFailedException {
+		switch (currentListName) {
+		case Constant.TASK_LIST_FINISHED:
+			return this.unDone(i);
+		case Constant.TASK_LIST_TRASHED:
+			return this.putBack(i);
+		default:
+			throw new CommandFailedException("unrecognized list name");
+		}
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	public Task retrieve(int index, String listName)
+			throws CommandFailedException {
+		switch (listName) {
+		case Constant.TASK_LIST_ONGOING:
+			return this.retrieveFromNormalList(index);
+
+		case Constant.TASK_LIST_FINISHED:
+			return this.retrieveFromFinishedList(index);
+
+		case Constant.TASK_LIST_TRASHED:
+			return this.retrieveFromTrashedList(index);
+
+		default:
+			throw new CommandFailedException(
+					"There is no list found with name: " + listName);
+		}
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+	 */
+
+	/**
+	 * exit exits the application
+	 */
+	public static void exit() {
+		UtilityMethod.showToUser(Constant.PROMPT_MESSAGE_SESSION_END);
+		System.exit(0);
+	}
+
+	/**
+	 * ========================================================================
+	 * ========================== Unused methods ==============================
+	 * ========================================================================
+	 */
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\model\User.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+	 */
+
+	public static GridPane getTagPaneForTask(Task task) {
+		GridPane tagPane = new GridPane();
+		tagPane.setStyle(Constant.CSS_STYLE_TAG_PANE);
+		tagPane.setHgap(10);
+		ArrayList<String> tags = task.getTag();
+		int columnIndex = 0;
+		for (String tag : tags) {
+			Label tagLabel = new Label(tag);
+			
+			int colorOffset = 0;
+			for (char c : tag.toCharArray()) {
+				colorOffset += c;
+			}
+			
+			colorOffset = colorOffset%Constant.COLORS_TAG.length;
+			tagLabel.setStyle(String.format(Constant.CSS_STYLE_TAG_LABEL, Constant.COLORS_TAG[colorOffset]));
+			tagPane.add(tagLabel, columnIndex, 0);
+			columnIndex ++;
+		}
+		return tagPane;
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+	 */
+
+	public static GridPane getEmptyPane(double width) {
+		GridPane emptyPane = new GridPane();
+		emptyPane.setStyle(Constant.CSS_STYLE_EMPTY_PANE);
+		emptyPane.setPrefWidth(width);
+		return emptyPane;
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+	 */
+
+	public static GridPane getContentPane(Task task, double width) {
+		String bodyColor = LayoutManager.getBodyColor(task);
+		GridPane contentPane = LayoutManager.getContentPane(bodyColor, width);
+		
+	
+		int subRow = 0;
+	
+		
+		Label description = LayoutManager.getDescriptionLabel(task, LayoutManager.calculateDescriptionWidth(width));
+		
+		contentPane.add(description, 0, subRow, 2, 1);
+		LayoutManager.setDisplayRow(contentPane, Constant.GRID_ROW_HEIGHT);
+		subRow ++;
+		
+		HBox timeBox = LayoutManager.getTimeBoxForTask(task);
+		if (timeBox != null) {
+			contentPane.add(timeBox, 1, 0, 2, 2);
+		}
+		
+		GridPane tagPane = getTagPaneForTask(task);
+		contentPane.add(tagPane, 0, subRow, 2, 1);
+		LayoutManager.setDisplayRow(contentPane, Constant.GRID_ROW_HEIGHT - 5);
+		subRow ++;
+		return contentPane;
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+	 */
+
+	public static Label getDescriptionLabel(Task task, double width) {
+		Label descriptionLabel = new Label(task.getDescription());
+		descriptionLabel.setStyle(Constant.CSS_STYLE_DESCRIPTION_LABEL);
+		descriptionLabel.setPrefWidth(width);
+		return descriptionLabel;
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+	 */
+
+	public static HBox getTimeBoxForTask(Task task) {
+		TimeInterval timeInterval = task.getInterval();
+		HBox overallTimeBox = new HBox();
+		overallTimeBox.setAlignment(Pos.CENTER_RIGHT);
+		overallTimeBox.setStyle(Constant.CSS_STYLE_OVERALL_TIME_BOX);
+		if (timeInterval.getStartDate().equals(Constant.FLOATING_START_DATE)) {
+			return null;
+		} else if (timeInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
+			
+			HBox deadlineBox = LayoutManager.getDeadlineBox(timeInterval.getEndDate());
+			deadlineBox.setPrefWidth(343);
+			overallTimeBox.getChildren().addAll(deadlineBox);
+			
+			return overallTimeBox;
+		} else {
+			HBox startDateBox = LayoutManager.getTimeBox(timeInterval.getStartDate());
+			HBox endDateBox = LayoutManager.getTimeBox(timeInterval.getEndDate());
+			Label toLabel = new Label("  to  ");
+			
+			toLabel.setStyle(Constant.CSS_STYLE_TO_LABEL);
+			
+			overallTimeBox.getChildren().addAll(startDateBox, toLabel , endDateBox);
+			return overallTimeBox;
+		}
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+	 */
+
+	public static HBox getTimeBox(Date date) {
+		
+		HBox timeBox = new HBox();
+		VBox dateBox = new VBox();
+		timeBox.setPrefWidth(153);
+		timeBox.setAlignment(Pos.CENTER);
+		timeBox.setStyle(Constant.CSS_STYLE_TIME_BOX
+				+ "");
+		
+		dateBox.setAlignment(Pos.CENTER);		
+		Label dateLabel = new Label(new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(date));
+		dateLabel.setStyle("-fx-text-fill: white;");
+		
+		Label weekdayLabel = new Label(new SimpleDateFormat("EE", Locale.ENGLISH).format(date));
+		weekdayLabel.setStyle(Constant.CSS_STYLE_WEEKDAY_LABEL);
+		
+		Label timeLabel = new Label(new SimpleDateFormat("HH:mm", Locale.ENGLISH).format(date));
+		timeLabel.setStyle(Constant.CSS_STYLE_TIME_LABEL);
+		
+		dateBox.getChildren().addAll(dateLabel, weekdayLabel);
+		timeBox.getChildren().addAll(dateBox, timeLabel);
+	
+		return timeBox;
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+	 */
+
+	public static HBox getDeadlineBox(Date date) {
+		HBox timeBox = new HBox();
+		VBox dateBox = new VBox();
+		
+		timeBox.setAlignment(Pos.CENTER);
+		timeBox.setStyle(Constant.CSS_STYLE_TIME_BOX);
+		
+		dateBox.setAlignment(Pos.CENTER);
+		Label deadlineLabel = new Label("DEADLINE:      ");
+		deadlineLabel.setStyle(Constant.CSS_STYLE_DEADLINE_LABEL);
+		
+		Label dateLabel = new Label(new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(date));
+		dateLabel.setStyle("-fx-text-fill: white;");
+		
+		Label weekdayLabel = new Label(new SimpleDateFormat("EE", Locale.ENGLISH).format(date));
+		weekdayLabel.setStyle(Constant.CSS_STYLE_WEEKDAY_LABEL);
+		
+		Label timeLabel = new Label(new SimpleDateFormat("HH:mm", Locale.ENGLISH).format(date));
+		timeLabel.setStyle(Constant.CSS_STYLE_TIME_LABEL);
+		
+		dateBox.getChildren().addAll(dateLabel, weekdayLabel);
+		timeBox.getChildren().addAll(deadlineLabel, dateBox, timeLabel);
+	
+		return timeBox;
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+	 */
+
+	public static int getRowCount(GridPane pane) {
+	    int numRows = pane.getRowConstraints().size();
+	    for (int i = 0; i < pane.getChildren().size(); i++) {
+	        Node child = pane.getChildren().get(i);
+	        if (child.isManaged()) {
+	            int rowIndex = GridPane.getRowIndex(child);
+	            int rowEnd = GridPane.getRowIndex(child);
+	            numRows = Math.max(numRows, (rowEnd != GridPane.REMAINING? rowEnd : rowIndex) + 1);
+	        }
+	    }
+	    return numRows;
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\LayoutManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+	 */
+
+	/**
+	 * load the custom font into the system
+	 */
+	private void loadFont() {
+		Font.loadFont(getClass().getResource(Constant.FONT_FILE_BASE_BOLD)
+				.toExternalForm(), Constant.FONT_LOAD_SIZE);
+		Font.loadFont(getClass().getResource(Constant.FONT_FILE_BASE)
+				.toExternalForm(), Constant.FONT_LOAD_SIZE);
+		Font.loadFont(getClass().getResource(Constant.FONT_FILE_TIME)
+				.toExternalForm(), Constant.FONT_LOAD_SIZE);
+		Font.loadFont(getClass().getResource(Constant.FONT_FILE_FEEDBACK)
+				.toExternalForm(), Constant.FONT_LOAD_SIZE);
+	}
+
+	/**
+	 * copy relative NLP files to user directory
+	 */
+	private void copyUserNlpFiles() {
+
+		InputStream[] propStreams = new InputStream[11];
+		InputStream[] tsvStreams = new InputStream[11];
+		InputStream[] gzStreams = new InputStream[11];
+
+		for (int i = 0; i < 11; i++) {
+			propStreams[i] = getClass().getResourceAsStream(
+					Constant.PROPS_SOURCE[i]);
+			tsvStreams[i] = getClass().getResourceAsStream(
+					Constant.TSVS_SOURCE[i]);
+			gzStreams[i] = getClass().getResourceAsStream(
+					Constant.GZS_SOURCE[i]);
+		}
+
+		try {
+			UtilityMethod.copyUserNlpFiles(tsvStreams, propStreams, gzStreams);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+	 */
+
+	/**
+	 * load the NLP parser in a separate thread to reduce the loading delay
+	 */
+	private void loadParser() {
+		final MainViewController instance = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				instance.updateTextField(Constant.GUI_MESSAGE_PARSER_LOADING);
+				instance.parser = new NerParser();
+				instance.updateTextField(Constant.EMPTY_STRING);
+				instance.updatePreviewLater();
+			}
+		}).start();
+	}
+
+	/**
+	 * initialize the shortcuts in a separate thread
+	 */
+	private void initializeShortCuts() {
+		final MainViewController instance = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					if (keyShortCuts == null) {
+						keyShortCuts = Provider.getCurrentProvider(false);
+					}
+					keyShortCuts.reset();
+					registerKeyShortCuts(instance);
+
+				} catch (Exception e) {
+					keyShortCuts = null;
+				}
+			}
+		}).start();
+	}
+
+	/**
+	 * register key shortcuts
+	 * 
+	 * @param instance	a HotKeyListener instance, normally should be 'this'
+	 */
+	private void registerKeyShortCuts(HotKeyListener instance) {
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_DESCRIPTION_TAG),instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_DATE_TAG),instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_TAG_TAG), instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_COMMAND_TAG),instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_INDEX_TAG),instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_PRIORITY_TAG),instance);
+
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_PREVIEW),instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_CREATE),instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_READ),instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_UPDATE),instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_DELETE),instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_SEARCH),instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_RELOAD),instance);
+
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_TO_DO),instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_TRASHED),instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_DONE),instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_HELP),instance);
+
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_LAST_COMMAND),instance);
+		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_NEXT_COMMAND),instance);
+	}
+
+	/**
+	 * update the start page
+	 */
+	private void updateStartPage() {
+		setPreviewPane(Constant.GUI_MESSAGE_WELCOME,this.getCurrentListName());
+		displayScrollPane.getStyleClass().add(Constant.CSS_CLASS_NAME); 
+		this.help();
+		this.changeViewTo(Constant.TASK_LIST_HELP);
+	}
+
+	/**
+	 * Apply observer pattern to the input TextField.
+	 * Any time the value changed of inputs, the delegate method will be called
+	 */
+	private void addTextFieldListener() {
+		final MainViewController instance = this;
+ 
+		this.input.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable,
+					String oldValue, String newValue) {
+				instance.loadPreview();
+			}
+		});
+	}
+
+	/**
+	 * this method is used to turn off the System.err PrintStream
+	 */
+	private void silentErrorStream() {
+		System.setErr(new PrintStream(new OutputStream() {
+			public void write(int b) {
+			}
+		}));
+	}
+
+/**
+ * ===============================================================================================
+ *  I/O, hot key, and view updating methods
+ * ===============================================================================================
+ */
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+	 */
+
+	/**
+	 * set the content of preview pane
+	 * 
+	 * @param textToDisplay		the new text the 'console' need to display
+	 * @param listName			the new list name
+	 */
+	public void setPreviewPane(String textToDisplay, String listName) {
+		GridPane previewContentPane = new GridPane();
+		previewContentPane.setStyle(Constant.CSS_STYLE_PREVIEW_PANE_BASE);
+		previewContentPane.setHgap(Constant.PREVIEW_PANE_INNER_GAP);
+
+		VBox parsingFeedbackBox = new VBox();
+		parsingFeedbackBox.setPrefWidth(Constant.PREF_WIDTH_FEEDBACK_BOX);
+		parsingFeedbackBox.setPrefHeight(Constant.PREF_HEIGHT_FEEDBACK_BOX);
+
+		//set the consoleTextLabel
+		consoleTextLabel = new Label(textToDisplay);
+		consoleTextLabel.setFont(Font.font(Constant.FONT_CONSOLE_TEXT_LABEL, FontWeight.BOLD, Constant.FONT_SIZE_CONSOLE_TEXT_LABEL));
+		consoleTextLabel.setStyle(Constant.CSS_STYLE_CONSOLE_TEXT_LABEL);
+		parsingFeedbackBox.setStyle(Constant.CSS_STYLE_FEEDBACK_BOX);
+		parsingFeedbackBox.getChildren().add(consoleTextLabel);
+
+		VBox listIndicatorBox = new VBox();
+		listIndicatorBox.setAlignment(Pos.BOTTOM_RIGHT);
+		listIndicatorBox.setPrefWidth(getWidth() - Constant.PREF_WIDTH_OFFSET_LIST_INDICATOR_BOX);
+		Label listLabel = new Label(listName.toUpperCase());
+		listLabel.setFont(Font.font(Constant.FONT_LIST_LABEL, FontWeight.EXTRA_BOLD, Constant.FONT_SIZE_LIST_LABEL));
+		listLabel.setStyle(Constant.CSS_STYLE_LIST_LABEL);
+		
+		//set different styles according to the list name
+		if (listName.equalsIgnoreCase(Constant.TASK_LIST_ONGOING)) {
+			listIndicatorBox.setStyle(Constant.CSS_STYLE_TASK_LIST_ONGOING);
+		} else if (listName.equalsIgnoreCase(Constant.TASK_LIST_TRASHED)) {
+			listIndicatorBox.setStyle(Constant.CSS_STYLE_TASK_LIST_TRASHED);
+		} else if (listName.equalsIgnoreCase(Constant.TASK_LIST_FINISHED)){
+			listIndicatorBox.setStyle(Constant.CSS_STYLE_TASK_LIST_FINISHED);
+		} else if (listName.equals(Constant.TASK_LIST_SEARCH)){
+			listIndicatorBox.setStyle(Constant.CSS_STYLE_TASK_LIST_SEARCH);
+		} else {
+			listIndicatorBox.setStyle(Constant.CSS_STYLE_TASK_LIST_DEFAULT);
+		}
+
+		listIndicatorBox.getChildren().add(listLabel);
+
+		//Add the two boxes into the pane
+		previewContentPane.add(parsingFeedbackBox, Constant.ROW_INDEX_FEEDBACK_BOX, Constant.COLUMN_INDEX_FEEDBACK_BOX);
+		previewContentPane.add(listIndicatorBox, Constant.ROW_INDEX_LIST_INDICATOR_BOX, Constant.COLUMN_INDEX_LIST_INDICATOR_BOX);
+
+		previewScrollPane.setStyle(Constant.CSS_STYLE_PREVIEW_SCROLL_PANE);
+		previewScrollPane.setContent(previewContentPane);
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+	 */
+
+	/**
+	 * insert the given text to the given position in the textField
+	 * UI updating performed in a new thread
+	 * 
+	 * @param cursorPosition	an integer representation the cursor position
+	 * @param text				a string indicating the text that will be inserted
+	 */
+	private void insertTextIntoTextField(final int cursorPosition,
+			final String text) {
+		// open a new thread to execute Java FX
+		final MainViewController instance = this;
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				instance.input.insertText(cursorPosition, text);
+			}
+		});
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+	 */
+
+	/**
+	 * toggle between e.g. <DATE> & </DATE>
+	 * 
+	 * @param tag	"<DATE>" or </DATE> in the above example
+	 * @return		<tag> or </tag>  
+	 */
+	private String toggleTag(String tag) {
+		if (tag.contains(Constant.TAG_OPEN_LATTER)) {
+			return tag.replace(Constant.TAG_OPEN_LATTER, Constant.TAG_OPEN_FORMER);
+		} else {
+			return tag.replace(Constant.TAG_OPEN_FORMER, Constant.TAG_OPEN_LATTER);
+		}
+	}
+
+	/**
+	 * load the real time parsing result to the preview pane
+	 */
+	private void loadPreview() {
+		// open a new thread to execute Java FX
+		final MainViewController instance = this;
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				String userInput = getUserInput(false);
+				if (userInput.length() > 0) {
+					System.out.println(userInput);
+					setPreviewPane(instance.getPreview(userInput),
+							instance.getCurrentListName());
+				} else {
+					setPreviewPane(instance.getConsoleText(),
+							instance.getCurrentListName());
+				}
+			}
+		});
+	}
+
+	/**
+	 * get the console label text
+	 * 
+	 * @return	a string representing the console label text
+	 */
+	protected String getConsoleText() {
+		return this.consoleTextLabel.getText();
+	}
+
+	/**
+	 * set the text of console
+	 * 
+	 * @param textToDisplay		the new text needed to be set
+	 */
+	public void setConsoleText (final String textToDisplay) {
+		final MainViewController instance = this;
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				instance.setPreviewPane(textToDisplay, instance.getCurrentListName());
+			}
+		});
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+	 */
+
+	/**
+	 * load an empty list indicating image
+	 * the image will be shown when current list is empty
+	 */
+	private void loadEmptyImage() {
+		HBox emptyImageBox = new HBox();
+		emptyImageBox.setPrefHeight(200);
+		emptyImageBox.setAlignment(Pos.CENTER_RIGHT);
+		Image emptyImage = new Image(getClass().getResourceAsStream(Constant.RESOURCE_EMPTY_IMAGE));
+		ImageView emptyImageView = new ImageView(emptyImage);
+		emptyImageView.fitHeightProperty().bind(emptyImageBox.heightProperty());
+		emptyImageBox.getChildren().add(emptyImageView);
+		this.displayScrollPane.setContent(emptyImageBox);
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+	 */
+
+	/**
+	 * The main method to execute user input
+	 * 
+	 * @param userInput		an unparsed user input string
+	 */
+	public void execute(String userInput) {
+
+		updateTsv(userInput);
+
+		COMMAND_TYPE thisCommand;
+		try {
+			if (userInput.equals(Constant.EMPTY_STRING)) {
+				return;
+			}
+
+			//pick the command
+			thisCommand = this.parser.pickCommand(userInput.toLowerCase());
+
+			//demux and execute the command
+			switch(thisCommand) {
+				case ADD :
+					performAdd(userInput);
+					break;
+					
+				case DELETE :
+					performDelete(userInput);
+					break;
+					
+				case UPDATE :
+					performUpdate(userInput);
+					break;
+					
+				case SEARCH :
+					performSearch(userInput);
+					break;
+				
+				case DISPLAY :
+					performDisplay();
+					break;
+					
+				case UNDO :
+					performUndo();
+					break;
+					
+				case REDO :
+					performRedo();
+					break;
+					
+				case CLEAR :
+					performClear();
+					break;
+					
+				case EXIT :
+					performExit();
+					break;
+					
+				case HELP :
+					performHelp();
+					break;
+					
+				case EMPTY_TRASH :
+					performEmptyTrash();
+					break;
+					
+				case RELOAD :
+					performReloadModel();
+					break;
+					
+				case DONE :
+					performDone(userInput);
+					break;
+					
+				case RECOVER :
+					performRecover(userInput);
+					break;
+					
+				case UNTAG :
+					performUntag(userInput);
+					
+				default :
+					break;
+
+			}
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * The main method to get real time preview
+	 * 
+	 * @param userInput		an unparsed user input string
+	 * @return				a string to show in the preview pane
+	 */
+	public String getPreview(String userInput) {
+		try {
+			
+			if (userInput.equals(Constant.EMPTY_STRING) || (userInput == null)) {
+				return Constant.GUI_MESSAGE_PREVIEW_DEFAULT;
+			}
+			
+			if (this.parser == null) {
+				return Constant.EMPTY_STRING;
+			}
+
+			//pick the command
+			COMMAND_TYPE thisCommand = this.parser.pickCommand(userInput.toLowerCase());
+			System.out.println(thisCommand);
+			//get the preview
+			switch(thisCommand) {
+				case ADD :
+					return getAddPreview(userInput);
+					
+				case DELETE :
+					return getDeletePreview(userInput);
+					
+				case UPDATE :
+					return getUpdatePreview(userInput);
+					
+				case SEARCH :
+					return getSearchPreview(userInput);
+				
+				case DONE :
+					return getDonePreview(userInput);
+					
+				case DISPLAY :
+					return getDisplayPreview();
+	
+				case UNDO :
+					return getUndoPreview();
+					
+				case REDO :
+					return getRedoPreview();
+					
+				case CLEAR :
+					return getClearPreview();
+					
+				case EMPTY_TRASH :
+					return getEmptyTrashPreview();
+					
+				case RELOAD :
+					return getReloadPreview();
+					
+				case HELP :
+					return getHelpPreview();
+					
+				case EXIT :
+					return getExitPreview();
+					
+				case RECOVER :
+					return getRecoverPreview(userInput);
+				
+				case UNTAG :
+					return getUntagPreview(userInput);
+					
+				default :
+					return getDefaultPreview();
+			}		
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+			return Constant.EXCEPTION_MESSAGE_PARSING_FAIL;
+		}
+	}
+/**
+ * ==========================================================================
+ *  Specific methods to perform action, the names self-explain their use
+ * ==========================================================================
+ */
+	private void performUntag(String userInput) {
+		setConsoleText(this.untag(userInput));
+		refreshCurrentList();
+	}
+
+	private void performRecover(String userInput) {
+		setConsoleText(this.recover(userInput));
+		performDisplay();
+	}
+	
+	private void performDone(String userInput) {
+		setConsoleText(this.done(userInput));
+		refreshCurrentList();
+	}
+	
+	private void performReloadModel() {
+		setConsoleText(this.reloadNLPModel());
+	}
+	
+	private void performEmptyTrash() {
+		setConsoleText(this.emptyTrash());
+		refreshCurrentList();
+	}
+	
+	private void performHelp() {
+		this.help();
+		changeViewTo(Constant.TASK_LIST_HELP);
+	}
+	
+	private void performExit() {
+		System.setErr(err); 
+		performReloadModel();
+		User.exit();
+	}
+	
+	private void performClear() {
+		setConsoleText(this.clear());
+		refreshCurrentList();
+	}
+	
+	private void performRedo() {
+		setConsoleText(this.redo());
+		refreshCurrentList();
+	}
+	
+	private void performUndo() {
+		setConsoleText(this.undo());
+		refreshCurrentList();
+	}
+	
+	private void performDisplay() {
+		changeViewTo(Constant.TASK_LIST_ONGOING);
+	}
+	
+	private void performSearch(String userInput) {
+		ArrayList<Task> queryList = this.search(userInput);
+		if (queryList != null) {
+			setDisplayPane(queryList);
+			changeViewTo(Constant.TASK_LIST_SEARCH);
+		}
+	}
+	
+	private void performUpdate(String userInput) {
+		setConsoleText(this.update(userInput));
+		performDisplay();
+	}
+	
+	private void performDelete(String userInput) {
+		setConsoleText(this.delete(userInput));
+		refreshCurrentList();
+	}
+	
+	private void performAdd(String userInput) {
+		setConsoleText(this.add(userInput));
+		performDisplay();
+	}
+		
+	private String getCurrentListName() {
+		return this.currentListName;
+	}
+
+/**
+ * ==========================================================================
+ *  Specific methods to get previews, the names self-explain their use
+ * ==========================================================================
+ */
+	
+	private String getRecoverPreview(String userInput) {
+		try {
+			if (this.getCurrentListName().equals(Constant.TASK_LIST_ONGOING)) {
+				return Constant.PREVIEW_MESSAGE_RECOVER_ALREADY_IN_LIST;
+			}
+			
+			ArrayList<Integer> indices = parser.pickIndex(userInput);
+			String returnValue = Constant.PREVIEW_MESSAGE_RECOVER_INITIAL_VALUE;
+
+			for (int index : indices) {
+				if (this.getCurrentListName().equals(Constant.TASK_LIST_FINISHED)) {
+					Task taskToFinish = this.user.retrieveFromFinishedList(index - 1);
+					returnValue += (index + ": " + taskToFinish.getDescription() + "\n");
+				} else if (this.getCurrentListName().equals(Constant.TASK_LIST_TRASHED)) {
+					Task taskToFinish = this.user.retrieveFromTrashedList(index - 1);
+					returnValue += (index + ": " + taskToFinish.getDescription() + "\n");
+				}
+			}
+			return returnValue;
+		} catch (CommandFailedException de) {
+			de.printStackTrace();
+			return Constant.PREVIEW_MESSAGE_RECOVER_NO_TASK_SPECIFIED;
+		}
+	}
+	
+	private String getDefaultPreview() {
+		return Constant.PREVIEW_MESSAGE_DEFAULT;
+	}
+
+	private String getReloadPreview() {
+		return Constant.PREVIEW_MESSAGE_RELOAD_MODEL;
+	}
+
+	private String getEmptyTrashPreview() {
+		return Constant.PREVIEW_MESSAGE_EMPTY_TRASH;
+	}
+
+	private String getHelpPreview() {
+		return Constant.PREVIEW_MESSAGE_HELP;
+	}
+
+	private String getExitPreview() {
+		return Constant.PREVIEW_MESSAGE_EXIT;
+	}
+
+	private String getClearPreview() {
+		return Constant.PREVIEW_MESSAGE_CLEAR;
+	}
+
+	private String getRedoPreview() {
+		return Constant.PREVIEW_MESSAGE_REDO;
+	}
+
+	private String getUndoPreview() {
+		return Constant.PREVIEW_MESSAGE_UNDO;
+	}
+
+	private String getDisplayPreview() {
+		return Constant.PREVIEW_MESSAGE_DISPLAY;
+	}
+
+	private String getDonePreview(String userInput) {
+		try {
+			if (this.getCurrentListName().equals(Constant.TASK_LIST_FINISHED)) {
+				return Constant.PREVIEW_MESSAGE_DONE_FINISHED_ALREADY;
+			} else if (this.getCurrentListName().equals(Constant.TASK_LIST_TRASHED)) {
+				return Constant.PREVIEW_MESSAGE_DONE_TRASHED;
+			}
+			
+			ArrayList<Integer> indices = parser.pickIndex(userInput);
+			String returnValue = Constant.PREVIEW_MESSAGE_INITIAL_VALUE;
+
+			for (int index : indices) {
+				Task taskToFinish = this.user.retrieveFromNormalList(index - 1);
+				returnValue += (index + ": " + taskToFinish.getDescription() + "\n");
+			}
+			return returnValue;
+		} catch (CommandFailedException de) {
+			return Constant.PREVIEW_MESSAGE_DONE_NO_TASK_SPECIFIED;
+		}
+	}
+
+	private String getSearchPreview(String userInput) {
+		if (this.getCurrentListName() != Constant.TASK_LIST_FINISHED &&
+				this.getCurrentListName() != Constant.TASK_LIST_ONGOING &&
+				this.getCurrentListName() != Constant.TASK_LIST_TRASHED) {
+			return Constant.PREVIEW_MESSAGE_SEARCH_NOT_ALLOWED;
+		}
+		Constraint thisConstraint = parser.getConstraint(userInput);
+		return Constant.PREVIEW_MESSAGE_SEARCH_INITIAL_VALUE + thisConstraint.toString();
+	}
+
+	private String getUpdatePreview(String userInput) {
+		try {
+			if (!this.getCurrentListName().equals(Constant.TASK_LIST_ONGOING)) {
+				return "Command: update \n\n" + "You can only update the task in 'TODO' section";
+			}
+			
+			int index = parser.pickIndex(userInput).get(0);
+			Task taskToUpdate = this.user.getUpdatePreview(index - 1,
+					parser.getUpdatedTaskMap(userInput));
+			return "Command: update \n\n"
+					+ taskToUpdate.toStringForDisplaying();
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+			return "Command: update \n\n"
+					+ Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
+		}
+	}
+	
+	private String getUntagPreview(String userInput) {
+		try {
+			if (!this.getCurrentListName().equals(Constant.TASK_LIST_ONGOING)) {
+				return "Command: untag \n\n" + "You can only update the task in 'TODO' section";
+			}
+			
+			int index = parser.pickIndex(userInput).get(0);
+			String task = this.user.getOngoingTaskList().get(index).getDescription();
+			
+			ArrayList<String> tags = parser.pickUntag(userInput);
+			String returnValue = String.format(Constant.PREVIEW_MESSAGE_UNTAG_INITIAL_VALUE, task);
+
+			for (String tag : tags) {
+				returnValue += tag + ",";
+			}
+			return returnValue;
+			
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+			return "Command: update \n\n"
+					+ Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
+		}
+	}
+
+	private String getDeletePreview(String userInput) {
+		try {
+			if (this.getCurrentListName().equals(Constant.TASK_LIST_TRASHED)) {
+				return Constant.PREVIEW_MESSAGE_DELETE_ALREADY_TRASHED;
+			}
+			
+			ArrayList<Integer> indices = parser.pickIndex(userInput);
+			String returnValue = Constant.PREVIEW_MESSAGE_DELETE_INITIAL_VALUE;
+
+			for (int index : indices) {
+				Task taskToDelete = this.user.retrieve(index - 1, this.getCurrentListName());
+				returnValue += (index + ": " + taskToDelete.getDescription() + "\n");
+			}
+			return returnValue;
+		} catch (CommandFailedException de) {
+			return Constant.PREVIEW_MESSAGE_DELETE_NO_TASK_SPECIFIED;
+		}
+	}
+
+	private String getAddPreview(String userInput) {
+		Task taskToAdd = parser.getTask(userInput);
+		return Constant.PREVIEW_MESSAGE_ADD_INITIAL_VALUE + taskToAdd.toStringForDisplaying();
+	}
+
+/**
+ * =================================================================================================
+ * Methods to be called by the above actions performing methods, the names self-explain their use
+ * =================================================================================================
+ */
+	private String add(String userInput) {
+		Task taskToAdd = parser.getTask(userInput);
+		assert (taskToAdd != null);
+		return (this.user.add(taskToAdd)) ? Constant.PROMPT_MESSAGE_ADD_TASK_SUCCESSFULLY
+				: Constant.PROMPT_MESSAGE_ADD_TASK_FAILED;
+	}
+
+	private String delete(String userInput) {
+		try {
+			ArrayList<Integer> indices = parser.pickIndex(userInput);
+			Collections.sort(indices);
+			int offset = 0;
+			boolean isAllSucceeded = true;
+			String returnValue = Constant.EMPTY_STRING;
+			for (int index : indices) {
+				try {
+					boolean isThisSucceeded = this.user.delete(index - offset - 1, this.getCurrentListName());
+
+					if (!isThisSucceeded) {
+						returnValue += (Constant.PROMPT_MESSAGE_DELETE_TASK_FAILED + ": " + index);
+					}
+					isAllSucceeded &= isThisSucceeded;
+					offset++;
+				} catch (CommandFailedException cfe) {
+					return cfe.toString();
+				}
+
+			}
+
+			return isAllSucceeded ? Constant.PROMPT_MESSAGE_DELETE_TASK_SUCCESSFULLY
+					: returnValue;
+		} catch (CommandFailedException e) {
+			return e.toString();
+		}
+	}
+
+	private String done(String userInput) {
+		try {
+			ArrayList<Integer> indices = parser.pickIndex(userInput);
+			Collections.sort(indices);
+			int offset = 0;
+			boolean isAllSucceeded = true;
+			String returnValue = "";
+			for (int index : indices) {
+				try {
+					boolean isThisSucceeded = this.user.done(index - offset - 1);
+					if (!isThisSucceeded) {
+						returnValue += (Constant.PROMPT_MESSAGE_DONE_TASK_FAILED + ": " + index);
+					}
+					isAllSucceeded &= isThisSucceeded;
+					offset++;
+				} catch (CommandFailedException cfe) {
+					return cfe.toString();
+				}
+
+			}
+
+			return isAllSucceeded ? Constant.PROMPT_MESSAGE_DONE_TASK_SUCCESSFULLY
+					: returnValue;
+		} catch (CommandFailedException e) {
+			return e.toString();
+		}
+	}
+	
+	private String update(String userInput) {
+		try {
+			int index = parser.pickIndex(userInput).get(0);
+			this.user.update(index - 1,
+					parser.getUpdatedTaskMap(userInput));
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+			return Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
+		}
+
+		return Constant.PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY;
+	}
+
+	private ArrayList<Task> search(String userInput) {
+		Constraint thisConstraint;
+		try {
+			if (this.getCurrentListName() != Constant.TASK_LIST_FINISHED &&
+					this.getCurrentListName() != Constant.TASK_LIST_ONGOING &&
+					this.getCurrentListName() != Constant.TASK_LIST_TRASHED) {
+				setConsoleText(Constant.PREVIEW_MESSAGE_SEARCH_NOT_ALLOWED);
+				return null;
+			}
+			thisConstraint = parser.getConstraint(userInput);
+			ArrayList<Task> queryResult = this.user.find(thisConstraint, this.getCurrentListName());
+			if (queryResult.isEmpty()) {
+				setConsoleText(Constant.PROMPT_MESSAGE_NO_TASK_FOUND);
+				return null;
+			} else {
+				return queryResult;
+			}
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+			setConsoleText(Constant.PREVIEW_MESSAGE_SEARCH_ERROR);
+			e.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			setConsoleText(Constant.PREVIEW_MESSAGE_SEARCH_ERROR);
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	private ArrayList<Task> displayOngoingList() {
+		ArrayList<Task> queryResult;
+		try {
+			queryResult = this.user.getOngoingTaskList();
+			if (queryResult.isEmpty()) {
+				this.loadEmptyImage();
+				return null;
+			} else {
+				return queryResult;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			setConsoleText(Constant.PROMPT_MESSAGE_DISPLAY_ERROR);
+			return null;
+		}
+	}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+	 */
+
+	private String emptyTrash() {
+		this.user.emptyTrash();
+		return Constant.PROMPT_MESSAGE_TRASH_EMPTIED;
+	}
+
+	private void help() {
+		VBox helpBox = LayoutManager.getHelpBox();
+		this.displayScrollPane.setContent(helpBox);
+	}
+
+	private String clear() {
+		try {
+			this.user.deleteAll(this.getCurrentListName());
+			return Constant.PREVIEW_MESSAGE_TASK_ALL_TRASHED;
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+	}
+
+	private String undo() {
+		try {
+			this.user.undo();
+			return Constant.PROMPT_MESSAGE_UNDO_SUCCESSFULLY;
+		} catch (CommandFailedException e) {
+			UtilityMethod.showToUser(e.toString());
+			return Constant.PROMPT_MESSAGE_UNDO_FAILED;
+		}
+	}
+
+	private String redo() {
+		try {
+			this.user.redo();
+			return Constant.PROMPT_MESSAGE_REDO_SUCCESSFULLY;
+		} catch (CommandFailedException e) {
+			UtilityMethod.showToUser(e.toString());
+			return Constant.PROMPT_MESSAGE_REDO_FAILED;
+		}
+	}
+
+	private String reloadNLPModel() {
+		NerParser.updateModal();
+		this.parser = new NerParser();
+		return Constant.PREVIEW_MESSAGE_MODEL_RELOADED;
+	}
+
+	private String recover(String userInput) {
+		try {
+			ArrayList<Integer> indices = parser.pickIndex(userInput);
+			Collections.sort(indices);
+			int offset = 0;
+			boolean isAllSucceeded = true;
+			String returnValue = "";
+			for (int index : indices) {
+				try {
+					boolean isThisSucceeded = this.user.recover(index - offset - 1, this.getCurrentListName());
+					if (!isThisSucceeded) {
+						returnValue += (Constant.PROMPT_MESSAGE_DONE_TASK_FAILED + ": " + index);
+					}
+					isAllSucceeded &= isThisSucceeded;
+					offset++;
+				} catch (CommandFailedException cfe) {
+					return cfe.toString();
+				}
+
+			}
+
+			return isAllSucceeded ? Constant.PROMPT_MESSAGE_DONE_TASK_SUCCESSFULLY
+					: returnValue;
+		} catch (CommandFailedException e) {
+			return e.toString();
+		}
+	}
+	
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+	 */
+
+	private void changeToOngoingList() {
+		final MainViewController instance = this;
+		Platform.runLater(new Runnable() {
+			
+			@Override
+	        public void run() {
+	        	instance.setDisplayPane(instance.displayOngoingList());
+	        	instance.currentListName = Constant.TASK_LIST_ONGOING;
+	        	instance.changeViewTo(Constant.TASK_LIST_ONGOING);
+	        }
+	   });
+	}
+
+	private void changeToTrashedList() {
+		final MainViewController instance = this;
+		Platform.runLater(new Runnable() {
+	        @Override
+	        public void run() {
+	        	instance.setDisplayPane(instance.displayTrashedList());
+	        	instance.currentListName = Constant.TASK_LIST_TRASHED;
+	        	instance.changeViewTo(Constant.TASK_LIST_TRASHED);
+	        }
+	   });
+	}
+
+	private void changeToFinishedList() {
+		final MainViewController instance = this;
+		Platform.runLater(new Runnable() {
+	        @Override
+	        public void run() {
+	        	instance.setDisplayPane(instance.displayFinishedList());
+	        	instance.currentListName = Constant.TASK_LIST_FINISHED;
+	        	instance.changeViewTo(Constant.TASK_LIST_FINISHED);
+	        }
+	   });
+		
+	}
+	
+	private void changeToHelp() {
+		final MainViewController instance = this;
+		Platform.runLater(new Runnable() {
+	        @Override
+	        public void run() {
+	        	instance.help();
+	        	instance.changeViewTo(Constant.TASK_LIST_HELP);
+	        }
+	   });
+		
+	}
+
+	private void updatePreviewLater() {
+		final MainViewController instance = this;
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				instance.setPreviewPane(Constant.PREVIEW_MESSAGE_COMMAND_READY,instance.getCurrentListName());
+			}
+		});
+
+	}
+	
+	private void changeViewTo(String listName) {
+		this.currentListName = listName;
+		switch(listName) {
+			case Constant.TASK_LIST_ONGOING:
+				this.setPreviewPane(this.getConsoleText(), Constant.TASK_LIST_ONGOING);
+				this.setDisplayPane(this.displayOngoingList());
+				break;
+				
+			case Constant.TASK_LIST_FINISHED:
+				this.setPreviewPane(this.getConsoleText(), Constant.TASK_LIST_FINISHED);
+				this.setDisplayPane(this.displayFinishedList());
+				break;
+				
+			case Constant.TASK_LIST_TRASHED:
+				this.setPreviewPane(this.getConsoleText(), Constant.TASK_LIST_TRASHED);
+				this.setDisplayPane(this.displayTrashedList());
+				break;
+				
+			case Constant.TASK_LIST_SEARCH:
+				this.setPreviewPane(this.getConsoleText(), Constant.TASK_LIST_SEARCH);
+				
+			default:
+				this.setPreviewPane(this.getConsoleText(), Constant.TASK_LIST_HELP);
+		}
+	}
+	
+	private void refreshCurrentList() {
+		this.changeViewTo(this.getCurrentListName());
+	}
+	
+/**
+ * ==========================================================================
+ * other methods
+ * ==========================================================================
+ */	
+	/**
+	 * update the model training file according to the given user input
+	 * @param userInput
+	 */
+	private void updateTsv(String userInput) {
+		if (!userInput.equals(Constant.EMPTY_STRING)) {
+			try {
+				NerParser.updateTsvFile(userInput);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+}
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\userInterface\MainViewController.java
+
+
+
+
+
