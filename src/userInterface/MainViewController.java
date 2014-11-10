@@ -81,6 +81,10 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	 * ========================================================================
 	 */
 	//@author A0119447Y
+	/**
+	 * Constructor for MainViewController
+	 * @param stage
+	 */
 	public MainViewController(Stage stage) {
 		try {
 			this.copyUserNlpFiles();
@@ -144,6 +148,11 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	}
 	
 	//@author A0119447Y
+	/**
+	 * Load the FXML file to render the graphical user interface
+	 *   
+	 * @throws IOException
+	 */
 	private void loadFxml() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
 				"MainView.fxml"));
@@ -279,6 +288,12 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	 * =================================
 	 */
 	//@author A0119447Y
+	/**
+	 * Retrieve the user input from the input box (hooked with 'input')
+	 * 
+	 * @param willClear		willClear whether the input area will be cleared
+	 * @return				the user input as a string
+	 */
 	public String getUserInput(boolean willClear) {
 		String text = input.getText();
 		if (willClear) {
@@ -347,6 +362,11 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	}
 
 	//@author A0119447Y
+	/**
+	 * Update the display area to the string specified
+	 * 
+	 * @param textToDisplay	textToDisplay string of the text to be displayed
+	 */
 	public void setDisplayText(String textToDisplay) {
 		VBox displayContent = new VBox();
 		Label textLabel = new Label(textToDisplay);
@@ -359,9 +379,15 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	}
 
 	//@author A0119447Y
+	/**
+	 * Update the display area to display the given task list
+	 * 
+	 * @param taskList	task list to be displayed
+	 */
 	public void setDisplayPane(ArrayList<Task> taskList) {
 		setDisplayScrollbarStyle();
-		if (taskList != null && taskList.isEmpty()) {
+		if (taskList == null || taskList.isEmpty()) {
+			// task list is empty, nothing to display
 			this.loadPreview();
 		} else {
 			VBox displayContent = new VBox();
@@ -372,7 +398,6 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			System.out.println("taskPane width: " + taskPane.getWidth());
 			displayContent.getChildren().add(taskPane);
 			displayScrollPane.setContent(displayContent);
-
 		}
 	}
 
@@ -396,6 +421,11 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	}
 
 	//@author A0119447Y
+	/**
+	 * Update the input area to given text
+	 * 
+	 * @param text	text String of text to be displayed
+	 */
 	private void updateTextField(final String text) {
 		final MainViewController instance = this;
 		Platform.runLater(new Runnable() {
@@ -413,13 +443,13 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		});
 	}
 
+	//@author A0119379R
 	/**
 	 * toggle between e.g. <DATE> & </DATE>
 	 * 
 	 * @param tag
 	 * @return
 	 */
-	//@author A0119379R
 	private String toggleTag(String tag) {
 		if (tag.contains("</")) {
 			return tag.replace("</", "<");
@@ -454,6 +484,9 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	}
 
 	//@author A0119447Y
+	/**
+	 * Catch the event when user press the enter key
+	 */
 	@FXML
 	private void onEnter() {
 		String command = getUserInput(true);
