@@ -1,4 +1,11 @@
-//@author A0113029U-reused
+//@author: a0113029u-reused
+
+
+
+	/**
+	 * origin: C:\Users\Gabriella\My Documents\NUS\2103\main\src\dataStore\JSonWriter.java
+	 */
+
 
 package dataStore;
 
@@ -42,3 +49,10 @@ public class JSonWriter extends StringWriter {
 		}
 	}
 }
+
+	// End of segment: C:\Users\Gabriella\My Documents\NUS\2103\main\src\dataStore\JSonWriter.java
+
+
+
+
+
