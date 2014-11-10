@@ -1206,10 +1206,35 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		}
 	}
 	
+	//@author A0119447Y
+	/**
+	 * 
+	 * @param userInput
+	 * @return
+	 */
 	private String untag(String userInput) {
-		// TODO Auto-generated method stub
+		boolean isAllSucceeded = true;
+		String returnValue = "";
+		try {
+			ArrayList<String> tags = parser.pickUntag(userInput);
+			int index = parser.pickIndex(userInput).get(0);
+			for (String tag : tags) {
+				try {
+					boolean isThisSucceeded = this.user.untag(index, tag);
+					if (!isThisSucceeded) {
+						returnValue += (Constant.PROMPT_MESSAGE_UNTAG_TASK_FAILED + ": " + index);
+					}
+					isAllSucceeded &= isThisSucceeded;
+				} catch (CommandFailedException cfe) {
+					return cfe.toString();
+				}
+			}
+		} catch (CommandFailedException e) {
+			return e.toString();
+		}
 
-		return null;
+		return isAllSucceeded ? Constant.PROMPT_MESSAGE_UNTAG_TASK_SUCCESSFULLY
+				: returnValue;
 	}
 
 

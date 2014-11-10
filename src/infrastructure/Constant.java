@@ -347,7 +347,9 @@ public abstract class Constant {
 	public static final String PROMPT_MESSAGE_NO_TASK_FOUND = "No task found";
 	public static final String PROMPT_MESSAGE_NO_TASK_FOUND_IN_LIST = "There is no list found with name: %1$s";
 	public static final String PROMPT_MESSAGE_DONE_TASK_SUCCESSFULLY = "Tasks are marked done";
-	public static final String PROMPT_MESSAGE_DONE_TASK_FAILED = "Task is failed to finished";
+	public static final String PROMPT_MESSAGE_DONE_TASK_FAILED = "Failed to finish task";
+	public static final String PROMPT_MESSAGE_UNTAG_TASK_FAILED = "Untag task successfully";
+	public static final String PROMPT_MESSAGE_UNTAG_TASK_SUCCESSFULLY = "Failed to untag task";
 	public static final String PROMPT_MESSAGE_TRASH_EMPTIED = "Trash emptied";
 	public static final String PROMPT_MESSAGE_INVALID_TASK_LISE = "Invalid task list name";
 	public static final String PROMPT_MESSAGE_INVALID_DESCRIPTION = "Invalid task descrption";

@@ -418,6 +418,23 @@ public class User {
 			throw new CommandFailedException(String.format(Constant.PROMPT_MESSAGE_NO_TASK_FOUND_IN_LIST, listName));
 		}
 	}
+	
+	//@author A0119447Y
+	/**
+	 * Remove the tag from the task with ongoingIndex
+	 * 
+	 * @param ongoingIndex
+	 * @return 	whether the tag is removed successfully
+	 * @throws 	CommandFailedException
+	 */
+	public boolean untag(int ongoingIndex, String tag) throws CommandFailedException {
+		if (!isValidOngoingIndex(ongoingIndex)) {
+			throw new CommandFailedException(String.format(
+					Constant.INVALID_INDEX_ERROR_MESSAGE, ongoingIndex));
+		} else {
+			return this.getOngoingTaskList().get(ongoingIndex).removeTag(tag);
+		}
+	}
 
 	/**
 	 * ========================================================================
