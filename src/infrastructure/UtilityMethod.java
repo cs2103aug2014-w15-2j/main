@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 import model.CommandFailedException;
 import model.Pair;
@@ -238,5 +239,10 @@ public abstract class UtilityMethod {
 			}
 		});
 	}
+
+
+	//@author A0119379R
+	// logger
+	public static Logger logger = Logger.getLogger("ListOfXiaoMing");
 }
 
