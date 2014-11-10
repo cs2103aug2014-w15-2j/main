@@ -11,9 +11,9 @@ import model.TimeInterval;
 import org.junit.Test;
 
 public class TaskTest {
+	
 	/**
-	 * 
-	 * test for task methods
+	 * test for tagToString method in Task
 	 */
 	//@author A0119444E
 	@Test
@@ -30,6 +30,10 @@ public class TaskTest {
 		System.out.println("all tag tests are passed");
 	}
 	
+	/**
+	 * test for status methods in Task
+	 */
+	//@author A0119444E
 	@Test
 	public void testStatus() {
 		ArrayList<Task> tasks = new ArrayList<Task>();
@@ -60,7 +64,13 @@ public class TaskTest {
 		
 		System.out.println("all status tests are passed");
 	}	
-
+	
+	/**
+	 * test method for tagToString
+	 * @param description
+	 * @param expected
+	 * @param task
+	 */
 	private void testTagToString(String description, String expected, Task task) {
 		try {
 			assertEquals(description, expected, task.tagToString()); 
@@ -69,6 +79,12 @@ public class TaskTest {
 		}
 	}
 	
+	/**
+	 * test method for status
+	 * @param description
+	 * @param expected
+	 * @param task
+	 */
 	private void testStatus(String description, String expected, Task task) {
 		try {
 			assertEquals(description, expected, task.getStatus());

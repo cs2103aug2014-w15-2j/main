@@ -91,7 +91,7 @@ public class DataStoreTest {
 	}
 	
 	/**
-	 * test save an empty tasks-list
+	 * test - save an empty tasks-list
 	 */
 	@Test
 	public void testSaveNull() {
@@ -125,7 +125,10 @@ public class DataStoreTest {
 			System.out.println(MESSAGE_FAILED_TESTING);
 		}
 	}
-
+	
+	/**
+	 * Test load file when no task-list file exists
+	 */
 	@Test
 	public void testLoadFileNotExist() {
 		fileData.delete();
@@ -147,6 +150,13 @@ public class DataStoreTest {
 		}
 	}
 	
+	/**
+	 * make a new tasks list for testing and checking
+	 * 
+	 * @return TaskBox for test-case 1
+	 * @throws ParseException - if failed in parsing dates
+	 * @throws CommandFailedException - if invalid time interval
+	 */
 	private TaskBox getTasksTC1() throws ParseException,
 										CommandFailedException {
 		ArrayList<String> tags = new ArrayList<String>();
@@ -179,6 +189,11 @@ public class DataStoreTest {
 		return tasks;
 	}
 	
+	/**
+	 * write a testing file for test-case 1
+	 * 
+	 * @throws IOException - failed in writing the testing file
+	 */
 	private void writeDataFileTC1() throws IOException {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(fileData));
 		bw.write(FORMAT_OPEN_ARRAY + "\n");
@@ -244,6 +259,12 @@ public class DataStoreTest {
 		bw.close();
 	}
 	
+	/**
+	 * compare testing file content with the expected content
+	 * 
+	 * @throws FileNotFoundException - testing file does not exist
+	 * @throws IOException - failed in reading the test file
+	 */
 	private void checkDataFileTC1()
 			throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(fileData));

@@ -479,10 +479,11 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		this.displayScrollPane.setContent(emptyImageBox);
 	}
 
-	//@author A0119444E
+	
 	/**
 	 * set the scroll bar style using css and set 2 event handlers
 	 */
+	//@author A0119444E
 	private void setDisplayScrollbarStyle() {
 		displayScrollPane.getStyleClass().add("mylistview");
 		displayScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);

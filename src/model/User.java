@@ -227,6 +227,7 @@ public class User {
 					Constant.INVALID_INDEX_ERROR_MESSAGE, ongoingIndex));
 		} else {
 			this.updateUndoable();
+			//get the task that users want to update
 			Task task = this.currentTasks.getOngoingTasks().get(ongoingIndex);
 			Iterator<String> attributes = toBeUpdated.keySet().iterator();
 			while (attributes.hasNext()) {
@@ -409,7 +410,11 @@ public class User {
 
 	/**
 	 * ========================================================================
+<<<<<<< HEAD
 	 * Auxiliary methods
+=======
+	 * ========================== Auxiliary methods ===========================
+>>>>>>> f1ee8313f8cf415eb246fe8c00a3eac0f0ad88fa
 	 * ========================================================================
 	 */
 
@@ -445,9 +450,8 @@ public class User {
 
 	/**
 	 * ========================================================================
-	 * ========================== Private methods
-	 * ================================
-	 * ==================================================================
+	 * ========================== Private methods =============================
+	 * ========================================================================
 	 */
 
 	//@author A0119447Y
@@ -534,7 +538,7 @@ public class User {
 	 * find gets the list of tasks that meet the constraint.
 	 * 
 	 * @param constraint
-	 * @return
+	 * @return normal tasks that meet the constraint
 	 * @throws Exception
 	 */
 	private ArrayList<Task> findOngoing(Constraint constraint) throws Exception {
@@ -555,7 +559,7 @@ public class User {
 	 * findTrashed gets the list of trashed tasks that meet the constraint.
 	 * 
 	 * @param constraint
-	 * @return
+	 * @return trashed tasks that meet the constraint
 	 * @throws Exception
 	 */
 	private ArrayList<Task> findTrashed(Constraint constraint) throws Exception {
@@ -576,7 +580,7 @@ public class User {
 	 * findFinished gets the list of finished tasks that meet the constraint.
 	 * 
 	 * @param constraint
-	 * @return
+	 * @return finished tasks that meet the constraint
 	 * @throws Exception
 	 */
 	private ArrayList<Task> findFinished(Constraint constraint)
@@ -611,7 +615,7 @@ public class User {
 	 * isValidOngoingIndex
 	 * 
 	 * @param index
-	 * @return
+	 * @return boolean
 	 */
 	private boolean isValidOngoingIndex(int index) {
 		if ((index < 0) || (index > this.currentTasks.getOngoingTasks().size())) {
@@ -626,7 +630,7 @@ public class User {
 	 * isValidTrashedIndex
 	 * 
 	 * @param index
-	 * @return
+	 * @return boolean
 	 */
 	private boolean isValidTrashedIndex(int index) {
 		if ((index < 0) || (index > this.currentTasks.getTrashedTasks().size())) {
@@ -641,7 +645,7 @@ public class User {
 	 * isValidFinishedIndex
 	 * 
 	 * @param index
-	 * @return
+	 * @return boolean
 	 */
 	private boolean isValidFinishedIndex(int index) {
 		if ((index < 0)
@@ -653,11 +657,9 @@ public class User {
 	}
 
 	/**
-	 * ========================================================================
-	 * ========================== System level static methods
-	 * ====================
-	 * ======================================================
-	 * ========================
+	 * =================================================================================
+	 * ========================== System level static methods ==========================
+	 * =================================================================================
 	 */
 	//@author A0119447Y
 	/**
@@ -670,9 +672,8 @@ public class User {
 
 	/**
 	 * ========================================================================
-	 * ========================== Unused methods
-	 * ================================
-	 * ==================================================================
+	 * ========================== Unused methods ==============================
+	 * ========================================================================
 	 */
 
 	//@author A0119444E-unused

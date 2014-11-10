@@ -4,6 +4,9 @@ package dataStore;
 
 import infrastructure.Converter;
 
+import model.Task;
+import model.TaskBox;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -13,9 +16,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import model.Task;
-import model.TaskBox;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ContainerFactory;
