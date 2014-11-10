@@ -85,6 +85,7 @@ public class NerCommandPickerTest {
 	@Test
 	public void testUntag() {
 		compareCommandEnum("untag", COMMAND_TYPE.UNTAG);
+		compareCommandEnum("untag 1 haha", COMMAND_TYPE.UNTAG);
 	}
 	
 	private void compareCommandEnum (String userInputString, COMMAND_TYPE command) {

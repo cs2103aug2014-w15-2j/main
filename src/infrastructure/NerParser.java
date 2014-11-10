@@ -335,7 +335,7 @@ public class NerParser {
 	}
 	
 
-//@author A0119379-unused
+//@author A0119379R-unused
 //This method is aborted for the unreliable performance. 
 //We decided to limit the flexibility to some extend to unsure the reliability.
 //

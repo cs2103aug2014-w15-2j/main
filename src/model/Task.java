@@ -375,7 +375,7 @@ public class Task {
 		}
 	}
 	
-	//@author A0119447
+	//@author A0119447Y
 	/**
 	 * Check whether a task is done
 	 *
