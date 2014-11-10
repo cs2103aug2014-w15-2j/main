@@ -90,7 +90,7 @@ public class Task {
 	/**
 	 * toStringForDisplaying convert the task information to a string for displaying
 	 * 
-	 * @return 
+	 * @return String for displaying
 	 */
 	public String toStringForDisplaying() {
 		String task = "description:\t";
@@ -108,9 +108,9 @@ public class Task {
 
 	//@author A0119444E
 	/**
-	 * getPriority gets the task description
+	 * getDescription gets the task description
 	 * 
-	 * @return
+	 * @return String description
 	 */
 	public String getDescription() {
 		return this.description;
@@ -124,10 +124,13 @@ public class Task {
 	 */
 	public void setDescription(String newDescription) {
 		try {
-			isValidDescription(newDescription);
-			this.description = newDescription;
+			if (isValidDescription(newDescription)){
+				this.description = newDescription;
+			} else {
+				throw new CommandFailedException(Constant.PROMPT_MESSAGE_INVALID_DESCRIPTION);
+			}
 		} catch (Exception e) {
-
+			
 		}
 	}
 
@@ -135,7 +138,7 @@ public class Task {
 	/**
 	 * getPriority getter of the priority attribute
 	 * 
-	 * @return int
+	 * @return int priority
 	 */	
 	public int getPriority() {
 		return this.priority;
@@ -149,10 +152,10 @@ public class Task {
 	 */
 	public void setPriority(int newPriority) {
 		try {
-			if(isValidPriority(newPriority)){
+			if (isValidPriority(newPriority)){
 				this.priority = newPriority;
 			} else {
-				throw new CommandFailedException();
+				throw new CommandFailedException(Constant.PROMPT_MESSAGE_INVALID_PRIORITY);
 			}
 		} catch (Exception e) {
 
@@ -163,7 +166,7 @@ public class Task {
 	/**
 	 * getTag getter of the tag attribute
 	 * 
-	 * @return 
+	 * @return ArrayList<String> tag list
 	 */
 	public ArrayList<String> getTag() {
 		return this.tag;
@@ -180,7 +183,7 @@ public class Task {
 			if(isValidTag(newTag)) {
 				this.tag = newTag;
 			} else {
-				throw new CommandFailedException();
+				throw new CommandFailedException(Constant.PROMPT_MESSAGE_INVALID_TAG);
 			}			
 		} catch (Exception e) {
 
@@ -208,11 +211,10 @@ public class Task {
 			if(isValidInterval(newInterval)) {
 				this.interval = newInterval;
 			} else {
-				throw new CommandFailedException();
+				throw new CommandFailedException(Constant.PROMPT_MESSAGE_INVALID_TIME_INTERVAL);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e);
+			
 		}
 	}
 	
