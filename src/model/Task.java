@@ -19,31 +19,32 @@ public class Task {
 	/**
 	 * constructor 
 	 * 
-	 * @param description
-	 * @param priority
-	 * @param tag
-	 * @param interval
+	 * @param description	description task description
+	 * @param priority		priority task priority
+	 * @param tag			tag task tags list
+	 * @param interval		interval task time interval
 	 */
 	public Task(String description, int priority, ArrayList<String> tag, TimeInterval interval) {
 		this.description = description;
 		this.priority = priority;
 		this.tag = tag;
 		this.interval = interval;
-		this.status = Constant.TASK_STATUS_NORMAL;
+		this.status = Constant.TASK_STATUS_ONGOING;
 	}
 
 	
 	/**
 	 * ==================================================================================================
-	 * API methods
+	 * ======================================== API methods =============================================
 	 * ==================================================================================================
 	 */
 	
 	//@author A0119447Y
 	/**
-	 * addTag insert a tag for this task, user cannot add duplicated tag for a task
+	 * Insert a tag for this task, user cannot add duplicated tag for a task
 	 * 
-	 * @param tag
+	 * @param tag	tag the tag to be added
+	 * @return 		whether the tag has been added successfully
 	 * @throws CommandFailedException
 	 */
 	public boolean addTag(String tag) throws CommandFailedException {
@@ -57,9 +58,10 @@ public class Task {
 
 	//@author A0119447Y
 	/**
-	 * removeTag remove the tag from the task.
+	 * Remove a tag for this task
 	 * 
-	 * @param tag
+	 * @param tag	tag to be removed
+	 * @return 		whether the tag has been removed successfully
 	 */
 	public boolean removeTag(String tag) {
 		return this.tag.remove(tag);
@@ -88,9 +90,9 @@ public class Task {
 
 	//@author A0119447Y
 	/**
-	 * toStringForDisplaying convert the task information to a string for displaying
+	 * Convert the task information to a string for displaying
 	 * 
-	 * @return String for displaying
+	 * @return 	String for displaying
 	 */
 	public String toStringForDisplaying() {
 		String task = "description:\t";
@@ -226,12 +228,12 @@ public class Task {
 	//@author A0113029U
 	public void setStatus(String state) {
 		if ((state == null) || (state == "")) {
-			this.status = Constant.TASK_STATUS_NORMAL;
+			this.status = Constant.TASK_STATUS_ONGOING;
 			return;
 		}
 		switch(state.toLowerCase().trim()) {
-			case Constant.TASK_STATUS_NORMAL:
-				this.status = Constant.TASK_STATUS_NORMAL;
+			case Constant.TASK_STATUS_ONGOING:
+				this.status = Constant.TASK_STATUS_ONGOING;
 				break;
 				
 			case Constant.TASK_STATUS_DONE:
@@ -243,7 +245,7 @@ public class Task {
 				break;
 				
 			default:
-				this.status = Constant.TASK_STATUS_NORMAL;
+				this.status = Constant.TASK_STATUS_ONGOING;
 				break;
 		}
 	}
@@ -345,11 +347,11 @@ public class Task {
 	
 	// check task type
 	
-	//@author A0119447
+	//@author A0119447Y
 	/**
-	 * isTrashed
-	 * check whether a task is trashed
-	 * @return boolean
+	 * Check whether a task is trashed
+	 *
+	 * @return 	whether a task is trashed
 	 */
 	public boolean isTrashed() {
 		if (this.status.equals(Constant.TASK_STATUS_TRASHED)) {
@@ -359,14 +361,14 @@ public class Task {
 		}
 	}
 	
-	//@author A0119447
+	//@author A0119447Y
 	/**
-	 * isNormal
-	 * check whether a task is normal
-	 * @return boolean
+	 * Check whether a task is ongoing
+	 *
+	 * @return 	whether a task is ongoing
 	 */
-	public boolean isNormal() {
-		if (this.status.equals(Constant.TASK_STATUS_NORMAL)) {
+	public boolean isOngoing() {
+		if (this.status.equals(Constant.TASK_STATUS_ONGOING)) {
 			return true;
 		} else {
 			return false;
@@ -375,9 +377,9 @@ public class Task {
 	
 	//@author A0119447
 	/**
-	 * isDone
-	 * check whether a task is done
-	 * @return boolean
+	 * Check whether a task is done
+	 *
+	 * @return 	whether a task is done
 	 */
 	public boolean isDone() {
 		if (this.status.equals(Constant.TASK_STATUS_DONE)) {
@@ -389,9 +391,9 @@ public class Task {
 	
 	//@author A0119447Y
 	/**
-	 * isFloating check whether the task is floating task, i.e. there is no start date or end date for it
+	 * Check whether the task is floating task, i.e. there is no start date or end date for it
 	 * 
-	 * @return boolean
+	 * @return 	whether the task is floating task
 	 */
 	public boolean isFloating() {
 		if (this.getInterval().getStartDate().equals(Constant.FLOATING_START_DATE)) {
@@ -403,9 +405,9 @@ public class Task {
 	
 	//@author A0119447Y
 	/**
-	 * isDeadline check whether the task is deadline task, i.e. there is only a deadline for it
+	 * Check whether the task is deadline task, i.e. there is only a deadline for it
 	 * 
-	 * @return boolean
+	 * @return 	whether the task is deadline task
 	 */
 	public boolean isDeadline() {
 		if (this.getInterval().getStartDate().equals(Constant.DEADLINE_START_DATE)) {
@@ -417,9 +419,9 @@ public class Task {
 	
 	//@author A0119447Y
 	/**
-	 * isTimed check whether the task is timed task
+	 * Check whether the task is timed task
 	 * 
-	 * @return boolean
+	 * @return 	whether the task is timed task
 	 */
 	public boolean isTimed() {
 		if (!this.isDeadline() && !this.isFloating()) {
@@ -432,7 +434,7 @@ public class Task {
 	
 	/**
 	 * ==================================================================================================
-	 * Unused methods
+	 * ========================================= Unused methods =========================================
 	 * ==================================================================================================
 	 */
 	//@author A0119444E-unused

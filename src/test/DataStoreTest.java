@@ -170,7 +170,7 @@ public class DataStoreTest {
 		//priority - high, period task, status - normal
 		Task task1 = new Task("task1", Constant.PRIORITY_HIGH, tags,
 							new TimeInterval(startDate, endDate));
-		task1.setStatus(Constant.TASK_STATUS_NORMAL);
+		task1.setStatus(Constant.TASK_STATUS_ONGOING);
 		
 		//priority - low, deadline task, status - done 
 		Task task2 = new Task("task2", Constant.PRIORITY_LOW, tags,
@@ -183,7 +183,7 @@ public class DataStoreTest {
 		task3.setStatus(Constant.TASK_STATUS_TRASHED);
 		
 		TaskBox tasks = new TaskBox();
-		tasks.getNormalTasks().add(task1);
+		tasks.getOngoingTasks().add(task1);
 		tasks.getFinishedTasks().add(task2);
 		tasks.getTrashedTasks().add(task3);
 		return tasks;
@@ -201,7 +201,7 @@ public class DataStoreTest {
 		//priority - high, period task, status - normal
 		bw.write(FORMAT_OPEN_OBJECT + "\n");
 		bw.write(String.format(FORMAT_DESCRIPTION, "task1") + "\n");
-		bw.write(String.format(FORMAT_STATUS, Constant.TASK_STATUS_NORMAL)
+		bw.write(String.format(FORMAT_STATUS, Constant.TASK_STATUS_ONGOING)
 				+ "\n");
 		bw.write(FORMAT_TAGS + "\n");
 		bw.write("\"tag1\",\n");
@@ -274,7 +274,7 @@ public class DataStoreTest {
 		assertEquals(FORMAT_OPEN_OBJECT, br.readLine().trim());
 		assertEquals(String.format(FORMAT_DESCRIPTION, "task1"),
 					br.readLine().trim());
-		assertEquals(String.format(FORMAT_STATUS, Constant.TASK_STATUS_NORMAL),
+		assertEquals(String.format(FORMAT_STATUS, Constant.TASK_STATUS_ONGOING),
 					br.readLine().trim());
 		assertEquals(FORMAT_TAGS, br.readLine().trim());
 		assertEquals("\"tag1\",", br.readLine().trim());

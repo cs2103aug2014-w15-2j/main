@@ -937,7 +937,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			thisConstraint = parser.getConstraint(userInput);
 			ArrayList<Task> queryResult = this.user.find(thisConstraint, this.getCurrentListName());
 			if (queryResult.isEmpty()) {
-				setConsoleText(Constant.PROMPT_MESSAGE_NO_TASK_FOUNDED);
+				setConsoleText(Constant.PROMPT_MESSAGE_NO_TASK_FOUND);
 				return null;
 			} else {
 				return queryResult;
@@ -960,7 +960,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	private ArrayList<Task> displayNormal() {
 		ArrayList<Task> queryResult;
 		try {
-			queryResult = this.user.getNormalTaskList();
+			queryResult = this.user.getOngoingTaskList();
 			if (queryResult.isEmpty()) {
 				System.out.println("displaying image");
 				this.loadEmptyImage();
