@@ -3,9 +3,9 @@
 .mylistview{
     -fx-border-color:rgb(244, 244, 244);
     -fx-background-color:rgb(244, 244, 244);
-    -fx-padding:10 0 10 10;
+    -fx-padding:0 0 0 12;
     -fx-font: 12px "Courier New";
-    
+    -fx-effect: innershadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 0);
 }
 
 /* ------------------------------------------------------------------------------------- */
@@ -14,7 +14,8 @@
 
 /* The main scrollbar **thumb** CSS class which we drag every time (movable) */
 .mylistview .scroll-bar:vertical .thumb {
-    -fx-background-color: rgb(180, 194, 199);
+    -fx-background-color: rgb(180, 180, 180);
+    
     -fx-background-insets:2, 0, 0;
     -fx-background-radius:2em;
 }
@@ -22,10 +23,10 @@
 
 /* The main scrollbar **track** CSS class  */
 .mylistview .scroll-bar:vertical .track{
-    -fx-background-color:rgb(244, 244, 244);
+    -fx-background-color: rgb(244, 244, 244);
     -fx-border-color:transparent;
     -fx-background-radius:0em;
-    -fx-border-radius:2em;    
+        
 }
 
 /* The main scrollbar **track** CSS class on event of "hover" and "pressed" */
@@ -57,3 +58,49 @@
 }
 
 
+.helpScrollView {
+	-fx-background-color:rgb(255, 255, 255);
+}
+
+.helpScrollView .scroll-bar:vertical .thumb {
+    -fx-background-color: rgb(180, 180, 180);
+    -fx-background-insets:2, 0, 0;
+    -fx-background-radius:2em;
+}
+
+
+/* The main scrollbar **track** CSS class  */
+.helpScrollView .scroll-bar:vertical .track{
+    -fx-background-color:rgba(255, 255, 255, 1);
+    -fx-border-color:transparent;
+    -fx-background-radius:0em;
+    -fx-border-radius:2em;    
+}
+
+/* The main scrollbar **track** CSS class on event of "hover" and "pressed" */
+.helpScrollView .scroll-bar .track:hover,
+.helpScrollView .scroll-bar .track:pressed{
+     -fx-background-color:transparent;
+     -fx-background-radius:2em;
+     
+}
+
+/* The main scrollbar **thumb** CSS class on event of "hover" and "pressed" */
+.helpScrollView .scroll-bar .thumb:hover,
+.helpScrollView .scroll-bar .thumb:pressed{
+    -fx-background-color:transparent;    
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+.helpScrollView .scroll-bar:vertical .increment-button ,
+.helpScrollView .scroll-bar:vertical .decrement-button {
+    -fx-background-color:rgb(244, 244, 244);
+    -fx-background-radius:0em;
+    -fx-padding:0 10 0 0;
+}
+
+.helpScrollView  .scroll-bar .increment-arrow,
+.helpScrollView  .scroll-bar .decrement-arrow {
+    -fx-shape:" ";
+    -fx-padding:0;
+}

@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
 
-import modal.CommandFailedException;
-import modal.Pair;
-import modal.Task;
+import model.CommandFailedException;
+import model.Pair;
+import model.Task;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;

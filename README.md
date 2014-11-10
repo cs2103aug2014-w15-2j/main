@@ -4,7 +4,7 @@ List of Xiao Ming
 
 Supervisor: 	Christopher Chak Hanrui
 
-Extra Feature: 	Power Cooperative Tasks
+Extra Feature: 	Learnable Natural Language Processing
 
 
 Build A User Model
@@ -16,7 +16,7 @@ java -cp stanford-ner.jar edu.stanford.nlp.ie.crf.CRFClassifier -prop propery_fi
 
 Screenshot
 -------------
-![Alt text](http://oi62.tinypic.com/2vi0135.jpg "Screenshot")
+<img src='screenshots/screenshot.png'alt='Logo' height=659px width = 1026px/>
 
 User Guide
 -------------

@@ -283,9 +283,7 @@ public abstract class Constant {
 
 	// parser
 	public static final String KEY_TIME = "time";
-	public static final String KEY_CATEGORY = "categroy";
 	public static final String KEY_PRIORITY = "priority";
-	public static final String KEY_REPEATED_PERIOD = "repeat";
 	public static final String KEY_TAG = "tag";
 
 	public static final String COMMAND_STRING_LOG_IN = "log in";
@@ -315,16 +313,27 @@ public abstract class Constant {
 	public static final int PRIORITY_HIGH = 1;
 	public static final int PRIORITY_MEDIUM = 2;
 	public static final int PRIORITY_LOW = 3;
-
-	public static final int REPEATED_PERIOD_DEFAULT = 1;
-	public static final int REPEATED_PERIOD_INVALID = 0;
-	public static final int REPEATED_PERIOD_NONE = 1;
-	public static final int REPEATED_PERIOD_DAILY = 2;
-	public static final int REPEATED_PERIOD_WEEKLY = 3;
-	public static final int REPEATED_PERIOD_MONTHLY = 4;
+	
+	public static final String PRIORITY_STRING_HIGH = "high";
+	public static final String PRIORITY_STRING_MEDIUM = "medium";
+	public static final String PRIORITY_STRING_LOW = "low";
 
 	public static final int CALENDAR_WEEK_IN_SECOND = 37;
-
+	public static final int CALENDAR_MONTH_IN_SECOND = 39;
+	public static final int CALENDAR_YEAR_IN_SECOND = 41;
+	
+	// DataStore
+	public static final String SAVE_DESCRIPTION = "description";
+	public static final String SAVE_STATUS = "status";
+	public static final String SAVE_TAGS = "tags";
+	public static final String SAVE_PRIORITY = "priority";
+	public static final String SAVE_TIME_INTERVAL = "time-interval";
+	public static final String SAVE_STARTDATE = "startDate";
+	public static final String SAVE_ENDDATE = "endDate";
+	
+	public static final String FORMAT_DATE = "dd-MMMM-yyyy HH:mm";
+	public static final String SAVE_FORMAT_NO_DATE = "-";
+	
 	// Logic
 	public static final String TRASHED_TAG = "trashed";
 	public static final String NO_REDOABLE_ERROR_MESSAGE = "nothing available for redoing";
@@ -345,9 +354,6 @@ public abstract class Constant {
 	public static final String TASK_STATUS_NORMAL = "normal";
 	public static final String TASK_STATUS_DONE = "done";
 	public static final String TASK_STATUS_TRASHED = "trashed";
-
-	// category
-	public static final String DEFAULT_CATEGORY = "default";
 
 	// TimeInterval
 	public static final Date FLOATING_START_DATE = new Date(0);
@@ -375,8 +381,9 @@ public abstract class Constant {
 			+ "-fx-background-color: %s";
 	public static final String CSS_STYLE_PRIVIEW_CONTENT_BOX = "-fx-font: 12px \"Akagi-SemiBold\";"
 			+ "-fx-background-color: rgba(0, 200, 255, 1)";
-	public static final String CSS_STYLE_PREVIEW_SCROLL_PANE = "-fx-padding:8 8 8 8;"
-			+ "-fx-background-color: rgb(244, 244, 244)";
+	public static final String CSS_STYLE_PREVIEW_SCROLL_PANE = "-fx-padding:8 8 8 10;"
+			+ "-fx-background-color: rgb(244, 244, 244);"
+			+ "-fx-effect: innershadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 0);";
 	public static final String CSS_STYLE_DEADLINE_LABEL = "-fx-font: 38px \"Ticking Timebomb BB\";"
 			+ "-fx-padding:5 0 0 0;" + "-fx-text-fill: white;";
 	public static final String CSS_STYLE_TIME_LABEL = "-fx-text-fill: white;"
@@ -389,7 +396,6 @@ public abstract class Constant {
 			+ "-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );";
 	public static final String CSS_STYLE_DESCRIPTION_LABEL = "-fx-font: 17px \"Akagi-SemiBold\";"
 			+ "-fx-padding:0 0 5 0;";
-//			+ "-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , z, 0.0 , 0 , 1 );";
 	public static final String CSS_STYLE_TIME_BOX = "-fx-font: 12px \"Akagi-SemiBold\";"
 			+ "-fx-background-color: rgba(0, 0, 0, 0.5);"
 			+ "-fx-padding: 5 0 0 5;"
@@ -400,7 +406,7 @@ public abstract class Constant {
 			+ "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 1);"
 			+ "-fx-text-fill: white;";
 	public static final String CSS_STYLE_EMPTY_PANE = "-fx-background-color: rgba(0, 0, 0, 0);";
-	public static final String CSS_STYLE_SHADOW = "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 5, 3);";
+	public static final String CSS_STYLE_SHADOW = "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);";
 
 	// CSS colors
 	public static final String COLOR_BANNER_DEFAULT = "rgba(222, 222, 222, 1)";
@@ -420,7 +426,7 @@ public abstract class Constant {
 	public static final String FONT_FILE_BASE = "/resource/Akagi-SB.ttf";
 	public static final String FONT_FILE_BASE_BOLD = "/resource/Akagi-EB.ttf";
 	public static final String FONT_FILE_TIME = "/resource/TickingTimebombBB.ttf";
-	public static final String FONT_FILE_FEEDBACK = "/resource/monaco.ttf";
+	public static final String FONT_FILE_FEEDBACK = "/resource/monaco.TTF";
 
 	// shortcuts
 	public static final String HOT_KEY_ADD_DESCRIPTION_TAG = "alt D";
@@ -438,8 +444,9 @@ public abstract class Constant {
 	public static final String HOT_KEY_RELOAD = "control M";
 
 	public static final String HOT_KEY_TO_DO = "control 1";
-	public static final String HOT_KEY_TRASHED = "control 3";
 	public static final String HOT_KEY_DONE = "control 2";
+	public static final String HOT_KEY_TRASHED = "control 3";
+	public static final String HOT_KEY_HELP = "control 4";
 
 	public static final String HOT_KEY_LAST_COMMAND = "UP";
 	public static final String HOT_KEY_NEXT_COMMAND = "DOWN";
@@ -453,4 +460,5 @@ public abstract class Constant {
 	public static final String TASK_LIST_TRASHED = "trashed";
 	public static final String TASK_LIST_TODO = "ongoing";
 	public static final String TASK_LIST_SEARCH = "search";
+	public static final String TASK_LIST_HELP = "help";
 }

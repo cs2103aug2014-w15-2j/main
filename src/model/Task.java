@@ -1,4 +1,4 @@
-package modal;
+package model;
 
 import infrastructure.*;
 
@@ -223,11 +223,11 @@ public class Task {
 	
 	//@author A0113029U
 	public void setStatus(String state) {
-		if ((state == null) || state == "") {
+		if ((state == null) || (state == "")) {
 			this.status = Constant.TASK_STATUS_NORMAL;
-			return ;
+			return;
 		}
-		switch(state.toLowerCase()) {
+		switch(state.toLowerCase().trim()) {
 			case Constant.TASK_STATUS_NORMAL:
 				this.status = Constant.TASK_STATUS_NORMAL;
 				break;
@@ -240,10 +240,24 @@ public class Task {
 				this.status = Constant.TASK_STATUS_TRASHED;
 				break;
 				
-			default :
+			default:
 				this.status = Constant.TASK_STATUS_NORMAL;
 				break;
 		}
+	}
+	
+	//@author A0113029U
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || obj.getClass()!=this.getClass()){
+			return false;
+		}
+		Task task = (Task) obj;
+		return (this.getDescription().equals(task.getDescription())) &&
+				(this.getStatus().equals(task.getStatus())) &&
+				(this.getPriority() == task.getPriority()) &&
+				(this.getInterval().equals(task.getInterval())) &&
+				(this.getTag().equals(task.getTag()));
 	}
 	
 	// check validity of attributes	

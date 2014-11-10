@@ -1,4 +1,4 @@
-Add	O
+add	O
 I’m	O
 going	O
 to	O
@@ -79,7 +79,7 @@ attend	O
 cs2103	O
 lecture	O
 this	DATE
-Friday	DATE
+friday	DATE
 .	O
 
 add	O
@@ -88,10 +88,10 @@ to	O
 grandma’s	O
 home	O
 this	DATE
-Friday	DATE
+friday	DATE
 .	O
 
-Add	O
+add	O
 reading	O
 books	O
 tomorrow DATE
@@ -101,7 +101,7 @@ to	DATE
 20:00	DATE
 .	O
 
-Add	O
+add	O
 repair	O
 computer	O
 10	DATE
@@ -214,7 +214,7 @@ home	O
 tomorrow	DATE
 .	O
 
-Add	O
+add	O
 group	O
 meeting	O
 today	DATE
@@ -224,7 +224,7 @@ to	O
 12am	DATE
 .	O
 
-Add	O
+add	O
 group	O
 meeting	O
 today	DATE
@@ -234,7 +234,7 @@ to	O
 12pm	DATE
 .	O
 
-Add	O
+add	O
 group	O
 meeting	O
 tmr	DATE
@@ -244,7 +244,7 @@ to	O
 4pm	DATE
 .	O
 
-Add	O
+add	O
 group	O
 meeting	O
 tmr	DATE
@@ -254,7 +254,7 @@ to	O
 4pm	DATE
 .	O
 
-Add	O
+add	O
 group	O
 meeting	O
 tomorrow	DATE
@@ -264,7 +264,7 @@ to	O
 4pm	DATE
 .	O
 
-Add	O
+add	O
 group	O
 meeting	O
 tmr	DATE
@@ -274,7 +274,7 @@ to	O
 4pm	DATE
 .	O
 
-Add	O
+add	O
 group	O
 meeting	O
 tmr	DATE
@@ -432,3 +432,146 @@ task	O
 1	O
 next	DATE
 mon	DATE
+
+
+add	O
+Good	O
+to	O
+see	O
+you	O
+by	DATE
+today	DATE
+
+
+reload	O
+
+
+add	O
+finish	O
+cs2102	O
+project	O
+before	DATE
+today	DATE
+
+
+reload	O
+
+
+add	O
+do	O
+cs2105	O
+homework	O
+by	DATE
+tmr	DATE
+
+
+reload	O
+
+
+add	O
+fix	O
+computer	O
+by	DATE
+tmr	DATE
+
+
+reload	O
+
+
+add	O
+swim	O
+until	DATE
+today	DATE
+
+
+reload	O
+
+
+add	O
+swim	O
+until	DATE
+today	DATE
+
+
+reload	O
+
+
+add	O
+swim	O
+until	O
+
+
+reload	O
+
+
+add	O
+swim	O
+until	DATE
+tmr	DATE
+
+
+reload	O
+
+
+add	O
+go	O
+to	O
+toilet	O
+till	DATE
+next	DATE
+Mon	DATE
+
+
+reload	O
+
+
+add	O
+task	O
+nov	DATE
+19	DATE
+
+
+reload	O
+
+
+add	O
+task	O
+feb	DATE
+1	DATE
+
+
+reload	O
+
+
+add	O
+task	O
+nov	DATE
+
+
+reload	O
+
+
+add	O
+task	O
+monday	DATE
+
+
+reload	O
+
+
+add	O
+task	O
+fri	DATE
+
+
+reload	O
+
+
+add	O
+task	O
+before	DATE
+this	DATE
+monday	DATE
+
+
+reload	O

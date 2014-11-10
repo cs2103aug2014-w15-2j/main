@@ -1,4 +1,9 @@
 eclipse.preferences.version=1
 encoding//src/infrastructure/Constant.java=UTF-8
+<<<<<<< HEAD
 encoding//src/modal/User.java=UTF-8
+=======
+encoding//src/infrastructure/NerParser.java=UTF-8
+encoding//src/model/User.java=UTF-8
+>>>>>>> ee21989ea94cbd182fe3b056a7dc575ba500185a
 encoding//src/userInterface/MainViewController.java=UTF-8

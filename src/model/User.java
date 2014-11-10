@@ -1,4 +1,4 @@
-package modal;
+package model;
 
 import infrastructure.Constant;
 import infrastructure.UtilityMethod;
@@ -412,7 +412,7 @@ public class User {
 	 * return the normal tasks
 	 */
 	public ArrayList<Task> getNormalTaskList() {
-		return this.currentTasks.normalTasks;
+		return this.currentTasks.getNormalTasks();
 	}
 
 	//@author A0119447Y
@@ -422,7 +422,7 @@ public class User {
 	 * return the normal tasks
 	 */
 	public ArrayList<Task> getTrashedTaskList() {
-		return this.currentTasks.trashedTasks;
+		return this.currentTasks.getTrashedTasks();
 	}
 
 	//@author A0119447Y
@@ -432,7 +432,7 @@ public class User {
 	 * return the normal tasks
 	 */
 	public ArrayList<Task> getFinishedTaskList() {
-		return this.currentTasks.finishedTasks;
+		return this.currentTasks.getFinishedTasks();
 	}
 
 	/**
@@ -621,7 +621,7 @@ public class User {
 	 * @return
 	 */
 	private boolean isValidTrashedIndex(int index) {
-		if ((index < 0) || (index > this.currentTasks.getNormalTasks().size())) {
+		if ((index < 0) || (index > this.currentTasks.getTrashedTasks().size())) {
 			return false;
 		} else {
 			return true;
@@ -856,8 +856,14 @@ public class User {
 		return "'Help' has not been implemented yet";
 	}
 
-	public String recover(String currentListName) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean recover(int i, String currentListName) throws CommandFailedException {
+		switch (currentListName) {
+		case Constant.TASK_LIST_FINISHED:
+			return this.unDone(i);
+		case Constant.TASK_LIST_TRASHED:
+			return this.putBack(i);
+		default:
+			throw new CommandFailedException("unrecognized list name");
+		}
 	}
 }

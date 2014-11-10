@@ -61,3 +61,43 @@ medium	MEDIUM
 priority	O
 low	LOW
 .	O
+
+prioriry	O
+h	HIGH
+.	O
+
+priority	O
+l	LOW
+.	O
+
+priority	O
+m	MEDIUM
+.	O
+
+priority	O
+hi	HIGH
+.	O
+
+priority	0
+hig	HIGH
+.	O
+
+priority	O
+lo	LOW
+.	O
+
+priority	O
+mediu	MEDIUM
+.	O
+
+priority	O
+medi	MEDIUM
+.	O
+
+priority	O
+med	MEDIUM
+.	O
+
+priority	O
+me	MEDIUM
+.	O

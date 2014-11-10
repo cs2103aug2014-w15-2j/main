@@ -9,9 +9,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.LinkedHashMap;
 
-import modal.CommandFailedException;
-import modal.Task;
-import modal.TimeInterval;
+import model.CommandFailedException;
+import model.Task;
+import model.TimeInterval;
 
 public class Converter {
 	
@@ -19,17 +19,19 @@ public class Converter {
 	public static LinkedHashMap convertTaskToMap(Task task) {
 		LinkedHashMap taskMap = new LinkedHashMap();
 		
-		taskMap.put("description", task.getDescription());
-		taskMap.put("status", task.getStatus());
+		taskMap.put(Constant.SAVE_DESCRIPTION, task.getDescription());
+		taskMap.put(Constant.SAVE_STATUS, task.getStatus());
 		
 		ArrayList<String> tags = new ArrayList<String>();
 		for(int i = 0; i < task.getTag().size(); i++) {
 			tags.add(task.getTag().get(i));
 		}
-		taskMap.put("tags", tags);
+		taskMap.put(Constant.SAVE_TAGS, tags);
 	
-		taskMap.put("priority", convertPriorityIntToString(task));
-		taskMap.put("time-interval", convertTimeIntervalToString(task));
+		taskMap.put(Constant.SAVE_PRIORITY, 
+					convertPriorityIntToString(task.getPriority()));
+		taskMap.put(Constant.SAVE_TIME_INTERVAL,
+					convertTimeIntervalToString(task.getInterval()));
 		
 		return taskMap;
 	}
@@ -41,18 +43,20 @@ public class Converter {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes") 
-	public static Task getTask(LinkedHashMap task) throws Exception {
-		String description = (String) task.get("description");
-		String status = (String) task.get("status");
-		int priority = convertPriorityStringToInt(task);
+	public static Task convertMapToTask(LinkedHashMap task) throws Exception {
+		String description = (String) task.get(Constant.SAVE_DESCRIPTION);
+		String status = (String) task.get(Constant.SAVE_STATUS);
+		int priority = convertPriorityStringToInt
+						((String) task.get(Constant.SAVE_PRIORITY));
 		
-		ArrayList tags = (ArrayList) task.get("tags");
+		ArrayList tags = (ArrayList) task.get(Constant.SAVE_TAGS);
 		ArrayList<String> tag = new ArrayList<String>();
 		for(int i = 0; i < tags.size(); i++) { 
 			tag.add((String)tags.get(i));
 		}
 		
-		LinkedHashMap intervalObj = (LinkedHashMap) task.get("time-interval");
+		LinkedHashMap intervalObj = (LinkedHashMap) 
+									task.get(Constant.SAVE_TIME_INTERVAL);
 		TimeInterval interval = convertStringToTimeInterval(intervalObj);
 		
 		Task newTask = new Task(description, priority, tag, interval);
@@ -61,80 +65,87 @@ public class Converter {
 		return newTask;
 	}
 
-	@SuppressWarnings("rawtypes") 
-	public static int convertPriorityStringToInt(LinkedHashMap task) {
+	private static int convertPriorityStringToInt(String priorityString) {
+		priorityString = priorityString.toLowerCase().trim();
 		int priority = Constant.PRIORITY_DEFAULT;
-		if(task.get("priority").equals("high")) {
+		if(priorityString.equals(Constant.PRIORITY_STRING_HIGH)) {
 			priority = Constant.PRIORITY_HIGH;
-		} else if(task.get("priority").equals("medium")) {
+		} else if(priorityString.equals(Constant.PRIORITY_STRING_MEDIUM)) {
 			priority = Constant.PRIORITY_MEDIUM;
-		} else if(task.get("priority").equals("low")) {
+		} else if(priorityString.equals(Constant.PRIORITY_STRING_LOW)) {
 			priority = Constant.PRIORITY_LOW;
 		}
 		return priority;
 	}
 	
-	public static String convertPriorityIntToString(Task task) {
-		String priority = "medium";
-		switch(task.getPriority()) {
+	private static String convertPriorityIntToString(int priorityInt) {
+		String priority;
+		switch(priorityInt) {
 			case Constant.PRIORITY_HIGH:
-				priority = "high";
+				priority = Constant.PRIORITY_STRING_HIGH;
 				break;
 			case Constant.PRIORITY_MEDIUM:
-				priority = "medium";
+				priority = Constant.PRIORITY_STRING_MEDIUM;
 				break;
 			case Constant.PRIORITY_LOW:
-				priority = "low";
+				priority = Constant.PRIORITY_STRING_LOW;
 				break;
 			default:
-				priority = "invalid";
+				priority = Constant.PRIORITY_STRING_MEDIUM;
+				break;
 		}
 		return priority;
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static TimeInterval convertStringToTimeInterval
+	private static TimeInterval convertStringToTimeInterval
 								(LinkedHashMap intervalObj) 
 								throws ParseException, CommandFailedException {
-		Date startDate = null;
-		if(!intervalObj.get("startDate").equals("-")) {
-			startDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
-				Locale.ENGLISH).parse((String) intervalObj.get("startDate"));
-		}
-		Date endDate = null;
-		if(!intervalObj.get("endDate").equals("-")) {
-			endDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
-				Locale.ENGLISH).parse((String) intervalObj.get("endDate"));
-		}
+		Date startDate = convertDateStringToDate
+						( (String) intervalObj.get(Constant.SAVE_STARTDATE)); 
+		Date endDate = convertDateStringToDate
+						( (String) intervalObj.get(Constant.SAVE_ENDDATE));
 		return new TimeInterval(startDate, endDate);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static LinkedHashMap convertTimeIntervalToString(Task task) {
+	private static LinkedHashMap convertTimeIntervalToString
+											(TimeInterval time) {
 		LinkedHashMap timeInterval = new LinkedHashMap();
 		
-		if(task.getInterval().getStartDate() == Constant.FLOATING_START_DATE &&
-			task.getInterval().getEndDate() == Constant.FLOATING_END_DATE) {
-			timeInterval.put("startDate", "-");
-			timeInterval.put("endDate", "-");
-		} else if(task.getInterval().getStartDate() == Constant.DEADLINE_START_DATE) {
-			String endDate = Converter.convertDateToString
-							(task.getInterval().getEndDate());
-			timeInterval.put("startDate", "-");
-			timeInterval.put("endDate", endDate);
-		} else {
-			String startDate = Converter.convertDateToString(task.getInterval()
-								.getStartDate());
-			String endDate = Converter.convertDateToString(task.getInterval()
-								.getEndDate());
-			timeInterval.put("startDate", startDate);
-			timeInterval.put("endDate", endDate);
-		}
+		String startDate = convertDateToString(time.getStartDate());
+		timeInterval.put(Constant.SAVE_STARTDATE, startDate);
+		String endDate = convertDateToString(time.getEndDate());
+		timeInterval.put(Constant.SAVE_ENDDATE, endDate);
 		
 		return timeInterval;
 	}
 	
+	private static String convertDateToString(Date date) {
+		String dateString;
+		if( date.equals(Constant.FLOATING_START_DATE) ||
+			date.equals(Constant.FLOATING_END_DATE) ||
+			date.equals(Constant.DEADLINE_START_DATE) ) {
+			dateString = Constant.SAVE_FORMAT_NO_DATE; 
+		} else {
+			dateString = new SimpleDateFormat(Constant.FORMAT_DATE,
+					Locale.ENGLISH).format(date);	
+		}
+		return dateString;
+	}
+	
+	private static Date convertDateStringToDate(String dateString)
+												throws ParseException {
+		if(dateString.trim().equals(Constant.SAVE_FORMAT_NO_DATE)) {
+			return null;
+		}
+		return new SimpleDateFormat(Constant.FORMAT_DATE,
+				Locale.ENGLISH).parse(dateString);
+	}
+	
 	/*
+	 * Unused
+	 * 
 	@SuppressWarnings("rawtypes") 
 	public static int convertRepeatedPeriodStringToInt(LinkedHashMap task) {
 		int repeated_period = Constant.REPEATED_PERIOD_DEFAULT;
@@ -173,11 +184,4 @@ public class Converter {
 		return repeatedPeriod;
 	}
 	*/
-	
-	public static String convertDateToString(Date date) {
-			String dateString = new SimpleDateFormat("dd-MMMM-yyyy HH:mm",
-					Locale.ENGLISH).format(date);	
-		return dateString;
-	}
-	
 }
