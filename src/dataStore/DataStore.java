@@ -4,6 +4,9 @@ package dataStore;
 
 import infrastructure.Converter;
 
+import model.Task;
+import model.TaskBox;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -13,9 +16,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import model.Task;
-import model.TaskBox;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ContainerFactory;
@@ -28,14 +28,14 @@ public abstract class DataStore {
 	private static final String DATA_FILEPATH = "List-of-Xiao-Ming/task-list.xiaoming";
 
 	/**
-	 * get the tasks list from the file data make a new file data if does not
-	 * exist
+	 * get the tasks list from the file data
+	 * make a new file data if does not exist
 	 * 
 	 * @return TaskBox for the tasks list
-	 * @throws Exception 
+	 * @throws Exception
 	 * 
 	 */
-	public static TaskBox loadFileData() throws Exception{
+	public static TaskBox loadFileData() throws Exception {
 		if (!isFileExisting()) {
 			createTaskFile();
 		}
@@ -46,7 +46,7 @@ public abstract class DataStore {
 	 * save the changes, write all tasks into the account data
 	 * 
 	 * @param tasks - list of tasks need to be saved into the file
-	 * @return true if it is successfully saved, false otherwise  
+	 * @return true if it is successfully saved, false otherwise
 	 */
 	@SuppressWarnings("rawtypes")
 	public static boolean save(TaskBox tasks) {
@@ -109,12 +109,12 @@ public abstract class DataStore {
 	 * read file and get user current tasks
 	 * 
 	 * @return user current tasks
-	 * @throws Exception - when it fails reading from the file,
-	 * 					   when the file does not exist
-	 * 					   or when the parsing fails  
+	 * @throws Exception
+	 *             - when it fails reading from the file, when the file does not
+	 *             exist or when the parsing fails
 	 */
 	@SuppressWarnings("rawtypes")
-	private static TaskBox getCurrentTasks() throws Exception{
+	private static TaskBox getCurrentTasks() throws Exception {
 		assert (isFileExisting());
 		TaskBox tasksList = new TaskBox();
 
@@ -122,7 +122,7 @@ public abstract class DataStore {
 		JSONParser parser = new JSONParser();
 		ContainerFactory orderedKeyFactory = setOrderedKeyFactory();
 		ArrayList allTasks = (ArrayList) parser.parse(user, orderedKeyFactory);
-		
+
 		LinkedHashMap task;
 		if (allTasks != null) {
 			for (int i = 0; i < allTasks.size(); i++) {
@@ -138,14 +138,14 @@ public abstract class DataStore {
 				}
 			}
 		}
-		
+
 		user.close();
 		Logger.logMsg(Logger.INFO, "All tasks loaded");
 		return tasksList;
 	}
 
 	/**
-	 * convert a list of tasks into the available format for the file 
+	 * convert a list of tasks into the available format for the file
 	 * 
 	 * @return the content of the file to be written
 	 */
@@ -171,7 +171,7 @@ public abstract class DataStore {
 				tasksList.add(task);
 			}
 		}
-		
+
 		Logger.logMsg(Logger.INFO, "All tasks converted to content");
 		return tasksList;
 	}
