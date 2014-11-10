@@ -15,6 +15,69 @@ import static org.junit.Assert.assertEquals;
 public class UserTest {
 	
 	/**
+	 * test for redo method in User
+	 * @throws Exception
+	 */
+	@Test
+	//author A0119444E
+	public void testRedo() throws Exception {
+		User user = new User();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+		Task task = new Task("testtask", 2, tag, interval);
+		ArrayList<Task> normalTasks;
+		
+		//test add
+		user.add(task);
+		normalTasks = user.getOngoingTaskList();
+		user.undo();
+		user.redo();
+		testRedo("test add", normalTasks, user.getOngoingTaskList());
+		user.undo();
+		
+		//test delete
+		if (!user.getOngoingTaskList().isEmpty()){
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			normalTasks = user.getOngoingTaskList();
+			user.undo();
+			user.redo();
+			testRedo("test delete", normalTasks, user.getOngoingTaskList());
+			user.undo();
+		} else {
+			user.add(task);
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			normalTasks = user.getOngoingTaskList();
+			user.undo();
+			user.redo();
+			testRedo("test delete", normalTasks, user.getOngoingTaskList());
+			user.undo();
+			user.undo();
+		}
+		
+		//test deleteAll
+		if (!user.getOngoingTaskList().isEmpty()){
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			normalTasks = user.getOngoingTaskList();
+			user.undo();
+			user.redo();
+			testRedo("test delete", normalTasks, user.getOngoingTaskList());
+			user.undo();
+		} else {
+			user.add(task);
+			user.add(task);
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			normalTasks = user.getOngoingTaskList();
+			user.undo();
+			user.redo();
+			testRedo("test delete", normalTasks, user.getOngoingTaskList());
+			user.undo();
+			user.undo();
+			user.undo();
+		}
+		System.out.println("all redo tests are passed");
+	}
+	
+	/**
 	 * test for undo method in User
 	 * @throws Exception
 	 */
@@ -34,13 +97,13 @@ public class UserTest {
 		
 		//test delete
 		if (!user.getOngoingTaskList().isEmpty()){
-			user.delete(0, Constant.TASK_LIST_TODO);
+			user.delete(0, Constant.TASK_LIST_ONGOING);
 			user.undo();
 			testUndo("test delete", normalTasks, user.getOngoingTaskList());
 		} else {
 			user.add(task);
 			normalTasks = user.getOngoingTaskList();
-			user.delete(0, Constant.TASK_LIST_TODO);
+			user.delete(0, Constant.TASK_LIST_ONGOING);
 			user.undo();
 			testUndo("test delete", normalTasks, user.getOngoingTaskList());
 			user.undo();
@@ -48,7 +111,7 @@ public class UserTest {
 		
 		//test deleteAll
 		if (!user.getOngoingTaskList().isEmpty()){
-			user.deleteAll(Constant.TASK_LIST_TODO);
+			user.deleteAll(Constant.TASK_LIST_ONGOING);
 			user.undo();
 			testUndo("test deleteAll", normalTasks, user.getOngoingTaskList());
 		} else {
@@ -56,7 +119,7 @@ public class UserTest {
 			user.add(task);
 			user.add(task);
 			normalTasks = user.getOngoingTaskList();
-			user.deleteAll(Constant.TASK_LIST_TODO);
+			user.deleteAll(Constant.TASK_LIST_ONGOING);
 			user.undo();
 			testUndo("test deleteAll", normalTasks, user.getOngoingTaskList());
 			user.undo();
@@ -93,7 +156,7 @@ public class UserTest {
 //			testAdd("test add for task: " + i, "task" + p++, user, i);
 //		}
 //		for (int i = currentSize - testSize; i < currentSize; i++) {
-//			user.delete(currentSize - testSize, Constant.TASK_LIST_TODO);
+//			user.delete(currentSize - testSize, Constant.TASK_LIST_ONGOING);
 //		}
 //		System.out.println("all add tests are passed");
 //	}
@@ -119,7 +182,7 @@ public class UserTest {
 //		int p = 1;
 //		for (int i = currentSize - testSize; i < currentSize; i++) {
 //			testDelete("test delete for task: " + i, "task" + p++, user, currentSize - testSize);
-//			user.delete(currentSize - testSize, Constant.TASK_LIST_TODO);
+//			user.delete(currentSize - testSize, Constant.TASK_LIST_ONGOING);
 //		}
 //		System.out.println("all delete tests are passed");		
 //	}
@@ -146,6 +209,21 @@ public class UserTest {
 	 */
 	//author A0119444E
 	private void testUndo(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
+		try {
+			assert(expected.equals(actual));
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	/**
+	 * test method for testing redo method
+	 * @param description
+	 * @param expected
+	 * @param actual
+	 */
+	//author A0119444E
+	private void testRedo(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
 		try {
 			assert(expected.equals(actual));
 		} catch (Exception e) {

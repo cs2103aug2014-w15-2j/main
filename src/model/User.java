@@ -113,7 +113,7 @@ public class User {
 	public boolean delete(int index, String listName)
 			throws CommandFailedException {
 		switch (listName) {
-		case Constant.TASK_LIST_TODO:
+		case Constant.TASK_LIST_ONGOING:
 			return this.deleteOngoing(index, true);
 
 		case Constant.TASK_LIST_FINISHED:
@@ -135,7 +135,7 @@ public class User {
 	 */
 	public boolean deleteAll(String listName) throws CommandFailedException {
 		switch (listName) {
-		case Constant.TASK_LIST_TODO:
+		case Constant.TASK_LIST_ONGOING:
 			return this.deleteAllOngoing();
 
 		case Constant.TASK_LIST_FINISHED:
@@ -324,7 +324,7 @@ public class User {
 	public Task retrieve(int index, String listName)
 			throws CommandFailedException {
 		switch (listName) {
-		case Constant.TASK_LIST_TODO:
+		case Constant.TASK_LIST_ONGOING:
 			return this.retrieveFromNormalList(index);
 
 		case Constant.TASK_LIST_FINISHED:
@@ -405,7 +405,7 @@ public class User {
 	public ArrayList<Task> find(Constraint constraint, String listName)
 			throws Exception {
 		switch (listName) {
-		case Constant.TASK_LIST_TODO:
+		case Constant.TASK_LIST_ONGOING:
 			return this.findOngoing(constraint);
 
 		case Constant.TASK_LIST_FINISHED:
