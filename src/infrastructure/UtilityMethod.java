@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Scanner;
 import java.util.logging.Logger;
 
 import model.CommandFailedException;
@@ -22,9 +21,6 @@ import javafx.stage.Stage;
 
 public abstract class UtilityMethod {
 	//@author A0119379R
-	
-	//a scanner to accept user input
-//	private static Scanner scanner_ = new Scanner(System.in);
 
 	public static int selectDifferentDate(Calendar c1, Calendar c2, Calendar c3)
 			throws CommandFailedException {
@@ -78,10 +74,6 @@ public abstract class UtilityMethod {
 	public static Date selectLaterDate(Date d1, Date d2) {
 		return d1.before(d2) ? d2 : d1;
 	}
-
-//	public static String readCommand() {
-//		return scanner_.nextLine();
-//	}
 
 	public static String priorityToString(int priority) {
 		switch (priority) {
