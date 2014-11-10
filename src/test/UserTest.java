@@ -246,13 +246,15 @@ public class UserTest {
 		if (!tasks.isEmpty()) {
 			String description = user.getOngoingTaskList().get(0).getDescription();
 			user.done(0);
-			testDone("test done", description, user.getFinishedTaskList().get(user.getFinishedTaskList().size() - 1).getDescription());
+			testDone("test done", description, user.getFinishedTaskList().get(user.getFinishedTaskList().size() - 1).
+					getDescription());
 			user.undo();
 		} else {
 			user.add(task);
 			String description = user.getOngoingTaskList().get(0).getDescription();
 			user.done(0);
-			testDone("test done", description, user.getFinishedTaskList().get(user.getFinishedTaskList().size() - 1).getDescription());
+			testDone("test done", description, user.getFinishedTaskList().get(user.getFinishedTaskList().size() - 1).
+					getDescription());
 			user.undo();
 			user.undo();
 		}
@@ -316,6 +318,32 @@ public class UserTest {
 		System.out.println("all empty trash tests are passed");
 	}
 
+	//@author A0119444E
+	@Test
+	public void testRetrieve() throws Exception{
+		User user = new User();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+		Task task = new Task("another test task", 2, tag, interval);
+		
+		//ongoing tasks
+		user.add(task);
+		testRetrieve("test retrieve", task.getDescription(), user.retrieve(user.getOngoingTaskList().size() - 1, 
+				Constant.TASK_LIST_ONGOING).getDescription());
+		
+		//finished tasks
+		user.done(user.getOngoingTaskList().size() - 1);
+		testRetrieve("test retrieve", task.getDescription(), user.retrieve(user.getFinishedTaskList().size() - 1, 
+				Constant.TASK_LIST_FINISHED).getDescription());
+		
+		//trashed tasks
+		user.deleteAllFinished();
+		testRetrieve("test retrieve", task.getDescription(), user.retrieve(user.getTrashedTaskList().size() - 1, 
+				Constant.TASK_LIST_TRASHED).getDescription());
+		user.emptyTrash();
+		System.out.println("all retrieve tests are passed");
+	}
+	
 	//@author A0119444E
 	/**
 	 * test method for testing undo method
@@ -437,6 +465,7 @@ public class UserTest {
 			
 		}
 	}
+	
 	//@author A0119444E
 	/**
 	 * test method for testing emptyTrash method
@@ -451,4 +480,19 @@ public class UserTest {
 			
 		}
 	}
+	
+	//@author A0119444E
+		/**
+		 * test method for testing retrieve method
+		 * @param description
+		 * @param expected
+		 * @param actualString
+		 */	
+		private void testRetrieve(String description, String expected, String actualString) {
+			try {
+				assertEquals(description, expected, actualString);
+			} catch (Exception e) {
+				
+			}
+		}
 }
