@@ -25,28 +25,28 @@ public class UserTest {
 		ArrayList<String> tag = new ArrayList<String>();
 		TimeInterval interval = new TimeInterval();
 		Task task = new Task("testtask", 2, tag, interval);
-		ArrayList<Task> normalTasks = user.getNormalTaskList();
+		ArrayList<Task> normalTasks = user.getOngoingTaskList();
 		System.out.println(normalTasks.size());
 		
 		//test add
 		user.add(task);
 		user.undo();
 		System.out.println(normalTasks.size());
-		testUndo("test add", normalTasks, user.getNormalTaskList());
+		testUndo("test add", normalTasks, user.getOngoingTaskList());
 		
 		//test delete
-		if (!user.getNormalTaskList().isEmpty()){
+		if (!user.getOngoingTaskList().isEmpty()){
 			user.delete(0, Constant.TASK_LIST_TODO);
 		}
 		user.undo();
-		testUndo("test delete", normalTasks, user.getNormalTaskList());
+		testUndo("test delete", normalTasks, user.getOngoingTaskList());
 		
 		//test deleteAll
-		if (!user.getNormalTaskList().isEmpty()){
+		if (!user.getOngoingTaskList().isEmpty()){
 			user.deleteAll(Constant.TASK_LIST_TODO);
 		}
 		user.undo();
-		testUndo("test deleteAll", normalTasks, user.getNormalTaskList());
+		testUndo("test deleteAll", normalTasks, user.getOngoingTaskList());
 		
 		System.out.println("all undo tests are passed");
 	}
