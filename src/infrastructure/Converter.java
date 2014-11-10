@@ -23,7 +23,13 @@ public class Converter {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static LinkedHashMap convertTaskToMap(Task task) {
+		assert(task != null);
+
 		LinkedHashMap taskMap = new LinkedHashMap();
+		
+		if(task == null) {
+			return taskMap;
+		}
 
 		taskMap.put(Constant.SAVE_DESCRIPTION, task.getDescription());
 		taskMap.put(Constant.SAVE_STATUS, task.getStatus());
@@ -52,6 +58,11 @@ public class Converter {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static Task convertMapToTask(LinkedHashMap task) throws Exception {
+		assert(task != null);
+		if(task == null) {
+			return null;
+		}
+		
 		String description = (String) task.get(Constant.SAVE_DESCRIPTION);
 		String status = (String) task.get(Constant.SAVE_STATUS);
 		int priority = convertPriorityStringToInt((String) task
