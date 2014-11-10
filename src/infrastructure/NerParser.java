@@ -1286,8 +1286,12 @@ public class NerParser {
 		ArrayList<String> results = new ArrayList<String>();
 
 		for (String cmd : commandList) {
+			if (cmd.equalsIgnoreCase("untag")) {
+				return COMMAND_TYPE.UNTAG;
+			}
 			String parsedTagString = classifierCommand.classifyToString(cmd,
 					Constant.PARSING_STYLE_INLINE_XML, false);
+			System.out.println(parsedTagString);
 			HashMap<String, ArrayList<String>> cmdMap = parseToMap(parsedTagString);
 			for (String command : cmdMap.keySet()) {
 				if (!command.equals(Constant.MAP_KEY_COMMAND)) {

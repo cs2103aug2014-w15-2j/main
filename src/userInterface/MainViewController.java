@@ -923,20 +923,21 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			}
 			
 			int index = parser.pickIndex(userInput).get(0);
-			String task = this.user.getOngoingTaskList().get(index).getDescription();
+			String task = this.user.getOngoingTaskList().get(index - 1).getDescription();
 			
 			ArrayList<String> tags = parser.pickUntag(userInput);
 			String returnValue = String.format(Constant.PREVIEW_MESSAGE_UNTAG_INITIAL_VALUE, task);
 
 			for (String tag : tags) {
+				System.out.println(tag);
 				returnValue += tag + ",";
 			}
 			return returnValue;
 			
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
-			return "Command: update \n\n"
-					+ Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
+			return "Command: untag \n\n"
+					+ Constant.PROMPT_MESSAGE_UNTAG_TASK_FAILED;
 		}
 	}
 
@@ -1220,7 +1221,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			int index = parser.pickIndex(userInput).get(0);
 			for (String tag : tags) {
 				try {
-					boolean isThisSucceeded = this.user.untag(index, tag);
+					boolean isThisSucceeded = this.user.untag(index - 1, tag);
 					if (!isThisSucceeded) {
 						returnValue += (Constant.PROMPT_MESSAGE_UNTAG_TASK_FAILED + ": " + index);
 					}
