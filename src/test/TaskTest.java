@@ -11,9 +11,9 @@ import model.TimeInterval;
 import org.junit.Test;
 
 public class TaskTest {
+	
 	/**
-	 * 
-	 * test for task methods
+	 * test for tagToString method in Task
 	 */
 	//@author A0119444E
 	@Test
@@ -30,6 +30,10 @@ public class TaskTest {
 		System.out.println("all tag tests are passed");
 	}
 	
+	/**
+	 * test for status methods in Task
+	 */
+	//@author A0119444E
 	@Test
 	public void testStatus() {
 		ArrayList<Task> tasks = new ArrayList<Task>();
