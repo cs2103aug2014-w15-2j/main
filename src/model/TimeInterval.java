@@ -10,14 +10,13 @@ public class TimeInterval {
 	private Date startDate;
 	private Date endDate;
 	
+	//@author A0119447Y
 	/**
-	 * constructor
+	 * Constructor for TimeInterval class
 	 * @param startDate
 	 * @param endDate
 	 * @throws Exception
 	 */
-	
-	//@author A0119447Y
 	public TimeInterval(Date startDate, Date endDate) throws CommandFailedException {
 		if (startDate == null) {
 			if (endDate != null) {
@@ -31,8 +30,6 @@ public class TimeInterval {
 			endDate = Constant.FLOATING_END_DATE;
 		}
 		
-//		System.err.println(startDate + " - " + endDate);
-		
 		if (!isValid(startDate, endDate)) {
 			throw new CommandFailedException("invalid time interval");
 		} else {
@@ -42,26 +39,31 @@ public class TimeInterval {
 	}
 	
 	//@author A0119447Y
+	/**
+	 * Constructor for empty TimeInterval
+	 */
 	public TimeInterval() {
 		// by default it is floating task
 		this.startDate = Constant.FLOATING_START_DATE;
 		this.endDate = Constant.FLOATING_END_DATE;
 	}
 
-	/**
-	 * getStartDate
-	 * @return start date
-	 */
 	//@author A0119447Y
+	/**
+	 * Retrieve the start date
+	 * 
+	 * @return 	the start date of this time interval
+	 */
 	public Date getStartDate() {
 		return this.startDate;
 	}
 	
-	/**
-	 * getEndDate
-	 * @return end date
-	 */
 	//@author A0119447Y
+	/**
+	 * Retrieve the end date
+	 * 
+	 * @return 	the end date of this time interval
+	 */
 	public Date getEndDate() {
 		return this.endDate;
 	}
@@ -80,13 +82,15 @@ public class TimeInterval {
 			return true;
 		}
 	}
+	
+	//@author A0119447Y
 	/**
-	 * isOverlapped
+	 * Check whether two time interval are overlapped
+	 * 
 	 * @param firstInterval
 	 * @param secondInterval
-	 * @return
+	 * @return	whether two time interval are overlapped
 	 */
-	//@author A0119447Y
 	public static boolean isOverlapped(TimeInterval firstInterval, TimeInterval secondInterval) {
 		if ((firstInterval.getStartDate().after(secondInterval.getEndDate())) || 
 		   (firstInterval.getEndDate().before(secondInterval.getStartDate()))) {

@@ -13,13 +13,13 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class UserTest {
-	
+
+	//@author A0119444E
 	/**
 	 * test for redo method in User
 	 * @throws Exception
 	 */
 	@Test
-	//@author A0119444E
 	public void testRedo() throws Exception {
 		User user = new User();
 		ArrayList<String> tag = new ArrayList<String>();
@@ -76,13 +76,13 @@ public class UserTest {
 		}
 		System.out.println("all redo tests are passed");
 	}
-	
+
+	//@author A0119444E
 	/**
 	 * test for undo method in User
 	 * @throws Exception
 	 */
 	@Test
-	//@author A0119444E
 	public void testUndo() throws Exception {
 		User user = new User();
 		ArrayList<String> tag = new ArrayList<String>();
@@ -130,11 +130,11 @@ public class UserTest {
 		System.out.println("all undo tests are passed");
 	}
 	
+	//@author A0119444E
 //	/**
 //	 * test for add method in User
 //	 * @throws Exception
 //	 */
-//	//@author A0119444E
 //	@Test
 //	public void testAdd() throws Exception {
 //		int testSize = 10;
@@ -160,13 +160,13 @@ public class UserTest {
 //		}
 //		System.out.println("all add tests are passed");
 //	}
-//	
+	
+//	//@author A0119444E
 //	/**
 //	 * test for delete method in User
 //	 * @throws Exception
 //	 */
-//	@Test
-//	//@author A0119444E
+//	@Test	
 //	public void testDelete() throws Exception {
 //		int testSize = 10;
 //
@@ -200,13 +200,13 @@ public class UserTest {
 //		user.undo();
 //		System.out.println("all deleteAll tests are passed");
 //	}
-	
+
+	//@author A0119444E
 	/**
 	 * test for putBack method in User
 	 * @throws Exception
 	 */
 	@Test
-	//@author A0119444E
 	public void testPutBack() throws Exception {
 		User user = new User();
 		ArrayList<String> tag = new ArrayList<String>();
@@ -229,9 +229,13 @@ public class UserTest {
 		}
 		System.out.println("all putBack tests are passed");
 	}
-	
-	@Test
+
 	//@author A0119444E
+	/**
+	 * test for done method in User
+	 * @throws Exception
+	 */
+	@Test
 	public void testDone() throws Exception {
 		User user = new User();
 		ArrayList<String> tag = new ArrayList<String>();
@@ -255,13 +259,36 @@ public class UserTest {
 		System.out.println("all done tests are passed");
 	}
 	
+	//@author A0119447Y
+	@Test
+	public void testUndone() throws Exception {
+		User user = new User();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+		Task task = new Task("another test task", 2, tag, interval);
+		
+		ArrayList<Task> tasks = user.getOngoingTaskList();
+		if (!tasks.isEmpty()){
+			user.done(0);
+			user.unDone(user.getFinishedTaskList().size() - 1);
+			testUndone("test undone", tasks, user.getOngoingTaskList());
+		} else {
+			user.add(task);
+			tasks = user.getOngoingTaskList();
+			user.done(0);
+			user.unDone(user.getFinishedTaskList().size() - 1);
+			testUndone("test putBack", tasks, user.getOngoingTaskList());
+		}
+		System.out.println("all undone tests are passed");
+	}
+
+	//@author A0119444E
 	/**
 	 * test method for testing undo method
 	 * @param description
 	 * @param expected
 	 * @param actual
 	 */
-	//@author A0119444E
 	private void testUndo(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
 		try {
 			assert(expected.equals(actual));
@@ -269,14 +296,14 @@ public class UserTest {
 			
 		}
 	}
-	
+
+	//@author A0119444E
 	/**
 	 * test method for testing redo method
 	 * @param description
 	 * @param expected
 	 * @param actual
 	 */
-	//@author A0119444E
 	private void testRedo(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
 		try {
 			assert(expected.equals(actual));
@@ -284,7 +311,8 @@ public class UserTest {
 			
 		}
 	}
-	
+
+	//@author A0119444E
 	/**
 	 * test method for testing add method
 	 * @param description
@@ -292,7 +320,6 @@ public class UserTest {
 	 * @param user
 	 * @param i
 	 */
-	//@author A0119444E
 	private void testAdd(String description, String expected, User user, int i) {
 		try {
 			assertEquals(description, expected, user.retrieveFromNormalList(i)
@@ -300,8 +327,9 @@ public class UserTest {
 		} catch (Exception e) {
 
 		}
-	}
-	
+	}	
+
+	//@author A0119444E
 	/**
 	 * test method for testing delete method
 	 * @param description
@@ -309,7 +337,6 @@ public class UserTest {
 	 * @param user
 	 * @param i
 	 */
-	//@author A0119444E
 	private void testDelete(String description, String expected, User user,
 			int i) {
 		try {
@@ -320,13 +347,13 @@ public class UserTest {
 		}
 	}
 	
+	//@author A0119444E
 	/**
 	 * test method for testing deleteAll method
 	 * @param description
 	 * @param expected
 	 * @param actualString
 	 */
-	//@author A0119444E
 	private void testDeleteAll(String description, int expected, int actualString) {
 		try {
 			assertEquals(description, expected, actualString);
@@ -335,13 +362,13 @@ public class UserTest {
 		}
 	}
 	
+	//@author A0119444E
 	/**
 	 * test method for testing putBack method
 	 * @param description
 	 * @param expected
 	 * @param actualString
 	 */
-	//@author A0119444E
 	private void testPutBack(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
 		try {
 			assert(expected.equals(actual));
@@ -350,16 +377,27 @@ public class UserTest {
 		}
 	}
 	
+	//@author A0119444E
 	/**
 	 * test method for testing done method
 	 * @param description
 	 * @param expected
 	 * @param actualString
-	 */
-	//@author A0119444E
+	 */	
 	private void testDone(String description, String expected, String actualString) {
 		try {
 			assertEquals(description, expected, actualString);
+		} catch (Exception e) {
+			
+		}
+
+	//@author A0119447Y
+	/**
+	 * test method for testing unDone method
+	 */	
+	private void testUndone(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
+		try {
+			assert(expected.equals(actual));
 		} catch (Exception e) {
 			
 		}
