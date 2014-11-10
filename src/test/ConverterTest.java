@@ -98,8 +98,8 @@ public class ConverterTest {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Test
+	@SuppressWarnings("rawtypes")
 	public void testConvertTasktoMapPriorityHigh() {
 		ArrayList<String> tags = new ArrayList<String>();
 		TimeInterval time;
@@ -114,8 +114,8 @@ public class ConverterTest {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Test
+	@SuppressWarnings("rawtypes")
 	public void testConvertTasktoMapPriorityMedium() {
 		ArrayList<String> tags = new ArrayList<String>();
 		TimeInterval time;
@@ -130,8 +130,8 @@ public class ConverterTest {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Test
+	@SuppressWarnings("rawtypes")
 	public void testConvertTasktoMapPriorityLow() {
 		ArrayList<String> tags = new ArrayList<String>();
 		TimeInterval time;
@@ -146,8 +146,8 @@ public class ConverterTest {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Test
+	@SuppressWarnings("rawtypes")
 	public void testConvertTasktoMapTagEmpty() {
 		ArrayList<String> tags = new ArrayList<String>();
 		TimeInterval time;
@@ -161,8 +161,8 @@ public class ConverterTest {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Test
+	@SuppressWarnings("rawtypes")
 	public void testConvertTasktoMapTags() {
 		ArrayList<String> tags = new ArrayList<String>();
 		tags.add("tag1");
@@ -178,8 +178,8 @@ public class ConverterTest {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Test
+	@SuppressWarnings("rawtypes")
 	public void testConvertTasktoMapDescriptionAndStatus() {
 		ArrayList<String> tags = new ArrayList<String>();
 		TimeInterval time;
@@ -207,8 +207,8 @@ public class ConverterTest {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void testConvertMapToTaskFloating() {
 		try {
 			LinkedHashMap taskMap = new LinkedHashMap();
@@ -233,8 +233,8 @@ public class ConverterTest {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void testConvertMapToTaskDeadline() {
 		try {
 			LinkedHashMap taskMap = new LinkedHashMap();
@@ -260,8 +260,8 @@ public class ConverterTest {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void testConvertMapToTaskPeriod() {
 		try {
 			LinkedHashMap taskMap = new LinkedHashMap();
@@ -288,8 +288,8 @@ public class ConverterTest {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void testConvertMapToTaskPriorityHigh() {
 		try {
 			LinkedHashMap taskMap = new LinkedHashMap();
@@ -311,8 +311,8 @@ public class ConverterTest {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void testConvertMapToTaskPriorityMedium() {
 		try {
 			LinkedHashMap taskMap = new LinkedHashMap();
@@ -334,8 +334,8 @@ public class ConverterTest {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void testConvertMapToTaskPriorityLow() {
 		try {
 			LinkedHashMap taskMap = new LinkedHashMap();
@@ -357,8 +357,8 @@ public class ConverterTest {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void testConvertMapToTaskTagEmpty() {
 		try {
 			LinkedHashMap taskMap = new LinkedHashMap();
@@ -380,8 +380,8 @@ public class ConverterTest {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void testConvertMapToTaskTags() {
 		try {
 			LinkedHashMap taskMap = new LinkedHashMap();
@@ -407,9 +407,9 @@ public class ConverterTest {
 			System.out.println(ERROR_TESTING);
 		}
 	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	
 	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void testConvertMapToTaskDecriptionaAndStatus() {
 		try {
 			LinkedHashMap taskMap = new LinkedHashMap();
