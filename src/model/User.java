@@ -34,7 +34,7 @@ public class User {
 
 	/**
 	 * ========================================================================
-	 * Functionality methods: CRUD, undo, redo, search
+	 * ============ Functionality methods: CRUD, undo, redo, search ===========
 	 * ========================================================================
 	 */
 
@@ -206,6 +206,18 @@ public class User {
 				}
 			}
 			return task;
+		}
+	}
+	
+	//@author A0119379R
+	public boolean recover(int i, String currentListName) throws CommandFailedException {
+		switch (currentListName) {
+		case Constant.TASK_LIST_FINISHED:
+			return this.unDone(i);
+		case Constant.TASK_LIST_TRASHED:
+			return this.putBack(i);
+		default:
+			throw new CommandFailedException("unrecognized list name");
 		}
 	}
 
@@ -410,11 +422,7 @@ public class User {
 
 	/**
 	 * ========================================================================
-<<<<<<< HEAD
-	 * Auxiliary methods
-=======
 	 * ========================== Auxiliary methods ===========================
->>>>>>> f1ee8313f8cf415eb246fe8c00a3eac0f0ad88fa
 	 * ========================================================================
 	 */
 
@@ -430,9 +438,9 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * getTrashedTaskList
+	 * Retrieve the trashed task list
 	 * 
-	 * return the normal tasks
+	 * @return 	array list of all the trashed tasks
 	 */
 	public ArrayList<Task> getTrashedTaskList() {
 		return this.currentTasks.getTrashedTasks();
@@ -440,9 +448,9 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * getTrashedTaskList
+	 * Retrieve the finished task list
 	 * 
-	 * return the normal tasks
+	 * @return 	array list of all the finished tasks
 	 */
 	public ArrayList<Task> getFinishedTaskList() {
 		return this.currentTasks.getFinishedTasks();
@@ -450,16 +458,17 @@ public class User {
 
 	/**
 	 * ========================================================================
-	 * ========================== Private methods =============================
+	 * =========================== Private methods ============================
 	 * ========================================================================
 	 */
 
 	//@author A0119447Y
 	/**
-	 * deleteNormal deletes the task with the index from the normal task list.
+	 * Deletes the task with the index from the ongoing task list.
 	 * 
-	 * @param ongoingIndex
-	 * @param willSave
+	 * @param ongoingIndex		ongoingIndex index of the task to be deleted
+	 * @param willUpdateUndo	willUpdateUndo whether the undoable stack will be updated
+	 * @return					whether the task is deleted successfully 
 	 * @throws CommandFailedException
 	 */
 	private boolean deleteOngoing(int ongoingIndex, boolean willUpdateUndo)
@@ -481,11 +490,11 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * deleteFinished deletes the task with the index from the finished task
-	 * list.
+	 * Deletes the task with the index from the finished task list.
 	 * 
-	 * @param finishedIndex
-	 * @param willSave
+	 * @param finishedIndex		finishedIndex index of the task to be deleted
+	 * @param willUpdateUndo	willUpdateUndo whether the undoable stack will be updated
+	 * @return					whether the task is deleted successfully 
 	 * @throws CommandFailedException
 	 */
 	private boolean deleteFinished(int finishedIndex, boolean willUpdateUndo)
@@ -507,13 +516,16 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * deleteAllOngoing deletes all current tasks
+	 * Delete all the ongoing tasks
 	 * 
+	 * @return		whether the tasks are deleted successfully
 	 * @throws CommandFailedException
 	 */
 	public boolean deleteAllOngoing() throws CommandFailedException {
 		this.updateUndoable();
 		for (int i = this.currentTasks.getOngoingTasks().size() - 1; i >= 0; i--) {
+			// since delete all is considered one command step, the undoable stack
+			// will not be updated
 			this.deleteOngoing(i, false);
 		}
 		return DataStore.save(this.currentTasks);
@@ -521,13 +533,16 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * deleteAllFinished deletes all finished tasks
+	 * Delete all the finished tasks
 	 * 
+	 * @return		whether the tasks are deleted successfully
 	 * @throws CommandFailedException
 	 */
 	public boolean deleteAllFinished() throws CommandFailedException {
 		this.updateUndoable();
 		for (int i = this.currentTasks.getFinishedTasks().size() - 1; i >= 0; i--) {
+			// since delete all is considered one command step, the undoable stack
+			// will not be updated
 			this.deleteFinished(i, false);
 		}
 		return DataStore.save(this.currentTasks);
@@ -599,8 +614,8 @@ public class User {
 
 	//@author A0119447Y
 	/**
-	 * updateUndoable this method should be called BEFORE every operation
-	 * involving task list
+	 * Update the undoable stack
+	 * this method should be called before every operation involving task list
 	 */
 	private void updateUndoable() {
 		this.redoable.clear();
@@ -661,7 +676,7 @@ public class User {
 	 * ========================== System level static methods ==========================
 	 * =================================================================================
 	 */
-	//@author A0119447Y
+	//@author A0119379R
 	/**
 	 * exit exits the application
 	 */
@@ -805,74 +820,52 @@ public class User {
 	// }
 
 	//@author A0119444E-unused
-	// /**
-	// * deleteCategory
-	// * delete a category
-	// * caetgory is not supported now
-	// * @param category
-	// * @throws CommandFailedException
-	// */
-	// public void deleteCategory(String category) throws CommandFailedException
-	// {
-	// if (!validCategory.contains(category)) {
-	// throw new CommandFailedException("no such category");
-	// } else {
-	// for (Task task : currentTasks) {
-	// if (task.getCategory().equals(category)) {
-	// task.setCategory(Constant.DEFAULT_CATEGORY);
-	// }
-	// }
-	// validCategory.remove(category);
-	// }
-	// }
+//	 /**
+//	 * deleteCategory
+//	 * delete a category
+//	 * caetgory is not supported now
+//	 * @param category
+//	 * @throws CommandFailedException
+//	 */
+//	 public void deleteCategory(String category) 
+//			 throws CommandFailedException {
+//		 if (!validCategory.contains(category)) {
+//			 throw new CommandFailedException("no such category");
+//		 } else {
+//			 for (Task task : currentTasks) {
+//				 if (task.getCategory().equals(category)) {
+//					 task.setCategory(Constant.DEFAULT_CATEGORY);
+//				 }
+//			 }
+//			 validCategory.remove(category);
+//		 }
+//	 }
 
 	//@author A0119444E-unused
-	// /**
-	// * getTaskList
-	// * gets the list of every non-trashed tasks of the user.
-	// *
-	// * @return
-	// */
-	// public ArrayList<Task> getTaskList() {
-	// ArrayList<Task> nonTrashedTasks = new ArrayList<Task>();
-	// for (Task task : this.currentTasks) {
-	// if (!task.isTrashed()) {
-	// nonTrashedTasks.add(task);
-	// }
-	// }
-	// return nonTrashedTasks;
-	// }
+//	 /**
+//	 * getTaskList
+//	 * gets the list of every non-trashed tasks of the user.
+//	 *
+//	 * @return
+//	 */
+//	 public ArrayList<Task> getTaskList() {
+//	 ArrayList<Task> nonTrashedTasks = new ArrayList<Task>();
+//	 for (Task task : this.currentTasks) {
+//	 if (!task.isTrashed()) {
+//	 nonTrashedTasks.add(task);
+//	 }
+//	 }
+//	 return nonTrashedTasks;
+//	 }
 
 	//@author A0119444E-unused
-	/**
-	 * show a joke to user joke is not supported now
-	 */
-	public void showJoke() {
-		System.out
-				.println("How can you expect a Todo-List software to provide you a joke!");
-		System.out.println("This function is actually the joke.");
-		System.out.println("If you really want some, go to jokes.cc.com ");
-	}
-
-	//@author A0119447Y-unused
-	/**
-	 * showHelp shows the application manual.
-	 * 
-	 * @return
-	 */
-	public static String showHelp() {
-
-		return "'Help' has not been implemented yet";
-	}
-
-	public boolean recover(int i, String currentListName) throws CommandFailedException {
-		switch (currentListName) {
-		case Constant.TASK_LIST_FINISHED:
-			return this.unDone(i);
-		case Constant.TASK_LIST_TRASHED:
-			return this.putBack(i);
-		default:
-			throw new CommandFailedException("unrecognized list name");
-		}
-	}
+//	/**
+//	 * show a joke to user joke is not supported now
+//	 */
+//	public void showJoke() {
+//		System.out
+//				.println("How can you expect a Todo-List software to provide you a joke!");
+//		System.out.println("This function is actually the joke.");
+//		System.out.println("If you really want some, go to jokes.cc.com ");
+//	}
 }
