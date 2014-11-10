@@ -201,8 +201,8 @@ public class UserTest {
 //		System.out.println("all deleteAll tests are passed");
 //	}
 	
+	//@author A0119444E
 	@Test
-	//author A0119444E
 	public void testPutBack() throws Exception {
 		User user = new User();
 		ArrayList<String> tag = new ArrayList<String>();
@@ -222,6 +222,29 @@ public class UserTest {
 			testPutBack("test putBack", tasks, user.getOngoingTaskList());
 		}
 		System.out.println("all putBack tests are passed");
+	}
+	
+	//@author A0119447Y
+	@Test
+	public void testUndone() throws Exception {
+		User user = new User();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+		Task task = new Task("another test task", 2, tag, interval);
+		
+		ArrayList<Task> tasks = user.getOngoingTaskList();
+		if (!tasks.isEmpty()){
+			user.done(0);
+			user.unDone(user.getFinishedTaskList().size() - 1);
+			testUndone("test undone", tasks, user.getOngoingTaskList());
+		} else {
+			user.add(task);
+			tasks = user.getOngoingTaskList();
+			user.done(0);
+			user.unDone(user.getFinishedTaskList().size() - 1);
+			testUndone("test putBack", tasks, user.getOngoingTaskList());
+		}
+		System.out.println("all undone tests are passed");
 	}
 	
 	/**
@@ -312,6 +335,22 @@ public class UserTest {
 	 */
 	//author A0119444E
 	private void testPutBack(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
+		try {
+			assert(expected.equals(actual));
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	
+	//author A0119447Y
+	/**
+	 * test method for testing unDone method
+	 * @param description
+	 * @param expected
+	 * @param actualString
+	 */
+	private void testUndone(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
 		try {
 			assert(expected.equals(actual));
 		} catch (Exception e) {
