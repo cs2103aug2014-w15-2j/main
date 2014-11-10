@@ -58,7 +58,6 @@ public class User {
 
 			// reload current task list 
 			this.currentTasks = cloner.deepClone(this.undoable.pop());
-			System.out.println(currentTasks.getOngoingTasks().toString());
 			DataStore.save(this.currentTasks);
 		}
 	}
