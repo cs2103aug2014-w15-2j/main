@@ -61,7 +61,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	private User user;
 
 	private Provider keyShortCuts = null;
-	private String currentListName = Constant.TASK_LIST_TODO;
+	private String currentListName = Constant.TASK_LIST_ONGOING;
 	private Label consoleTextLabel;
 
 	
@@ -329,7 +329,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		listLabel.setStyle( "-fx-text-fill: white;"
 				+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 3, 1);");
 		
-		if (listName.equalsIgnoreCase(Constant.TASK_LIST_TODO)) {
+		if (listName.equalsIgnoreCase(Constant.TASK_LIST_ONGOING)) {
 			listIndicatorBox.setStyle("-fx-background-color: rgba(250, 230, 155, 1);"
 					+ "-fx-padding: 8 16 8 8;"
 					+ Constant.CSS_STYLE_SHADOW);
@@ -491,7 +491,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	private void onEnter() {
 		String command = getUserInput(true);
 		if (command.equals("")) {
-			refresh(Constant.TASK_LIST_TODO);
+			refresh(Constant.TASK_LIST_ONGOING);
 		} else {
 			this.commandHistory.add(command);
 			this.currentCommandIndex = this.commandHistory.size();
@@ -540,9 +540,8 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	/**
 	 * ========================================================================
-	 * ========================== Demux methods
-	 * ==================================
-	 * ================================================================
+	 * Demux methods
+	 * ========================================================================
 	 */
 
 	//@author A0119379R
@@ -570,7 +569,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			switch(thisCommand) {
 				case ADD:
 					setConsoleText(this.add(userInput));
-					refresh(Constant.TASK_LIST_TODO);
+					refresh(Constant.TASK_LIST_ONGOING);
 					break;
 					
 				case DELETE:
@@ -580,19 +579,19 @@ public class MainViewController extends GridPane implements HotKeyListener {
 					
 				case UPDATE:
 					setConsoleText(this.update(userInput));
-					refresh(Constant.TASK_LIST_TODO);
+					refresh(Constant.TASK_LIST_ONGOING);
 					break;
 					
 				case SEARCH:
 					ArrayList<Task> queryList = this.search(userInput);
 					if (queryList != null) {
 						setDisplayPane(queryList);
+						refresh(Constant.TASK_LIST_SEARCH);
 					}
-					refresh(Constant.TASK_LIST_SEARCH);
 					break;
 				
 				case DISPLAY:
-					refresh(Constant.TASK_LIST_TODO);
+					refresh(Constant.TASK_LIST_ONGOING);
 					break;
 					
 				case UNDO:
@@ -637,7 +636,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 					
 				case RECOVER:
 					setConsoleText(this.recover(userInput));
-					refresh(Constant.TASK_LIST_TODO);
+					refresh(Constant.TASK_LIST_ONGOING);
 					break;
 					
 				default:
@@ -738,7 +737,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	//@author A0119379R
 	private String getRecoverPreview(String userInput) {
 		try {
-			if (this.getCurrentListName().equals(Constant.TASK_LIST_TODO)) {
+			if (this.getCurrentListName().equals(Constant.TASK_LIST_ONGOING)) {
 				return "Command: done \n\n" + "All Tasks here are already in \"TODO\" list";
 			}
 			
@@ -830,6 +829,11 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	//@author A0119379R
 	private String getSearchPreview(String userInput) {
+		if (this.getCurrentListName() != Constant.TASK_LIST_FINISHED &&
+				this.getCurrentListName() != Constant.TASK_LIST_TODO &&
+				this.getCurrentListName() != Constant.TASK_LIST_TRASHED) {
+			return "You can only perform search operations under \"TODO\", \"FINISHED\" or \"TRASHED\" page";
+		}
 		Constraint thisConstraint = parser.getConstraint(userInput);
 		return "Command: search \n\n" + thisConstraint.toString();
 	}
@@ -837,7 +841,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	//@author A0119379R
 	private String getUpdatePreview(String userInput) {
 		try {
-			if (!this.getCurrentListName().equals(Constant.TASK_LIST_TODO)) {
+			if (!this.getCurrentListName().equals(Constant.TASK_LIST_ONGOING)) {
 				return "Command: update \n\n" + "You can only update the task in 'TODO' section";
 			}
 			
@@ -967,6 +971,12 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	private ArrayList<Task> search(String userInput) {
 		Constraint thisConstraint;
 		try {
+			if (this.getCurrentListName() != Constant.TASK_LIST_FINISHED &&
+					this.getCurrentListName() != Constant.TASK_LIST_TODO &&
+					this.getCurrentListName() != Constant.TASK_LIST_TRASHED) {
+				setConsoleText("You can only perform search operation under \"TODO\", \"FINISHED\" or \"TRASHED\" page");
+				return null;
+			}
 			thisConstraint = parser.getConstraint(userInput);
 			ArrayList<Task> queryResult = this.user.find(thisConstraint, this.getCurrentListName());
 			if (queryResult.isEmpty()) {
@@ -1264,8 +1274,8 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			@Override
 	        public void run() {
 	        	instance.setDisplayPane(instance.displayNormal());
-	        	instance.currentListName = Constant.TASK_LIST_TODO;
-	        	instance.refresh(Constant.TASK_LIST_TODO);
+	        	instance.currentListName = Constant.TASK_LIST_ONGOING;
+	        	instance.refresh(Constant.TASK_LIST_ONGOING);
 	        }
 	   });
 	}
@@ -1334,8 +1344,8 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	private void refresh(String listName) {
 		this.currentListName = listName;
 		switch(listName) {
-			case Constant.TASK_LIST_TODO:
-				this.setPreviewPane(this.getConsoleText(), Constant.TASK_LIST_TODO);
+			case Constant.TASK_LIST_ONGOING:
+				this.setPreviewPane(this.getConsoleText(), Constant.TASK_LIST_ONGOING);
 				this.setDisplayPane(this.displayNormal());
 				break;
 				

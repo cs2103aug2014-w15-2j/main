@@ -21,8 +21,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public abstract class UtilityMethod {
-//@author A0119379R
-	private static Scanner scanner_ = new Scanner(System.in);
+	//@author A0119379R
+	
+	//a scanner to accept user input
+//	private static Scanner scanner_ = new Scanner(System.in);
 
 	public static int selectDifferentDate(Calendar c1, Calendar c2, Calendar c3)
 			throws CommandFailedException {
@@ -77,9 +79,9 @@ public abstract class UtilityMethod {
 		return d1.before(d2) ? d2 : d1;
 	}
 
-	public static String readCommand() {
-		return scanner_.nextLine();
-	}
+//	public static String readCommand() {
+//		return scanner_.nextLine();
+//	}
 
 	public static String priorityToString(int priority) {
 		switch (priority) {
