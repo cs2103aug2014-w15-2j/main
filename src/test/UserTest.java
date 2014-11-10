@@ -140,7 +140,7 @@ public class UserTest {
 //		int testSize = 10;
 //
 //		User user = new User();
-//		int initialSize = user.getNormalTaskList().size();
+//		int initialSize = user.getOngoingTaskList().size();
 //		System.out.println("user normal task size: " + initialSize);
 //
 //		ArrayList<String> tag = new ArrayList<String>();
@@ -150,7 +150,7 @@ public class UserTest {
 //			Task task = new Task("task" + i, 2, tag, interval);
 //			user.add(task);
 //		}
-//		int currentSize = user.getNormalTaskList().size();
+//		int currentSize = user.getOngoingTaskList().size();
 //		int p = 1;
 //		for (int i = currentSize - testSize; i < currentSize - 1; i++) {
 //			testAdd("test add for task: " + i, "task" + p++, user, i);
@@ -178,7 +178,7 @@ public class UserTest {
 //			Task task = new Task("task" + i, 2, tag, interval);
 //			user.add(task);
 //		}
-//		int currentSize = user.getNormalTaskList().size();
+//		int currentSize = user.getOngoingTaskList().size();
 //		int p = 1;
 //		for (int i = currentSize - testSize; i < currentSize; i++) {
 //			testDelete("test delete for task: " + i, "task" + p++, user, currentSize - testSize);
@@ -196,11 +196,34 @@ public class UserTest {
 //	public void testDeleteAll() throws Exception {
 //		User user = new User();
 //		user.deleteAll(Constant.TASK_LIST_TODO);
-//		testDeleteAll("test deleteAll method", 0, user.getNormalTaskList().size());
+//		testDeleteAll("test deleteAll method", 0, user.getOngoingTaskList().size());
 //		user.undo();
 //		System.out.println("all deleteAll tests are passed");
 //	}
-//	
+	
+	@Test
+	//author A0119444E
+	public void testPutBack() throws Exception {
+		User user = new User();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+		Task task = new Task("testtask", 2, tag, interval);
+		
+		ArrayList<Task> tasks = user.getOngoingTaskList();
+		if (!tasks.isEmpty()){
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			user.putBack(user.getTrashedTaskList().size() - 1);
+			testPutBack("test putBack", tasks, user.getOngoingTaskList());
+		} else {
+			user.add(task);
+			tasks = user.getOngoingTaskList();
+			user.delete(0, Constant.TASK_LIST_ONGOING);
+			user.putBack(0);
+			testPutBack("test putBack", tasks, user.getOngoingTaskList());
+		}
+		System.out.println("all putBack tests are passed");
+	}
+	
 	/**
 	 * test method for testing undo method
 	 * @param description
@@ -276,6 +299,21 @@ public class UserTest {
 	private void testDeleteAll(String description, int expected, int actualString) {
 		try {
 			assertEquals(description, expected, actualString);
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	/**
+	 * test method for testing putBack method
+	 * @param description
+	 * @param expected
+	 * @param actualString
+	 */
+	//author A0119444E
+	private void testPutBack(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
+		try {
+			assert(expected.equals(actual));
 		} catch (Exception e) {
 			
 		}
