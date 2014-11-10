@@ -223,84 +223,73 @@ public abstract class Constant {
 	public static final String XML_TAG_PRIORITY = "PRIORITY";
 	public static final String XML_TAG_COMMAND = "COMMAND";
 	
-	static final String MAP_KEY_PRIORITY = "PRIORITY";
-	static final String MAP_KEY_TAG = "TAG";
-	static final String MAP_KEY_DESCRIPTION = "DESCRIPTION";
-	static final String MAP_KEY_DATE = "DATE";
-	static final String MAP_KEY_COMMAND = "COMMAND";
+	public static final String MAP_KEY_PRIORITY = "PRIORITY";
+	public static final String MAP_KEY_TAG = "TAG";
+	public static final String MAP_KEY_DESCRIPTION = "DESCRIPTION";
+	public static final String MAP_KEY_DATE = "DATE";
+	public static final String MAP_KEY_COMMAND = "COMMAND";
 	
-	static final String DEADLINE_INDICATOR_BEFORE = "before";
-	static final String DEADLINE_INDICATOR_TILL = "till";
-	static final String DEADLINE_INDICATOR_UNTIL = "until";
-	static final String DEADLINE_INDICATOR_BY = "by";
+	public static final String DEADLINE_INDICATOR_BEFORE = "before";
+	public static final String DEADLINE_INDICATOR_TILL = "till";
+	public static final String DEADLINE_INDICATOR_UNTIL = "until";
+	public static final String DEADLINE_INDICATOR_BY = "by";
 	
-	static final int XML_STRING_MIN_LENGTH = 5;
-	static final int DATE_SIZE_THREE = 3;
-	static final int DATE_SIZE_TWO = 2;
-	static final int DATE_SIZE_ONE = 1;
+	public static final int XML_STRING_MIN_LENGTH = 5;
+	public static final int DATE_SIZE_THREE = 3;
+	public static final int DATE_SIZE_TWO = 2;
+	public static final int DATE_SIZE_ONE = 1;
 	
-	static final int DATE_SPECIAL_CHAR_T_INDEX = 10;
-	static final char DATE_SPECIAL_CHAR_T = 'T';
-	static final String DATE_SPECIAL_CHAR_T_STRING = "T";
-	static final String DATE_SPECIAL_CHAR_W = "W";
+	public static final int DATE_SPECIAL_CHAR_T_INDEX = 10;
+	public static final char DATE_SPECIAL_CHAR_T = 'T';
+	public static final String DATE_SPECIAL_CHAR_T_STRING = "T";
+	public static final String DATE_SPECIAL_CHAR_W = "W";
 	
-	static final int DATE_STRING_LENGTH_MINUTE = 16;
-	static final int DATE_STRING_LENGTH_WEEK = 11;
-	static final int DATE_STRING_LENGTH_BASE = 10;
-	static final int DATE_STRING_LENGTH_MONTH = 7;
-	static final int DATE_STRING_LENGTH_YEAR = 4;
+	public static final int DATE_STRING_LENGTH_MINUTE = 16;
+	public static final int DATE_STRING_LENGTH_WEEK = 11;
+	public static final int DATE_STRING_LENGTH_BASE = 10;
+	public static final int DATE_STRING_LENGTH_MONTH = 7;
+	public static final int DATE_STRING_LENGTH_YEAR = 4;
 	
-	static final String DATE_FORMAT_MINUTE = "yyyy-MM-dd HH:mm";
-	static final String DATE_FORMAT_WEEK = "yyyy-MM-ww";
-	static final String DATE_FORMAT_YEAR_MONTH = "yyyy-MM";
-	static final String DATE_FORMAT_YEAR = "yyyy";
-	static final String DATE_FORMAT_BASE = "yyyy-MM-dd";
+	public static final String DATE_FORMAT_MINUTE = "yyyy-MM-dd HH:mm";
+	public static final String DATE_FORMAT_WEEK = "yyyy-MM-ww";
+	public static final String DATE_FORMAT_YEAR_MONTH = "yyyy-MM";
+	public static final String DATE_FORMAT_YEAR = "yyyy";
+	public static final String DATE_FORMAT_BASE = "yyyy-MM-dd";
 	
-	static final int CALENDAR_INCREMENT_ONE = 1;
-	static final int CALENDAR_WEEK_START_DAY_OFFSET = 1;
-	static final int CALENDAR_END_MINUTE = 59;
-	static final int CALENDAR_END_HOUR = 23;
-	static final int CALENDAR_START_MINUTE = 0;
-	static final int CALENDAR_START_HOUR = 0;
+	public static final int CALENDAR_INCREMENT_ONE = 1;
+	public static final int CALENDAR_WEEK_START_DAY_OFFSET = 1;
+	public static final int CALENDAR_END_MINUTE = 59;
+	public static final int CALENDAR_END_HOUR = 23;
+	public static final int CALENDAR_START_MINUTE = 0;
+	public static final int CALENDAR_START_HOUR = 0;
 	
-	static final String TASK_TAG_DEFAULT = "ongoing";
-	static final String EMPTY_STRING = "";
-	static final String SPLITOR_TAB = "\t";
-	static final String SPLITOR_DOT = "\\.";
-	static final String TAG_OPEN_LATTER = "</";
-	static final String TAG_OPEN_FORMER_SPACE = " <";
-	static final String TAG_CLOSE = ">";
-	static final String TAG_CLOSE_SPACE = "> ";
-	static final String TAG_OPEN_FORMER = "<";
+	public static final String TASK_TAG_DEFAULT = "ongoing";
+	public static final String EMPTY_STRING = "";
+	public static final String SPLITOR_TAB = "\t";
+	public static final String SPLITOR_DOT = "\\.";
+	public static final String TAG_OPEN_LATTER = "</";
+	public static final String TAG_OPEN_FORMER = "<";
+	public static final String TAG_OPEN_FORMER_SPACE = " <";
+	public static final String TAG_CLOSE = ">";
+	public static final String TAG_CLOSE_SPACE = "> ";
 	
-	static final int LIST_SIZE_EMPTY = 0;
-	static final int LIST_INDEX_FIRST = 0;
-	static final int LIST_INDEX_NOT_EXISTING = -1;
 	
-	static final String SPLITOR_SPACE = " ";
-	static final String SPLITOR_COMMA = ",";
+	public static final int LIST_SIZE_EMPTY = 0;
+	public static final int LIST_INDEX_FIRST = 0;
+	public static final int LIST_INDEX_NOT_EXISTING = -1;
+	
+	public static final String SPLITOR_SPACE = " ";
+	public static final String SPLITOR_COMMA = ",";
 
-	static final String PARSING_STYLE_INLINE_XML = "inlineXML";
-	static final String TIME_PARSER_KEY_SUTIME = "sutime";
-	static final String TIME_PARSER_FILE_PATH = "NLPTraining/defs.sutime.txt, NLPTraining/english.holidays.sutime.txt, NLPTraining/english.sutime.txt";
-	static final String TIME_PARSER_ARGUMENT_2 = "0";
-	static final String TIME_PARSER_SUTIME_RULES = "sutime.rules";
-	static final String TIME_PARSER_SUTIME_BINDERS = "sutime.binders";
+	public static final String PARSING_STYLE_INLINE_XML = "inlineXML";
+	public static final String TIME_PARSER_KEY_SUTIME = "sutime";
+	public static final String TIME_PARSER_FILE_PATH = "NLPTraining/defs.sutime.txt, NLPTraining/english.holidays.sutime.txt, NLPTraining/english.sutime.txt";
+	public static final String TIME_PARSER_ARGUMENT_2 = "0";
+	public static final String TIME_PARSER_SUTIME_RULES = "sutime.rules";
+	public static final String TIME_PARSER_SUTIME_BINDERS = "sutime.binders";
 
 	// GUI messages that will be shown to users
 	public static final String GUI_MESSAGE_WELCOME = "Welcome to 小鸣的清单(List of Xiao Ming)";
-	public static final String GUI_MESSAGE_SHORTCUT_INSTRUCTION = "ALT + A:\t <DATE> \t </DATE>\n"
-			+ "ALT + C:\t <COMMAND> \t </COMMAND>\n"
-			+ "ALT + D:\t <DESCRIPTION> \t </DESCRIPTION>\n"
-			+ "ALT + I:\t <INDEX> \t </INDEX>\n"
-			+ "ALT + P:\t <PRIORITY> \t </PRIORITY>\n"
-			+ "ALT + T:\t <TAG> \t\t </TAG>\n\n"
-			+ "CTRL + C:\t add\n"
-			+ "CTRL + R:\t display\n"
-			+ "CTRL + U:\t update\n"
-			+ "CTRL + D:\t delete\n"
-			+ "CTRL + F:\t search\n"
-			+ "CTRL + M:\t reload model\n";
 	public static final String GUI_PREVIEW_MESSAGE_DELETE = "Command: delete \n\n"
 			+ "No Task Specified";
 

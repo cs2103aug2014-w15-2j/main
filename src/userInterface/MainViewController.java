@@ -45,8 +45,81 @@ import javafx.stage.Stage;
 
 public class MainViewController extends GridPane implements HotKeyListener {
 
+	private static final String PREVIEW_MESSAGE_COMMAND_READY = "We're ready for your commands!";
+	private static final String TEXT_INSERTED_RELOAD_MODEL = "reload model ";
+	private static final String TEXT_INSERTED_SEARCH = "search ";
+	private static final String TEXT_INSERTED_DELETE = "delete ";
+	private static final String TEXT_INSERTED_UPDATE = "update ";
+	private static final String TEXT_INSERTED_DISPLAY = "display ";
+	private static final String TEXT_INSERTED_ADD = "add ";
+	private static final String PREVIEW_MESSAGE_MODEL_RELOADED = "Model reloaded!";
+	private static final String PREVIEW_MESSAGE_TASK_ALL_TRASHED = "All tasks trashed";
+	private static final String PREVIEW_MESSAGE_SEARCH_ERROR = "SEARCH ERROR";
+	private static final String PREVIEW_MESSAGE_ADD_INITIAL_VALUE = "Command: create \n\n";
+	private static final String PREVIEW_MESSAGE_DELETE_INITIAL_VALUE = "Command: delete \n\n";
+	private static final String PREVIEW_MESSAGE_DELETE_NO_TASK_SPECIFIED = PREVIEW_MESSAGE_DELETE_INITIAL_VALUE + "No Task Specified";
+	private static final String PREVIEW_MESSAGE_DELETE_ALREADY_TRASHED = PREVIEW_MESSAGE_DELETE_INITIAL_VALUE + "All tasks in 'TRASHED' section have been trashed already.";
+	private static final String PREVIEW_MESSAGE_SEARCH_INITIAL_VALUE = "Command: search \n\n";
+	private static final String PREVIEW_MESSAGE_SEARCH_NOT_ALLOWED = "You can only perform search operations under \"ONGOING\", \"FINISHED\" or \"TRASHED\" page";
+	private static final String PREVIEW_MESSAGE_INITIAL_VALUE = "Command: done \n\n";
+	private static final String PREVIEW_MESSAGE_DONE_NO_TASK_SPECIFIED = PREVIEW_MESSAGE_INITIAL_VALUE + "No Task Specified";
+	private static final String PREVIEW_MESSAGE_DONE_TRASHED = PREVIEW_MESSAGE_INITIAL_VALUE + "Move the task out of 'TRASHED' section first to finish it";
+	private static final String PREVIEW_MESSAGE_DONE_FINISHED_ALREADY = PREVIEW_MESSAGE_INITIAL_VALUE + "All tasks in 'FINISHED' section have been finished already";
+	private static final String PREVIEW_MESSAGE_DISPLAY = "Command: display";
+	private static final String PREVIEW_MESSAGE_UNDO = "Command: undo";
+	private static final String PREVIEW_MESSAGE_REDO = "Command: redo";
+	private static final String PREVIEW_MESSAGE_CLEAR = "Command: clear";
+	private static final String PREVIEW_MESSAGE_EXIT = "Command: exit";
+	private static final String PREVIEW_MESSAGE_HELP = "Command: help";
+	private static final String PREVIEW_MESSAGE_EMPTY_TRASH = "Command: empty trash";
+	private static final String PREVIEW_MESSAGE_RELOAD_MODEL = "Command: reload model";
+	private static final String PREVIEW_MESSAGE_DEFAULT = "Command not recognized";
+	private static final String PREVIEW_MESSAGE_RECOVER_INITIAL_VALUE = "Command: recover \n\n";
+	private static final String PREVIEW_MESSAGE_RECOVER_NO_TASK_SPECIFIED = PREVIEW_MESSAGE_RECOVER_INITIAL_VALUE + "No Task Specified";
+	private static final String PREVIEW_MESSAGE_RECOVER_ALREADY_IN_LIST = PREVIEW_MESSAGE_INITIAL_VALUE + "All Tasks here are already in \"ONGOING\" list";
+	private static final String EXCEPTION_MESSAGE_PARSING_FAIL = "Failure in Parsing The Task";
+	private static final String GUI_MESSAGE_PREVIEW_DEFAULT = "The expected result will be shown here";
+	private static final String RESOURCE_EMPTY_IMAGE = "/resource/empty.png";
+	private static final String CSS_STYLE_DISPLAY_CONTENT_BOX = "-fx-padding: 10 0 0 0;";
+	private static final int COLUMN_INDEX_LIST_INDICATOR_BOX = 0;
+	private static final int ROW_INDEX_LIST_INDICATOR_BOX = 1;
+	private static final int COLUMN_INDEX_FEEDBACK_BOX = 0;
+	private static final int ROW_INDEX_FEEDBACK_BOX = 0;
+	private static final String CSS_STYLE_TASK_LIST_DEFAULT = "-fx-background-color: rgba(240, 115, 136, 1);"
+			+ "-fx-padding: 8 16 8 8;"
+			+ Constant.CSS_STYLE_SHADOW;
+	private static final String CSS_STYLE_TASK_LIST_SEARCH = "-fx-background-color: rgba(100, 138, 173, 1);"
+			+ "-fx-padding: 8 16 8 8;"
+			+ Constant.CSS_STYLE_SHADOW;
+	private static final String TASK_LIST_SEARCH = "search";
+	private static final String CSS_STYLE_TASK_LIST_FINISHED = "-fx-background-color: rgba(222, 236, 147, 1);"
+			+ "-fx-padding: 8 16 8 8;"
+			+ Constant.CSS_STYLE_SHADOW;
+	private static final String CSS_STYLE_TASK_LIST_TRASHED = "-fx-background-color: rgba(150, 150, 150, 1);"
+			+ "-fx-padding: 8 16 8 8;"
+			+ Constant.CSS_STYLE_SHADOW;
+	private static final String CSS_STYLE_TASK_LIST_ONGOING = "-fx-background-color: rgba(250, 230, 155, 1);"
+			+ "-fx-padding: 8 16 8 8;"
+			+ Constant.CSS_STYLE_SHADOW;
+	private static final int FONT_SIZE_LIST_LABEL = 50;
+	private static final String FONT_LIST_LABEL = "Akagi";
+	private static final int PREF_WIDTH_OFFSET_LIST_INDICATOR_BOX = 720;
+	private static final int FONT_SIZE_CONSOLE_TEXT_LABEL = 12;
+	private static final String CSS_STYLE_FEEDBACK_BOX = "-fx-background-color: rgba(80, 80, 80, 1);"
+			+ "-fx-padding: 8 8 8 8;" 
+			+ Constant.CSS_STYLE_SHADOW;
+	private static final String CSS_STYLE_CONSOLE_TEXT_LABEL = "-fx-text-fill: white;";
+	private static final String CSS_STYLE_LIST_LABEL = CSS_STYLE_CONSOLE_TEXT_LABEL
+			+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 3, 1);";
+	private static final String FONT_CONSOLE_TEXT_LABEL = "Courier New";
+	private static final int PREF_HEIGHT_FEEDBACK_BOX = 134;
+	private static final int PREF_WIDTH_FEEDBACK_BOX = 650;
+	private static final int PREVIEW_PANE_INNER_GAP = 15;
+	private static final String CSS_STYLE_PREVIEW_PANE_BASE = "-fx-padding: 10 8 8 8;";
+	private static final String CSS_CLASS_NAME = "mylistview";
+	private static final String GUI_MESSAGE_WELCOME = "Welcome to List of Xiao Ming. \nPlease wait for the NLP model loading...";
+	private static final String GUI_MESSAGE_PARSER_LOADING = "NLP MODEL LOADING";
 	private static final String RESOURCE_FXML = "MainView.fxml";
-
 	private static final int FONT_LOAD_SIZE = 10;
 
 	@FXML
@@ -98,7 +171,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			this.loadParser();
 			this.addTextFieldListener();
 			this.initializeShortCuts();
-			this.updatePage();
+			this.updateStartPage();
 			UtilityMethod.makeDraggable(stage, dragNode);
 
 			if (!Constant.ERROR_PRINT_ON) {
@@ -158,13 +231,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	
 	//@author A0119447Y
 	/**
-<<<<<<< HEAD
-	 * load the FXML file, which is used to regulate the view
-	 * 
-=======
 	 * Load the FXML file to render the graphical user interface
-	 *   
->>>>>>> FETCH_HEAD
 	 * @throws IOException
 	 */
 	private void loadFxml() throws IOException {
@@ -177,21 +244,24 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	//@author A0119379R
 	/**
-	 * load the NLP parser in a separate thread
+	 * load the NLP parser in a separate thread to reduce the loading delay
 	 */
 	private void loadParser() {
 		final MainViewController instance = this;
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				instance.updateTextField("NLP MODEL LOADING");
+				instance.updateTextField(GUI_MESSAGE_PARSER_LOADING);
 				instance.parser = new NerParser();
-				instance.updateTextField("");
+				instance.updateTextField(Constant.EMPTY_STRING);
 				instance.updatePreviewLater();
 			}
 		}).start();
 	}
 
+	/**
+	 * initialize the shortcuts in a separate thread
+	 */
 	private void initializeShortCuts() {
 		final MainViewController instance = this;
 		new Thread(new Runnable() {
@@ -211,6 +281,11 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		}).start();
 	}
 
+	/**
+	 * register key shortcuts
+	 * 
+	 * @param instance	a HotKeyListener instance, normally should be 'this'
+	 */
 	private void registerKeyShortCuts(HotKeyListener instance) {
 		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_DESCRIPTION_TAG),instance);
 		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_ADD_DATE_TAG),instance);
@@ -236,15 +311,20 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		keyShortCuts.register(KeyStroke.getKeyStroke(Constant.HOT_KEY_NEXT_COMMAND),instance);
 	}
 
-	private void updatePage() {
-		setPreviewPane(
-				"Welcome to List of Xiao Ming. \nPlease wait for the NLP model loading...",
-				this.getCurrentListName());
-		displayScrollPane.getStyleClass().add("mylistview"); 
+	/**
+	 * update the start page
+	 */
+	private void updateStartPage() {
+		setPreviewPane(GUI_MESSAGE_WELCOME,this.getCurrentListName());
+		displayScrollPane.getStyleClass().add(CSS_CLASS_NAME); 
 		this.help();
-		this.refresh(Constant.TASK_LIST_HELP);
+		this.changeViewTo(Constant.TASK_LIST_HELP);
 	}
 
+	/**
+	 * Apply observer pattern to the input TextField.
+	 * Any time the value changed of inputs, the delegate method will be called
+	 */
 	private void addTextFieldListener() {
 		final MainViewController instance = this;
  
@@ -257,6 +337,9 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		});
 	}
 
+	/**
+	 * this method is used to turn off the System.err PrintStream
+	 */
 	private void silentErrorStream() {
 		System.setErr(new PrintStream(new OutputStream() {
 			public void write(int b) {
@@ -286,59 +369,53 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	}
 	
 	//@author A0119379R
+	/**
+	 * set the content of preview pane
+	 * 
+	 * @param textToDisplay		the new text the 'console' need to display
+	 * @param listName			the new list name
+	 */
 	public void setPreviewPane(String textToDisplay, String listName) {
 		GridPane previewContentPane = new GridPane();
-		previewContentPane.setStyle("-fx-padding: 10 8 8 8;");
-		previewContentPane.setHgap(15);
+		previewContentPane.setStyle(CSS_STYLE_PREVIEW_PANE_BASE);
+		previewContentPane.setHgap(PREVIEW_PANE_INNER_GAP);
 
 		VBox parsingFeedbackBox = new VBox();
-		parsingFeedbackBox.setPrefWidth(650);
-		parsingFeedbackBox.setPrefHeight(134);
+		parsingFeedbackBox.setPrefWidth(PREF_WIDTH_FEEDBACK_BOX);
+		parsingFeedbackBox.setPrefHeight(PREF_HEIGHT_FEEDBACK_BOX);
 
+		//set the consoleTextLabel
 		consoleTextLabel = new Label(textToDisplay);
-		consoleTextLabel.setFont(Font.font("Courier New", FontWeight.BOLD, 12));
-		consoleTextLabel.setStyle("-fx-text-fill: white;");
-		parsingFeedbackBox.setStyle("-fx-background-color: rgba(80, 80, 80, 1);"
-				+ "-fx-padding: 8 8 8 8;" 
-				+ Constant.CSS_STYLE_SHADOW);
+		consoleTextLabel.setFont(Font.font(FONT_CONSOLE_TEXT_LABEL, FontWeight.BOLD, FONT_SIZE_CONSOLE_TEXT_LABEL));
+		consoleTextLabel.setStyle(CSS_STYLE_CONSOLE_TEXT_LABEL);
+		parsingFeedbackBox.setStyle(CSS_STYLE_FEEDBACK_BOX);
 		parsingFeedbackBox.getChildren().add(consoleTextLabel);
 
 		VBox listIndicatorBox = new VBox();
 		listIndicatorBox.setAlignment(Pos.BOTTOM_RIGHT);
-		listIndicatorBox.setPrefWidth(getWidth() - 720);
+		listIndicatorBox.setPrefWidth(getWidth() - PREF_WIDTH_OFFSET_LIST_INDICATOR_BOX);
 		Label listLabel = new Label(listName.toUpperCase());
-		listLabel.setFont(Font.font("Akagi", FontWeight.EXTRA_BOLD, 50));
-
-		listLabel.setStyle( "-fx-text-fill: white;"
-				+ "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 5, 0.1, 3, 1);");
+		listLabel.setFont(Font.font(FONT_LIST_LABEL, FontWeight.EXTRA_BOLD, FONT_SIZE_LIST_LABEL));
+		listLabel.setStyle(CSS_STYLE_LIST_LABEL);
 		
+		//set different styles according to the list name
 		if (listName.equalsIgnoreCase(Constant.TASK_LIST_ONGOING)) {
-			listIndicatorBox.setStyle("-fx-background-color: rgba(250, 230, 155, 1);"
-					+ "-fx-padding: 8 16 8 8;"
-					+ Constant.CSS_STYLE_SHADOW);
+			listIndicatorBox.setStyle(CSS_STYLE_TASK_LIST_ONGOING);
 		} else if (listName.equalsIgnoreCase(Constant.TASK_LIST_TRASHED)) {
-			listIndicatorBox.setStyle("-fx-background-color: rgba(150, 150, 150, 1);"
-					+ "-fx-padding: 8 16 8 8;"
-					+ Constant.CSS_STYLE_SHADOW);
+			listIndicatorBox.setStyle(CSS_STYLE_TASK_LIST_TRASHED);
 		} else if (listName.equalsIgnoreCase(Constant.TASK_LIST_FINISHED)){
-			listIndicatorBox.setStyle("-fx-background-color: rgba(222, 236, 147, 1);"
-					+ "-fx-padding: 8 16 8 8;"
-					+ Constant.CSS_STYLE_SHADOW);
-		} else if (listName.equals("search")){
-			listIndicatorBox.setStyle("-fx-background-color: rgba(100, 138, 173, 1);"
-					+ "-fx-padding: 8 16 8 8;"
-					+ Constant.CSS_STYLE_SHADOW);
-
+			listIndicatorBox.setStyle(CSS_STYLE_TASK_LIST_FINISHED);
+		} else if (listName.equals(TASK_LIST_SEARCH)){
+			listIndicatorBox.setStyle(CSS_STYLE_TASK_LIST_SEARCH);
 		} else {
-			listIndicatorBox.setStyle("-fx-background-color: rgba(240, 115, 136, 1);"
-					+ "-fx-padding: 8 16 8 8;"
-					+ Constant.CSS_STYLE_SHADOW);
+			listIndicatorBox.setStyle(CSS_STYLE_TASK_LIST_DEFAULT);
 		}
 
 		listIndicatorBox.getChildren().add(listLabel);
 
-		previewContentPane.add(parsingFeedbackBox, 0, 0);
-		previewContentPane.add(listIndicatorBox, 1, 0);
+		//Add the two boxes into the pane
+		previewContentPane.add(parsingFeedbackBox, ROW_INDEX_FEEDBACK_BOX, COLUMN_INDEX_FEEDBACK_BOX);
+		previewContentPane.add(listIndicatorBox, ROW_INDEX_LIST_INDICATOR_BOX, COLUMN_INDEX_LIST_INDICATOR_BOX);
 
 		previewScrollPane.setStyle(Constant.CSS_STYLE_PREVIEW_SCROLL_PANE);
 		previewScrollPane.setContent(previewContentPane);
@@ -373,23 +450,22 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			// task list is empty, nothing to display
 			this.loadPreview();
 		} else {
-			VBox displayContent = new VBox();
-			displayContent.setStyle("-fx-padding: 10 0 0 0;");
-			displayContent.setAlignment(Pos.CENTER);
+			VBox displayContentBox = new VBox();
+			displayContentBox.setStyle(CSS_STYLE_DISPLAY_CONTENT_BOX);
+			displayContentBox.setAlignment(Pos.CENTER);
 			GridPane taskPane = LayoutManager.getTaskPane(taskList, getWidth());
-
-			System.out.println("taskPane width: " + taskPane.getWidth());
-			displayContent.getChildren().add(taskPane);
-			displayScrollPane.setContent(displayContent);
+			displayContentBox.getChildren().add(taskPane);
+			displayScrollPane.setContent(displayContentBox);
 		}
 	}
 
 	//@author A0119379R
 	/**
 	 * insert the given text to the given position in the textField
+	 * UI updating performed in a new thread
 	 * 
-	 * @param cursorPosition
-	 * @param text
+	 * @param cursorPosition	an integer representation the cursor position
+	 * @param text				a string indicating the text that will be inserted
 	 */
 	private void insertTextIntoTextField(final int cursorPosition,
 			final String text) {
@@ -415,6 +491,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			@Override
 			public void run() {
 				if (text == null) {
+					//clear the input
 					instance.input.deleteText(0, instance.input.getText()
 							.length());
 					;
@@ -430,19 +507,20 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	/**
 	 * toggle between e.g. <DATE> & </DATE>
 	 * 
-	 * @param tag
-	 * @return
+	 * @param tag	"<DATE>" or </DATE> in the above example
+	 * @return		<tag> or </tag>  
 	 */
 	private String toggleTag(String tag) {
-		if (tag.contains("</")) {
-			return tag.replace("</", "<");
+		if (tag.contains(Constant.TAG_OPEN_LATTER)) {
+			return tag.replace(Constant.TAG_OPEN_LATTER, Constant.TAG_OPEN_FORMER);
 		} else {
-			return tag.replace("<", "</");
+			return tag.replace(Constant.TAG_OPEN_FORMER, Constant.TAG_OPEN_LATTER);
 		}
-
 	}
 
-	//@author A0119379R
+	/**
+	 * load the real time parsing result to the preview pane
+	 */
 	private void loadPreview() {
 		// open a new thread to execute Java FX
 		final MainViewController instance = this;
@@ -462,10 +540,20 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		});
 	}
 
+	/**
+	 * get the console label text
+	 * 
+	 * @return	a string representing the console label text
+	 */
 	protected String getConsoleText() {
 		return this.consoleTextLabel.getText();
 	}
 
+	/**
+	 * set the text of console
+	 * 
+	 * @param textToDisplay		the new text needed to be set
+	 */
 	public void setConsoleText (final String textToDisplay) {
 		final MainViewController instance = this;
 		Platform.runLater(new Runnable() {
@@ -493,11 +581,15 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	}
 
 	//@author A0119379R
+	/**
+	 * load an empty list indicating image
+	 * the image will be shown when current list is empty
+	 */
 	private void loadEmptyImage() {
 		HBox emptyImageBox = new HBox();
 		emptyImageBox.setPrefHeight(200);
 		emptyImageBox.setAlignment(Pos.CENTER_RIGHT);
-		Image emptyImage = new Image(getClass().getResourceAsStream("/resource/empty.png"));
+		Image emptyImage = new Image(getClass().getResourceAsStream(RESOURCE_EMPTY_IMAGE));
 		ImageView emptyImageView = new ImageView(emptyImage);
 		emptyImageView.fitHeightProperty().bind(emptyImageBox.heightProperty());
 		emptyImageBox.getChildren().add(emptyImageView);
@@ -505,8 +597,11 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	}
 
 	//@author A0119444E
+	/**
+	 * only show scroll bar when users scrolling
+	 */
 	private void setDisplayScrollbarStyle() {
-		displayScrollPane.getStyleClass().add("mylistview");
+		displayScrollPane.getStyleClass().add(CSS_CLASS_NAME);
 		displayScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 
 		displayScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
@@ -533,20 +628,25 @@ public class MainViewController extends GridPane implements HotKeyListener {
  */
 
 	//@author A0119379R
+	/**
+	 * The main method to execute user input
+	 * 
+	 * @param userInput		an unparsed user input string
+	 */
 	public void execute(String userInput) {
 
 		updateTsv(userInput);
 
 		COMMAND_TYPE thisCommand;
 		try {
-			if (userInput.equals("")) {
+			if (userInput.equals(Constant.EMPTY_STRING)) {
 				return;
 			}
 
-			thisCommand = this.parser.pickCommand(userInput
-					.toLowerCase());
-			System.err.println("CMD - executeNER: " + thisCommand);
+			//pick the command
+			thisCommand = this.parser.pickCommand(userInput.toLowerCase());
 
+			//demux and execute the command
 			switch(thisCommand) {
 				case ADD :
 					performAdd(userInput);
@@ -613,23 +713,27 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		}
 	}
 
-	//@author A0119379R
+	/**
+	 * The main method to get real time preview
+	 * 
+	 * @param userInput		an unparsed user input string
+	 * @return				a string to show in the preview pane
+	 */
 	public String getPreview(String userInput) {
 		try {
 			
-			if (userInput.equals("") || (userInput == null)) {
-				return "The expected result will be shown here";
+			if (userInput.equals(Constant.EMPTY_STRING) || (userInput == null)) {
+				return GUI_MESSAGE_PREVIEW_DEFAULT;
 			}
 			
 			if (this.parser == null) {
-				return "";
+				return Constant.EMPTY_STRING;
 			}
 
-			COMMAND_TYPE thisCommand = this.parser
-					.pickCommand(userInput.toLowerCase());
-			System.err.println("CMD - getPreview: " + thisCommand);
-
+			//pick the command
+			COMMAND_TYPE thisCommand = this.parser.pickCommand(userInput.toLowerCase());
 		
+			//get the preview
 			switch(thisCommand) {
 				case ADD :
 					return getAddPreview(userInput);
@@ -678,12 +782,12 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			}		
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
-			return "Failure in Parsing The Task";
+			return EXCEPTION_MESSAGE_PARSING_FAIL;
 		}
 	}
 /**
  * ==========================================================================
- *  Specific methods to perform action
+ *  Specific methods to perform action, the names self-explain their use
  * ==========================================================================
  */
 
@@ -708,7 +812,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	
 	private void performHelp() {
 		this.help();
-		refresh(Constant.TASK_LIST_HELP);
+		changeViewTo(Constant.TASK_LIST_HELP);
 	}
 	
 	private void performExit() {
@@ -733,14 +837,14 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	}
 	
 	private void performDisplay() {
-		refresh(Constant.TASK_LIST_ONGOING);
+		changeViewTo(Constant.TASK_LIST_ONGOING);
 	}
 	
 	private void performSearch(String userInput) {
 		ArrayList<Task> queryList = this.search(userInput);
 		if (queryList != null) {
 			setDisplayPane(queryList);
-			refresh(Constant.TASK_LIST_SEARCH);
+			changeViewTo(Constant.TASK_LIST_SEARCH);
 		}
 	}
 	
@@ -765,19 +869,18 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 /**
  * ==========================================================================
- *  Specific methods to get previews
+ *  Specific methods to get previews, the names self-explain their use
  * ==========================================================================
  */
 	
-	//@author A0119379R
 	private String getRecoverPreview(String userInput) {
 		try {
 			if (this.getCurrentListName().equals(Constant.TASK_LIST_ONGOING)) {
-				return "Command: done \n\n" + "All Tasks here are already in \"TODO\" list";
+				return PREVIEW_MESSAGE_RECOVER_ALREADY_IN_LIST;
 			}
 			
 			ArrayList<Integer> indices = parser.pickIndex(userInput);
-			String returnValue = "Command: recover \n\n";
+			String returnValue = PREVIEW_MESSAGE_RECOVER_INITIAL_VALUE;
 
 			for (int index : indices) {
 				if (this.getCurrentListName().equals(Constant.TASK_LIST_FINISHED)) {
@@ -791,66 +894,56 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			return returnValue;
 		} catch (CommandFailedException de) {
 			de.printStackTrace();
-			return "Command: recover \n\n" + "No Task Specified";
+			return PREVIEW_MESSAGE_RECOVER_NO_TASK_SPECIFIED;
 		}
 	}
 	
-	//@author A0119379R
 	private String getDefaultPreview() {
-		return "Command not recognized";
+		return PREVIEW_MESSAGE_DEFAULT;
 	}
 
-	//@author A0119379R
 	private String getReloadPreview() {
-		return "Command: reload model";
+		return PREVIEW_MESSAGE_RELOAD_MODEL;
 	}
 
-	//@author A0119379R
 	private String getEmptyTrashPreview() {
-		return "Command: empty trash";
+		return PREVIEW_MESSAGE_EMPTY_TRASH;
 	}
 
-	//@author A0119379R
 	private String getHelpPreview() {
-		return "Command: help";
+		return PREVIEW_MESSAGE_HELP;
 	}
 
-	//@author A0119379R
 	private String getExitPreview() {
-		return "Command: exit";
+		return PREVIEW_MESSAGE_EXIT;
 	}
 
-	//@author A0119379R
 	private String getClearPreview() {
-		return "Command: clear";
+		return PREVIEW_MESSAGE_CLEAR;
 	}
 
-	//@author A0119379R
 	private String getRedoPreview() {
-		return "Command: redo";
+		return PREVIEW_MESSAGE_REDO;
 	}
 
-	//@author A0119379R
 	private String getUndoPreview() {
-		return "Command: undo";
+		return PREVIEW_MESSAGE_UNDO;
 	}
 
-	//@author A0119379R
 	private String getDisplayPreview() {
-		return "Command: display";
+		return PREVIEW_MESSAGE_DISPLAY;
 	}
 
-	//@author A0119379R
 	private String getDonePreview(String userInput) {
 		try {
 			if (this.getCurrentListName().equals(Constant.TASK_LIST_FINISHED)) {
-				return "Command: done \n\n" + "All tasks in 'FINISHED' section have been finished already";
+				return PREVIEW_MESSAGE_DONE_FINISHED_ALREADY;
 			} else if (this.getCurrentListName().equals(Constant.TASK_LIST_TRASHED)) {
-				return "Command: done \n\n" + "Move the task out of 'TRASHED' section first to finish it";
+				return PREVIEW_MESSAGE_DONE_TRASHED;
 			}
 			
 			ArrayList<Integer> indices = parser.pickIndex(userInput);
-			String returnValue = "Command: done \n\n";
+			String returnValue = PREVIEW_MESSAGE_INITIAL_VALUE;
 
 			for (int index : indices) {
 				Task taskToFinish = this.user.retrieveFromNormalList(index - 1);
@@ -858,22 +951,20 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			}
 			return returnValue;
 		} catch (CommandFailedException de) {
-			return "Command: done \n\n" + "No Task Specified";
+			return PREVIEW_MESSAGE_DONE_NO_TASK_SPECIFIED;
 		}
 	}
 
-	//@author A0119379R
 	private String getSearchPreview(String userInput) {
 		if (this.getCurrentListName() != Constant.TASK_LIST_FINISHED &&
 				this.getCurrentListName() != Constant.TASK_LIST_ONGOING &&
 				this.getCurrentListName() != Constant.TASK_LIST_TRASHED) {
-			return "You can only perform search operations under \"TODO\", \"FINISHED\" or \"TRASHED\" page";
+			return PREVIEW_MESSAGE_SEARCH_NOT_ALLOWED;
 		}
 		Constraint thisConstraint = parser.getConstraint(userInput);
-		return "Command: search \n\n" + thisConstraint.toString();
+		return PREVIEW_MESSAGE_SEARCH_INITIAL_VALUE + thisConstraint.toString();
 	}
 
-	//@author A0119379R
 	private String getUpdatePreview(String userInput) {
 		try {
 			if (!this.getCurrentListName().equals(Constant.TASK_LIST_ONGOING)) {
@@ -892,15 +983,14 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		}
 	}
 
-	//@author A0119379R
 	private String getDeletePreview(String userInput) {
 		try {
 			if (this.getCurrentListName().equals(Constant.TASK_LIST_TRASHED)) {
-				return "Command: delete \n\n" + "All tasks in 'TRASHED' section have been trashed already.";
+				return PREVIEW_MESSAGE_DELETE_ALREADY_TRASHED;
 			}
 			
 			ArrayList<Integer> indices = parser.pickIndex(userInput);
-			String returnValue = "Command: delete \n\n";
+			String returnValue = PREVIEW_MESSAGE_DELETE_INITIAL_VALUE;
 
 			for (int index : indices) {
 				Task taskToDelete = this.user.retrieve(index - 1, this.getCurrentListName());
@@ -908,22 +998,20 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			}
 			return returnValue;
 		} catch (CommandFailedException de) {
-			return "Command: delete \n\n" + "No Task Specified";
+			return PREVIEW_MESSAGE_DELETE_NO_TASK_SPECIFIED;
 		}
 	}
 
-	//@author A0119379R
 	private String getAddPreview(String userInput) {
 		Task taskToAdd = parser.getTask(userInput);
-		return "Command: create \n\n" + taskToAdd.toStringForDisplaying();
+		return PREVIEW_MESSAGE_ADD_INITIAL_VALUE + taskToAdd.toStringForDisplaying();
 	}
 
 /**
- * ==========================================================================
- * Methods to be called by the above actions performing methods
- * ==========================================================================
+ * =================================================================================================
+ * Methods to be called by the above actions performing methods, the names self-explain their use
+ * =================================================================================================
  */
-	//@author A0119379R
 	private String add(String userInput) {
 		Task taskToAdd = parser.getTask(userInput);
 		assert (taskToAdd != null);
@@ -931,20 +1019,19 @@ public class MainViewController extends GridPane implements HotKeyListener {
 				: Constant.PROMPT_MESSAGE_ADD_TASK_FAILED;
 	}
 
-	//@author A0119379R
 	private String delete(String userInput) {
 		try {
 			ArrayList<Integer> indices = parser.pickIndex(userInput);
 			Collections.sort(indices);
 			int offset = 0;
 			boolean isAllSucceeded = true;
-			String returnValue = "";
+			String returnValue = Constant.EMPTY_STRING;
 			for (int index : indices) {
 				try {
 					boolean isThisSucceeded = this.user.delete(index - offset - 1, this.getCurrentListName());
 
 					if (!isThisSucceeded) {
-						returnValue += (Constant.PROMPT_MESSAGE_DELETE_TASK_FAILED + " for task " + index);
+						returnValue += (Constant.PROMPT_MESSAGE_DELETE_TASK_FAILED + ": " + index);
 					}
 					isAllSucceeded &= isThisSucceeded;
 					offset++;
@@ -961,7 +1048,6 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		}
 	}
 
-	//@author A0119379R
 	private String done(String userInput) {
 		try {
 			ArrayList<Integer> indices = parser.pickIndex(userInput);
@@ -973,7 +1059,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 				try {
 					boolean isThisSucceeded = this.user.done(index - offset - 1);
 					if (!isThisSucceeded) {
-						returnValue += (Constant.PROMPT_MESSAGE_DONE_TASK_FAILED + " for task " + index);
+						returnValue += (Constant.PROMPT_MESSAGE_DONE_TASK_FAILED + ": " + index);
 					}
 					isAllSucceeded &= isThisSucceeded;
 					offset++;
@@ -990,7 +1076,6 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		}
 	}
 	
-	//@author A0119379R
 	private String update(String userInput) {
 		try {
 			int index = parser.pickIndex(userInput).get(0);
@@ -1004,14 +1089,13 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		return Constant.PROMPT_MESSAGE_UPDATE_TASK_SUCCESSFULLY;
 	}
 
-	//@author A0119379R
 	private ArrayList<Task> search(String userInput) {
 		Constraint thisConstraint;
 		try {
 			if (this.getCurrentListName() != Constant.TASK_LIST_FINISHED &&
 					this.getCurrentListName() != Constant.TASK_LIST_ONGOING &&
 					this.getCurrentListName() != Constant.TASK_LIST_TRASHED) {
-				setConsoleText("You can only perform search operation under \"TODO\", \"FINISHED\" or \"TRASHED\" page");
+				setConsoleText(PREVIEW_MESSAGE_SEARCH_NOT_ALLOWED);
 				return null;
 			}
 			thisConstraint = parser.getConstraint(userInput);
@@ -1024,32 +1108,29 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			}
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
-			setConsoleText("SEARCH ERROR");
+			setConsoleText(PREVIEW_MESSAGE_SEARCH_ERROR);
 			e.printStackTrace();
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
-			setConsoleText("SEARCH ERROR");
+			setConsoleText(PREVIEW_MESSAGE_SEARCH_ERROR);
 			e.printStackTrace();
 			return null;
 		}
 
 	}
 
-	//@author A0119379R
-	private ArrayList<Task> displayNormal() {
+	private ArrayList<Task> displayOngoingList() {
 		ArrayList<Task> queryResult;
 		try {
 			queryResult = this.user.getOngoingTaskList();
 			if (queryResult.isEmpty()) {
-				System.out.println("displaying image");
 				this.loadEmptyImage();
 				return null;
 			} else {
 				return queryResult;
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			setConsoleText(Constant.PROMPT_MESSAGE_DISPLAY_ERROR);
 			return null;
@@ -1057,12 +1138,10 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	}
 
 	//@author A0119447Y
-	private ArrayList<Task> displayTrashed() {
+	private ArrayList<Task> displayTrashedList() {
 		ArrayList<Task> queryResult;
 		try {
 			queryResult = this.user.getTrashedTaskList();
-			System.out.println("displayTrashed queryResult length: "
-					+ this.user.currentTasks.getTrashedTasks().size());
 			if (queryResult.isEmpty()) {
 				setDisplayText(Constant.PROMPT_MESSAGE_DISPLAY_EMPTY_TASK);
 				// TODO: create a box for empty list
@@ -1071,15 +1150,13 @@ public class MainViewController extends GridPane implements HotKeyListener {
 				return queryResult;
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			setConsoleText(Constant.PROMPT_MESSAGE_DISPLAY_ERROR);
 			return null;
 		}
 	}
 
-	//@author A0119447Y
-	private ArrayList<Task> displayFinished() {
+	private ArrayList<Task> displayFinishedList() {
 		ArrayList<Task> queryResult;
 		try {
 			queryResult = this.user.getFinishedTaskList();
@@ -1091,7 +1168,6 @@ public class MainViewController extends GridPane implements HotKeyListener {
 				return queryResult;
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			setConsoleText(Constant.PROMPT_MESSAGE_DISPLAY_ERROR);
 			return null;
@@ -1104,24 +1180,21 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		return Constant.PROMPT_MESSAGE_TRASH_EMPTIED;
 	}
 
-	//@author A0119379R
 	private void help() {
 		VBox helpBox = LayoutManager.getHelpBox();
 		this.displayScrollPane.setContent(helpBox);
 	}
 
-	//@author A0119379R
 	private String clear() {
 		try {
 			this.user.deleteAll(this.getCurrentListName());
-			return "All tasks trashed";
+			return PREVIEW_MESSAGE_TASK_ALL_TRASHED;
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
 			return e.toString();
 		}
 	}
 
-	//@author A0119379R
 	private String undo() {
 		try {
 			this.user.undo();
@@ -1132,7 +1205,6 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		}
 	}
 
-	//@author A0119379R
 	private String redo() {
 		try {
 			this.user.redo();
@@ -1143,14 +1215,12 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		}
 	}
 
-	//@author A0119379R
 	private String reloadNLPModel() {
 		NerParser.updateModal();
 		this.parser = new NerParser();
-		return "Model reloaded!";
+		return PREVIEW_MESSAGE_MODEL_RELOADED;
 	}
 
-	//@author A0119379R
 	private String recover(String userInput) {
 		try {
 			ArrayList<Integer> indices = parser.pickIndex(userInput);
@@ -1162,7 +1232,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 				try {
 					boolean isThisSucceeded = this.user.recover(index - offset - 1, this.getCurrentListName());
 					if (!isThisSucceeded) {
-						returnValue += (Constant.PROMPT_MESSAGE_DONE_TASK_FAILED + " for task " + index);
+						returnValue += (Constant.PROMPT_MESSAGE_DONE_TASK_FAILED + ": " + index);
 					}
 					isAllSucceeded &= isThisSucceeded;
 					offset++;
@@ -1232,37 +1302,37 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			break;
 
 		case KeyEvent.VK_C + Constant.MODIFIER_CTRL:
-			insertTextIntoTextField(cursorPosition, "add ");
+			insertTextIntoTextField(cursorPosition, TEXT_INSERTED_ADD);
 			break;
 
 		case KeyEvent.VK_R + Constant.MODIFIER_CTRL:
-			insertTextIntoTextField(cursorPosition, "display ");
+			insertTextIntoTextField(cursorPosition, TEXT_INSERTED_DISPLAY);
 			break;
 
 		case KeyEvent.VK_U + Constant.MODIFIER_CTRL:
-			insertTextIntoTextField(cursorPosition, "update ");
+			insertTextIntoTextField(cursorPosition, TEXT_INSERTED_UPDATE);
 			break;
 
 		case KeyEvent.VK_D + Constant.MODIFIER_CTRL:
-			insertTextIntoTextField(cursorPosition, "delete ");
+			insertTextIntoTextField(cursorPosition, TEXT_INSERTED_DELETE);
 			break;
 
 		case KeyEvent.VK_F + Constant.MODIFIER_CTRL:
-			insertTextIntoTextField(cursorPosition, "search ");
+			insertTextIntoTextField(cursorPosition, TEXT_INSERTED_SEARCH);
 			break;
 
 		case KeyEvent.VK_M + Constant.MODIFIER_CTRL:
-			insertTextIntoTextField(cursorPosition, "reload model ");
+			insertTextIntoTextField(cursorPosition, TEXT_INSERTED_RELOAD_MODEL);
 			break;
 
 		case KeyEvent.VK_BACK_SPACE + Constant.MODIFIER_CTRL:
 			String inputString = (String) input.getCharacters();
 			insertTextIntoTextField(cursorPosition,
-					inputString.substring(0, inputString.lastIndexOf(" ")));
+					inputString.substring(0, inputString.lastIndexOf(Constant.SPLITOR_SPACE)));
 			break;
 
 		case KeyEvent.VK_1 + Constant.MODIFIER_CTRL:
-			changeToToDoList();
+			changeToOngoingList();
 			break;
 
 		case KeyEvent.VK_2 + Constant.MODIFIER_CTRL:
@@ -1307,20 +1377,20 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 /**
  * ==========================================================================
- * methods that related to view changing
+ * methods that related to view changing, the names explain their uses
  * ==========================================================================
  */	
 	
 	//@author A0119379R
-	private void changeToToDoList() {
+	private void changeToOngoingList() {
 		final MainViewController instance = this;
 		Platform.runLater(new Runnable() {
 			
 			@Override
 	        public void run() {
-	        	instance.setDisplayPane(instance.displayNormal());
+	        	instance.setDisplayPane(instance.displayOngoingList());
 	        	instance.currentListName = Constant.TASK_LIST_ONGOING;
-	        	instance.refresh(Constant.TASK_LIST_ONGOING);
+	        	instance.changeViewTo(Constant.TASK_LIST_ONGOING);
 	        }
 	   });
 	}
@@ -1330,9 +1400,9 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		Platform.runLater(new Runnable() {
 	        @Override
 	        public void run() {
-	        	instance.setDisplayPane(instance.displayTrashed());
+	        	instance.setDisplayPane(instance.displayTrashedList());
 	        	instance.currentListName = Constant.TASK_LIST_TRASHED;
-	        	instance.refresh(Constant.TASK_LIST_TRASHED);
+	        	instance.changeViewTo(Constant.TASK_LIST_TRASHED);
 	        }
 	   });
 	}
@@ -1342,9 +1412,9 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		Platform.runLater(new Runnable() {
 	        @Override
 	        public void run() {
-	        	instance.setDisplayPane(instance.displayFinished());
+	        	instance.setDisplayPane(instance.displayFinishedList());
 	        	instance.currentListName = Constant.TASK_LIST_FINISHED;
-	        	instance.refresh(Constant.TASK_LIST_FINISHED);
+	        	instance.changeViewTo(Constant.TASK_LIST_FINISHED);
 	        }
 	   });
 		
@@ -1356,7 +1426,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	        @Override
 	        public void run() {
 	        	instance.help();
-	        	instance.refresh(Constant.TASK_LIST_HELP);
+	        	instance.changeViewTo(Constant.TASK_LIST_HELP);
 	        }
 	   });
 		
@@ -1367,29 +1437,28 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				instance.setPreviewPane("We're ready for your commands!",
-						instance.getCurrentListName());
+				instance.setPreviewPane(PREVIEW_MESSAGE_COMMAND_READY,instance.getCurrentListName());
 			}
 		});
 
 	}
 	
-	private void refresh(String listName) {
+	private void changeViewTo(String listName) {
 		this.currentListName = listName;
 		switch(listName) {
 			case Constant.TASK_LIST_ONGOING:
 				this.setPreviewPane(this.getConsoleText(), Constant.TASK_LIST_ONGOING);
-				this.setDisplayPane(this.displayNormal());
+				this.setDisplayPane(this.displayOngoingList());
 				break;
 				
 			case Constant.TASK_LIST_FINISHED:
 				this.setPreviewPane(this.getConsoleText(), Constant.TASK_LIST_FINISHED);
-				this.setDisplayPane(this.displayFinished());
+				this.setDisplayPane(this.displayFinishedList());
 				break;
 				
 			case Constant.TASK_LIST_TRASHED:
 				this.setPreviewPane(this.getConsoleText(), Constant.TASK_LIST_TRASHED);
-				this.setDisplayPane(this.displayTrashed());
+				this.setDisplayPane(this.displayTrashedList());
 				break;
 				
 			case Constant.TASK_LIST_SEARCH:
@@ -1401,16 +1470,20 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	}
 	
 	private void refreshCurrentList() {
-		this.refresh(this.getCurrentListName());
+		this.changeViewTo(this.getCurrentListName());
 	}
 	
 /**
  * ==========================================================================
  * other methods
  * ==========================================================================
- */		
+ */	
+	/**
+	 * update the model training file according to the given user input
+	 * @param userInput
+	 */
 	private void updateTsv(String userInput) {
-		if (!userInput.equals("")) {
+		if (!userInput.equals(Constant.EMPTY_STRING)) {
 			try {
 				NerParser.updateTsvFile(userInput);
 			} catch (IOException e1) {
