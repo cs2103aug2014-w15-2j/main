@@ -507,9 +507,8 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	/**
 	 * ========================================================================
-	 * ========================== Demux methods
-	 * ==================================
-	 * ================================================================
+	 * Demux methods
+	 * ========================================================================
 	 */
 
 	//@author A0119379R
@@ -554,8 +553,8 @@ public class MainViewController extends GridPane implements HotKeyListener {
 					ArrayList<Task> queryList = this.search(userInput);
 					if (queryList != null) {
 						setDisplayPane(queryList);
+						refresh(Constant.TASK_LIST_SEARCH);
 					}
-					refresh(Constant.TASK_LIST_SEARCH);
 					break;
 				
 				case DISPLAY:
@@ -797,6 +796,11 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 	//@author A0119379R
 	private String getSearchPreview(String userInput) {
+		if (this.getCurrentListName() != Constant.TASK_LIST_FINISHED &&
+				this.getCurrentListName() != Constant.TASK_LIST_TODO &&
+				this.getCurrentListName() != Constant.TASK_LIST_TRASHED) {
+			return "You can only perform search operations under \"TODO\", \"FINISHED\" or \"TRASHED\" page";
+		}
 		Constraint thisConstraint = parser.getConstraint(userInput);
 		return "Command: search \n\n" + thisConstraint.toString();
 	}
@@ -934,6 +938,12 @@ public class MainViewController extends GridPane implements HotKeyListener {
 	private ArrayList<Task> search(String userInput) {
 		Constraint thisConstraint;
 		try {
+			if (this.getCurrentListName() != Constant.TASK_LIST_FINISHED &&
+					this.getCurrentListName() != Constant.TASK_LIST_TODO &&
+					this.getCurrentListName() != Constant.TASK_LIST_TRASHED) {
+				setConsoleText("You can only perform search operation under \"TODO\", \"FINISHED\" or \"TRASHED\" page");
+				return null;
+			}
 			thisConstraint = parser.getConstraint(userInput);
 			ArrayList<Task> queryResult = this.user.find(thisConstraint, this.getCurrentListName());
 			if (queryResult.isEmpty()) {
