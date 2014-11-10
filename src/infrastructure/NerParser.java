@@ -34,61 +34,6 @@ import java.util.logging.Level;
 import model.*;
 
 public class NerParser {
-	private static final int XML_STRING_MIN_LENGTH = 5;
-	private static final String DEADLINE_INDICATOR_BEFORE = "before";
-	private static final String DEADLINE_INDICATOR_TILL = "till";
-	private static final String DEADLINE_INDICATOR_UNTIL = "until";
-	private static final String DEADLINE_INDICATOR_BY = "by";
-	private static final int DATE_SIZE_THREE = 3;
-	private static final int DATE_SIZE_TWO = 2;
-	private static final int DATE_SIZE_ONE = 1;
-	private static final String EXCEPTION_MESSAGE_INVALID_TIME_INTERVAL_ARGUMENT = "parseTimeInterval: more than three date recieved";
-	private static final int DATE_SPECIAL_CHAR_T_INDEX = 10;
-	private static final String DATE_SPECIAL_CHAR_T_STRING = "T";
-	private static final char DATE_SPECIAL_CHAR_T = 'T';
-	private static final String DATE_SPECIAL_CHAR_W = "W";
-	private static final int DATE_STRING_LENGTH_MINUTE = 16;
-	private static final int DATE_STRING_LENGTH_WEEK = 11;
-	private static final int DATE_STRING_LENGTH_BASE = 10;
-	private static final int DATE_STRING_LENGTH_MONTH = 7;
-	private static final int DATE_STRING_LENGTH_YEAR = 4;
-	private static final String DATE_FORMAT_MINUTE = "yyyy-MM-dd HH:mm";
-	private static final String DATE_FORMAT_WEEK = "yyyy-MM-ww";
-	private static final String DATE_FORMAT_YEAR_MONTH = "yyyy-MM";
-	private static final String DATE_FORMAT_YEAR = "yyyy";
-	private static final int CALENDAR_INCREMENT_ONE = 1;
-	private static final int CALENDAR_WEEK_START_DAY_OFFSET = 1;
-	private static final String DATE_FORMAT_BASE = "yyyy-MM-dd";
-	private static final String TASK_TAG_DEFAULT = "ongoing";
-	private static final String SPLITOR_TAB = "\t";
-	private static final String TAG_CLOSE_SPACE = "> ";
-	private static final String TAG_OPEN_FORMER_SPACE = " <";
-	private static final String SPLITOR_DOT = "\\.";
-	private static final String EMPTY_STRING = "";
-	private static final String TAG_OPEN_LATTER = "</";
-	private static final String TAG_CLOSE = ">";
-	private static final String TAG_OPEN_FORMER = "<";
-	private static final int LIST_INDEX_NOT_EXISTING = -1;
-	private static final String EXCEPTION_MESSAGE_INDEX_NOT_PARSABLE = "index not parsable";
-	private static final int LIST_SIZE_EMPTY = 0;
-	private static final int LIST_INDEX_FIRST = 0;
-	private static final int CALENDAR_END_MINUTE = 59;
-	private static final int CALENDAR_END_HOUR = 23;
-	private static final int CALENDAR_START_MINUTE = 0;
-	private static final int CALENDAR_START_HOUR = 0;
-	private static final String SPLITOR_SPACE = " ";
-	private static final String SPLITOR_COMMA = ",";
-	private static final String MAP_KEY_PRIORITY = "PRIORITY";
-	private static final String MAP_KEY_TAG = "TAG";
-	private static final String MAP_KEY_DESCRIPTION = "DESCRIPTION";
-	private static final String MAP_KEY_DATE = "DATE";
-	private static final String MAP_KEY_COMMAND = "COMMAND";
-	private static final String PARSING_STYLE_INLINE_XML = "inlineXML";
-	private static final String TIME_PARSER_KEY_SUTIME = "sutime";
-	private static final String TIME_PARSER_FILE_PATH = "NLPTraining/defs.sutime.txt, NLPTraining/english.holidays.sutime.txt, NLPTraining/english.sutime.txt";
-	private static final String TIME_PARSER_ARGUMENT_2 = "0";
-	private static final String TIME_PARSER_SUTIME_RULES = "sutime.rules";
-	private static final String TIME_PARSER_SUTIME_BINDERS = "sutime.binders";
 	private AbstractSequenceClassifier<CoreLabel> classifierTag;
 	private AbstractSequenceClassifier<CoreLabel> classifierCommand;
 	private AbstractSequenceClassifier<CoreLabel> classifierTime;
@@ -138,11 +83,11 @@ public class NerParser {
 	private void loadTimeParser() {
 		// Time parsers
 		props = new Properties();
-		props.put(TIME_PARSER_SUTIME_BINDERS, TIME_PARSER_ARGUMENT_2);
-		props.put(TIME_PARSER_SUTIME_RULES, TIME_PARSER_FILE_PATH);
+		props.put(Constant.TIME_PARSER_SUTIME_BINDERS, Constant.TIME_PARSER_ARGUMENT_2);
+		props.put(Constant.TIME_PARSER_SUTIME_RULES, Constant.TIME_PARSER_FILE_PATH);
 		pipeline = new AnnotationPipeline();
 		pipeline.addAnnotator(new TokenizerAnnotator(false));
-		pipeline.addAnnotator(new TimeAnnotator(TIME_PARSER_KEY_SUTIME, props));
+		pipeline.addAnnotator(new TimeAnnotator(Constant.TIME_PARSER_KEY_SUTIME, props));
 	}
 
 	
@@ -206,11 +151,11 @@ public class NerParser {
 			commandList.add(directParseCommand);
 		} else {
 			String xmlStr = classifierCommandPicker.classifyToString(
-					userInputString, PARSING_STYLE_INLINE_XML, false);
+					userInputString, Constant.PARSING_STYLE_INLINE_XML, false);
 			//System.err.println("XML STRING - pickCommand: " + xmlStr);
 			HashMap<String, ArrayList<String>> result = NerParser
 					.parseToMap(xmlStr);
-			commandList = result.get(MAP_KEY_COMMAND);
+			commandList = result.get(Constant.MAP_KEY_COMMAND);
 		}
 		
 		
@@ -239,13 +184,13 @@ public class NerParser {
 				Constant.XML_TAG_TIME);
 		if (directParseTime != null) {
 			this.isTimeChanged = true;
-			ArrayList<String> results = new ArrayList<String>(Arrays.asList(directParseTime.split(SPLITOR_COMMA)));
+			ArrayList<String> results = new ArrayList<String>(Arrays.asList(directParseTime.split(Constant.SPLITOR_COMMA)));
 			TimeInterval returningInterval = parseTimeInterval(results);
 			if (isDeadlineTask(results) || returningInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 				Calendar c = UtilityMethod.dateToCalendar(returningInterval.getEndDate());
-				if (c.get(Calendar.HOUR_OF_DAY) == CALENDAR_START_HOUR && c.get(Calendar.MINUTE) == CALENDAR_START_MINUTE) {
-					c.set(Calendar.HOUR_OF_DAY, CALENDAR_END_HOUR);
-					c.set(Calendar.MINUTE, CALENDAR_END_MINUTE);
+				if (c.get(Calendar.HOUR_OF_DAY) == Constant.CALENDAR_START_HOUR && c.get(Calendar.MINUTE) == Constant.CALENDAR_START_MINUTE) {
+					c.set(Calendar.HOUR_OF_DAY, Constant.CALENDAR_END_HOUR);
+					c.set(Calendar.MINUTE, Constant.CALENDAR_END_MINUTE);
 					return new TimeInterval(Constant.DEADLINE_START_DATE, c.getTime());
 				} else {
 					return new TimeInterval(Constant.DEADLINE_START_DATE, returningInterval.getEndDate());	
@@ -257,11 +202,11 @@ public class NerParser {
 
 		ArrayList<String> resultList = new ArrayList<String>();
 		String xmlStr = classifierTimePicker.classifyToString(userInputString,
-				PARSING_STYLE_INLINE_XML, false);
+				Constant.PARSING_STYLE_INLINE_XML, false);
 //		System.err.println("XML STRING - pickDate: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
-		resultList = result.get(MAP_KEY_DATE);
+		resultList = result.get(Constant.MAP_KEY_DATE);
 
 		if (resultList == null) {
 			return new TimeInterval();
@@ -270,9 +215,9 @@ public class NerParser {
 			TimeInterval returningInterval = parseTimeInterval(resultList);
 			if (isDeadlineTask(resultList) || returningInterval.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 				Calendar c = UtilityMethod.dateToCalendar(returningInterval.getEndDate());
-				if (c.get(Calendar.HOUR_OF_DAY) == CALENDAR_START_HOUR && c.get(Calendar.MINUTE) == CALENDAR_START_MINUTE) {
-					c.set(Calendar.HOUR_OF_DAY, CALENDAR_END_HOUR);
-					c.set(Calendar.MINUTE, CALENDAR_END_MINUTE);
+				if (c.get(Calendar.HOUR_OF_DAY) == Constant.CALENDAR_START_HOUR && c.get(Calendar.MINUTE) == Constant.CALENDAR_START_MINUTE) {
+					c.set(Calendar.HOUR_OF_DAY, Constant.CALENDAR_END_HOUR);
+					c.set(Calendar.MINUTE, Constant.CALENDAR_END_MINUTE);
 					return new TimeInterval(Constant.DEADLINE_START_DATE, c.getTime());
 				} else {
 					return new TimeInterval(Constant.DEADLINE_START_DATE, returningInterval.getEndDate());
@@ -304,16 +249,16 @@ public class NerParser {
 		}
 
 		String xmlStr = classifierDescriptionPicker.classifyToString(
-				userInputString, PARSING_STYLE_INLINE_XML, false);
+				userInputString, Constant.PARSING_STYLE_INLINE_XML, false);
 		//System.err.println("XML STRING - pickDescription: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
-		ArrayList<String> resultList = result.get(MAP_KEY_DESCRIPTION);
-		if (resultList == null || resultList.size() == LIST_SIZE_EMPTY) {
-			return EMPTY_STRING;
+		ArrayList<String> resultList = result.get(Constant.MAP_KEY_DESCRIPTION);
+		if (resultList == null || resultList.size() == Constant.LIST_SIZE_EMPTY) {
+			return Constant.EMPTY_STRING;
 		} else {
 			this.isDescriptionChanged = true;
-			return resultList.get(LIST_INDEX_FIRST);
+			return resultList.get(Constant.LIST_INDEX_FIRST);
 			
 		}
 	}
@@ -331,7 +276,7 @@ public class NerParser {
 		String indexString = UtilityMethod.removeFirstWord(userInputString);
 		ArrayList<Integer> results = new ArrayList<Integer>();
 		try {
-			String[] indices = indexString.split(SPLITOR_SPACE);
+			String[] indices = indexString.split(Constant.SPLITOR_SPACE);
 			for (String thisIndex : indices) {
 				Integer index = new Integer(Integer.parseInt(thisIndex.trim()));
 				if (!results.contains(index)) {
@@ -339,20 +284,20 @@ public class NerParser {
 				}
 			}
 		} catch (Exception e1) {
-			if (results.size() != LIST_SIZE_EMPTY) {
+			if (results.size() != Constant.LIST_SIZE_EMPTY) {
 				return results;
 			} 
 			
 			try {
-				String[] indices = indexString.split(SPLITOR_COMMA);
+				String[] indices = indexString.split(Constant.SPLITOR_COMMA);
 				for (String thisIndex : indices) {
 					results.add(Integer.parseInt(thisIndex.trim()));
 				}
 			} catch (Exception e2) {
-				if (results.size() != LIST_SIZE_EMPTY) {
+				if (results.size() != Constant.LIST_SIZE_EMPTY) {
 					return results;
 				}
-				throw new CommandFailedException(EXCEPTION_MESSAGE_INDEX_NOT_PARSABLE);
+				throw new CommandFailedException(Constant.EXCEPTION_MESSAGE_INDEX_NOT_PARSABLE);
 			}
 		}
 		return results;
@@ -433,12 +378,12 @@ public class NerParser {
 		}
 
 		String xmlStr = classifierTagPicker.classifyToString(userInputString,
-				PARSING_STYLE_INLINE_XML, false);
+				Constant.PARSING_STYLE_INLINE_XML, false);
 		//System.err.println("XML STRING - pickTag: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
-		ArrayList<String> resultList = result.get(MAP_KEY_TAG);
-		if (resultList == null || resultList.size() == LIST_SIZE_EMPTY) {
+		ArrayList<String> resultList = result.get(Constant.MAP_KEY_TAG);
+		if (resultList == null || resultList.size() == Constant.LIST_SIZE_EMPTY) {
 			return new ArrayList<String>();
 		} else {
 			this.isTagChanged = true;
@@ -467,16 +412,16 @@ public class NerParser {
 		}
 
 		String xmlStr = classifierPriorityPicker.classifyToString(
-				userInputString, PARSING_STYLE_INLINE_XML, false);
+				userInputString, Constant.PARSING_STYLE_INLINE_XML, false);
 //		System.err.println("XML STRING - pickPriority: " + xmlStr);
 		HashMap<String, ArrayList<String>> result = NerParser
 				.parseToMap(xmlStr);
-		ArrayList<String> resultList = result.get(MAP_KEY_PRIORITY);
-		if (resultList == null || resultList.size() == LIST_SIZE_EMPTY) {
+		ArrayList<String> resultList = result.get(Constant.MAP_KEY_PRIORITY);
+		if (resultList == null || resultList.size() == Constant.LIST_SIZE_EMPTY) {
 			return Constant.PRIORITY_DEFAULT;
 		} else {
 			this.isPriorityChanged = true;
-			return parsePriority(resultList.get(LIST_INDEX_FIRST));
+			return parsePriority(resultList.get(Constant.LIST_INDEX_FIRST));
 		}
 	}
 	
@@ -497,12 +442,12 @@ public class NerParser {
 	 * @return				the String segment wrapped between the two tag
 	 */
 	public static String pickTheTagged(String inputString, String type) {
-		String prefix = TAG_OPEN_FORMER + type + TAG_CLOSE;
-		String postfix = TAG_OPEN_LATTER + type + TAG_CLOSE;
+		String prefix = Constant.TAG_OPEN_FORMER + type + Constant.TAG_CLOSE;
+		String postfix = Constant.TAG_OPEN_LATTER + type + Constant.TAG_CLOSE;
 		int prefixIndex = inputString.indexOf(prefix);
 		int postfixIndex = inputString.indexOf(postfix);
 		
-		if (prefixIndex == LIST_INDEX_NOT_EXISTING || postfixIndex == LIST_INDEX_NOT_EXISTING) {
+		if (prefixIndex == Constant.LIST_INDEX_NOT_EXISTING || postfixIndex == Constant.LIST_INDEX_NOT_EXISTING) {
 			return null;
 		} else {
 			System.out.println(inputString);
@@ -524,12 +469,12 @@ public class NerParser {
 		                  Constant.XML_TAG_PRIORITY, Constant.XML_TAG_INDEX, Constant.XML_TAG_COMMAND};
 		for (String type : types) {
 			if (!type.equals(t)) {
-				String prefix = TAG_OPEN_FORMER + type + TAG_CLOSE;
-				String postfix = TAG_OPEN_LATTER + type + TAG_CLOSE;
+				String prefix = Constant.TAG_OPEN_FORMER + type + Constant.TAG_CLOSE;
+				String postfix = Constant.TAG_OPEN_LATTER + type + Constant.TAG_CLOSE;
 				int prefixIndex = inputString.indexOf(prefix);
 				int postfixIndex = inputString.indexOf(postfix);
-				if (prefixIndex != LIST_INDEX_NOT_EXISTING && postfixIndex != LIST_INDEX_NOT_EXISTING) {
-					inputString = inputString.substring(LIST_INDEX_FIRST, prefixIndex).trim() + SPLITOR_SPACE + inputString.substring(postfixIndex + postfix.length()).trim();
+				if (prefixIndex != Constant.LIST_INDEX_NOT_EXISTING && postfixIndex != Constant.LIST_INDEX_NOT_EXISTING) {
+					inputString = inputString.substring(Constant.LIST_INDEX_FIRST, prefixIndex).trim() + Constant.SPLITOR_SPACE + inputString.substring(postfixIndex + postfix.length()).trim();
 				}
 			}
 		}
@@ -664,28 +609,28 @@ public class NerParser {
 		
 //		System.out.println("\n\n\n\n\n\n xmlString: interpretXML: " + xmlString + "\n\n\n\n");
 
-		String[] wordArray = xmlString.split(SPLITOR_SPACE);
+		String[] wordArray = xmlString.split(Constant.SPLITOR_SPACE);
 		ArrayList<Pair<String, String>> wordPairs = new ArrayList<Pair<String, String>>();
 
 		String currentKey = Constant.XML_TAG_DEFAULT;
 
 		for (String currentWord : wordArray) {
 			
-			if (currentWord.contains(TAG_OPEN_LATTER) && currentWord.contains(TAG_CLOSE)
-					&& currentWord.indexOf(TAG_CLOSE) > currentWord.indexOf(TAG_OPEN_LATTER)) {
+			if (currentWord.contains(Constant.TAG_OPEN_LATTER) && currentWord.contains(Constant.TAG_CLOSE)
+					&& currentWord.indexOf(Constant.TAG_CLOSE) > currentWord.indexOf(Constant.TAG_OPEN_LATTER)) {
 				currentKey = Constant.XML_TAG_DEFAULT;
 
-			} else if (currentWord.contains(TAG_OPEN_FORMER) && currentWord.contains(TAG_CLOSE)
-					&& currentWord.indexOf(TAG_CLOSE) > currentWord.indexOf(TAG_OPEN_FORMER)) {
+			} else if (currentWord.contains(Constant.TAG_OPEN_FORMER) && currentWord.contains(Constant.TAG_CLOSE)
+					&& currentWord.indexOf(Constant.TAG_CLOSE) > currentWord.indexOf(Constant.TAG_OPEN_FORMER)) {
 				if (!currentKey.equals(Constant.XML_TAG_DEFAULT)) {
 					//System.err.println("interpretXML: currentKey != defaultKey ----- one word can only have a single tag");
 					return null;
 				}
 				currentKey = currentWord.substring(
-						currentWord.indexOf(TAG_OPEN_FORMER) + 1, currentWord.indexOf(TAG_CLOSE))
+						currentWord.indexOf(Constant.TAG_OPEN_FORMER) + 1, currentWord.indexOf(Constant.TAG_CLOSE))
 						.trim();
 				setTrueModelUpdateIndicator(currentKey);
-			} else if (!currentWord.equals(EMPTY_STRING)) {
+			} else if (!currentWord.equals(Constant.EMPTY_STRING)) {
 				wordPairs.add(new Pair<String, String>(currentWord.trim(),
 						currentKey.trim()));
 			}
@@ -737,13 +682,13 @@ public class NerParser {
 	 * @return
 	 */
 	private static String tokenize(String userInputString) {
-		String[] symbols = {SPLITOR_COMMA, SPLITOR_DOT};
+		String[] symbols = {Constant.SPLITOR_COMMA, Constant.SPLITOR_DOT};
 		
-		userInputString = userInputString.replaceAll(TAG_OPEN_FORMER, TAG_OPEN_FORMER_SPACE);
-		userInputString = userInputString.replaceAll(TAG_CLOSE, TAG_CLOSE_SPACE);
+		userInputString = userInputString.replaceAll(Constant.TAG_OPEN_FORMER, Constant.TAG_OPEN_FORMER_SPACE);
+		userInputString = userInputString.replaceAll(Constant.TAG_CLOSE, Constant.TAG_CLOSE_SPACE);
 		
 		for (String s : symbols) {
-			userInputString = userInputString.replaceAll(s, SPLITOR_SPACE + s + SPLITOR_SPACE);
+			userInputString = userInputString.replaceAll(s, Constant.SPLITOR_SPACE + s + Constant.SPLITOR_SPACE);
 		}
 		
 		return userInputString;
@@ -767,7 +712,7 @@ public class NerParser {
 
 		bw.newLine();
 		for (Pair<String, String> p : list) {
-			String thisLine = p.head + SPLITOR_TAB + p.tail;
+			String thisLine = p.head + Constant.SPLITOR_TAB + p.tail;
 			bw.newLine();
 			bw.write(thisLine);
 		}
@@ -898,7 +843,7 @@ public class NerParser {
 		try {
 			description = this.pickDescription(userInputString);
 		} catch (CommandFailedException e) {
-			description = EMPTY_STRING;
+			description = Constant.EMPTY_STRING;
 		}
 		
 		ArrayList<String> tag = this.pickTag(userInputString);
@@ -906,7 +851,7 @@ public class NerParser {
 		int priority = this.pickPriority(userInputString);
 		
 		if (tag.isEmpty()) {
-			tag.add(TASK_TAG_DEFAULT);
+			tag.add(Constant.TASK_TAG_DEFAULT);
 		}
 
 		return new Task(description, priority, tag, timeInterval);
@@ -934,7 +879,7 @@ public class NerParser {
 		try {
 			description = this.pickDescription(userInputString);
 		} catch (CommandFailedException e) {
-			description = EMPTY_STRING;
+			description = Constant.EMPTY_STRING;
 		}
 		int priority = this.pickPriority(userInputString);
 
@@ -975,15 +920,15 @@ public class NerParser {
 		TimeInterval timeInterval;
 		try {
 			timeInterval = this.pickTimeInterval(userInputString);
-			String keyword = EMPTY_STRING;
+			String keyword = Constant.EMPTY_STRING;
 			//System.err.println("timeInterval - getConstraint: " + timeInterval.toString());
 			if (timeInterval.equals(new TimeInterval())) {
 				keyword = UtilityMethod.removeFirstWord(userInputString);
 			}
-			String[] keywords = keyword.split(SPLITOR_SPACE);
+			String[] keywords = keyword.split(Constant.SPLITOR_SPACE);
 			return new Constraint(keywords, timeInterval);
 		} catch (CommandFailedException e) {
-			String[] keywords = UtilityMethod.removeFirstWord(userInputString).split(SPLITOR_SPACE);
+			String[] keywords = UtilityMethod.removeFirstWord(userInputString).split(Constant.SPLITOR_SPACE);
 			return new Constraint(keywords, new TimeInterval());
 		}
 
@@ -1005,7 +950,7 @@ public class NerParser {
 	 * @return				a XML string with tags (<DATE> and </DATE>)
 	 */
 	public String parseTimeStringToXML(String timeString) {
-		return classifierTime.classifyToString(timeString, PARSING_STYLE_INLINE_XML, false);
+		return classifierTime.classifyToString(timeString, Constant.PARSING_STYLE_INLINE_XML, false);
 	}
 	
 	/**
@@ -1018,7 +963,7 @@ public class NerParser {
 	public ArrayList<Date> parseTimeListToDate(ArrayList<String> timeList) {
 
 		ArrayList<Date> results = new ArrayList<Date>();
-		SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_BASE);
+		SimpleDateFormat format = new SimpleDateFormat(Constant.DATE_FORMAT_BASE);
 		String stringForToday = format.format(Calendar.getInstance().getTime());
 
 		for (String text : timeList) {
@@ -1037,30 +982,30 @@ public class NerParser {
 				if (d != null) {
 					if (c.get(Calendar.SECOND) == Constant.CALENDAR_WEEK_IN_SECOND) {
 						//System.err.println("parsing weeks");
-						c.add(Calendar.DATE, CALENDAR_WEEK_START_DAY_OFFSET);
+						c.add(Calendar.DATE, Constant.CALENDAR_WEEK_START_DAY_OFFSET);
 						Date d1 = c.getTime();
-						c.add(Calendar.WEEK_OF_YEAR, CALENDAR_INCREMENT_ONE);
-						c.add(Calendar.DATE, LIST_INDEX_NOT_EXISTING);
-						c.set(Calendar.HOUR_OF_DAY, CALENDAR_END_HOUR);
-						c.set(Calendar.MINUTE, CALENDAR_END_MINUTE);
+						c.add(Calendar.WEEK_OF_YEAR, Constant.CALENDAR_INCREMENT_ONE);
+						c.add(Calendar.DATE, Constant.LIST_INDEX_NOT_EXISTING);
+						c.set(Calendar.HOUR_OF_DAY, Constant.CALENDAR_END_HOUR);
+						c.set(Calendar.MINUTE, Constant.CALENDAR_END_MINUTE);
 						Date d2 = c.getTime();
 						results.add(d1);
 						results.add(d2);
 					} else if (c.get(Calendar.SECOND) == Constant.CALENDAR_MONTH_IN_SECOND){
 						Date d1 = c.getTime();
-						c.add(Calendar.MONTH, CALENDAR_INCREMENT_ONE);
-						c.add(Calendar.DATE, LIST_INDEX_NOT_EXISTING);
-						c.set(Calendar.HOUR_OF_DAY, CALENDAR_END_HOUR);
-						c.set(Calendar.MINUTE, CALENDAR_END_MINUTE);
+						c.add(Calendar.MONTH, Constant.CALENDAR_INCREMENT_ONE);
+						c.add(Calendar.DATE, Constant.LIST_INDEX_NOT_EXISTING);
+						c.set(Calendar.HOUR_OF_DAY, Constant.CALENDAR_END_HOUR);
+						c.set(Calendar.MINUTE, Constant.CALENDAR_END_MINUTE);
 						Date d2 = c.getTime();
 						results.add(d1);
 						results.add(d2);
 					} else if (c.get(Calendar.SECOND) == Constant.CALENDAR_YEAR_IN_SECOND){
 						Date d1 = c.getTime();
-						c.add(Calendar.YEAR, CALENDAR_INCREMENT_ONE);
-						c.add(Calendar.DATE, LIST_INDEX_NOT_EXISTING);
-						c.set(Calendar.HOUR_OF_DAY, CALENDAR_END_HOUR);
-						c.set(Calendar.MINUTE, CALENDAR_END_MINUTE);
+						c.add(Calendar.YEAR, Constant.CALENDAR_INCREMENT_ONE);
+						c.add(Calendar.DATE, Constant.LIST_INDEX_NOT_EXISTING);
+						c.set(Calendar.HOUR_OF_DAY, Constant.CALENDAR_END_HOUR);
+						c.set(Calendar.MINUTE, Constant.CALENDAR_END_MINUTE);
 						Date d2 = c.getTime();
 						results.add(d1);
 						results.add(d2);
@@ -1092,37 +1037,37 @@ public class NerParser {
 
 		Date date = null;
 		try {
-			if (timeString.length() == DATE_STRING_LENGTH_YEAR) {
-				date = new SimpleDateFormat(DATE_FORMAT_YEAR, Locale.ENGLISH)
+			if (timeString.length() == Constant.DATE_STRING_LENGTH_YEAR) {
+				date = new SimpleDateFormat(Constant.DATE_FORMAT_YEAR, Locale.ENGLISH)
 						.parse(timeString);
 				Calendar c = UtilityMethod.dateToCalendar(date);
 				c.set(Calendar.SECOND, Constant.CALENDAR_YEAR_IN_SECOND);
 				date = c.getTime();
-			} else if (timeString.length() == DATE_STRING_LENGTH_MONTH) {
-				date = new SimpleDateFormat(DATE_FORMAT_YEAR_MONTH, Locale.ENGLISH)
+			} else if (timeString.length() == Constant.DATE_STRING_LENGTH_MONTH) {
+				date = new SimpleDateFormat(Constant.DATE_FORMAT_YEAR_MONTH, Locale.ENGLISH)
 						.parse(timeString);
 				Calendar c = UtilityMethod.dateToCalendar(date);
 				c.set(Calendar.SECOND, Constant.CALENDAR_MONTH_IN_SECOND);
 				date = c.getTime();
-			} else if (timeString.length() == DATE_STRING_LENGTH_BASE) {
-				date = new SimpleDateFormat(DATE_FORMAT_BASE, Locale.ENGLISH)
+			} else if (timeString.length() == Constant.DATE_STRING_LENGTH_BASE) {
+				date = new SimpleDateFormat(Constant.DATE_FORMAT_BASE, Locale.ENGLISH)
 						.parse(timeString);
-			} else if (timeString.length() == DATE_STRING_LENGTH_WEEK) {
-				timeString = timeString.replaceFirst(DATE_SPECIAL_CHAR_W, EMPTY_STRING);
-				date = new SimpleDateFormat(DATE_FORMAT_WEEK, Locale.ENGLISH)
+			} else if (timeString.length() == Constant.DATE_STRING_LENGTH_WEEK) {
+				timeString = timeString.replaceFirst(Constant.DATE_SPECIAL_CHAR_W, Constant.EMPTY_STRING);
+				date = new SimpleDateFormat(Constant.DATE_FORMAT_WEEK, Locale.ENGLISH)
 						.parse(timeString);
 				Calendar c = UtilityMethod.dateToCalendar(date);
 				c.set(Calendar.SECOND, Constant.CALENDAR_WEEK_IN_SECOND);
 				date = c.getTime();
 				//System.err.println("Parsing week: " + date);
-			} else if (timeString.length() == DATE_STRING_LENGTH_MINUTE) {
-				if (timeString.charAt(DATE_SPECIAL_CHAR_T_INDEX) == DATE_SPECIAL_CHAR_T) {
-					timeString = timeString.replace(DATE_SPECIAL_CHAR_T_STRING, SPLITOR_SPACE);
-					date = new SimpleDateFormat(DATE_FORMAT_MINUTE,
+			} else if (timeString.length() == Constant.DATE_STRING_LENGTH_MINUTE) {
+				if (timeString.charAt(Constant.DATE_SPECIAL_CHAR_T_INDEX) == Constant.DATE_SPECIAL_CHAR_T) {
+					timeString = timeString.replace(Constant.DATE_SPECIAL_CHAR_T_STRING, Constant.SPLITOR_SPACE);
+					date = new SimpleDateFormat(Constant.DATE_FORMAT_MINUTE,
 							Locale.ENGLISH).parse(timeString);
 				} else {
-					timeString = timeString.substring(0, DATE_SPECIAL_CHAR_T_INDEX);
-					date = new SimpleDateFormat(DATE_FORMAT_BASE, Locale.ENGLISH)
+					timeString = timeString.substring(0, Constant.DATE_SPECIAL_CHAR_T_INDEX);
+					date = new SimpleDateFormat(Constant.DATE_FORMAT_BASE, Locale.ENGLISH)
 							.parse(timeString);
 				}
 			} else {
@@ -1150,24 +1095,24 @@ public class NerParser {
 		assert (dates != null);
 		TimeInterval interval = new TimeInterval();
 
-		if (dates.size() == DATE_SIZE_ONE) {
-			Calendar c = UtilityMethod.dateToCalendar(dates.get(LIST_INDEX_FIRST));
-			if (c.get(Calendar.HOUR_OF_DAY) != CALENDAR_START_HOUR || c.get(Calendar.MINUTE) != CALENDAR_START_MINUTE) {
+		if (dates.size() == Constant.DATE_SIZE_ONE) {
+			Calendar c = UtilityMethod.dateToCalendar(dates.get(Constant.LIST_INDEX_FIRST));
+			if (c.get(Calendar.HOUR_OF_DAY) != Constant.CALENDAR_START_HOUR || c.get(Calendar.MINUTE) != Constant.CALENDAR_START_MINUTE) {
 				interval = new TimeInterval(Constant.DEADLINE_START_DATE, c.getTime());
 			} else {
-				Calendar cEnd = UtilityMethod.dateToCalendar(dates.get(LIST_INDEX_FIRST));
-				cEnd.set(Calendar.HOUR_OF_DAY, CALENDAR_END_HOUR);
-				cEnd.set(Calendar.MINUTE, CALENDAR_END_MINUTE);
+				Calendar cEnd = UtilityMethod.dateToCalendar(dates.get(Constant.LIST_INDEX_FIRST));
+				cEnd.set(Calendar.HOUR_OF_DAY, Constant.CALENDAR_END_HOUR);
+				cEnd.set(Calendar.MINUTE, Constant.CALENDAR_END_MINUTE);
 				interval = new TimeInterval(c.getTime(), cEnd.getTime());
 			}
 			
-		} else if (dates.size() == DATE_SIZE_TWO) {
+		} else if (dates.size() == Constant.DATE_SIZE_TWO) {
 			Date d0 = dates.get(0);
 			Date d1 = dates.get(1);
 			interval = new TimeInterval(
 					UtilityMethod.selectEarlierDate(d0, d1),
 					UtilityMethod.selectLaterDate(d0, d1));
-		} else if (dates.size() == DATE_SIZE_THREE) {
+		} else if (dates.size() == Constant.DATE_SIZE_THREE) {
 			Calendar c1 = UtilityMethod.dateToCalendar(dates.get(0));
 			Calendar c2 = UtilityMethod.dateToCalendar(dates.get(1));
 			Calendar c3 = UtilityMethod.dateToCalendar(dates.get(2));
@@ -1213,7 +1158,7 @@ public class NerParser {
 				break;
 			}
 		} else {
-			throw new CommandFailedException(EXCEPTION_MESSAGE_INVALID_TIME_INTERVAL_ARGUMENT);
+			throw new CommandFailedException(Constant.EXCEPTION_MESSAGE_INVALID_TIME_INTERVAL_ARGUMENT);
 		}
 
 		return interval;
@@ -1234,13 +1179,13 @@ public class NerParser {
 		ArrayList<String> results = new ArrayList<String>();
 
 		for (String tagMine : tagStringlist) {
-			if (tagMine.indexOf(SPLITOR_SPACE) == LIST_INDEX_NOT_EXISTING) {
+			if (tagMine.indexOf(Constant.SPLITOR_SPACE) == Constant.LIST_INDEX_NOT_EXISTING) {
 				results.add(tagMine);
 			} else {
 				String parsedTagString = classifierTag.classifyToString(tagMine,
-						PARSING_STYLE_INLINE_XML, false);
+						Constant.PARSING_STYLE_INLINE_XML, false);
 				HashMap<String, ArrayList<String>> tagMap = parseToMap(parsedTagString);
-				ArrayList<String> tagList = tagMap.get(MAP_KEY_TAG);
+				ArrayList<String> tagList = tagMap.get(Constant.MAP_KEY_TAG);
 				if (tagList != null) {
 					for (String tag : tagList) {
 						results.add(tag);
@@ -1262,11 +1207,11 @@ public class NerParser {
 	private int parsePriority(String priorityString) {
 
 		String parsedPriorityString = classifierPriority.classifyToString(
-				priorityString, PARSING_STYLE_INLINE_XML, false);
+				priorityString, Constant.PARSING_STYLE_INLINE_XML, false);
 		HashMap<String, ArrayList<String>> cmdMap = parseToMap(parsedPriorityString);
 		int result = Constant.PRIORITY_INVALID;
 		for (String command : cmdMap.keySet()) {
-			if (!command.equals(MAP_KEY_COMMAND)) {
+			if (!command.equals(Constant.MAP_KEY_COMMAND)) {
 				result = parsePriorityFromFormattedString(command);
 			}
 		}
@@ -1312,10 +1257,10 @@ public class NerParser {
 
 		for (String cmd : commandList) {
 			String parsedTagString = classifierCommand.classifyToString(cmd,
-					PARSING_STYLE_INLINE_XML, false);
+					Constant.PARSING_STYLE_INLINE_XML, false);
 			HashMap<String, ArrayList<String>> cmdMap = parseToMap(parsedTagString);
 			for (String command : cmdMap.keySet()) {
-				if (!command.equals(MAP_KEY_COMMAND)) {
+				if (!command.equals(Constant.MAP_KEY_COMMAND)) {
 					results.add(command);
 				}
 			}
@@ -1323,7 +1268,7 @@ public class NerParser {
 
 		if (results.size() >= 1) {
 			//System.err.println("PARSED CMD - parseCommand: " + results.get(0).toLowerCase());
-			return determineCommandType(results.get(LIST_INDEX_FIRST).toLowerCase());
+			return determineCommandType(results.get(Constant.LIST_INDEX_FIRST).toLowerCase());
 		} else {
 			return COMMAND_TYPE.ADD;
 		}
@@ -1377,10 +1322,10 @@ public class NerParser {
 	private static boolean isDeadlineTask(ArrayList<String> timeStringList) {
 		for (String userInputString : timeStringList) {
 			userInputString = userInputString.toLowerCase();
-			if (userInputString.contains(DEADLINE_INDICATOR_BY) 
-					|| userInputString.contains(DEADLINE_INDICATOR_UNTIL) 
-					|| userInputString.contains(DEADLINE_INDICATOR_TILL) 
-					|| userInputString.contains(DEADLINE_INDICATOR_BEFORE)) {
+			if (userInputString.contains(Constant.DEADLINE_INDICATOR_BY) 
+					|| userInputString.contains(Constant.DEADLINE_INDICATOR_UNTIL) 
+					|| userInputString.contains(Constant.DEADLINE_INDICATOR_TILL) 
+					|| userInputString.contains(Constant.DEADLINE_INDICATOR_BEFORE)) {
 				return true;
 			}
 		}
@@ -1397,17 +1342,17 @@ public class NerParser {
 	 */
 	public static HashMap<String, ArrayList<String>> parseToMap(String xmlString) {
 		assert (xmlString != null);
-		assert (xmlString.length() > XML_STRING_MIN_LENGTH);
-		if (xmlString == null || xmlString.length() <= XML_STRING_MIN_LENGTH) {
+		assert (xmlString.length() > Constant.XML_STRING_MIN_LENGTH);
+		if (xmlString == null || xmlString.length() <= Constant.XML_STRING_MIN_LENGTH) {
 			//System.err.println("Invalid input");
 			return new HashMap<String, ArrayList<String>>();
 		}
 		
 		HashMap<String, ArrayList<String>> taskMap = new HashMap<String, ArrayList<String>>();
-		taskMap.put(MAP_KEY_COMMAND, new ArrayList<String>());
+		taskMap.put(Constant.MAP_KEY_COMMAND, new ArrayList<String>());
 		// get rid of the first and last character
 		xmlString = xmlString.substring(1, xmlString.length() - 2);
-		String[] xmlSegments = xmlString.split(TAG_OPEN_LATTER);
+		String[] xmlSegments = xmlString.split(Constant.TAG_OPEN_LATTER);
 		// string format: ADD>Add, ADD> <DESCRIPTION> ... , DESCRIPTION>
 		// <DATE>...
 
@@ -1416,14 +1361,14 @@ public class NerParser {
 		for (int i = 0; i < NumberOfSegments; i++) {
 			String segment = xmlSegments[i];
 			String nextSegment = xmlSegments[i + 1];
-			String key = nextSegment.substring(0, nextSegment.indexOf(TAG_CLOSE));
+			String key = nextSegment.substring(0, nextSegment.indexOf(Constant.TAG_CLOSE));
 			String temp = segment.replaceFirst(
-					segment.substring(0, segment.indexOf(TAG_CLOSE) + 1), EMPTY_STRING);
+					segment.substring(0, segment.indexOf(Constant.TAG_CLOSE) + 1), Constant.EMPTY_STRING);
 
 			String value = null;
-			if (temp.indexOf(TAG_CLOSE) != LIST_INDEX_NOT_EXISTING) {
+			if (temp.indexOf(Constant.TAG_CLOSE) != Constant.LIST_INDEX_NOT_EXISTING) {
 				value = temp.replaceFirst(
-						temp.substring(0, temp.indexOf(TAG_CLOSE) + 1), EMPTY_STRING);
+						temp.substring(0, temp.indexOf(Constant.TAG_CLOSE) + 1), Constant.EMPTY_STRING);
 			} else {
 				value = temp;
 			}

@@ -25,28 +25,44 @@ public class UserTest {
 		ArrayList<String> tag = new ArrayList<String>();
 		TimeInterval interval = new TimeInterval();
 		Task task = new Task("testtask", 2, tag, interval);
-		ArrayList<Task> normalTasks = user.getNormalTaskList();
-		System.out.println(normalTasks.size());
+		ArrayList<Task> normalTasks = user.getOngoingTaskList();
 		
 		//test add
 		user.add(task);
 		user.undo();
-		System.out.println(normalTasks.size());
-		testUndo("test add", normalTasks, user.getNormalTaskList());
+		testUndo("test add", normalTasks, user.getOngoingTaskList());
 		
 		//test delete
-		if (!user.getNormalTaskList().isEmpty()){
+		if (!user.getOngoingTaskList().isEmpty()){
 			user.delete(0, Constant.TASK_LIST_TODO);
-		}
-		user.undo();
-		testUndo("test delete", normalTasks, user.getNormalTaskList());
+			user.undo();
+			testUndo("test delete", normalTasks, user.getOngoingTaskList());
+		} else {
+			user.add(task);
+			normalTasks = user.getOngoingTaskList();
+			user.delete(0, Constant.TASK_LIST_TODO);
+			user.undo();
+			testUndo("test delete", normalTasks, user.getOngoingTaskList());
+			user.undo();
+		}	
 		
 		//test deleteAll
-		if (!user.getNormalTaskList().isEmpty()){
+		if (!user.getOngoingTaskList().isEmpty()){
 			user.deleteAll(Constant.TASK_LIST_TODO);
-		}
-		user.undo();
-		testUndo("test deleteAll", normalTasks, user.getNormalTaskList());
+			user.undo();
+			testUndo("test deleteAll", normalTasks, user.getOngoingTaskList());
+		} else {
+			user.add(task);
+			user.add(task);
+			user.add(task);
+			normalTasks = user.getOngoingTaskList();
+			user.deleteAll(Constant.TASK_LIST_TODO);
+			user.undo();
+			testUndo("test deleteAll", normalTasks, user.getOngoingTaskList());
+			user.undo();
+			user.undo();
+			user.undo();
+		}		
 		
 		System.out.println("all undo tests are passed");
 	}
@@ -131,7 +147,7 @@ public class UserTest {
 	//author A0119444E
 	private void testUndo(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
 		try {
-			assertEquals(description, expected, actual);
+			assert(expected.equals(actual));
 		} catch (Exception e) {
 			
 		}
