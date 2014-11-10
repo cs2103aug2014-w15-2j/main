@@ -343,8 +343,8 @@ public class User {
 	/**
 	 * retrieveFromNormalList
 	 * 
-	 * @param normalIndex
-	 * @return
+	 * @param normalIndex	task index of normalTaskList
+	 * @return task			corresponding task of the index in normalTaskList
 	 * @throws CommandFailedException
 	 */
 	public Task retrieveFromNormalList(int normalIndex)
@@ -361,8 +361,8 @@ public class User {
 	/**
 	 * retrieveFromTrashedList
 	 * 
-	 * @param trashedIndex
-	 * @return
+	 * @param trashedIndex	task index of trashedTaskList
+	 * @return task			corresponding task of the index in trashedTaskList
 	 * @throws CommandFailedException
 	 */
 	public Task retrieveFromTrashedList(int trashedIndex)
@@ -379,8 +379,8 @@ public class User {
 	/**
 	 * retrieveFromFinishedList
 	 * 
-	 * @param finishedIndex
-	 * @return
+	 * @param finishedIndex	task index of finishedTaskList
+	 * @return task 		corresponding task of the index in trashedTaskList
 	 * @throws CommandFailedException
 	 */
 	public Task retrieveFromFinishedList(int finishedIndex)
@@ -551,8 +551,8 @@ public class User {
 	/**
 	 * find gets the list of tasks that meet the constraint.
 	 * 
-	 * @param constraint
-	 * @return normal tasks that meet the constraint
+	 * @param constraint	a constraint provided by a user
+	 * @return ongoing tasks  		which can meet the constraint
 	 * @throws Exception
 	 */
 	private ArrayList<Task> findOngoing(Constraint constraint) throws Exception {
@@ -572,8 +572,8 @@ public class User {
 	/**
 	 * findTrashed gets the list of trashed tasks that meet the constraint.
 	 * 
-	 * @param constraint
-	 * @return trashed tasks that meet the constraint
+	 * @param constraint	a constraint provided by a user
+	 * @return trashed tasks 	which can meet the constraint
 	 * @throws Exception
 	 */
 	private ArrayList<Task> findTrashed(Constraint constraint) throws Exception {
@@ -593,8 +593,8 @@ public class User {
 	/**
 	 * findFinished gets the list of finished tasks that meet the constraint.
 	 * 
-	 * @param constraint
-	 * @return finished tasks that meet the constraint
+	 * @param constraint	a constraint provided by a user
+	 * @return finished tasks 	which can meet the constraint
 	 * @throws Exception
 	 */
 	private ArrayList<Task> findFinished(Constraint constraint)
@@ -628,8 +628,8 @@ public class User {
 	/**
 	 * isValidOngoingIndex
 	 * 
-	 * @param index
-	 * @return boolean
+	 * @param index		a task index
+	 * @return boolean	indicates whether the task index is a valid ongoing task index
 	 */
 	private boolean isValidOngoingIndex(int index) {
 		if ((index < 0) || (index > this.currentTasks.getOngoingTasks().size())) {
@@ -643,8 +643,8 @@ public class User {
 	/**
 	 * isValidTrashedIndex
 	 * 
-	 * @param index
-	 * @return boolean
+	 * @param index		a task index
+	 * @return boolean	indicates whether the task index is a valid trashed task index
 	 */
 	private boolean isValidTrashedIndex(int index) {
 		if ((index < 0) || (index > this.currentTasks.getTrashedTasks().size())) {
@@ -658,8 +658,8 @@ public class User {
 	/**
 	 * isValidFinishedIndex
 	 * 
-	 * @param index
-	 * @return boolean
+	 * @param index		a task index
+	 * @return boolean	indicates whether the task index is a valid finished task index
 	 */
 	private boolean isValidFinishedIndex(int index) {
 		if ((index < 0)
