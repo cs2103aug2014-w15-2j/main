@@ -348,8 +348,8 @@ public abstract class Constant {
 	public static final String PROMPT_MESSAGE_NO_TASK_FOUND_IN_LIST = "There is no list found with name: %1$s";
 	public static final String PROMPT_MESSAGE_DONE_TASK_SUCCESSFULLY = "Tasks are marked done";
 	public static final String PROMPT_MESSAGE_DONE_TASK_FAILED = "Failed to finish task";
-	public static final String PROMPT_MESSAGE_UNTAG_TASK_FAILED = "Untag task successfully";
-	public static final String PROMPT_MESSAGE_UNTAG_TASK_SUCCESSFULLY = "Failed to untag task";
+	public static final String PROMPT_MESSAGE_UNTAG_TASK_FAILED = "Failed to untag task";
+	public static final String PROMPT_MESSAGE_UNTAG_TASK_SUCCESSFULLY = "Untag task successfully";
 	public static final String PROMPT_MESSAGE_TRASH_EMPTIED = "Trash emptied";
 	public static final String PROMPT_MESSAGE_INVALID_TASK_LISE = "Invalid task list name";
 	public static final String PROMPT_MESSAGE_INVALID_DESCRIPTION = "Invalid task descrption";
@@ -429,8 +429,8 @@ public abstract class Constant {
 	public static final String NO_UNDOABLE_ERROR_MESSAGE = "nothing available for undoing";
 	public static final String INVALID_INDEX_ERROR_MESSAGE = "invalid task index %1$d";
 	public static final String INVALID_UPDATE_MESSAGE = "invalid task attributes";
-	public static final int MAXIMUM_UNDO_TIMES = 10;
-	public static final int MAXIMUM_REDO_TIMES = 10;
+	public static final int MAXIMUM_UNDO_TIMES = 200;
+	public static final int MAXIMUM_REDO_TIMES = 200;
 
 	public static final String DUPLICATED_TAG_ERROR_MESSAGE = "tag %1$s already exists.";
 

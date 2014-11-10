@@ -452,7 +452,6 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			public void run() {
 				String userInput = getUserInput(false);
 				if (userInput.length() > 0) {
-					System.out.println(userInput);
 					setPreviewPane(instance.getPreview(userInput),
 							instance.getCurrentListName());
 				} else {
@@ -658,7 +657,6 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 			//pick the command
 			COMMAND_TYPE thisCommand = this.parser.pickCommand(userInput.toLowerCase());
-			System.out.println(thisCommand);
 			//get the preview
 			switch(thisCommand) {
 				case ADD :
@@ -929,7 +927,6 @@ public class MainViewController extends GridPane implements HotKeyListener {
 			String returnValue = String.format(Constant.PREVIEW_MESSAGE_UNTAG_INITIAL_VALUE, task);
 
 			for (String tag : tags) {
-				System.out.println(tag);
 				returnValue += tag + " ";
 			}
 			return returnValue;
@@ -1233,7 +1230,6 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		} catch (CommandFailedException e) {
 			return e.toString();
 		}
-
 		return isAllSucceeded ? Constant.PROMPT_MESSAGE_UNTAG_TASK_SUCCESSFULLY
 				: returnValue;
 	}

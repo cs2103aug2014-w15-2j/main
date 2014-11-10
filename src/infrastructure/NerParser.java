@@ -676,7 +676,6 @@ public class NerParser {
 	 * @param currentKey 	a string indicating the model update indicator
 	 */
 	private static void setTrueModelUpdateIndicator(String currentKey) {
-		System.out.println(currentKey);
 		switch (currentKey) {
 		case Constant.XML_TAG_COMMAND:
 			isCommandModelUpdate = true;
@@ -1423,7 +1422,6 @@ public class NerParser {
 	 * @return						an COMMAND_TYPE enumeration representing the corresponding command
 	 */
 	public static COMMAND_TYPE determineCommandType(String commandTypeString) {
-		System.out.println(commandTypeString);
 		switch (commandTypeString) {
 			case Constant.COMMAND_STRING_LOG_IN:
 				return COMMAND_TYPE.LOG_IN;
