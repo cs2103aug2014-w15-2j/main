@@ -608,11 +608,11 @@ public class NerParser {
 		} else if (this.getStartDate().equals(Constant.DEADLINE_START_DATE)) {
 			// deadline task
 			String deadline = new SimpleDateFormat("HH:mm   EEEE dd/MMMM/yyyy", Locale.ENGLISH).format(this.getEndDate());
-			text = text + "\ndeadline: \t" + deadline;
+			text = text + "\nDeadline: \t" + deadline;
 		} else {
 			String start = new SimpleDateFormat("HH:mm   EEEE dd/MMMM/yyyy", Locale.ENGLISH).format(this.getStartDate());
 			String end = new SimpleDateFormat("HH:mm   EEEE dd/MMMM/yyyy", Locale.ENGLISH).format(this.getEndDate());
-			text = text + "\ntime: \t\tfrom \t" + start + "\n\t\tto \t" + end;
+			text = text + "\nTime: \t\tfrom \t" + start + "\n\t\tto \t" + end;
 		}
 		
 		return text;
@@ -1706,20 +1706,21 @@ public class NerParser {
 			}
 			
 			int index = parser.pickIndex(userInput).get(0);
-			String task = this.user.getOngoingTaskList().get(index).getDescription();
+			String task = this.user.getOngoingTaskList().get(index - 1).getDescription();
 			
 			ArrayList<String> tags = parser.pickUntag(userInput);
 			String returnValue = String.format(Constant.PREVIEW_MESSAGE_UNTAG_INITIAL_VALUE, task);
 
 			for (String tag : tags) {
-				returnValue += tag + ",";
+				System.out.println(tag);
+				returnValue += tag + " ";
 			}
 			return returnValue;
 			
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
-			return "Command: update \n\n"
-					+ Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
+			return "Command: untag \n\n"
+					+ Constant.PROMPT_MESSAGE_UNTAG_TASK_FAILED;
 		}
 	}
 
