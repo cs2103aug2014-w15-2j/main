@@ -301,8 +301,8 @@ public class Task {
 	/**
 	 * check whether a list of tag is valid
 	 * 
-	 * @param tag
-	 * @return boolean
+	 * @param tags
+	 * @return boolean	indicates whether the tag list is a valid tag list
 	 */
 	private boolean isValidTag(ArrayList<String> tag){
 		if (tag.equals(null) || tag.contains(null) || tag.contains("")) {
@@ -319,7 +319,7 @@ public class Task {
 	 * check whether all tags in a tag list are valid
 	 * 
 	 * @param tags
-	 * @return boolean
+	 * @return boolean	indicates whether all tags are valid tags
 	 */
 	private boolean isValidOneTag(ArrayList<String> tags){
 		for(String tag : tags){
@@ -335,7 +335,7 @@ public class Task {
 	 * check whether a interval is valid
 	 * 
 	 * @param interval
-	 * @return boolean
+	 * @return boolean	indicates whether the TimeInterval is a valid TimeInterval
 	 */
 	private boolean isValidInterval(TimeInterval interval){
 		if (interval == null) {
@@ -351,7 +351,7 @@ public class Task {
 	/**
 	 * Check whether a task is trashed
 	 *
-	 * @return 	whether a task is trashed
+	 * @return boolean	indicates whether a task is trashed
 	 */
 	public boolean isTrashed() {
 		if (this.status.equals(Constant.TASK_STATUS_TRASHED)) {
