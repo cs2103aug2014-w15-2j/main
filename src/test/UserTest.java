@@ -281,6 +281,40 @@ public class UserTest {
 		}
 		System.out.println("all undone tests are passed");
 	}
+	
+	//@author A0119444E
+	/**
+	 * test for empty trash method in User
+	 * @throws Exception
+	 */
+	@Test
+	public void testEmptyTrash() throws Exception {
+		User user = new User();
+		ArrayList<String> tag = new ArrayList<String>();
+		TimeInterval interval = new TimeInterval();
+		Task task = new Task("another test task", 2, tag, interval);
+		
+		if (!user.getTrashedTaskList().isEmpty()){
+			user.emptyTrash();
+			testEmptyTrash("test emptyTrash", 0, user.getTrashedTaskList().size());
+			user.undo();
+		} else {
+			user.add(task);
+			user.add(task);
+			user.add(task);
+			
+			user.deleteAll(Constant.TASK_LIST_ONGOING);
+			
+			user.emptyTrash();
+			testEmptyTrash("test emptyTrash", 0, user.getTrashedTaskList().size());
+			user.undo();
+			user.undo();
+			user.undo();
+			user.undo();
+			user.undo();
+		}		
+		System.out.println("all empty trash tests are passed");
+	}
 
 	//@author A0119444E
 	/**
@@ -399,6 +433,20 @@ public class UserTest {
 	private void testUndone(String description, ArrayList<Task> expected, ArrayList<Task> actual) {
 		try {
 			assert(expected.equals(actual));
+		} catch (Exception e) {
+			
+		}
+	}
+	//@author A0119444E
+	/**
+	 * test method for testing emptyTrash method
+	 * @param description
+	 * @param expected
+	 * @param actual
+	 */
+	private void testEmptyTrash(String description, int expected, int actual){
+		try {
+			assertEquals(description, expected, actual);
 		} catch (Exception e) {
 			
 		}
