@@ -30,14 +30,14 @@ public class NerDateParsingTest {
 	public void testDate1() {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("tomorrow");
-		this.testTimed(dateList, "2014-11-10 00:00", "2014-11-10 23:59");
+		this.testTimed(dateList, "2014-11-11 00:00", "2014-11-11 23:59");
 	}
 	
 	@Test
 	public void testDate2() {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("today");
-		this.testTimed(dateList, "2014-11-09 00:00", "2014-11-09 23:59");
+		this.testTimed(dateList, "2014-11-10 00:00", "2014-11-10 23:59");
 	}
 	
 	@Test
@@ -46,8 +46,8 @@ public class NerDateParsingTest {
 		dateList.add("next Friday");
 		TimeInterval results;
 		try {
-			Date startDate = formatter.parse("2014-11-14 00:00");
-			Date endDate = formatter.parse("2014-11-14 23:59");
+			Date startDate = formatter.parse("2014-11-21 00:00");
+			Date endDate = formatter.parse("2014-11-21 23:59");
 			TimeInterval expected = new TimeInterval(startDate, endDate);
 			results = nerParser.parseTimeInterval(dateList);
 			assertEquals(expected.toString(), results.toString());
@@ -71,7 +71,7 @@ public class NerDateParsingTest {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("this Friday");
 		dateList.add("from 14:00 to 18:00");
-		this.testTimed(dateList, "2014-11-07 14:00", "2014-11-07 18:00");
+		this.testTimed(dateList, "2014-11-14 14:00", "2014-11-14 18:00");
 	}
 	
 	@Test
@@ -79,7 +79,7 @@ public class NerDateParsingTest {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("next Friday");
 		dateList.add("14:00 - 18:00");
-		this.testTimed(dateList, "2014-11-14 14:00", "2014-11-14 18:00");
+		this.testTimed(dateList, "2014-11-21 14:00", "2014-11-21 18:00");
 	}
 	
 	@Test
@@ -123,14 +123,14 @@ public class NerDateParsingTest {
 	public void testDate12() {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("this week");
-		this.testTimed(dateList, "2014-11-03 00:00", "2014-11-09 23:59");
+		this.testTimed(dateList, "2014-11-10 00:00", "2014-11-16 23:59");
 	}
 	
 	@Test
 	public void testDate13() {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("next week");
-		this.testTimed(dateList, "2014-11-10 00:00", "2014-11-16 23:59");
+		this.testTimed(dateList, "2014-11-17 00:00", "2014-11-23 23:59");
 	}
 	
 	@Test
@@ -177,7 +177,7 @@ public class NerDateParsingTest {
 	public void testDate2_2() {
 		ArrayList<String> dateList= new ArrayList<String>();
 		dateList.add("today 09:00");
-		this.testDeadline(dateList, "2014-11-09 09:00");
+		this.testDeadline(dateList, "2014-11-10 09:00");
 	}
 	
 	

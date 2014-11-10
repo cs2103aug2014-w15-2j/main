@@ -21,8 +21,8 @@ public class NerDatePickerTest {
 	
 	private static String DATE_TODAY;
 	private static  String DATE_TOMORROW;
-	private static  String[] thisWeek = {"2014-11-03", "2014-11-04", "2014-11-05", "2014-11-06", "2014-11-07", "2014-11-08", "2014-11-09"};
-	private static  String[] nextWeek = {"2014-11-10", "2014-11-11", "2014-11-12", "2014-11-13", "2014-11-14", "2014-11-15", "2014-11-16"};
+	private static  String[] nextWeek = {"2014-11-17", "2014-11-18", "2014-11-19", "2014-11-20", "2014-11-21", "2014-11-22", "2014-11-23"};
+	private static  String[] thisWeek = {"2014-11-10", "2014-11-11", "2014-11-12", "2014-11-13", "2014-11-14", "2014-11-15", "2014-11-16"};
 	static NerParser nerParser = new NerParser();
 	static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.ENGLISH);
 
