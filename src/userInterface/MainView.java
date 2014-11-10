@@ -2,6 +2,7 @@ package userInterface;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -18,6 +19,7 @@ public class MainView extends Application {
         	scene = new Scene(control, 980, 690);
         }
         scene.getStylesheets().add("resource/style.css");
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/resource/icon.png")));
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(scene);
         stage.setTitle("List of Xiao Ming");
