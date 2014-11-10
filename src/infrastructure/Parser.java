@@ -1,40 +1,75 @@
 //@author A0119379R-unused
+//This class was used when we didn't add in the natural language processor.
+//All functionalities covered by this class is cover by NerParser class right now.
 //
+
 package infrastructure;
-//
+
 //import infrastructure.Constant.COMMAND_TYPE;
 //
 //import java.util.ArrayList;
 //import java.util.Arrays;
 //import java.util.HashMap;
 //
-//import modal.CommandFailedException;
-//import modal.Pair;
-//import modal.Task;
-//import modal.TimeInterval;
-//
-//
-//
+//import model.CommandFailedException;
+//import model.Pair;
+//import model.Task;
+//import model.TimeInterval;
+
+
+
 public class Parser {
+//	
+//	private static final String KEY_NER_MAP_DATE = "DATE";
+//	private static final String MESSAGE_INVALID_ARGUMENT_MULTIPLE_PRIORITY = "You can only assign one priority to a task";
+//	private static final String MESSAGE_INVALID_ARGUMENT_TWISTED_INTERVAL = "start time should be earlier than end time";
+//	private static final String MESSAGE_INVALID_ARGUMENT_TIME_FORMAT = "invalid time format: the correct format should be...";
+//	private static final String MESSAGE_INVALID_ARGUMENT_MULTIPLE_TIME = "You can only assign one time for a task";
+//	private static final String KEY_STRING_DESCRIPTION = "description";
+//	private static final String MESSAGE_INVALID_ARGUMENT_REPEATED_PERIOD = "invalid argument for repeated period";
+//	private static final String MESSAGE_INVALID_ARGUMENT_PRIORITY = "invalid argument for priority";
+//	private static final String PRIORITY_STRING_LOW = "low";
+//	private static final String PRIORITY_STRING_MEDIUM = "medium";
+//	private static final String PRIORITY_STRING_HIGH = "high";
+//	private static final String KEY_STRING_TAG = "tag";
+//	private static final String KEY_STRING_REPEAT = "repeat";
+//	private static final String KEY_STRING_PRIORITY = "priority";
+//	private static final String KEY_STRING_TIME = "time";
+//	private static final String KEY_STRING_CATEGORY = "category";
 //	
 //	public NerParser nerParser;
 //	
+//	/**
+//	 * constructor: create a new NerParser to process the date
+//	 */
 //	public Parser() {
 //		nerParser = new NerParser();
 //	}
 //	
+//	/**
+//	 * translate a string to a integer indicates the priority
+//	 * 
+//	 * @param parameter		a string represents the priority, valid formats include "high", "medium", "low", case insensitive
+//	 * @return				an integer representation of the priority, returns PRIORITY_INVALID is system can't interpret the input
+//	 */
 //	public static int parsePriority(String parameter) {
-//		if (parameter.equalsIgnoreCase("high")) {
+//		if (parameter.equalsIgnoreCase(PRIORITY_STRING_HIGH)) {
 //			return Constant.PRIORITY_HIGH;
-//		} else if (parameter.equalsIgnoreCase("medium")) {
+//		} else if (parameter.equalsIgnoreCase(PRIORITY_STRING_MEDIUM)) {
 //			return Constant.PRIORITY_MEDIUM;
-//		} else if (parameter.equalsIgnoreCase("low")) {
+//		} else if (parameter.equalsIgnoreCase(PRIORITY_STRING_LOW)) {
 //			return Constant.PRIORITY_LOW;
 //		} else {
 //			return Constant.PRIORITY_INVALID;
 //		}
 //	}
 //	
+//	/**
+//	 * determine the command type with the given string
+//	 * 
+//	 * @param commandTypeString		a string that might contain the user command
+//	 * @return						an COMMAND_TYPE enumeration representing the corresponding command
+//	 */
 //	public static COMMAND_TYPE determineCommandType(String commandTypeString) {
 //		switch (commandTypeString) {
 //			case Constant.COMMAND_STRING_LOG_IN:
@@ -106,6 +141,13 @@ public class Parser {
 //	}
 //	
 //	
+//	/**
+//	 * get a key-value map from the given parameter list
+//	 * this method will be called when performing an update operation
+//	 * 
+//	 * @param parameterList		A list of String, in which each element represents a parameter of the task
+//	 * @return					A map that maps the task property key and value
+//	 */
 //	public HashMap<String, Object> getTaskMap(ArrayList<String> parameterList) {
 //		HashMap <String, Object> updateAttributes = new HashMap<String, Object> ();
 //		
@@ -113,46 +155,46 @@ public class Parser {
 //			String key = UtilityMethod.getFirstWord(parameter);
 //			String value = UtilityMethod.removeFirstWord(parameter);
 //			switch (key) {
-//			case "category":
-//				updateAttributes.put("category", value);
+//			case KEY_STRING_CATEGORY:
+//				updateAttributes.put(KEY_STRING_CATEGORY, value);
 //				break;
 //				
-//			case "time":
+//			case KEY_STRING_TIME:
 //				try {
 //					TimeInterval t = parseTimeInterval(value);
-//					updateAttributes.put("time_interval", t);
+//					updateAttributes.put(KEY_STRING_TIME, t);
 //				} catch (Exception e) {
 //					e.printStackTrace();
 //				}
 //				break;
 //				
-//			case "priority":
+//			case KEY_STRING_PRIORITY:
 //				try {
 //					Integer p = Parser.parsePriority(value);
-//					updateAttributes.put("priority", p);
+//					updateAttributes.put(KEY_STRING_PRIORITY, p);
 //				} catch (Exception e) {
-//					UtilityMethod.showToUser("invalid argument for priority");
+//					UtilityMethod.showToUser(MESSAGE_INVALID_ARGUMENT_PRIORITY);
 //				}
 //				
 //				break;
 //				
-//			case "repeat":
+//			case KEY_STRING_REPEAT:
 //				try {
 //					Integer r = Integer.parseInt(value);
-//					updateAttributes.put("repeated_period", r);
+//					updateAttributes.put(KEY_STRING_REPEAT, r);
 //				} catch (Exception e) {
-//					UtilityMethod.showToUser("invalid argument for repeated period");
+//					UtilityMethod.showToUser(MESSAGE_INVALID_ARGUMENT_REPEATED_PERIOD);
 //				}
 //				break;
 //				
-//			case "tag":
+//			case KEY_STRING_TAG:
 //				ArrayList<String> tags = new ArrayList<String>();
 //				tags.add(value);
-//				updateAttributes.put("tag", tags);
+//				updateAttributes.put(KEY_STRING_TAG, tags);
 //				break;
 //				
 //			default:
-//				updateAttributes.put("description", parameter);
+//				updateAttributes.put(KEY_STRING_DESCRIPTION, parameter);
 //				break;
 //			}
 //		}
@@ -161,15 +203,19 @@ public class Parser {
 //	}
 //	
 //	
+//	/**
+//	 * Get a Task object from the parameter list
+//	 * This method will be called when performing an add operation
+//	 * 
+//	 * @param parameterList					A list of String, in which each element represents a parameter of the task
+//	 * @return								A task object, constructed with the parameter list
+//	 * @throws CommandFailedException		CommandFailedException thrown when one or more subsequent parsing goes wrong.
+//	 */
 //	public Task getTaskFromParameterList(ArrayList<String> parameterList) throws CommandFailedException {
 //		TimeInterval timeInterval = new TimeInterval();
-////		String category = null; 
 //		int priority = Constant.PRIORITY_DEFAULT;
-////		int repeatedPeriod = Constant.REPEATED_PERIOD_DEFAULT; 
 //		ArrayList<String> tag = new ArrayList<String>();
 //		String description = null;
-////		String description = parameterList.get(0);
-////		parameterList.remove(0);
 //		
 //		boolean hasTime = false;
 //		boolean hasPriority = false;
@@ -181,36 +227,28 @@ public class Parser {
 //				case Constant.KEY_TIME:
 //					try {
 //						if (hasTime) {
-//							UtilityMethod.showToUser("You can only assign one time for a task");
+//							UtilityMethod.showToUser(MESSAGE_INVALID_ARGUMENT_MULTIPLE_TIME);
 //						} else {
 //							TimeInterval parsedTimeInterval = parseTimeInterval(value);
 //							if (parsedTimeInterval == null) {
-//								UtilityMethod.showToUser("invalid time format: the correct format should be...");
+//								UtilityMethod.showToUser(MESSAGE_INVALID_ARGUMENT_TIME_FORMAT);
 //							} else {
 //								timeInterval = parsedTimeInterval;
 //								hasTime = true;
 //							}
 //						}
 //					} catch (Exception e) {
-//						UtilityMethod.showToUser("start time should be earlier than end time");
+//						UtilityMethod.showToUser(MESSAGE_INVALID_ARGUMENT_TWISTED_INTERVAL);
 //					}
 //					break;
-//	/*			
-//				case Constant.KEY_CATEGORY:
-//					if (hasCategory) {
-//						UtilityMethod.showToUser("You can only assign one category for a task");
-//					} else {
-//						category = value;
-//					}
-//					break;
-//	*/			
+//		
 //				case Constant.KEY_PRIORITY:
 //					if (hasPriority) {
-//						UtilityMethod.showToUser("You can only assign one priority to a task");
+//						UtilityMethod.showToUser(MESSAGE_INVALID_ARGUMENT_MULTIPLE_PRIORITY);
 //					} else {
 //						int tempPriority = parsePriority(value);
 //						if (tempPriority == Constant.PRIORITY_INVALID) {
-//							UtilityMethod.showToUser("invalid priority format: it should be 'priority none/high/medium/low'");
+//							UtilityMethod.showToUser(MESSAGE_INVALID_ARGUMENT_PRIORITY);
 //						} else {
 //							priority = tempPriority;
 //							hasPriority = true;
@@ -218,21 +256,7 @@ public class Parser {
 //
 //					}
 //					break;
-//		/*		
-//				case Constant.KEY_REPEATED_PERIOD:
-//					if (hasRepeatedPeriod) {
-//						UtilityMethod.showToUser("You can only assign one repeated period to a task");
-//					} else {
-//						int tempRepeatedPeriod = parseRepeatedPeriod(value);
-//						if (tempRepeatedPeriod == Constant.REPEATED_PERIOD_INVALID) {
-//							throw new CommandFailedException("invalid repeat format: it should be 'repeat daily/weekly/monthly'");
-//						} else {
-//							repeatedPeriod = tempRepeatedPeriod;
-//							hasRepeatedPeriod = true;
-//						}
-//					}
-//					break;
-//		*/			
+//		
 //				case Constant.KEY_TAG:
 //					if (!tag.contains(value)) {
 //						tag.add(value);
@@ -249,7 +273,13 @@ public class Parser {
 //		return new Task(description, /*category,*/ priority, /*repeatedPeriod,*/ tag, timeInterval);
 //	}
 //
-//	
+//	/**
+//	 * The method breaks an userInput String, returns a COMMAND_TYPE and a list of parameters
+//	 * This method will be called immediately after the system received the user input
+//	 * 
+//	 * @param userInput		the String that user input
+//	 * @return				a Pair object, of which the head is a COMMAND_TYPE, the tail is a list of task parameters 
+//	 */
 //	public static Pair<COMMAND_TYPE, ArrayList<String>> parseCommandPair(String userInput) {
 //		ArrayList<String> parameterList = new ArrayList<String>(Arrays.asList(userInput.trim().split("@")));
 //		COMMAND_TYPE thisCommand = determineCommandType(parameterList.get(0).trim());
@@ -257,10 +287,17 @@ public class Parser {
 //		return new Pair<COMMAND_TYPE, ArrayList<String>>(thisCommand, parameterList);
 //	}
 //	
-//	public TimeInterval parseTimeInterval(String parameter) throws Exception {
+//	/**
+//	 * Date parsing
+//	 * This method parse a string to a TimeInterval object
+//	 * 
+//	 * @param parameter						the specific string that might contains the date/time of the task 
+//	 * @return								a TimeInterval object representing the time of the task
+//	 * @throws CommandFailedException 		CommandFailedExcpetion thrown if the subsequent NerParsing goes wrong.
+//	 */
+//	public TimeInterval parseTimeInterval(String parameter) throws CommandFailedException {
 //		HashMap<String, ArrayList<String>> map = NerParser.parseToMap(nerParser.parseTimeToXML(parameter));
-//		ArrayList<String> dateList = map.get("DATE");
+//		ArrayList<String> dateList = map.get(KEY_NER_MAP_DATE);
 //		return nerParser.parseTimeInterval(dateList);
 //	}
-//	
 }
