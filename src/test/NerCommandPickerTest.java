@@ -82,6 +82,11 @@ public class NerCommandPickerTest {
 		compareCommandEnum("clear", COMMAND_TYPE.CLEAR);
 	}
 	
+	@Test
+	public void testUntag() {
+		compareCommandEnum("untag", COMMAND_TYPE.UNTAG);
+	}
+	
 	private void compareCommandEnum (String userInputString, COMMAND_TYPE command) {
 		try {
 			COMMAND_TYPE result = nerParser.pickCommand(userInputString);

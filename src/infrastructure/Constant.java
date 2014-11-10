@@ -388,6 +388,7 @@ public abstract class Constant {
 	public static final String COMMAND_STRING_RELOAD = "reload";
 	public static final String COMMAND_STRING_DONE = "done";
 	public static final String COMMAND_STRING_RECOVER = "recover";
+	public static final String COMMAND_STRING_UNTAG = "untag";
 
 	public static final int PRIORITY_DEFAULT = 2;
 	public static final int PRIORITY_INVALID = 0;
@@ -433,7 +434,7 @@ public abstract class Constant {
 
 	// command type
 	public static enum COMMAND_TYPE {
-		LOG_IN, LOG_OUT, CREATE_ACCOUNT, DELETE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR, NLP, EMPTY_TRASH, RELOAD, DONE, RECOVER
+		LOG_IN, LOG_OUT, CREATE_ACCOUNT, DELETE_ACCOUNT, HELP, EXIT, ADD, UPDATE, DELETE, DISPLAY, SEARCH, REDO, UNDO, CLEAR, NLP, EMPTY_TRASH, RELOAD, DONE, RECOVER, UNTAG
 	}
 
 	// task status
@@ -590,6 +591,7 @@ public abstract class Constant {
 	public static final String PREVIEW_MESSAGE_SEARCH_ERROR = "SEARCH ERROR";
 	public static final String PREVIEW_MESSAGE_ADD_INITIAL_VALUE = "Command: create \n\n";
 	public static final String PREVIEW_MESSAGE_DELETE_INITIAL_VALUE = "Command: delete \n\n";
+	public static final String PREVIEW_MESSAGE_UNTAG_INITIAL_VALUE = "Command: untag %1$s tags: \n\n";
 	public static final String PREVIEW_MESSAGE_DELETE_NO_TASK_SPECIFIED = PREVIEW_MESSAGE_DELETE_INITIAL_VALUE + "No Task Specified";
 	public static final String PREVIEW_MESSAGE_DELETE_ALREADY_TRASHED = PREVIEW_MESSAGE_DELETE_INITIAL_VALUE + "All tasks in 'TRASHED' section have been trashed already.";
 	public static final String PREVIEW_MESSAGE_SEARCH_INITIAL_VALUE = "Command: search \n\n";

@@ -627,6 +627,9 @@ public class MainViewController extends GridPane implements HotKeyListener {
 					performRecover(userInput);
 					break;
 					
+				case UNTAG :
+					performUntag(userInput);
+					
 				default :
 					break;
 
@@ -655,7 +658,7 @@ public class MainViewController extends GridPane implements HotKeyListener {
 
 			//pick the command
 			COMMAND_TYPE thisCommand = this.parser.pickCommand(userInput.toLowerCase());
-		
+			System.out.println(thisCommand);
 			//get the preview
 			switch(thisCommand) {
 				case ADD :
@@ -699,6 +702,9 @@ public class MainViewController extends GridPane implements HotKeyListener {
 					
 				case RECOVER :
 					return getRecoverPreview(userInput);
+				
+				case UNTAG :
+					return getUntagPreview(userInput);
 					
 				default :
 					return getDefaultPreview();
@@ -713,10 +719,14 @@ public class MainViewController extends GridPane implements HotKeyListener {
  *  Specific methods to perform action, the names self-explain their use
  * ==========================================================================
  */
+	private void performUntag(String userInput) {
+		setConsoleText(this.untag(userInput));
+		refreshCurrentList();
+	}
 
 	private void performRecover(String userInput) {
 		setConsoleText(this.recover(userInput));
-	performDisplay();
+		performDisplay();
 	}
 	
 	private void performDone(String userInput) {
@@ -899,6 +909,30 @@ public class MainViewController extends GridPane implements HotKeyListener {
 					parser.getUpdatedTaskMap(userInput));
 			return "Command: update \n\n"
 					+ taskToUpdate.toStringForDisplaying();
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+			return "Command: update \n\n"
+					+ Constant.PROMPT_MESSAGE_UPDATE_TASK_FAILED;
+		}
+	}
+	
+	private String getUntagPreview(String userInput) {
+		try {
+			if (!this.getCurrentListName().equals(Constant.TASK_LIST_ONGOING)) {
+				return "Command: untag \n\n" + "You can only update the task in 'TODO' section";
+			}
+			
+			int index = parser.pickIndex(userInput).get(0);
+			String task = this.user.getOngoingTaskList().get(index).getDescription();
+			
+			ArrayList<String> tags = parser.pickUntag(userInput);
+			String returnValue = String.format(Constant.PREVIEW_MESSAGE_UNTAG_INITIAL_VALUE, task);
+
+			for (String tag : tags) {
+				returnValue += tag + ",";
+			}
+			return returnValue;
+			
 		} catch (CommandFailedException e) {
 			e.printStackTrace();
 			return "Command: update \n\n"
@@ -1170,6 +1204,12 @@ public class MainViewController extends GridPane implements HotKeyListener {
 		} catch (CommandFailedException e) {
 			return e.toString();
 		}
+	}
+	
+	private String untag(String userInput) {
+		// TODO Auto-generated method stub
+
+		return null;
 	}
 
 

@@ -303,6 +303,37 @@ public class NerParser {
 		return results;
 	}
 	
+	//@author A0119447Y
+	public ArrayList<String> pickUntag(String userInputString) throws CommandFailedException {
+		String tagString = UtilityMethod.removeFirstWord(UtilityMethod.removeFirstWord(userInputString));
+		ArrayList<String> results = new ArrayList<String>();
+		try {
+			String[] tags = tagString.split(Constant.SPLITOR_SPACE);
+			for (String thisTag : tags) {
+				if (!results.contains(thisTag)) {
+					results.add(thisTag);
+				}
+			}
+		} catch (Exception e1) {
+			if (results.size() != Constant.LIST_SIZE_EMPTY) {
+				return results;
+			} 
+			
+			try {
+				String[] tags = tagString.split(Constant.SPLITOR_COMMA);
+				for (String thisTag : tags) {
+					results.add(thisTag);
+				}
+			} catch (Exception e2) {
+				if (results.size() != Constant.LIST_SIZE_EMPTY) {
+					return results;
+				}
+				throw new CommandFailedException(Constant.EXCEPTION_MESSAGE_INDEX_NOT_PARSABLE);
+			}
+		}
+		return results;
+	}
+	
 
 //@author A0119379-unused
 //This method is aborted for the unreliable performance. 
@@ -450,7 +481,6 @@ public class NerParser {
 		if (prefixIndex == Constant.LIST_INDEX_NOT_EXISTING || postfixIndex == Constant.LIST_INDEX_NOT_EXISTING) {
 			return null;
 		} else {
-			System.out.println(inputString);
 			return inputString.substring(prefixIndex + prefix.length(),
 					postfixIndex);
 		}
@@ -1267,7 +1297,6 @@ public class NerParser {
 		}
 
 		if (results.size() >= 1) {
-			//System.err.println("PARSED CMD - parseCommand: " + results.get(0).toLowerCase());
 			return determineCommandType(results.get(Constant.LIST_INDEX_FIRST).toLowerCase());
 		} else {
 			return COMMAND_TYPE.ADD;
@@ -1390,6 +1419,7 @@ public class NerParser {
 	 * @return						an COMMAND_TYPE enumeration representing the corresponding command
 	 */
 	public static COMMAND_TYPE determineCommandType(String commandTypeString) {
+		System.out.println(commandTypeString);
 		switch (commandTypeString) {
 			case Constant.COMMAND_STRING_LOG_IN:
 				return COMMAND_TYPE.LOG_IN;
@@ -1453,6 +1483,9 @@ public class NerParser {
 				
 			case Constant.COMMAND_STRING_RECOVER:
 				return COMMAND_TYPE.RECOVER;
+				
+			case Constant.COMMAND_STRING_UNTAG:
+				return COMMAND_TYPE.UNTAG;
 				
 			default:
 				return COMMAND_TYPE.HELP;
