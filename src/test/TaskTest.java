@@ -4,7 +4,9 @@ import static org.junit.Assert.assertEquals;
 import infrastructure.Constant;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+import model.CommandFailedException;
 import model.Task;
 import model.TimeInterval;
 
@@ -63,8 +65,30 @@ public class TaskTest {
 		}	
 		
 		System.out.println("all status tests are passed");
-	}	
+	}
 	
+	//@author A0119447Y
+	/**
+	 * test for interval method in Task
+	 */
+	@Test
+	public void testInterval() {
+		try {
+			TimeInterval interval = new TimeInterval(new Date(34826), new Date());
+			Task task1 = new Task("task1", 0, null, interval);
+			
+			testInterval("task1 interval", 
+						   interval, 
+						   task1);
+			
+			System.out.println("all interval tests are passed");
+		} catch (CommandFailedException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	//@author A0119444E
 	/**
 	 * test method for tagToString
 	 * @param description
@@ -79,6 +103,7 @@ public class TaskTest {
 		}
 	}
 	
+	//@author A0119444E
 	/**
 	 * test method for status
 	 * @param description
@@ -89,7 +114,16 @@ public class TaskTest {
 		try {
 			assertEquals(description, expected, task.getStatus());
 		} catch (Exception e) {
-			
+			e.printStackTrace();
+		}
+	}
+	
+	//@author A0119447Y
+	private void testInterval(String description, TimeInterval expected, Task task) {
+		try {
+			assertEquals(description, expected, task.getInterval());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

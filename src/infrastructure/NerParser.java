@@ -1071,12 +1071,12 @@ public class NerParser {
 							.parse(timeString);
 				}
 			} else {
-				Constant.logger.log(Level.INFO, "unrecognized format: " + timeString);
+				UtilityMethod.logger.log(Level.INFO, "unrecognized format: " + timeString);
 				// will return null
 			}
 		} catch (ParseException e) {
 			// will return null
-			Constant.logger.log(Level.INFO, "parseStringToDate gets expection, returns null");
+			UtilityMethod.logger.log(Level.INFO, "parseStringToDate gets expection, returns null");
 			e.printStackTrace();
 		}
 		return date;
